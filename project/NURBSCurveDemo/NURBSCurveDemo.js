@@ -26,8 +26,8 @@ function main() {
         return;
     }
     ShaderFileName.push("NURBSCURVE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/NURBSCurveDemo/Default.vert', 'v',"NURBSCURVE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/NURBSCurveDemo/Default.frag', 'f',"NURBSCURVE");
+	WebGLUtils.readShaderFile(gl, '../project/NURBSCurveDemo/Default.vert', 'v',"NURBSCURVE");
+	WebGLUtils.readShaderFile(gl, '../project/NURBSCurveDemo/Default.frag', 'f',"NURBSCURVE");
 
     cam=new Camera();
     cam.Perspective(50, window.innerWidth / window.innerHeight, 1, 2000 );
