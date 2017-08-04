@@ -21,8 +21,8 @@ function main() {
         return;
     }
     ShaderFileName.push("BEZIERCURVE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierCurveDemo/Default.vert', 'v','BEZIERCURVE');
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierCurveDemo/Default.frag', 'f','BEZIERCURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicBezierCurveDemo/Default.vert', 'v','BEZIERCURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicBezierCurveDemo/Default.frag', 'f','BEZIERCURVE');
 }
 
 

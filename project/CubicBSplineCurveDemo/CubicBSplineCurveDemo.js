@@ -21,8 +21,8 @@ function main() {
         return;
     }
     ShaderFileName.push("BSPLINECURVE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBSplineCurveDemo/Default.vert', 'v','BSPLINECURVE');
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBSplineCurveDemo/Default.frag', 'f','BSPLINECURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicBSplineCurveDemo/Default.vert', 'v','BSPLINECURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicBSplineCurveDemo/Default.frag', 'f','BSPLINECURVE');
 }
 
 

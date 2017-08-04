@@ -26,10 +26,10 @@ function main() {
         return;
     }
     ShaderFileName.push("BEZIERSURFACE","GRID");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierSurfaceDemo/Default.vert', 'v',"BEZIERSURFACE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierSurfaceDemo/Default.frag', 'f',"BEZIERSURFACE");
-    WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierSurfaceDemo/Grid.vert', 'v',"GRID");
-    WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicBezierSurfaceDemo/Grid.frag', 'f',"GRID");
+	WebGLUtils.readShaderFile(gl, '../project/CubicBezierSurfaceDemo/Default.vert', 'v',"BEZIERSURFACE");
+	WebGLUtils.readShaderFile(gl, '../project/CubicBezierSurfaceDemo/Default.frag', 'f',"BEZIERSURFACE");
+    WebGLUtils.readShaderFile(gl, '../project/CubicBezierSurfaceDemo/Grid.vert', 'v',"GRID");
+    WebGLUtils.readShaderFile(gl, '../project/CubicBezierSurfaceDemo/Grid.frag', 'f',"GRID");
 
     cam=new Camera();
     cam.Perspective(30, 1, 1, 100);

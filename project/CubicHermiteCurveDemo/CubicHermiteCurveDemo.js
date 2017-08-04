@@ -22,8 +22,8 @@ function main() {
         return;
     }
     ShaderFileName.push("HERMITECURVE");
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicHermiteCurveDemo/Default.vert', 'v','HERMITECURVE');
-	WebGLUtils.readShaderFile(gl, '../RayEngine/project/CubicHermiteCurveDemo/Default.frag', 'f','HERMITECURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicHermiteCurveDemo/Default.vert', 'v','HERMITECURVE');
+	WebGLUtils.readShaderFile(gl, '../project/CubicHermiteCurveDemo/Default.frag', 'f','HERMITECURVE');
 }
 
 
