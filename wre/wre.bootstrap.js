@@ -118,7 +118,8 @@
                         callback();
                     };
                 }
-                script.src = url;
+                //script.src = url;
+                script.src = url+ '?' + d.getTime();
                 document.getElementsByTagName("head")[0].appendChild(script);
             }
 
