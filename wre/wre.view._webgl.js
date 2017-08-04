@@ -36,7 +36,7 @@ WRE.view._webgl._view._init = function (callback) {
         }
 
         $.when(
-            AjaxFile(WRE.view._webgl._projectRootPath + '.html', 'html')
+            AjaxFile(WRE.view._webgl._projectRootPath + '.html' + '?t=' + d.getTime(), 'html')
         ).then(function (canvasHtml) {
 
             WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
