@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="mocha.js"></script>
+    <script>mocha.setup('bdd');</script>
+	<script src="../webgl/webgl-util.js"></script>
+    <script src="../webgl/wre.point.js"></script>
+	<script src="../webgl/wre.vector3.js"></script>
+    <script src="../webgl/wre.vector4.js"></script>
+    <script src="../webgl/wre.mathutils.js"></script>
+	<script src="../webgl/wre.matrix4x4.js"></script>
+	<script src="../webgl/wre.bezier.js"></script>
+	<script src="../webgl/wre.beziersurface.js"></script>
+    <script src="http://chaijs.com/chai.js"></script>
+    <script src="tests.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
