@@ -36,7 +36,6 @@
         var loc = this.runtime.scriptLocation + '/';
 
         this._libraries = [
-            loc + 'lib/tether.min.js',
             loc + 'lib/bootstrap/bootstrap.min.js',
             loc + 'lib/numeric-1.2.6.min.js',
             loc + 'lib/webgl/webgl-util.js',
@@ -83,18 +82,19 @@
             this.bootstrap.loading(self.config.theme);
 
             loadScript(loc + 'lib/jquery-3.1.1.min.js', function () {
+                loadScript(loc + 'lib/tether.min.js', function () {
+                    loadMultipleScripts(self._canvas2dLibraries, function () {
+                        console.log("WRE canvas2d library successfully loaded.");
+                    });
 
-                loadMultipleScripts(self._canvas2dLibraries, function () {
-                    console.log("WRE canvas2d library successfully loaded.");
-                });
 
-
-                loadMultipleScripts(self._libraries, function () {
-                    console.log("WRE libraries successfully loaded.");
-                    loadMultipleScripts(self._components, function () {
-                        console.log("WRE components successfully loaded.");
-                        self.boot(function () {
-                            self.bootstrap.finishLoading();
+                    loadMultipleScripts(self._libraries, function () {
+                        console.log("WRE libraries successfully loaded.");
+                        loadMultipleScripts(self._components, function () {
+                            console.log("WRE components successfully loaded.");
+                            self.boot(function () {
+                                self.bootstrap.finishLoading();
+                            });
                         });
                     });
                 });
