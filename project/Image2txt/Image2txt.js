@@ -74,9 +74,14 @@ function init() {
     
 }
 
-function base64Img2Blob(code){
-    console.log(code);
-    var parts = code.split(';base64,');
+
+function saveImg2MobileAndPC() {
+    
+    content=saveImg2PC();
+    var aLink = document.createElement('a');
+    
+    //base64Img2Blob
+    var parts = content.split(';base64,');
     var contentType = parts[0].split(':')[1];
     var raw = window.atob(parts[1]);
     var rawLength = raw.length;
@@ -87,26 +92,15 @@ function base64Img2Blob(code){
         uInt8Array[i] = raw.charCodeAt(i);
     }
     
-    return new Blob([uInt8Array], {type: contentType});
-}
-
-function downloadFile(fileName, content){
-    
-    var aLink = document.createElement('a');
-    var blob = base64Img2Blob(content); //new Blob([content]);
+    var blob = new Blob([uInt8Array], {type: contentType});
     
     var evt = document.createEvent("HTMLEvents");
     evt.initEvent("click", false, false);
-    aLink.download = fileName;
+    aLink.download = 'img2txt.png';
     aLink.href = URL.createObjectURL(blob);
     
     aLink.dispatchEvent(evt);
-}
-
-function saveImg2MobileAndPC() {
     
-    content=saveImg2PC();
-    downloadFile('img2txt.png', content);
 }
 
 //save image
