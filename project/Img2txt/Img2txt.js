@@ -49,7 +49,7 @@ function init() {
     img_div.width = img.width;
     img_div.height = img.height;
     img_canvas.drawImage(img, 0, 0);
-    var imgData = c.getImageData(0, 0, img.width, img.height);
+    var imgData = img_canvas.getImageData(0, 0, img.width, img.height);
     var imgDataArr = imgData.data;
     var imgDataWidth = imgData.width;
     var imgDataHeight = imgData.height;
