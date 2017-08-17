@@ -13,7 +13,7 @@ img.onload = init; // init
 
 //bind event
 fileBtn.onchange = getImg;
-downloadBtn.onchange = saveImg;
+downloadBtn.onclick = saveImg;
 
 //generate txt according to gray value
 function toText(g) {
