@@ -41,7 +41,7 @@ function getGray(r, g, b) {
 function init() {
     txt_div.width = img.width;
     txt_div.height = img.height;
-    txt_canvas.font = "1px Courier New";
+    txt_canvas.font = "10px Courier New";
     txt_canvas.fillStyle = "blue";
 
 
@@ -53,8 +53,8 @@ function init() {
     var imgDataArr = imgData.data;
     var imgDataWidth = imgData.width;
     var imgDataHeight = imgData.height;
-    for (h = 0; h < imgDataHeight; h += 4) {
-        for (w = 0; w < imgDataWidth; w += 2) {
+    for (h = 0; h < imgDataHeight; h += 12) {
+        for (w = 0; w < imgDataWidth; w += 6) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
             var g = imgDataArr[index + 1];
