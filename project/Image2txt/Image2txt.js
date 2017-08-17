@@ -16,7 +16,7 @@ img.onload = init; // init
 
 //bind event
 fileBtn.onchange = getImg;
-downloadBtn.onclick = saveImg2MobileAndPC;
+downloadBtn.onclick = saveImg2PC;
 
 //generate txt according to gray value
 function toText(g) {
@@ -75,33 +75,7 @@ function init() {
 }
 
 
-function saveImg2MobileAndPC() {
-    
-    content=saveImg2PC();
-    var aLink = document.createElement('a');
-    
-    //base64Img2Blob
-    var parts = content.split(';base64,');
-    var contentType = parts[0].split(':')[1];
-    var raw = window.atob(parts[1]);
-    var rawLength = raw.length;
-    
-    var uInt8Array = new Uint8Array(rawLength);
-    
-    for (var i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i);
-    }
-    
-    var blob = new Blob([uInt8Array], {type: contentType});
-    
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", false, false);
-    aLink.download = 'img2txt.png';
-    aLink.href = URL.createObjectURL(blob);
-    
-    aLink.dispatchEvent(evt);
-    
-}
+
 
 //save image
 function saveImg2PC() {
@@ -127,9 +101,8 @@ function saveImg2PC() {
     var filename = new Date().toLocaleDateString() + '.' + type;
     
     //console.log(imgdata);
-    //saveFile(imgdata, filename);
-    
-    return imgdata;
+    saveFile(imgdata, filename);
+
 }
 
 //get image
