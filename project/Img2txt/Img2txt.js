@@ -48,7 +48,7 @@ function init() {
     var imgDataHeight = imgData.height;
     var html = '';
     for (h = 0; h < imgDataHeight; h += 12) {
-        var p = '<p style="margin:0px;width:'+img.width+';height:'+img.height/12+'px">';
+        var p = '<p style="margin:0px;width:'+img.width+'px;height:12px">';
         for (w = 0; w < imgDataWidth; w += 6) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
