@@ -88,7 +88,7 @@ function saveImg2MobileAndPC() {
     }
     imgdata = imgdata.replace(fixtype(type), 'image/octet-stream')
     
-    downloadImg.download=imgdata;
+    downloadImg.href=imgdata;
 }
 
 //save image
