@@ -1,14 +1,16 @@
 
-var cv = document.getElementById('cv');
-var c = cv.getContext('2d');
-var txtDiv = document.getElementById('txt');
+var img_div = document.getElementById('img');
+var img_canvas = img_div.getContext('2d');
+var txt_div = document.getElementById('txt');
+var txt_canvas = txt_div.getContext('2d');
 var fileBtn = document.getElementById("up-button");
+
 var img = new Image();
 img.src = './img/nxn.jpg';
-img.onload = init; // 图片加载完开始转换
+img.onload = init; // init
 fileBtn.onchange = getImg;
 
-// 根据灰度生成相应字符
+//generate txt according to gray value
 function toText(g) {
     if (g <= 30) {
         return '8';
@@ -30,37 +32,37 @@ function toText(g) {
 }
 
 
-// 根据rgb值计算灰度
+//convert rgb to gray
 function getGray(r, g, b) {
     return 0.299 * r + 0.578 * g + 0.114 * b;
 }
 
-// 转换
+//img2txt
 function init() {
-    txtDiv.style.width = img.width + 'px';
-    txtDiv.style.height = img.height + 'px';
-    cv.width = img.width;
-    cv.height = img.height;
-    c.drawImage(img, 0, 0);
+    txt_div.width = img.width;
+    txt_div.height = img.height;
+    txt_canvas.font = "1px Courier New";
+    txt_canvas.fillStyle = "blue";
+
+
+    
+    img_div.width = img.width;
+    img_div.height = img.height;
+    img_canvas.drawImage(img, 0, 0);
     var imgData = c.getImageData(0, 0, img.width, img.height);
     var imgDataArr = imgData.data;
     var imgDataWidth = imgData.width;
     var imgDataHeight = imgData.height;
-    var html = '';
-    for (h = 0; h < imgDataHeight; h += 12) {
-        var p = '<p style="margin:0px;width:'+img.width+'px;height:12px">';
-        for (w = 0; w < imgDataWidth; w += 6) {
+    for (h = 0; h < imgDataHeight; h += 1) {
+        for (w = 0; w < imgDataWidth; w += 1) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
             var g = imgDataArr[index + 1];
             var b = imgDataArr[index + 2];
             var gray = getGray(r, g, b);
-            p += toText(gray);
+            txt_canvas.fillText(toText(gray), h, w);
         }
-        p += '</p>';
-        html += p;
     }
-    txtDiv.innerHTML = html;
 }
 
 // 获取图片
