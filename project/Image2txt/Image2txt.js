@@ -72,7 +72,6 @@ function init() {
         }
     }
     
-    saveImg2PC();
 }
 
 function base64Img2Blob(code){
@@ -106,7 +105,7 @@ function downloadFile(fileName, content){
 
 function saveImg2MobileAndPC() {
     
-    content=txt_div.toDataURL('png');
+    content=saveImg2PC();
     downloadFile('img2txt.png', content);
 }
 
@@ -133,8 +132,10 @@ function saveImg2PC() {
     }
     var filename = new Date().toLocaleDateString() + '.' + type;
     
-    console.log(imgdata);
-    saveFile(imgdata, filename);
+    //console.log(imgdata);
+    //saveFile(imgdata, filename);
+    
+    return imgdata;
 }
 
 //get image
