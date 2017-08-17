@@ -53,8 +53,8 @@ function init() {
     var imgDataArr = imgData.data;
     var imgDataWidth = imgData.width;
     var imgDataHeight = imgData.height;
-    for (h = 0; h < imgDataHeight; h += 1) {
-        for (w = 0; w < imgDataWidth; w += 1) {
+    for (h = 0; h < imgDataHeight; h += 12) {
+        for (w = 0; w < imgDataWidth; w += 6) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
             var g = imgDataArr[index + 1];
