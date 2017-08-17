@@ -41,7 +41,7 @@ function getGray(r, g, b) {
 function init() {
     txt_div.width = img.width;
     txt_div.height = img.height;
-    txt_canvas.font = "bold 36px Courier New";
+    txt_canvas.font = "bold 10px Courier New";
     txt_canvas.fillStyle = "blue";
 
 
