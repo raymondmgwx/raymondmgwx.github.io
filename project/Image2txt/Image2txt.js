@@ -104,7 +104,8 @@ function downloadFile(fileName, content){
 
 function saveImg2MobileAndPC() {
     
-    downloadFile('img2txt.png', txt_div.toDataURL('png'));
+    content=txt_div.toDataURL('png');
+    downloadFile('img2txt.png', content);
 }
 
 //save image
