@@ -53,14 +53,14 @@ function init() {
     var imgDataArr = imgData.data;
     var imgDataWidth = imgData.width;
     var imgDataHeight = imgData.height;
-    for (h = 0; h < imgDataHeight; h += 12) {
-        for (w = 0; w < imgDataWidth; w += 6) {
+    for (h = 0; h < imgDataHeight; h += 4) {
+        for (w = 0; w < imgDataWidth; w += 2) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
             var g = imgDataArr[index + 1];
             var b = imgDataArr[index + 2];
             var gray = getGray(r, g, b);
-            txt_canvas.fillText(toText(gray), h, w);
+            txt_canvas.fillText(toText(gray), w, h);
         }
     }
 }
