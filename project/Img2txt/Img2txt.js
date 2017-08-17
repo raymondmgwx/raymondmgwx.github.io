@@ -4,7 +4,7 @@ var c = cv.getContext('2d');
 var txtDiv = document.getElementById('txt');
 var fileBtn = document.getElementById("up-button");
 var img = new Image();
-img.src = '~/img/nxn.jpg';
+img.src = './img/nxn.jpg';
 img.onload = init; // 图片加载完开始转换
 fileBtn.onchange = getImg;
 
@@ -48,7 +48,7 @@ function init() {
     var imgDataHeight = imgData.height;
     var html = '';
     for (h = 0; h < imgDataHeight; h += 12) {
-        var p = '<p style="margin:0px;width:img.width;height:1px">';
+        var p = '<p style="margin:1px;width:img.width;height:1px">';
         for (w = 0; w < imgDataWidth; w += 6) {
             var index = (w + imgDataWidth * h) * 4;
             var r = imgDataArr[index + 0];
