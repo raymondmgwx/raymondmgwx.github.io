@@ -4,11 +4,16 @@ var img_canvas = img_div.getContext('2d');
 var txt_div = document.getElementById('txt');
 var txt_canvas = txt_div.getContext('2d');
 var fileBtn = document.getElementById("up-button");
+var downloadBtn = document.getElementById("down-button");
 
 var img = new Image();
 img.src = './img/nxn.jpg';
 img.onload = init; // init
+
+
+//bind event
 fileBtn.onchange = getImg;
+downloadBtn.onchange = saveImg;
 
 //generate txt according to gray value
 function toText(g) {
@@ -65,7 +70,14 @@ function init() {
     }
 }
 
-// 获取图片
+
+//save image
+function saveImg () {
+    var image = txt_div.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    window.location.href=image;
+}
+
+//get image
 function getImg(file) {
     var reader = new FileReader();
     reader.readAsDataURL(fileBtn.files[0]);
