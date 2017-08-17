@@ -71,10 +71,28 @@ function init() {
 }
 
 
+
 //save image
-function saveImg () {
-    var image = txt_div.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    window.location.href=image;
+function saveImg() {
+    var imgdata = txt_div.toDataURL('png');
+
+    var fixtype = function (type) {
+        type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
+        var r = type.match(/png|jpeg|bmp|gif/)[0];
+        return 'image/' + r;
+    }
+    imgdata = imgdata.replace(fixtype(type), 'image/octet-stream')
+
+    var saveFile = function (data, filename) {
+        var link = document.createElement('a');
+        link.href = data;
+        link.download = filename;
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        link.dispatchEvent(event);
+    }
+    var filename = new Date().toLocaleDateString() + '.' + type;
+    saveFile(imgdata, filename);
 }
 
 //get image
