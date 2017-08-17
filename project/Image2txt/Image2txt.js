@@ -71,11 +71,10 @@ function init() {
             txt_canvas.fillText(toText(gray), w, h);
         }
     }
-    
-    saveImg2MobileAndPC();
 }
 
 function base64Img2Blob(code){
+    console.log(code);
     var parts = code.split(';base64,');
     var contentType = parts[0].split(':')[1];
     var raw = window.atob(parts[1]);
@@ -105,7 +104,7 @@ function downloadFile(fileName, content){
 
 function saveImg2MobileAndPC() {
     
-    downloadFile('img2txt.png', txt_div.toDataURL("image/png"));
+    downloadFile('img2txt.png', txt_div.toDataURL("png"));
 }
 
 //save image
