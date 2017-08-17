@@ -4,7 +4,7 @@ var c = cv.getContext('2d');
 var txtDiv = document.getElementById('txt');
 var fileBtn = document.getElementById("up-button");
 var img = new Image();
-img.src = './img/nxn.jpg';
+img.src = '~/img/nxn.jpg';
 img.onload = init; // 图片加载完开始转换
 fileBtn.onchange = getImg;
 
@@ -37,8 +37,8 @@ function getGray(r, g, b) {
 
 // 转换
 function init() {
-    //txtDiv.style.width = img.width + 'px';
-    //txtDiv.style.height = img.height + 'px';
+    txtDiv.style.width = img.width + 'px';
+    txtDiv.style.height = img.height + 'px';
     cv.width = img.width;
     cv.height = img.height;
     c.drawImage(img, 0, 0);
