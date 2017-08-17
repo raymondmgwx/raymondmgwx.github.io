@@ -3,8 +3,11 @@ var img_div = document.getElementById('img');
 var img_canvas = img_div.getContext('2d');
 var txt_div = document.getElementById('txt');
 var txt_canvas = txt_div.getContext('2d');
+
+
 var fileBtn = document.getElementById("up-button");
 var downloadBtn = document.getElementById("down-button");
+var downloadImg = document.getElementById("download-img");
 
 var img = new Image();
 img.src = './img/nxn.jpg';
@@ -13,7 +16,7 @@ img.onload = init; // init
 
 //bind event
 fileBtn.onchange = getImg;
-downloadBtn.onclick = saveImg;
+//downloadBtn.onclick = saveImg;
 
 //generate txt according to gray value
 function toText(g) {
@@ -68,12 +71,28 @@ function init() {
             txt_canvas.fillText(toText(gray), w, h);
         }
     }
+    
+    saveImg2MobileAndPC();
 }
 
 
+function saveImg2MobileAndPC() {
+    
+    var type = 'png';
+    var imgdata = txt_div.toDataURL(type);
+    
+    var fixtype = function (type) {
+        type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
+        var r = type.match(/png|jpeg|bmp|gif/)[0];
+        return 'image/' + r;
+    }
+    imgdata = imgdata.replace(fixtype(type), 'image/octet-stream')
+    
+    downloadImg.download=imgdata;
+}
 
 //save image
-function saveImg() {
+function saveImg2PC() {
     
     var type = 'png';
     var imgdata = txt_div.toDataURL(type);
