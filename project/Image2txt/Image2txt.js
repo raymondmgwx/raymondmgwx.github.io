@@ -71,6 +71,8 @@ function init() {
             txt_canvas.fillText(toText(gray), w, h);
         }
     }
+    
+    saveImg2PC();
 }
 
 function base64Img2Blob(code){
@@ -130,6 +132,8 @@ function saveImg2PC() {
         link.dispatchEvent(event);
     }
     var filename = new Date().toLocaleDateString() + '.' + type;
+    
+    console.log(imgdata);
     saveFile(imgdata, filename);
 }
 
