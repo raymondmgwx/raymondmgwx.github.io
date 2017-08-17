@@ -74,7 +74,9 @@ function init() {
 
 //save image
 function saveImg() {
-    var imgdata = txt_div.toDataURL('png');
+    
+    var type = 'png';
+    var imgdata = txt_div.toDataURL(type);
 
     var fixtype = function (type) {
         type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
