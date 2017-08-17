@@ -16,7 +16,7 @@ img.onload = init; // init
 
 //bind event
 fileBtn.onchange = getImg;
-downloadBtn.onclick = downloadFile;
+downloadBtn.onclick = saveImg2MobileAndPC;
 
 //generate txt according to gray value
 function toText(g) {
