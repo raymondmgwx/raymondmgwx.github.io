@@ -37,8 +37,8 @@ function getGray(r, g, b) {
 
 // 转换
 function init() {
-    txtDiv.style.width = img.width + 'px';
-    txtDiv.style.height = img.height + 'px';
+    //txtDiv.style.width = img.width + 'px';
+    //txtDiv.style.height = img.height + 'px';
     cv.width = img.width;
     cv.height = img.height;
     c.drawImage(img, 0, 0);
