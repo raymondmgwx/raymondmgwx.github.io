@@ -184,4 +184,6 @@ function initEvent() {
             trackball.enabled = false;
         }
     };
+
+    console.log('init event...'+Math.random());
 }
