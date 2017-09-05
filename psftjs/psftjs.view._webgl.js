@@ -43,10 +43,11 @@ WRE.view._webgl._view._init = function (callback) {
             //$("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '.js" charset="utf-8"></script>');
             loadScript(WRE.view._webgl._projectRootPath + '.js' , function () {
                 console.log("loaded project " + WRE.view._webgl._projectName + "  current time:" + new Date().getTime());
+                callback();
             });
 
            
-            callback();
+       
         });
 
 
