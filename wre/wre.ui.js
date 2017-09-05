@@ -73,7 +73,7 @@ WRE.ui._init = function () {
 
 WRE.ui._build = function (callback) {
     callback();
-}
+};
 
 
 

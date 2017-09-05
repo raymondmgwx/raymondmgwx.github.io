@@ -35,7 +35,7 @@
 
         var loc = this.runtime.scriptLocation + '/';
 
-        this._libraries = [
+        this._wreLibraries = [
             loc + 'lib/bootstrap/bootstrap.min.js',
             loc + 'lib/numeric-1.2.6.min.js',
             loc + 'lib/webgl/webgl-util.js',
@@ -81,28 +81,33 @@
             var self = this;
             this.bootstrap.loading(self.config.theme);
 
-            loadScript(loc + 'lib/jquery-3.1.1.min.js', function () {
-                loadScript(loc + 'lib/tether.min.js', function () {
-                    loadMultipleScripts(self._canvas2dLibraries, function () {
-                        console.log("WRE canvas2d library successfully loaded.");
-                    });
-
-
-                    loadMultipleScripts(self._libraries, function () {
-                        console.log("WRE libraries successfully loaded.");
-                        loadMultipleScripts(self._components, function () {
-                            console.log("WRE components successfully loaded.");
-                            self.boot(function () {
-                                self.bootstrap.finishLoading();
+            switch(self.config.theme){
+                case "W-RayEngine":
+                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function () {
+                        loadScript(loc + 'lib/tether.min.js', function () {
+                            loadMultipleScripts(self._canvas2dLibraries, function () {
+                                console.log("WRE canvas2d library successfully loaded.");
+                            });
+        
+        
+                            loadMultipleScripts(self._wreLibraries, function () {
+                                console.log("WRE libraries successfully loaded.");
+                                loadMultipleScripts(self._components, function () {
+                                    console.log("WRE components successfully loaded.");
+                                    self.boot(function () {
+                                        self.bootstrap.finishLoading();
+                                    });
+                                });
                             });
                         });
                     });
-                });
-            });
+                    break;
+            }
+
 
 
             function loadScript(url, callback) {
-                var script = document.createElement("script")
+                var script = document.createElement("script");
                 script.type = "text/javascript";
                 if (script.readyState) { //IE
                     script.onreadystatechange = function () {
@@ -197,4 +202,4 @@
     }
 
     window.WRE = new _WRE();
-})()
+})();
