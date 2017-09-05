@@ -32,7 +32,7 @@ WRE.view._webgl._view._init = function (callback) {
         } else {
             WRE.view._webgl._projectFile += getReqQuery().e+"/"+getReqQuery().e;
             WRE.view._webgl._projectName = getReqQuery().e;
-            WRE.view._webgl._projectRootPath = WRE.view._webgl._projectFile;
+            WRE.view._webgl._projectRootPath = WRE.view._webgl._projectFile +".js?"+ new Date().getTime();
         }
         
         $.when(
@@ -40,7 +40,7 @@ WRE.view._webgl._view._init = function (callback) {
         ).then(function (canvasHtml) {
             WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
 
-            $("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '.js" charset="utf-8"></script>');
+            $("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '" charset="utf-8"></script>');
 
             console.log("loaded project " + WRE.view._webgl._projectName);
             callback();
