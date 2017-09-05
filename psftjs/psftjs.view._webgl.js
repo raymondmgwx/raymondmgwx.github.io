@@ -41,7 +41,7 @@ WRE.view._webgl._view._init = function (callback) {
             WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
 
             //$("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '.js" charset="utf-8"></script>');
-            loadScript(loc + WRE.view._webgl._projectRootPath + '.js' , function () {
+            loadScript(WRE.view._webgl._projectRootPath + '.js' , function () {
                 console.log("loaded project " + WRE.view._webgl._projectName + "  current time:" + new Date().getTime());
             });
 
