@@ -158,7 +158,7 @@ function render() {
 }
 
 function initEvent() {
-    document.onmousemove = function(e) {
+    document.onmousemove, document.ontouchmove = function(e) {
         e = e || window.event;
         x = e.clientX;
         y = e.clientY;
@@ -169,5 +169,5 @@ function initEvent() {
         else{
             trackball.enabled = false;
         }
-    }
+    };
 }
