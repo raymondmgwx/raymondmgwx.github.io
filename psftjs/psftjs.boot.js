@@ -1,4 +1,4 @@
-<!--//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////                                                                      //
 ////  W-RayEngine            //////////   v0.0                                                              //
 //////////////////////////////////////                                                                      //
@@ -7,17 +7,20 @@
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PhysicsSimulationLab">
-    <meta name="author" content="RaymondMcGuire">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Physics_Simulation_Lab</title>
-</head>
-<body>
-</body>
-</html>
-<script type="text/javascript" charset="utf-8" src="psftjs/psftjs.bootstrap.js"></script>
+
+WRE.boot = function (callback) {
+    WRE.runtime._init();
+    $.when(
+        WRE.view._init(),
+        WRE.ui._init()
+    ).then(function () {
+        WRE.view._build(function () {
+            WRE.ui._build(function () {
+                callback();
+            });
+        });
+    });
+};
+
+
+
