@@ -14,10 +14,6 @@ window.addEventListener("load", function () {
 });
 
 
-function initEvent() {
-    
-}
-
 function threeStart() {
     initThree();  
     initCamera(); 
@@ -28,7 +24,7 @@ function threeStart() {
 }
 
 var stats;
-var renderer, scene, canvasFrame; 
+var renderer, scene, canvasFrame, canvas; 
 function initThree() {
 
     //detect the envir of the browser
@@ -42,8 +38,12 @@ function initThree() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
 
-    canvasFrame.appendChild(renderer.domElement);
+
+    canvas = renderer.domElement;
+    canvasFrame.appendChild(canvas);
     
+
+
     stats = new Stats();
     canvasFrame.appendChild( stats.dom );
     
@@ -80,7 +80,6 @@ function initCamera() {
     trackball.staticMoving = true;
     trackball.dynamicDampingFactor = 0.3;
 
-    trackball.addEventListener( 'change', render );
 }
 
 var directionalLight, ambientLight;
@@ -156,4 +155,19 @@ function render() {
     renderer.clear();
     renderer.render( scene, camera );
     
+}
+
+function initEvent() {
+    document.onmousemove = function(e) {
+        e = e || window.event;
+        x = e.clientX;
+        y = e.clientY;
+
+        if(x-canvas.getBoundingClientRect().left > 0 && x-canvas.getBoundingClientRect().left-canvas.width < 0 && y-canvas.getBoundingClientRect().top > 0 && y-canvas.getBoundingClientRect().top-canvas.height < 0){
+            trackball.enabled = true;
+        }
+        else{
+            trackball.enabled = false;
+        }
+    }
 }
