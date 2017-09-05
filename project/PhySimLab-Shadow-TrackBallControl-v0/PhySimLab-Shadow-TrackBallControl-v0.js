@@ -7,11 +7,6 @@
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
-//after load the info of html
-window.addEventListener("load", function () {
-    threeStart(); 
-    initEvent();  
-});
 
 
 function threeStart() {
@@ -176,3 +171,8 @@ function initEvent() {
 
     console.log('init event...'+Math.random());
 }
+
+
+
+threeStart(); 
+initEvent(); 
