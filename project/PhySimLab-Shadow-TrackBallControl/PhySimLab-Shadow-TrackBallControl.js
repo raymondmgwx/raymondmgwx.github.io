@@ -158,7 +158,21 @@ function render() {
 }
 
 function initEvent() {
-    document.onmousemove, document.ontouchmove = function(e) {
+    
+    document.onmousemove = function(e) {
+        e = e || window.event;
+        x = e.clientX;
+        y = e.clientY;
+
+        if(x-canvas.getBoundingClientRect().left > 0 && x-canvas.getBoundingClientRect().left-canvas.width < 0 && y-canvas.getBoundingClientRect().top > 0 && y-canvas.getBoundingClientRect().top-canvas.height < 0){
+            trackball.enabled = true;
+        }
+        else{
+            trackball.enabled = false;
+        }
+    };
+
+    document.ontouchmove= function(e) {
         e = e || window.event;
         x = e.clientX;
         y = e.clientY;
