@@ -3,7 +3,7 @@
 ////  PhysicsSimulationLab  //////////   v0.0                                                               //
 //////////////////////////////////////                                                                      //
 //////////////////////////////////////  Copyright 2017-2018,                                                //
-//////////////////////////////////////  Last vist: 9, 05, 2017  by Raymond Wang                             //
+//////////////////////////////////////  Last vist: 8, 05, 2017  by Raymond Wang                             //
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
@@ -13,7 +13,7 @@ function threeStart() {
     initThree();  
     initCamera(); 
     initLight();  
-    initObject(); 
+    initObject();
     render();
     animate();       
 }
@@ -108,32 +108,35 @@ function initObject() {
 
     var yuka_n = 20,  
         yuka_w = 100; 
+
     for (var i = -yuka_n / 2; i <= yuka_n / 2; i++) {
         for (var j = -yuka_n / 2; j <= yuka_n / 2; j++) {
-            //位置座標
+            //pos
             var x = j * yuka_w;
             var y = i * yuka_w;
-            //一辺の長さ「yuka_w」の正方形の形状オブジェクトの宣言と生成
+
             geometry = new THREE.PlaneGeometry(yuka_w, yuka_w);
 
-            //市松模様とするための材質オブジェクトを生成
-            if (Math.abs(i + j) % 2 == 0) {
-                material = new THREE.MeshLambertMaterial({ color: 0x999999 });
-            } else {
-                material = new THREE.MeshLambertMaterial({ color: 0x4d4d4d });
+            if (Math.abs(i + j) % 3 == 0) {
+                material = new THREE.MeshLambertMaterial({ color: 0x00CED1 });
+            } else if (Math.abs(i + j) % 3 == 1) {
+                material = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+            } else if (Math.abs(i + j) % 3 == 2) {
+                material = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
             }
-            //平面オブジェクトの宣言と生成
+            
             var plane = new THREE.Mesh(geometry, material);
-            //平面オブジェクトの位置の設定
+            
             plane.position.set(x, y, 0);
             
             plane.castShadow = false;
             plane.receiveShadow = true;
-            //平面オブジェクトのシーンへの追加
+            
             scene.add(plane);
         }
     }
 }
+
 
 
 function animate() {
