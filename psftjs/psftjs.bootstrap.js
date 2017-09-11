@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->
 
 
-(function () {
+(function() {
 
     function _WRE(config) {
         console.log("Instantiating WRG");
@@ -37,6 +37,7 @@
 
         this._psftjsLibraries = [
             loc + 'lib/bootstrap/bootstrap.min.js',
+            loc + 'lib/bootstrap/bootstrap-slider.min.js',
             loc + 'lib/jquery.jqplot.min.js',
             loc + 'lib/three/three.min.js'
         ];
@@ -62,21 +63,21 @@
         this.ui = {};
 
 
-        this.bootstrap = function () {
+        this.bootstrap = function() {
             var self = this;
             this.bootstrap.loading(self.config.theme);
 
-            switch(self.config.theme){
+            switch (self.config.theme) {
                 case "PhysicsSimulationLab":
-                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function () {
-                        loadScript(loc + 'lib/tether.min.js', function () {       
-                            loadMultipleScripts(self._psftjsLibraries, function () {
+                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function() {
+                        loadScript(loc + 'lib/tether.min.js', function() {
+                            loadMultipleScripts(self._psftjsLibraries, function() {
                                 console.log("PSL libraries successfully loaded.");
-                                loadMultipleScripts(self._threejsPlugins, function () {
+                                loadMultipleScripts(self._threejsPlugins, function() {
                                     console.log("PSL-plugins libraries successfully loaded.");
-                                    loadMultipleScripts(self._components, function () {
+                                    loadMultipleScripts(self._components, function() {
                                         console.log("PSL components successfully loaded.");
-                                        self.boot(function () {
+                                        self.boot(function() {
                                             self.bootstrap.finishLoading();
                                         });
                                     });
@@ -93,7 +94,7 @@
                 var script = document.createElement("script");
                 script.type = "text/javascript";
                 if (script.readyState) { //IE
-                    script.onreadystatechange = function () {
+                    script.onreadystatechange = function() {
                         if (script.readyState == "loaded" || script.readyState == "complete") {
                             script.onreadystatechange = null;
                             //console.log(url + " loaded.");
@@ -101,13 +102,13 @@
                         }
                     };
                 } else { //Others
-                    script.onload = function () {
+                    script.onload = function() {
                         //console.log(url + " loaded.");
                         callback();
                     };
                 }
                 //script.src = url;
-                script.src = url+ '?' + new Date().getTime();
+                script.src = url + '?' + new Date().getTime();
                 document.getElementsByTagName("head")[0].appendChild(script);
             }
 
@@ -115,7 +116,7 @@
                 // /console.log(urlArray.length);
                 var counter = urlArray.length;
                 for (var i = 0; i < urlArray.length; i++) {
-                    loadScript(urlArray[i], function () {
+                    loadScript(urlArray[i], function() {
                         counter = counter - 1;
                         if (counter == 0) {
                             callback();
@@ -124,7 +125,7 @@
                 }
             }
         };
-        this.bootstrap.loading = function (theme) {
+        this.bootstrap.loading = function(theme) {
             console.log('Start loading...');
             var preload = document.createElement('div');
             preload.setAttribute('id', 'PSL-loading');
@@ -157,7 +158,7 @@
             document.body.appendChild(preload);
             this.loading.dom = preload;
         };
-        this.bootstrap.finishLoading = function () {
+        this.bootstrap.finishLoading = function() {
             document.body.removeChild(this.loading.dom);
             console.log('Loading finished.');
         };

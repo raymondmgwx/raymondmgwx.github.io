@@ -10,25 +10,37 @@
 
 
 function threeStart() {
-    initThree();  
-    initCamera(); 
-    initLight();  
+    initThree();
+    initCamera();
+    initLight();
     initObject();
     render();
-    animate();       
+    animate();
 }
 
+//define physics var
+var Ball = function(parameter) {
+    this.radius = parameter.radius; //radius
+    this.x = parameter.x;
+    this.y = parameter.y;
+    this.z = parameter.z;
+};
+var ball = new Ball({ radius: 50, x: 0, y: 0, z: 30 });
+
+
+//three.js
 var stats;
-var renderer, scene, canvasFrame, canvas; 
+var renderer, scene, canvasFrame, canvas;
+
 function initThree() {
 
     //detect the envir of the browser
-    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-    
-    canvasFrame = document.getElementById( 'webglContent' );
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
 
-    renderer = new THREE.WebGLRenderer({ antialias: true });  
-    renderer.setSize( canvasFrame.clientWidth, canvasFrame.clientHeight);
+    canvasFrame = document.getElementById('webglContent');
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -36,18 +48,19 @@ function initThree() {
 
     canvas = renderer.domElement;
     canvasFrame.appendChild(canvas);
-    
+
 
 
     stats = new Stats();
-    canvasFrame.appendChild( stats.dom );
-    
+    canvasFrame.appendChild(stats.dom);
+
 
     scene = new THREE.Scene();
 }
 
 var camera, trackball;
 var clock = new THREE.Clock();
+
 function initCamera() {
 
     camera = new THREE.PerspectiveCamera(45, canvasFrame.clientWidth / canvasFrame.clientHeight, 1, 10000);
@@ -57,10 +70,10 @@ function initCamera() {
 
     trackball = new THREE.TrackballControls(camera);
 
-    trackball.screen.width = canvasFrame.clientWidth;                        
-    trackball.screen.height = canvasFrame.clientHeight;                      
-    trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left;  
-    trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top;    
+    trackball.screen.width = canvasFrame.clientWidth;
+    trackball.screen.height = canvasFrame.clientHeight;
+    trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left;
+    trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top;
 
     trackball.noRotate = false;
     trackball.rotateSpeed = 2.0;
@@ -78,12 +91,13 @@ function initCamera() {
 }
 
 var directionalLight, ambientLight;
+
 function initLight() {
 
     directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0, 0);
     directionalLight.position.set(100, 100, 1000);
     directionalLight.castShadow = true;
-    directionalLight.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 10, 2500 ) );
+    directionalLight.shadow = new THREE.LightShadow(new THREE.PerspectiveCamera(50, 1, 10, 2500));
     directionalLight.shadow.bias = 0.0001;
     directionalLight.shadow.mapSize.width = 2048;
     directionalLight.shadow.mapSize.height = 1024;
@@ -95,19 +109,20 @@ function initLight() {
 }
 
 var sphere;
+
 function initObject() {
 
-    var geometry = new THREE.SphereGeometry(100, 20, 20);
+    var geometry = new THREE.SphereGeometry(ball.radius, 20, 20);
     var material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
     sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(0, 0, 200);
+    sphere.position.set(ball.x, ball.y, ball.z);
     sphere.castShadow = true;
     sphere.castShadow = true;
     scene.add(sphere);
 
 
-    var yuka_n = 20,  
-        yuka_w = 100; 
+    var yuka_n = 20,
+        yuka_w = 100;
 
     for (var i = -yuka_n / 2; i <= yuka_n / 2; i++) {
         for (var j = -yuka_n / 2; j <= yuka_n / 2; j++) {
@@ -124,14 +139,14 @@ function initObject() {
             } else if (Math.abs(i + j) % 3 == 2) {
                 material = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
             }
-            
+
             var plane = new THREE.Mesh(geometry, material);
-            
+
             plane.position.set(x, y, 0);
-            
+
             plane.castShadow = false;
             plane.receiveShadow = true;
-            
+
             scene.add(plane);
         }
     }
@@ -149,23 +164,23 @@ function animate() {
 }
 
 function render() {
-      
+
+    sphere.position.set(ball.x, ball.y, ball.z);
     renderer.clear();
-    renderer.render( scene, camera );
-    
+    renderer.render(scene, camera);
+
 }
 
 function initEvent() {
-    
+
     document.onmousemove = function(e) {
         e = e || window.event;
         x = e.clientX;
         y = e.clientY;
 
-        if(x-canvas.getBoundingClientRect().left > 0 && x-canvas.getBoundingClientRect().left-canvas.width < 0 && y-canvas.getBoundingClientRect().top > 0 && y-canvas.getBoundingClientRect().top-canvas.height < 0){
+        if (x - canvas.getBoundingClientRect().left > 0 && x - canvas.getBoundingClientRect().left - canvas.width < 0 && y - canvas.getBoundingClientRect().top > 0 && y - canvas.getBoundingClientRect().top - canvas.height < 0) {
             trackball.enabled = true;
-        }
-        else{
+        } else {
             trackball.enabled = false;
         }
     };
@@ -175,20 +190,45 @@ function initEvent() {
         x = e.touches[0].clientX;
         y = e.touches[0].clientY;
 
-        if(x-canvas.getBoundingClientRect().left > 0 && x-canvas.getBoundingClientRect().left-canvas.width < 0 && y-canvas.getBoundingClientRect().top > 0 && y-canvas.getBoundingClientRect().top-canvas.height < 0){
+        if (x - canvas.getBoundingClientRect().left > 0 && x - canvas.getBoundingClientRect().left - canvas.width < 0 && y - canvas.getBoundingClientRect().top > 0 && y - canvas.getBoundingClientRect().top - canvas.height < 0) {
             trackball.enabled = true;
-        }
-        else{
+        } else {
             trackball.enabled = false;
         }
     };
 
-  
+    //init control param 
+    var strs = ['x', 'y', 'z'];
+    for (var i = 0; i < strs.length; i++) {
+        var axis = strs[i];
+        var value = ball[axis];
 
-    console.log('init event...'+Math.random());
+        document.getElementById("input_" + axis).value = value;
+        $('#slide_' + axis).slider({
+            min: -100,
+            max: 100,
+            step: 1,
+            value: value
+        });
+    }
+
+    $('#slide_x').on("slide", function(slideEvt) {
+        $('#input_x').val(slideEvt.value);
+        ball['x'] = slideEvt.value;
+    });
+    $('#slide_y').on("slide", function(slideEvt) {
+        $('#input_y').val(slideEvt.value);
+        ball['y'] = slideEvt.value;
+    });
+    $('#slide_z').on("slide", function(slideEvt) {
+        $('#input_z').val(slideEvt.value);
+        ball['z'] = slideEvt.value;
+    });
+
+    console.log('init event...' + Math.random());
 }
 
 
 
-threeStart(); 
-initEvent(); 
+threeStart();
+initEvent();
