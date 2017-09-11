@@ -3,7 +3,7 @@
 ////  PhysicsSimulationLab  //////////   v0.0                                                               //
 //////////////////////////////////////                                                                      //
 //////////////////////////////////////  Copyright 2017-2018,                                                //
-//////////////////////////////////////  Last vist: 8, 05, 2017  by Raymond Wang                             //
+//////////////////////////////////////  Last vist: 9, 11, 2017  by Raymond Wang                             //
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
@@ -19,14 +19,67 @@ function threeStart() {
 }
 
 //define physics var
+var step = 0; //ステップ数
+var skip_data = 10; //プロットデータ間引数
+
+//time series record
+var data_x = [];
+var data_y = [];
+var data_z = [];
+
+//pause var
+var restartFlag = false; //restart
+var stopFlag = true;
+
 var Ball = function(parameter) {
-    this.radius = parameter.radius; //radius
+    this.radius = parameter.radius;
     this.x = parameter.x;
     this.y = parameter.y;
     this.z = parameter.z;
+
+    data_x = [];
+    data_y = [];
+    data_z = [];
+
+    data_x.push([0, this.x]);
+    data_y.push([0, this.y]);
+    data_z.push([0, this.z]);
 };
+
 var ball = new Ball({ radius: 50, x: 0, y: 0, z: 30 });
 
+//jplot
+function plotStart() {
+
+    plot2D_position = new Plot2D("graphContent");
+    //オプションの設定
+    plot2D_position.options.axesDefaults.tickOptions.formatString = ''; //目盛フォーマット
+    plot2D_position.options.axes.xaxis.label = "step"; //x軸ラベル
+    plot2D_position.options.axes.yaxis.label = "position"; //y軸ラベル
+    plot2D_position.options.axes.yaxis.labelOptions = { angle: -90 }; //ラベル回転角
+    plot2D_position.options.axes.xaxis.min = 0; //目盛の最小値
+    plot2D_position.options.legend.show = true; //凡例の有無
+    plot2D_position.options.legend.location = 'ne'; //凡例の位置 
+    var series = []; //データ列オプション用配列
+    series.push({
+        showLine: true, //線描画の有無
+        label: "x座標", //凡例の設定
+        markerOptions: { show: true } //点描画の有無
+    });
+    series.push({
+        showLine: true, //線描画の有無
+        label: "y座標", //凡例の設定
+        markerOptions: { show: true } //点描画の有無
+    });
+    series.push({
+        showLine: true, //線描画の有無
+        label: "z座標", //凡例の設定
+        markerOptions: { show: true } //点描画の有無
+    });
+    plot2D_position.options.series = series; //データ列オプションの代入
+
+    console.log("plot start.......");
+}
 
 //three.js
 var stats;
@@ -156,16 +209,57 @@ function initObject() {
 
 function animate() {
 
-    requestAnimationFrame(animate);
-
-    render();
     stats.update();
     trackball.update();
+    update_param();
+
+    render();
+    requestAnimationFrame(animate);
+}
+
+function update_param() {
+
+    if (stopFlag == false) {
+        step++;
+        if (step % skip_data == 0) {
+            data_x.push([step, ball.x]);
+            data_y.push([step, ball.y]);
+            data_z.push([step, ball.z]);
+        }
+    }
+
+    $('#time_elaspe').val(step);
+
+    sphere.position.set(ball.x, ball.y, ball.z);
+
+    if (restartFlag == true) {
+
+        step = 0;
+
+        var parameter = {
+            radius: 50
+        };
+        parameter.x = parseFloat(document.getElementById("input_x").value);
+        parameter.y = parseFloat(document.getElementById("input_y").value);
+        parameter.z = parseFloat(document.getElementById("input_z").value);
+
+        ball = new Ball(parameter);
+
+        restartFlag = false;
+        stopFlag = false;
+
+        $('#btn_start').text("restart");
+    }
+
+    if (stopFlag) {
+        $('#btn_resume').text("resume");
+    } else {
+        $('#btn_resume').text("stop");
+    }
 }
 
 function render() {
 
-    sphere.position.set(ball.x, ball.y, ball.z);
     renderer.clear();
     renderer.render(scene, camera);
 
@@ -225,10 +319,41 @@ function initEvent() {
         ball['z'] = slideEvt.value;
     });
 
+
+
+    //bind button event
+    document.getElementById("btn_start").addEventListener("click", function() {
+        restartFlag = true;
+    });
+
+    document.getElementById("btn_resume").addEventListener("click", function() {
+        if (stopFlag) {
+            stopFlag = false;
+        } else {
+            stopFlag = true;
+        }
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        if (e.target.id == 'graph-tab') {
+            plot2D_position.clearData();
+
+            plot2D_position.pushData(data_x);
+            plot2D_position.pushData(data_y);
+            plot2D_position.pushData(data_z);
+
+            plot2D_position.linerPlot();
+            stopFlag = true;
+        }
+
+    });
+
+
     console.log('init event...' + Math.random());
 }
 
 
 
 threeStart();
+plotStart();
 initEvent();

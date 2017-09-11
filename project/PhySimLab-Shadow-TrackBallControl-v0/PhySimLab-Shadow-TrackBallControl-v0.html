@@ -20,6 +20,18 @@
             <div class="card-body">
 
                 <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h4>time elaspe</h4>
+                                <input id="time_elaspe" type="text" class="form-control text-center" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
                     <div class="col-lg-4">
                         <div class="card text-center">
                             <div class="card-body">
@@ -40,7 +52,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-lg-4">
                         <div class="card text-center">
                             <div class="card-body">
@@ -51,6 +62,27 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary btn-sm" id="btn_start">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary btn-sm" id="btn_resume">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -84,7 +116,14 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="graph" role="tabpanel" aria-labelledby="graph-tab">
-
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="graphHeight">
+                                </div>
+                                <div id="graphContent">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

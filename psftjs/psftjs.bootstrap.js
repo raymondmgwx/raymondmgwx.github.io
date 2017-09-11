@@ -48,6 +48,16 @@
             loc + 'lib/three/utils/Detector.js'
         ];
 
+        this._jqplotPlugins = [
+            loc + 'lib/jqplot_plugins/jqplot.canvasTextRenderer.js',
+            loc + 'lib/jqplot_plugins/jqplot.canvasAxisTickRenderer.js',
+            loc + 'lib/jqplot_plugins/jqplot.canvasAxisLabelRenderer.js',
+            loc + 'lib/jqplot_plugins/jqplot.logAxisRenderer.js',
+            loc + 'lib/jqplot_plugins/jqplot.highlighter.js',
+            loc + 'lib/jqplot_plugins/jqplot.cursor.js',
+            loc + 'lib/plot2D.js'
+        ];
+
 
         this._components = [
             loc + 'psftjs.util.js',
@@ -74,11 +84,13 @@
                             loadMultipleScripts(self._psftjsLibraries, function() {
                                 console.log("PSL libraries successfully loaded.");
                                 loadMultipleScripts(self._threejsPlugins, function() {
-                                    console.log("PSL-plugins libraries successfully loaded.");
-                                    loadMultipleScripts(self._components, function() {
-                                        console.log("PSL components successfully loaded.");
-                                        self.boot(function() {
-                                            self.bootstrap.finishLoading();
+                                    loadMultipleScripts(self._jqplotPlugins, function() {
+                                        console.log("PSL-plugins libraries successfully loaded.");
+                                        loadMultipleScripts(self._components, function() {
+                                            console.log("PSL components successfully loaded.");
+                                            self.boot(function() {
+                                                self.bootstrap.finishLoading();
+                                            });
                                         });
                                     });
                                 });
