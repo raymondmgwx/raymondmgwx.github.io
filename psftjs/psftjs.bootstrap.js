@@ -119,8 +119,8 @@
                         callback();
                     };
                 }
-                //script.src = url;
-                script.src = url + '?' + new Date().getTime();
+                script.src = url;
+                //script.src = url + '?' + new Date().getTime();
                 document.getElementsByTagName("head")[0].appendChild(script);
             }
 

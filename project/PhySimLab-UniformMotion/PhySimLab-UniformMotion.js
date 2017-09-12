@@ -3,13 +3,14 @@
 ////  PhysicsSimulationLab  //////////   v0.0                                                               //
 //////////////////////////////////////                                                                      //
 //////////////////////////////////////  Copyright 2017-2018,                                                //
-//////////////////////////////////////  Last vist: 9, 11, 2017  by Raymond Wang                             //
+//////////////////////////////////////  Last vist: 9, 12, 2017  by Raymond Wang                             //
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
 
 
 function threeStart() {
+    addScript();
     initThree();
     initCamera();
     initLight();
@@ -272,6 +273,14 @@ function render() {
     renderer.clear();
     renderer.render(scene, camera);
 
+}
+
+
+function addScript() {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML";
+    document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 function initEvent() {
