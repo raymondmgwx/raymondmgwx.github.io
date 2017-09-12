@@ -19,8 +19,12 @@ function threeStart() {
 }
 
 //define physics var
-var step = 0; //ステップ数
-var skip_data = 10; //プロットデータ間引数
+var step = 0;
+var dt = 0.01666667;
+var skip = 1;
+var skip_data = 5;
+
+var plot2D_position;
 
 //time series record
 var data_x = [];
@@ -219,16 +223,21 @@ function animate() {
 
 function update_param() {
 
+
+    var time = step * dt;
     if (stopFlag == false) {
-        step++;
-        if (step % skip_data == 0) {
-            data_x.push([step, ball.x]);
-            data_y.push([step, ball.y]);
-            data_z.push([step, ball.z]);
+        for (var k = 0; k < skip; k++) {
+            step++;
+            time = step * dt;
+            if (step % (skip * skip_data) == 0) {
+                data_x.push([time, ball.x]);
+                data_y.push([time, ball.y]);
+                data_z.push([time, ball.z]);
+            }
         }
     }
 
-    $('#time_elaspe').val(step);
+    $('#time_elaspe').val(time.toFixed(2));
 
     sphere.position.set(ball.x, ball.y, ball.z);
 

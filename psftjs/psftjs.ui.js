@@ -40,8 +40,8 @@ WRE.ui._init = function() {
             $("head").append('<script type="text/javascript" src="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/js/wre.ui.' + WRE.ui.uiMode + '.js" charset="utf-8"></script>'),
             $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/' + WRE.ui.uiMode + '.css" />'),
             $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/bootstrap.min.css" />'),
-            $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/bootstrap-slider.min.css" />')
-            //$("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/jquery.jqplot.min.css" />')
+            $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/bootstrap-slider.min.css" />'),
+            $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/jquery.jqplot.min.css" />')
         ).then(function(wreHtml) {
 
             //create html
