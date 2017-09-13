@@ -21,16 +21,20 @@ function threeStart() {
 
 //define physics var
 var step = 0;
-var dt = 0.01666667;
-var skip = 1;
+var dt = 0.001;
+var skip = 100;
 var skip_data = 5;
 
 var plot2D_position;
+var plot2D_velocity;
 
 //time series record
 var data_x = [];
 var data_y = [];
 var data_z = [];
+var data_vx = [];
+var data_vy = [];
+var data_vz = [];
 
 //pause var
 var restartFlag = false; //restart
@@ -42,25 +46,54 @@ var Ball = function(parameter) {
     this.y = parameter.y;
     this.z = parameter.z;
 
+    this.vx = parameter.vx;
+    this.vy = parameter.vy;
+    this.vz = parameter.vz;
+
     data_x = [];
     data_y = [];
     data_z = [];
+    data_vx = [];
+    data_vy = [];
+    data_vz = [];
 
     data_x.push([0, this.x]);
     data_y.push([0, this.y]);
     data_z.push([0, this.z]);
+    data_vx.push([0, this.vx]);
+    data_vy.push([0, this.vy]);
+    data_vz.push([0, this.vz]);
 };
 
-var ball = new Ball({ radius: 50, x: 0, y: 0, z: 30 });
+Ball.prototype = {
+    constructor: Ball,
+    timeEvolution: function(dt) {
+
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+        this.z += this.vz * dt;
+    }
+};
+
+var ball = new Ball({
+    radius: 30,
+    x: 0,
+    y: 0,
+    z: 50,
+    vx: 5,
+    vy: 2,
+    vz: 1
+});
 
 //jplot
 function plotStart() {
 
-    plot2D_position = new Plot2D("graphContent");
+    //position graph
+    plot2D_position = new Plot2D("posPlotContent");
 
     plot2D_position.options.axesDefaults.tickOptions.formatString = '';
-    plot2D_position.options.axes.xaxis.label = "step"; //x axis label
-    plot2D_position.options.axes.yaxis.label = "position"; //y axis label
+    plot2D_position.options.axes.xaxis.label = "time [s]"; //x axis label
+    plot2D_position.options.axes.yaxis.label = "position [m]"; //y axis label
     plot2D_position.options.axes.yaxis.labelOptions = { angle: -90 };
     plot2D_position.options.axes.xaxis.min = 0; //min value
     plot2D_position.options.legend.show = true;
@@ -82,8 +115,36 @@ function plotStart() {
         markerOptions: { show: true }
     });
     plot2D_position.options.series = series;
+    console.log("position plot start.......");
 
-    console.log("plot start.......");
+    //velocity graph
+    plot2D_velocity = new Plot2D("velPlotContent");
+
+    plot2D_velocity.options.axesDefaults.tickOptions.formatString = '';
+    plot2D_velocity.options.axes.xaxis.label = "time [s]";
+    plot2D_velocity.options.axes.yaxis.label = "velocity [m/s]";
+    plot2D_velocity.options.axes.yaxis.labelOptions = { angle: -90 };
+    plot2D_velocity.options.axes.xaxis.min = 0;
+    plot2D_velocity.options.legend.show = true;
+    plot2D_velocity.options.legend.location = 'ne';
+    var series = [];
+    series.push({
+        showLine: true,
+        label: "vx",
+        markerOptions: { show: true }
+    });
+    series.push({
+        showLine: true,
+        label: "vy",
+        markerOptions: { show: true }
+    });
+    series.push({
+        showLine: true,
+        label: "vz",
+        markerOptions: { show: true }
+    });
+    plot2D_velocity.options.series = series;
+    console.log("velocity plot start.......");
 }
 
 //three.js
@@ -230,10 +291,15 @@ function update_param() {
         for (var k = 0; k < skip; k++) {
             step++;
             time = step * dt;
+            ball.timeEvolution(dt);
+
             if (step % (skip * skip_data) == 0) {
                 data_x.push([time, ball.x]);
                 data_y.push([time, ball.y]);
                 data_z.push([time, ball.z]);
+                data_vx.push([time, ball.vx]);
+                data_vy.push([time, ball.vy]);
+                data_vz.push([time, ball.vz]);
             }
         }
     }
@@ -245,13 +311,16 @@ function update_param() {
     if (restartFlag == true) {
 
         step = 0;
+        skip = 100;
+        dt = 0.001;
 
-        var parameter = {
-            radius: 50
-        };
+        var parameter = { radius: 50 };
         parameter.x = parseFloat(document.getElementById("input_x").value);
         parameter.y = parseFloat(document.getElementById("input_y").value);
         parameter.z = parseFloat(document.getElementById("input_z").value);
+        parameter.vx = parseFloat(document.getElementById("input_vx").value);
+        parameter.vy = parseFloat(document.getElementById("input_vy").value);
+        parameter.vz = parseFloat(document.getElementById("input_vz").value);
 
         ball = new Ball(parameter);
 
@@ -310,7 +379,7 @@ function initEvent() {
     };
 
     //init control param 
-    var strs = ['x', 'y', 'z'];
+    var strs = ['x', 'y', 'z', 'vx', 'vy', 'vz'];
     for (var i = 0; i < strs.length; i++) {
         var axis = strs[i];
         var value = ball[axis];
@@ -322,20 +391,18 @@ function initEvent() {
             step: 1,
             value: value
         });
+
+        $('#slide_' + axis).on("slide", function(slideEvt) {
+
+            var id = this.id;
+            var curAxis = id.replace("slide_", "");
+            var curInput = id.replace("slide_", "input_");
+            $('#' + curInput).val(slideEvt.value);
+            ball[curAxis] = slideEvt.value;
+        });
     }
 
-    $('#slide_x').on("slide", function(slideEvt) {
-        $('#input_x').val(slideEvt.value);
-        ball['x'] = slideEvt.value;
-    });
-    $('#slide_y').on("slide", function(slideEvt) {
-        $('#input_y').val(slideEvt.value);
-        ball['y'] = slideEvt.value;
-    });
-    $('#slide_z').on("slide", function(slideEvt) {
-        $('#input_z').val(slideEvt.value);
-        ball['z'] = slideEvt.value;
-    });
+
 
 
 
@@ -353,7 +420,7 @@ function initEvent() {
     });
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        if (e.target.id == 'graph-tab') {
+        if (e.target.id == 'pos-tab') {
             plot2D_position.clearData();
 
             plot2D_position.pushData(data_x);
@@ -361,6 +428,15 @@ function initEvent() {
             plot2D_position.pushData(data_z);
 
             plot2D_position.linerPlot();
+            stopFlag = true;
+        } else if (e.target.id == 'vel-tab') {
+            plot2D_velocity.clearData();
+
+            plot2D_velocity.pushData(data_vx);
+            plot2D_velocity.pushData(data_vy);
+            plot2D_velocity.pushData(data_vz);
+
+            plot2D_velocity.linerPlot();
             stopFlag = true;
         }
 

@@ -1,4 +1,4 @@
-#webglContent {
+.canvas-3d {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -6,7 +6,7 @@
     left: 0%;
 }
 
-#webglContent canvas {
+.canvas-3d canvas {
     display: block;
     width: 100%;
     height: 100%;
@@ -14,21 +14,16 @@
     top: 0;
 }
 
-#canvasHeight {
+.canvas-3d-height {
     height: 600px;
 }
 
-#graphContent {
+.canvas-2d {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0%;
     left: 0%;
-    background-color: #FFFFFF;
-}
-
-#graphHeight {
-    height: 600px;
 }
 
 body {

@@ -1,0 +1,198 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Introduce</div>
+            <div class="card-body">
+                <h4 class="card-title">Uniform Motion</h4>
+                <p class="card-text">Uniform motion is defined as the motion of an object in which the object travels in a straight line and its velocity remains constant along that line as it covers equal distances in equal intervals of time, irrespective of the length of
+                    the time.</p>
+
+                <h6 class="card-subtitle mb-2 text-muted">the relationship of time, position and velocity</h6>
+                <p>
+                    \begin{align} v & = \frac{x_1-x_0}{t_1-t_0} = \frac{x_1-x_0}{\Delta t} \\ \Delta & t = t1 - t0 \end{align}
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">recurrence relation</h6>
+                <p>
+                    \[x_1 = x_0 + v\Delta t \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Euler method</h6>
+                <p>
+                    \[x_{n+1} = x_n + v\Delta t \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Uniform Motion for 3D</h6>
+                <p>
+                    \begin{align} r_{n+1} & = r_n + v\Delta t \\ (x_{n+1},y_{n+1},z_{n+1}) & = (x_n + v_x\Delta t,y_n + v_y\Delta t,z_n + v_z\Delta t) \end{align}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Parameter for sphere control</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h4>time elaspe</h4>
+                                <input id="time_elaspe" type="text" class="form-control text-center" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param x</h6>
+                                <input id="slide_x" data-slider-id='ex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_x" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param y</h6>
+                                <input id="slide_y" data-slider-id='ex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_y" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param z</h6>
+                                <input id="slide_z" data-slider-id='ex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_z" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param x</h6>
+                                <input id="slide_vx" data-slider-id='vex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vx" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param y</h6>
+                                <input id="slide_vy" data-slider-id='vex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vy" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param z</h6>
+                                <input id="slide_vz" data-slider-id='vex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vz" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_start">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_resume">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Physics Simulation Scene</div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="BasicTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="threeD-tab" data-toggle="tab" href="#threed" role="tab" aria-controls="threed" aria-expanded="true">3D Scene</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pos-tab" data-toggle="tab" href="#pos" role="tab" aria-controls="pos">Position Plot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vel-tab" data-toggle="tab" href="#vel" role="tab" aria-controls="vel">Velocity Plot</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="threed" role="tabpanel" aria-labelledby="threeD-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="canvasHeight" class="canvas-3d-height">
+                                </div>
+                                <div id="webglContent" class="canvas-3d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pos" role="tabpanel" aria-labelledby="pos-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="posPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vel" role="tabpanel" aria-labelledby="vel-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="velPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
