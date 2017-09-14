@@ -1,0 +1,270 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Introduce</div>
+            <div class="card-body">
+                <h4 class="card-title">Jerk</h4>
+                <p class="card-text">the rate of acceleration motion</p>
+
+                <h6 class="card-subtitle mb-2 text-muted">the relationship of time, position and velocity</h6>
+                <p>
+                    \begin{align} j & = \frac{a_1-a_0}{t_1-t_0} = \frac{a_1-a_0}{\Delta t} \end{align}
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Euler method</h6>
+                <p>
+                    \begin{align} a_{n+1} & = a_n + j\Delta t \\ r_{n+1} & = r_n + a_n\Delta t \end{align}
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Jerk for 3D</h6>
+                <p>
+                    \begin{align} (x_{n+1},y_{n+1},z_{n+1}) & = (x_n + v_xn\Delta t,y_n + v_yn\Delta t,z_n + v_zn\Delta t) \\ (v_{xn+1},v_{yn+1},v_{zn+1}) & = (v_xn + a_xn\Delta t,v_yn + a_yn\Delta t,v_zn + a_zn\Delta t) \\ (a_{xn+1},a_{yn+1},a_{zn+1}) & = (a_xn + j_x\Delta
+                    t,a_yn + j_y\Delta t,a_zn + j_z\Delta t) \end{align}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Parameter for sphere control</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h4>time elaspe</h4>
+                                <input id="time_elaspe" type="text" class="form-control text-center" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param x</h6>
+                                <input id="slide_x" data-slider-id='ex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_x" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param y</h6>
+                                <input id="slide_y" data-slider-id='ex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_y" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param z</h6>
+                                <input id="slide_z" data-slider-id='ex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_z" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param x</h6>
+                                <input id="slide_vx" data-slider-id='vex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vx" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param y</h6>
+                                <input id="slide_vy" data-slider-id='vex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vy" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param z</h6>
+                                <input id="slide_vz" data-slider-id='vex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vz" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>acceleration param x</h6>
+                                <input id="slide_ax" data-slider-id='aex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_ax" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>acceleration param y</h6>
+                                <input id="slide_ay" data-slider-id='aex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_ay" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>acceleration param z</h6>
+                                <input id="slide_az" data-slider-id='aex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_az" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>jerk param x</h6>
+                                <input id="slide_jx" data-slider-id='jex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_jx" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>jerk param y</h6>
+                                <input id="slide_jy" data-slider-id='jex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_jy" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>jerk param z</h6>
+                                <input id="slide_jz" data-slider-id='jex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_jz" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_start">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_resume">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Physics Simulation Scene</div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="BasicTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="threeD-tab" data-toggle="tab" href="#threed" role="tab" aria-controls="threed" aria-expanded="true">3D Scene</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pos-tab" data-toggle="tab" href="#pos" role="tab" aria-controls="pos">Position Plot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vel-tab" data-toggle="tab" href="#vel" role="tab" aria-controls="vel">Velocity Plot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="acc-tab" data-toggle="tab" href="#acc" role="tab" aria-controls="acc">Acceleration Plot</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="threed" role="tabpanel" aria-labelledby="threeD-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="canvasHeight" class="canvas-3d-height">
+                                </div>
+                                <div id="webglContent" class="canvas-3d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pos" role="tabpanel" aria-labelledby="pos-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="posPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vel" role="tabpanel" aria-labelledby="vel-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="velPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="acc" role="tabpanel" aria-labelledby="acc-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="accPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
