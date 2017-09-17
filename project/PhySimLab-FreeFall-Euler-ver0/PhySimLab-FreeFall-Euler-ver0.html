@@ -1,0 +1,246 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Introduce</div>
+            <div class="card-body">
+                <h4 class="card-title">FreeFall Simulation Used by Euler</h4>
+                <p class="card-text">definiation</p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Gravity for 3D</h6>
+                <p>
+                    \begin{align} F_g & = (0,0,-mg) \\ a(t) & = \frac{F(t)}{m} = (0,0,-g) \end{align}
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Newtonian Equation of motion</h6>
+                <p>
+                    \begin{align} m(t)a(t) & = F(t) \\ m(t)a_x(t) & = f_x(t) \\ m(t)a_y(t) & = f_y(t) \\ m(t)a_z(t) & = f_z(t) \end{align}
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Mechanical energy</h6>
+                <p>left equation</p>
+                <p>
+                    \begin{align} \int_{x_1}^{x_2} m\frac{{\rm d}v(t)}{{\rm d}t} {\rm d}x = & \int_{v_1}^{v_2} m\frac{{\rm d}x(t)}{{\rm d}t} {\rm d}v \\ = & \int_{v_1}^{v_2} mv {\rm d}v \\ = & \left[ \frac{1}{2}mv^2 \right]_{v_1}^{v_2} \\ = & \frac{1}{2}mv_2^2 - \frac{1}{2}mv_1^2
+                    \end{align}
+                </p>
+                <p>right equation</p>
+                <p>
+                    \begin{align} F(t) \equiv &-\frac{{\rm d}U(x(t))}{{\rm d}x} \\ \int_{x_1}^{x_2}F(t){\rm d}x = &-\int_{x_1}^{x_2}\frac{{\rm d}U(x)}{{\rm d}x}{\rm d}x \\ = &-\int_{U_1}^{U_2}{\rm d}U \\ = &-\left[U \right]_{U_1}^{U_2} \\ = &U_1 - U_2 \end{align}
+                </p>
+
+                <p>combine left equation and right equation</p>
+                <p>
+                    \[\frac{1}{2}mv_1^2 + U_1 = \frac{1}{2}mv_2^2 + U_2 \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Kinetic energy</h6>
+                <p>
+                    \[K(t) \equiv \frac{1}{2}mv(t)^2 \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Potential energy</h6>
+                <p>
+                    \[U(t) \equiv -\int F(t){\rm d}x \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Mechanical energy</h6>
+                <p>
+                    \[E(t) \equiv U(t)+K(t) \]
+                </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Euler Method for 3D FreeFall Simulation</h6>
+                <p>
+                    \begin{align} K(t) = & \frac{1}{2}mv(t)^2 \\ = & \frac{1}{2}m(v_x(t)^2 + v_y(t)^2 + v_z(t)^2 ) \end{align}
+                </p>
+                <p>
+                    \begin{align} U(t) = & -\int_0^r F\cdot {\rm d}r \\ = & -\int_0^z (-mg) {\rm d}z \\ = & mgz(t) \end{align}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Parameter for sphere control</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>time elaspe</h6>
+                                <input id="time_elaspe" type="text" class="form-control text-center" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param mass</h6>
+                                <input id="input_mass" type="text" value=1 class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param x</h6>
+                                <input id="slide_x" data-slider-id='ex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_x" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param y</h6>
+                                <input id="slide_y" data-slider-id='ex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_y" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>ball param z</h6>
+                                <input id="slide_z" data-slider-id='ex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_z" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param x</h6>
+                                <input id="slide_vx" data-slider-id='vex1Sliderx' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vx" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param y</h6>
+                                <input id="slide_vy" data-slider-id='vex1Slidery' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vy" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6>velocity param z</h6>
+                                <input id="slide_vz" data-slider-id='vex1Sliderz' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <input id="input_vz" type="text" class="form-control text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_start">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" id="btn_resume">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card text-center">
+            <div class="card-header">Physics Simulation Scene</div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="BasicTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="threeD-tab" data-toggle="tab" href="#threed" role="tab" aria-controls="threed" aria-expanded="true">3D Scene</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pos-tab" data-toggle="tab" href="#pos" role="tab" aria-controls="pos">Position Plot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vel-tab" data-toggle="tab" href="#vel" role="tab" aria-controls="vel">Velocity Plot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ene-tab" data-toggle="tab" href="#ene" role="tab" aria-controls="ene">Energy Plot</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="threed" role="tabpanel" aria-labelledby="threeD-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="canvasHeight" class="canvas-3d-height">
+                                </div>
+                                <div id="webglContent" class="canvas-3d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pos" role="tabpanel" aria-labelledby="pos-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="posPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vel" role="tabpanel" aria-labelledby="vel-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="velPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="ene" role="tabpanel" aria-labelledby="ene-tab">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <div id="enerPlotContent" class="canvas-2d">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
