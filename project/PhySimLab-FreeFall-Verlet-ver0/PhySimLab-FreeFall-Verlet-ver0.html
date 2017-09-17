@@ -3,57 +3,63 @@
         <div class="card text-center">
             <div class="card-header">Introduce</div>
             <div class="card-body">
-                <h4 class="card-title">FreeFall Simulation Used by Euler Method</h4>
+                <h4 class="card-title">FreeFall Simulation Used by Verlet integration</h4>
                 <p class="card-text">definiation</p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Gravity for 3D</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Taylor series</h6>
                 <p>
-                    \begin{align} F_g & = (0,0,-mg) \\ a(t) & = \frac{F(t)}{m} = (0,0,-g) \end{align}
+                    \begin{align} f(x) & = f(a) + f^{\prime}(a)(x-a) + \frac{1}{2}f^{\prime\prime}(a)(x-a)^2 + \frac{1}{6}f^{\prime\prime\prime}(a)(x-a)^3 + \cdot\cdot\cdot \\ f(x) & = \sum_{n=0}^\infty \frac{f^{(n)}(a)}{n!} (x-a)^n \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Newtonian Equation of motion</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Taylor series for x(t) and v(t)</h6>
                 <p>
-                    \begin{align} m(t)a(t) & = F(t) \\ m(t)a_x(t) & = f_x(t) \\ m(t)a_y(t) & = f_y(t) \\ m(t)a_z(t) & = f_z(t) \end{align}
+                    \begin{align} x(t+\Delta t) & = x(t) + x^{\prime}(t)(t+\Delta t - t) + \frac{1}{2}x^{\prime\prime}(t)(t+\Delta t - t)^2 + \frac{1}{6}x^{\prime\prime\prime}(t)(t+\Delta t - t)^3 \\ x(t+\Delta t) & = x(t) + x^{\prime}(t)\Delta t + \frac{1}{2}x^{\prime\prime}(t)(\Delta
+                    t)^2 + \frac{1}{6}x^{\prime\prime\prime}(t)(\Delta t)^3 + \cdot\cdot\cdot \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Mechanical energy</h6>
-                <p>left equation</p>
                 <p>
-                    \begin{align} \int_{x_1}^{x_2} m\frac{{\rm d}v(t)}{{\rm d}t} {\rm d}x = & \int_{v_1}^{v_2} m\frac{{\rm d}x(t)}{{\rm d}t} {\rm d}v \\ = & \int_{v_1}^{v_2} mv {\rm d}v \\ = & \left[ \frac{1}{2}mv^2 \right]_{v_1}^{v_2} \\ = & \frac{1}{2}mv_2^2 - \frac{1}{2}mv_1^2
-                    \end{align}
-                </p>
-                <p>right equation</p>
-                <p>
-                    \begin{align} F(t) \equiv &-\frac{{\rm d}U(x(t))}{{\rm d}x} \\ \int_{x_1}^{x_2}F(t){\rm d}x = &-\int_{x_1}^{x_2}\frac{{\rm d}U(x)}{{\rm d}x}{\rm d}x \\ = &-\int_{U_1}^{U_2}{\rm d}U \\ = &-\left[U \right]_{U_1}^{U_2} \\ = &U_1 - U_2 \end{align}
+                    \begin{align} v(t+\Delta t) & = v(t) + v^{\prime}(t)(t+\Delta t - t) + \frac{1}{2}v^{\prime\prime}(t)(t+\Delta t - t)^2 + \frac{1}{6}v^{\prime\prime\prime}(t)(t+\Delta t - t)^3 \\ v(t+\Delta t) & = v(t) + v^{\prime}(t)\Delta t + \frac{1}{2}v^{\prime\prime}(t)(\Delta
+                    t)^2 + \frac{1}{6}v^{\prime\prime\prime}(t)(\Delta t)^3 + \cdot\cdot\cdot \end{align}
                 </p>
 
-                <p>combine left equation and right equation</p>
                 <p>
-                    \[\frac{1}{2}mv_1^2 + U_1 = \frac{1}{2}mv_2^2 + U_2 \]
+                    \begin{align} \because v(t) & =\frac{{\rm d}x(t)}{{\rm d}t} \\ a(t) & =\frac{{\rm d}v(t)}{{\rm d}t} \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Kinetic energy</h6>
                 <p>
-                    \[K(t) \equiv \frac{1}{2}mv(t)^2 \]
+                    \begin{align} \therefore x(t+\Delta t) & = x(t) + v(t)\Delta t + \frac{1}{2}a(t)(\Delta t)^2 + \frac{1}{6}x^{\prime\prime\prime}(t)(\Delta t)^3 + \cdot\cdot\cdot \\ v(t+\Delta t) & = v(t) + a(t)\Delta t + \frac{1}{2}v^{\prime\prime}(t)(\Delta t)^2 + \frac{1}{6}v^{\prime\prime\prime}(t)(\Delta
+                    t)^3 + \cdot\cdot\cdot \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Potential energy</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Verlet integration</h6>
                 <p>
-                    \[U(t) \equiv -\int F(t){\rm d}x \]
+                    \begin{align} x(t+\Delta t) & = x(t) + v(t)\Delta t + \frac{1}{2}a(t)(\Delta t)^2 + \frac{1}{6}x^{\prime\prime\prime}(t)(\Delta t)^3 + O((\Delta t)^4) \\ x(t+\Delta t) & = x(t) - v(t)\Delta t + \frac{1}{2}a(t)(\Delta t)^2 - \frac{1}{6}x^{\prime\prime\prime}(t)(\Delta
+                    t)^3 + O((\Delta t)^4) \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Mechanical energy</h6>
                 <p>
-                    \[E(t) \equiv U(t)+K(t) \]
+                    \begin{align} x(t+\Delta t) + x(t- \Delta t) & = 2x(t) + a(t)(\Delta t)^2 + O((\Delta t)^4) \\ x(t+\Delta t) & = 2x(t) - x(t- \Delta t) + a(t)(\Delta t)^2 + O((\Delta t)^4) \end{align}
                 </p>
 
-                <h6 class="card-subtitle mb-2 text-muted">Euler Method for 3D FreeFall Simulation</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Finite difference method</h6>
                 <p>
-                    \begin{align} K(t) = & \frac{1}{2}mv(t)^2 \\ = & \frac{1}{2}m(v_x(t)^2 + v_y(t)^2 + v_z(t)^2 ) \end{align}
+                    \[x_{n+1} = 2x_n - x_{n-1} + a_n(\Delta t)^2 + O((\Delta t)^4) \]
                 </p>
+
                 <p>
-                    \begin{align} U(t) = & -\int_0^r F\cdot {\rm d}r \\ = & -\int_0^z (-mg) {\rm d}z \\ = & mgz(t) \end{align}
+                    \[v_{n+1} = v_{n-1} + 2a_n\Delta t + O((\Delta t)^3) \]
                 </p>
+
+                <h6 class="card-subtitle mb-2 text-muted">Initial status</h6>
+                <p>
+                    \[x_{-1} = x_0 - v_0\Delta t + \frac{1}{2}a_0(\Delta t)^2 + O((\Delta t)^3) \]
+                </p>
+
+                <p>
+                    \[v_{-1} = v_0 - a_0\Delta t + O((\Delta t)^2) \]
+                </p>
+
+
             </div>
         </div>
     </div>

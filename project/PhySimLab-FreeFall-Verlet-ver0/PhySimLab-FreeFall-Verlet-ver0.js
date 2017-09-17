@@ -58,6 +58,12 @@ var Ball = function(parameter) {
     this.vy = parameter.vy;
     this.vz = parameter.vz;
 
+    this.x_1;
+    this.y_1;
+    this.z_1;
+    //start position calculate
+    this.calculateInitialCondition(dt);
+
     data_x = [];
     data_y = [];
     data_z = [];
@@ -87,21 +93,49 @@ Ball.prototype = {
 
         f = this.calculateForce();
 
-        this.x += this.vx * dt;
-        this.y += this.vy * dt;
-        this.z += this.vz * dt;
-
+        //update the acceleration
         this.ax = f.x / this.mass;
         this.ay = f.y / this.mass;
         this.az = f.z / this.mass;
 
-        this.vx += this.ax * dt;
-        this.vy += this.ay * dt;
-        this.vz += this.az * dt;
+        //save the current time position
+        var x_ = this.x;
+        var y_ = this.y;
+        var z_ = this.z;
+
+        //the next time calculate（x_{n+1} = 2x_n - x_{n_1} + a_{n}\Delta t^2 ）
+        this.x = 2 * this.x - this.x_1 + this.ax * dt * dt;
+        this.y = 2 * this.y - this.y_1 + this.ay * dt * dt;
+        this.z = 2 * this.z - this.z_1 + this.az * dt * dt;
+
+
+        //function1: no relation between force and velocity
+        this.vx = (this.x - this.x_1) / (2 * dt);
+        this.vy = (this.y - this.y_1) / (2 * dt);
+        this.vz = (this.z - this.z_1) / (2 * dt);
+
+        //function2: force and velocity have relationship
+        //var vx_ = this.vx;
+        //var vy_ = this.vy;
+        //var vz_ = this.vz;
+        //v_n+1 = v_n-1 + 2 a_n deltat
+        //this.vx = this.vx_1 + 2 * this.ax * dt;
+        //this.vy = this.vy_1 + 2 * this.ay * dt;
+        //this.vz = this.vz_1 + 2 * this.az * dt;
+
+        //this.vx_1 = vx_;
+        //this.vy_1 = vy_;
+        //this.vz_1 = vz_;
+
+        //in order to calculate the next time 「x_{n_1}」
+        this.x_1 = x_;
+        this.y_1 = y_;
+        this.z_1 = z_;
 
         if (this.z < this.radius) {
-            this.vz = -this.vz;
-            this.z = this.radius;
+            var tmp_z = this.z_1;
+            this.z_1 = this.z;
+            this.z = tmp_z;
         }
     },
     calculateForce: function() {
@@ -112,13 +146,31 @@ Ball.prototype = {
 
         return { x: fx, y: fy, z: fz };
     },
+    //verlet init status calculation
+    calculateInitialCondition: function(dt) {
+
+        f = this.calculateForce();
+
+        this.ax = f.x / this.mass;
+        this.ay = f.y / this.mass;
+        this.az = f.z / this.mass;
+        //calculate the 「x_{-1}」
+        this.x_1 = this.x - this.vx * dt + 1 / 2 * this.ax * dt * dt;
+        this.y_1 = this.y - this.vy * dt + 1 / 2 * this.ay * dt * dt;
+        this.z_1 = this.z - this.vz * dt + 1 / 2 * this.az * dt * dt;
+
+        //v_-1
+        //this.vx_1 = this.vx - this.ax * dt;
+        //this.vy_1 = this.vy - this.ay * dt;
+        //this.vz_1 = this.vz - this.az * dt;
+    },
     calculateEnergy: function() {
 
         var v2 = this.vx * this.vx + this.vy * this.vy + this.vz * this.vz;
 
         var kinetic = 1 / 2 * this.mass * v2;
 
-        var potential = this.mass * g * this.z;
+        var potential = this.mass * g * this.z_1;
         return { kinetic: kinetic, potential: potential };
     }
 };
