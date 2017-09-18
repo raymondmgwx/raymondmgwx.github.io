@@ -19,7 +19,7 @@ function init() {
     img_div.width = img.width;
     img_div.height = img.height;
 
-    var left_offset = (img_window.width - img_div.width) / 2;
+    var left_offset = (img_window.style.width - img_div.width) / 2;
 
     img_canvas.drawImage(img, left_offset, 0);
 
