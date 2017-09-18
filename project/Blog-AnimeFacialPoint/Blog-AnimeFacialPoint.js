@@ -15,13 +15,10 @@ function getGray(r, g, b) {
 //img2txt
 function init() {
 
-    var left_offset = (img_window_width - img.width) / 2;
-
-    console.log(img_window_width);
-    img_div.width = img.width + left_offset;
+    img_div.width = img.width;
     img_div.height = img.height;
 
-    img_canvas.drawImage(img, left_offset, 0, img.width, img.height);
+    img_canvas.drawImage(img, img_div.width / 2, 0);
 
     /*var imgData = img_canvas.getImageData(0, 0, img.width, img.height);
     var imgDataArr = imgData.data;
