@@ -13,12 +13,6 @@ function getGray(r, g, b) {
 
 //img2txt
 function init() {
-    txt_div.width = img.width;
-    txt_div.height = img.height;
-    txt_canvas.font = "bold 10px Courier New";
-    txt_canvas.fillStyle = "blue";
-
-
 
     img_div.width = img.width;
     img_div.height = img.height;
