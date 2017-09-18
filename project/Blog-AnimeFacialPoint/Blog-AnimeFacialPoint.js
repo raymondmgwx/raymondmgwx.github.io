@@ -21,7 +21,7 @@ function init() {
 
     var left_offset = (img_window.style.width - img_div.width) / 2;
 
-    img_canvas.drawImage(img, left_offset, 0);
+    img_canvas.drawImage(img, left_offset, 0, img.width, img.height);
 
     /*var imgData = img_canvas.getImageData(0, 0, img.width, img.height);
     var imgDataArr = imgData.data;
