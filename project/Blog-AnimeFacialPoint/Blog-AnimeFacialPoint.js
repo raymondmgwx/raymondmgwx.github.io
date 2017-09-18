@@ -1,4 +1,5 @@
 var img_div = document.getElementById('img');
+var img_window = document.getElementById('img_div');
 var img_canvas = img_div.getContext('2d');
 
 
@@ -14,9 +15,13 @@ function getGray(r, g, b) {
 //img2txt
 function init() {
 
+
     img_div.width = img.width;
     img_div.height = img.height;
-    img_canvas.drawImage(img, 0, 0);
+
+    var left_offset = (img_window.width - img_div.width) / 2;
+
+    img_canvas.drawImage(img, left_offset, 0);
 
     /*var imgData = img_canvas.getImageData(0, 0, img.width, img.height);
     var imgDataArr = imgData.data;
