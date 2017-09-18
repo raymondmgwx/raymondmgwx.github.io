@@ -16,11 +16,12 @@ function getGray(r, g, b) {
 function init() {
 
 
-    img_div.width = img.width;
-    img_div.height = img.height;
 
-    var left_offset = (img_window_width - img_div.width) / 2;
-    console.log(left_offset);
+
+    var left_offset = (img_window_width - img.width) / 2;
+
+    img_div.width = img.width + left_offset;
+    img_div.height = img.height;
 
     img_canvas.drawImage(img, left_offset, 0, img.width, img.height);
 
