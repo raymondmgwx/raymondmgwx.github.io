@@ -15,9 +15,6 @@ function getGray(r, g, b) {
 //img2txt
 function init() {
 
-
-
-
     var left_offset = (img_window_width - img.width) / 2;
 
     img_div.width = img.width + left_offset;
