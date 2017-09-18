@@ -1,5 +1,5 @@
 var img_div = document.getElementById('img');
-var img_window_width = document.body.clientWidth;
+var img_window_width = document.getElementById('img_div').style.width;
 var img_canvas = img_div.getContext('2d');
 
 
@@ -17,6 +17,7 @@ function init() {
 
     var left_offset = (img_window_width - img.width) / 2;
 
+    console.log(img_window_width);
     img_div.width = img.width + left_offset;
     img_div.height = img.height;
 
