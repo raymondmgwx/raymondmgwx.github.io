@@ -22,7 +22,7 @@ router.post('/', function(req, res, next) {
         });
     });
 
-    res.end("success!");
+    //res.end("jsontestback(" + JSON.stringify(response) + ")");
 });
 
 module.exports = router;

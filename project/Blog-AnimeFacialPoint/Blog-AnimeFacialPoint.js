@@ -8,6 +8,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
 
+
+//----------------------server info
+var server_address = "http://127.0.0.1:3000/";
+
+
+//--------------------------------------------
 var img_div = document.getElementById('img');
 var img_canvas = img_div.getContext('2d');
 
@@ -18,12 +24,14 @@ var img = new Image();
 
 var curMousePosInCvsX = 0;
 var curMousePosInCvsY = 0;
-var maxLabeledPoints = 5;
+var maxLabeledPoints = 16;
 var curIndex = 0;
 var curImageName = "";
 //json storage data
 var xArray = new Array();
 var yArray = new Array();
+//--------------------------------------------
+
 
 
 function windowPos2CanvasPos(cvs, x, y) {
@@ -112,7 +120,7 @@ function init_img() {
 function init_database() {
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:3000/init_database',
+        url: server_address + 'init_database',
         contentType: 'application/json',
         dataType: "jsonp",
         jsonp: 'callback',
@@ -130,15 +138,11 @@ function init_database() {
     });
 }
 
-//init func
-function init() {
 
-    //init_database();
-
-    //get image
+function getNextImage() {
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:3000/get_image',
+        url: server_address + 'get_image',
         contentType: 'application/json',
         dataType: "jsonp",
         jsonp: 'callback',
@@ -157,11 +161,29 @@ function init() {
             //console.log(json['imagename']);
             //get image from server
             curImageName = json['imagename'];
-            img.src = 'http://127.0.0.1:3000/images/' + json['imagename'];
+            img.src = server_address + 'images/' + json['imagename'];
             img.onload = init_img;
             // console.log(img.src);
+            alert("successful to get the anime image from server!");
         }
     });
+}
+
+function reset_img() {
+    xArray.splice(0, xArray.length);
+    yArray.splice(0, yArray.length);
+    curIndex = 0;
+    drawBg();
+    drawImg();
+}
+
+//init func
+function init() {
+
+    //init_database();
+
+    //get image
+    getNextImage();
 }
 
 img_div.onmousemove = function(e) {
@@ -187,13 +209,13 @@ img_div.onclick = function(e) {
     //console.log('(' + curMousePosInCvsX + ',' + curMousePosInCvsY + ')');
 }
 
+$("#btn_next").click(function() {
+    reset_img();
+    getNextImage();
+});
 
 $("#btn_reset").click(function() {
-    xArray.splice(0, xArray.length);
-    yArray.splice(0, yArray.length);
-    curIndex = 0;
-    drawBg();
-    drawImg();
+    reset_img();
 });
 
 function removeByValue(arr, val) {
@@ -223,26 +245,37 @@ function submitDatabase(database, imgname) {
         }
     }
 
-    console.log(JSON.stringify(database));
+    //console.log(JSON.stringify(database));
 
+    //callback bug,TODO!
     $.ajax({
         type: 'POST',
         processData: false,
-        url: 'http://127.0.0.1:3000/submit_landmark',
+        url: server_address + 'submit_landmark',
         contentType: 'application/json',
         dataType: "json",
         data: JSON.stringify(database),
+        error: function(XMLHttpReuqest, textStautus, errothrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpReuqest.readyState);
+            console.log(XMLHttpRequest.responseText);
+            console.log(textStautus);
+            console.log(errothrown);
+        },
         success: function(json) {
-            console.log(json);
+            console.log(JSON.parse(json['res']));
+            alert("successful submitted!");
         }
     });
 
+    //reset_img();
+    //getNextImage();
 }
 
 $("#btn_submit").click(function() {
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:3000/get_database',
+        url: server_address + 'get_database',
         contentType: 'application/json',
         dataType: "jsonp",
         jsonp: 'callback',
@@ -264,13 +297,13 @@ $("#btn_submit").click(function() {
                 if (item == 'needLandmarkedName') {
                     for (var ik = 0; ik < inter.length; ik++) {
                         if (inter[ik] == curImageName) {
-                            console.log("need landmark, you can submit!");
+                            //console.log("need landmark, you can submit!");
 
                             if (xArray.length == maxLabeledPoints && yArray.length == maxLabeledPoints) {
-                                console.log('enough points, you can submit!');
+                                //console.log('enough points, you can submit!');
                                 submitDatabase(res_database, curImageName);
                             } else {
-                                console.log('please label enough points!');
+                                alert('please label enough points!');
                             }
 
                             break;

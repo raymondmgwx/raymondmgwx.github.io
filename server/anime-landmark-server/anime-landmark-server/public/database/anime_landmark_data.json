@@ -1,1 +1,12 @@
-{"system":"anime-landmark","maxLandmarkNum":400,"currentLandMarkNum":0,"landmarkedName":[],"needLandmarkedName":["1.jpg","2.jpg","3.jpg"],"landmarkData":[]}
+{
+    "system": "anime-landmark",
+    "maxLandmarkNum": 400,
+    "currentLandMarkNum": 0,
+    "landmarkedName": [],
+    "needLandmarkedName": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+    ],
+    "landmarkData": []
+}
