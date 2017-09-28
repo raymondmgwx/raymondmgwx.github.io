@@ -10,7 +10,7 @@
 
 
 //----------------------server info
-var server_address = "//118.190.204.181:3388/";
+var server_address = "http://118.190.204.181:3388/";
 
 
 //--------------------------------------------
@@ -24,7 +24,10 @@ var img = new Image();
 
 var curMousePosInCvsX = 0;
 var curMousePosInCvsY = 0;
-var maxLabeledPoints = 16;
+var maxLabeledPoints = 45;
+var maxFaceDirection = 4;
+var maxEyeStatus = 3;
+var maxMouseStatus = 2;
 var curIndex = 0;
 var curImageName = "";
 //json storage data
@@ -161,6 +164,7 @@ function getNextImage() {
             //console.log(json['imagename']);
             //get image from server
             curImageName = json['imagename'];
+            $('#input_unlandmark_number').val(json['unlandmarknumber']);
             img.src = server_address + 'images/' + json['imagename'];
             img.onload = init_img;
             // console.log(img.src);
@@ -173,6 +177,9 @@ function reset_img() {
     xArray.splice(0, xArray.length);
     yArray.splice(0, yArray.length);
     curIndex = 0;
+    $("#input_face_direction").val(0);
+    $("#input_eye_status").val(0);
+    $("#input_mouse_status").val(0);
     drawBg();
     drawImg();
 }
@@ -239,8 +246,9 @@ function submitDatabase(database, imgname) {
             landmarkObj['image_name'] = imgname;
             landmarkObj['x_coordinate'] = xArray;
             landmarkObj['y_coordinate'] = yArray;
-            landmarkObj['smile'] = 0;
-            landmarkObj['position'] = 1;
+            landmarkObj['facedirection'] = $("#input_face_direction").val();
+            landmarkObj['eyestatus'] = $("#input_eye_status").val();
+            landmarkObj['mousestatus'] = $("#input_mouse_status").val();
             inter.push(landmarkObj);
         }
     }
@@ -250,7 +258,6 @@ function submitDatabase(database, imgname) {
     //callback bug,TODO!
     $.ajax({
         type: 'POST',
-        processData: false,
         url: server_address + 'submit_landmark',
         contentType: 'application/json',
         dataType: "json",
@@ -263,8 +270,9 @@ function submitDatabase(database, imgname) {
             console.log(errothrown);
         },
         success: function(json) {
-            console.log(JSON.parse(json['res']));
-            alert("successful submitted!");
+            alert(json['result']);
+            reset_img();
+            getNextImage();
         }
     });
 
@@ -299,11 +307,17 @@ $("#btn_submit").click(function() {
                         if (inter[ik] == curImageName) {
                             //console.log("need landmark, you can submit!");
 
-                            if (xArray.length == maxLabeledPoints && yArray.length == maxLabeledPoints) {
+                            var face_direction = $("#input_face_direction").val();
+                            var eye_status = $("#input_eye_status").val();
+                            var mouse_status = $("#input_mouse_status").val();
+
+
+
+                            if (xArray.length == maxLabeledPoints && yArray.length == maxLabeledPoints && face_direction <= maxFaceDirection && face_direction >= 0 && eye_status <= maxEyeStatus && eye_status >= 0 && mouse_status <= maxMouseStatus && mouse_status >= 0) {
                                 //console.log('enough points, you can submit!');
                                 submitDatabase(res_database, curImageName);
                             } else {
-                                alert('please label enough points!');
+                                alert('please label enough points or attributes value is wrong!');
                             }
 
                             break;

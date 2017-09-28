@@ -22,6 +22,10 @@ router.post('/', function(req, res, next) {
         });
     });
 
+    var response = {
+        result: 'success submit!'
+    };
+    res.end(JSON.stringify(response));
     //res.end("jsontestback(" + JSON.stringify(response) + ")");
 });
 

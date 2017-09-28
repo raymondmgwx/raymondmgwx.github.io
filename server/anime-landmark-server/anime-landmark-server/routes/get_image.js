@@ -24,7 +24,8 @@ router.get('/', function(req, res, next) {
                 var returnImageName = anime_data[item][retureNum];
 
                 var response = {
-                    imagename: returnImageName
+                    imagename: returnImageName,
+                    unlandmarknumber: inter.length
                 };
 
                 res.end("jsontestback(" + JSON.stringify(response) + ")");
