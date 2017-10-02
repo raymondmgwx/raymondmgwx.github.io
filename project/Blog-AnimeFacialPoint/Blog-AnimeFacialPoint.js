@@ -87,7 +87,7 @@ function drawLabeledPoints() {
 
 function drawGuideLines(x, y) {
     img_canvas.strokeStyle = 'red';
-    img_canvas.lineWidth = 5;
+    img_canvas.lineWidth = 1;
 
     function drawHorizontalLine(y) {
         img_canvas.beginPath();
@@ -187,10 +187,10 @@ function reset_img() {
 //init func
 function init() {
 
-    //init_database();
+    init_database();
 
     //get image
-    getNextImage();
+    //getNextImage();
 }
 
 img_div.onmousemove = function(e) {
