@@ -10,7 +10,7 @@
 
 
 //----------------------server info
-var server_address = "http://118.190.204.181:3388/";
+var server_address = "http://127.0.0.1:3000/";
 
 
 //--------------------------------------------
@@ -22,13 +22,12 @@ var img = new Image();
 //img.src = './img/nxn.jpg';
 //img.onload = init; // init
 
-var curMousePosInCvsX = 0;
-var curMousePosInCvsY = 0;
-var maxLabeledPoints = 45;
-var maxFaceDirection = 4;
-var maxEyeStatus = 3;
-var maxMouseStatus = 2;
-var curIndex = 0;
+var maxGender = 2;
+var maxSmile = 2;
+var maxHeadPose = 5;
+var maxGlasses = 2;
+
+var deletepart = "";
 var curImageName = "";
 //json storage data
 var xArray = new Array();
@@ -37,29 +36,6 @@ var yArray = new Array();
 
 
 
-function windowPos2CanvasPos(cvs, x, y) {
-    var box = cvs.getBoundingClientRect();
-    return {
-        x: x - box.left * (cvs.width / box.width),
-        y: y - box.top * (cvs.height / box.height)
-    }
-}
-
-function drawBg() {
-    var VERTICAL_LINE_SPACING = 12,
-        i = img_div.height;
-
-    img_canvas.clearRect(0, 0, img_div.width, img_div.height);
-    img_canvas.strokeStyle = 'lightgray';
-    img_canvas.lineWidth = 0.5;
-    while (i > VERTICAL_LINE_SPACING * 4) {
-        img_canvas.beginPath();
-        img_canvas.moveTo(0, 1);
-        img_canvas.lineTo(img_div.width, i);
-        img_canvas.stroke();
-        i -= VERTICAL_LINE_SPACING;
-    }
-}
 
 
 function drawImg() {
@@ -68,13 +44,7 @@ function drawImg() {
 
 function drawLabeledPoints() {
 
-    for (j = 0; j < curIndex; j++) {
-        img_canvas.strokeStyle = "blue";
-        img_canvas.beginPath();
-        img_canvas.arc(xArray[j], yArray[j], 10, 0, 2 * Math.PI, true);
-        img_canvas.closePath();
-        img_canvas.stroke();
-
+    for (j = 0; j < xArray.length; j++) {
         img_canvas.fillStyle = "red";
         img_canvas.beginPath();
         img_canvas.arc(xArray[j], yArray[j], 2, 0, 2 * Math.PI, true);
@@ -85,47 +55,44 @@ function drawLabeledPoints() {
 
 }
 
-function drawGuideLines(x, y) {
-    img_canvas.strokeStyle = 'red';
-    img_canvas.lineWidth = 1;
 
-    function drawHorizontalLine(y) {
-        img_canvas.beginPath();
-        img_canvas.moveTo(0, y + .5);
-        img_canvas.lineTo(img_div.width, y + .5);
-        img_canvas.stroke();
-    }
 
-    function drawVerticalLine(x) {
-        img_canvas.beginPath();
-        img_canvas.moveTo(x + .5, 0)
-        img_canvas.lineTo(x + .5, img_div.height);
-        img_canvas.stroke();
-    }
 
-    drawVerticalLine(x);
-    drawHorizontalLine(y);
-}
-
-function updatePosition(x, y) {
-    curMousePosInCvsX = x.toFixed(0);
-    curMousePosInCvsY = y.toFixed(0);
-    //console.log('(' + x.toFixed(0) + ',' + y.toFixed(0) + ')');
-}
 
 function init_img() {
     img_div.width = img.width;
     img_div.height = img.height;
     img_canvas.drawImage(img, 0, 0);
+    drawLabeledPoints();
 }
 
 
 
+function init_database() {
+    $.ajax({
+        type: 'GET',
+        url: server_address + 'facelandmark/init_database',
+        contentType: 'application/json',
+        dataType: "jsonp",
+        jsonp: 'callback',
+        jsonpCallback: "jsontestback",
+        error: function(XMLHttpReuqest, textStautus, errothrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpReuqest.readyState);
+            console.log(XMLHttpRequest.responseText);
+            console.log(textStautus);
+            console.log(errothrown);
+        },
+        success: function(json) {
+            console.log(json['res']);
+        }
+    });
+}
 
 function getNextImage() {
     $.ajax({
         type: 'GET',
-        url: server_address + 'get_image',
+        url: server_address + 'facelandmark/get_facelandmark64',
         contentType: 'application/json',
         dataType: "jsonp",
         jsonp: 'callback',
@@ -144,8 +111,38 @@ function getNextImage() {
             //console.log(json['imagename']);
             //get image from server
             curImageName = json['imagename'];
+
+            //console.log("array_y:" + json['array_y']);
+            //console.log("array_x:" + json['array_x']);
+            //console.log("gender:" + json['gender']);
+            //console.log("smile:" + json['smile']);
+            //console.log("headpose:" + json['headpose']);
+            //console.log("glasses:" + json['glasses']);
+
+            for (var xx in json['array_x']) {
+                xArray.push(json['array_x'][xx])
+            }
+
+            for (var yy in json['array_y']) {
+                yArray.push(json['array_y'][yy])
+            }
+
+            //console.log("array_y:" + yArray);
+            //console.log("array_x:" + xArray);
+
+
             $('#input_unlandmark_number').val(json['unlandmarknumber']);
-            img.src = server_address + 'images/' + json['imagename'];
+
+            $('#input_gender').val(json['gender']);
+            $('#input_smile').val(json['smile']);
+            $('#input_glasses').val(json['glasses']);
+            $('#input_headpose').val(json['headpose']);
+
+            deletepart = curImageName.split('dataset')[0];
+            curImageName = curImageName.split('dataset')[1];
+            //console.log(curImageName)
+
+            img.src = server_address + 'images/' + curImageName;
             img.onload = init_img;
             // console.log(img.src);
             alert("successful to get the anime image from server!");
@@ -156,10 +153,11 @@ function getNextImage() {
 function reset_img() {
     xArray.splice(0, xArray.length);
     yArray.splice(0, yArray.length);
-    curIndex = 0;
-    $("#input_face_direction").val(0);
-    $("#input_eye_status").val(0);
-    $("#input_mouse_status").val(0);
+
+    $("#input_gender").val(000);
+    $("#input_smile").val(000);
+    $("#input_headpose").val(000);
+    $("#input_glasses").val(000);
 }
 
 //init func
@@ -178,9 +176,6 @@ $("#btn_next").click(function() {
     getNextImage();
 });
 
-$("#btn_reset").click(function() {
-    reset_img();
-});
 
 function removeByValue(arr, val) {
     for (var i = 0; i < arr.length; i++) {
@@ -195,17 +190,19 @@ function submitDatabase(database, imgname) {
     for (var item in database) {
         var inter = database[item];
         if (item == 'needLandmarkedName') {
-            removeByValue(inter, imgname);
+            removeByValue(inter, deletepart + "dataset" + imgname);
         } else if (item == 'landmarkedName') {
             inter.push(imgname);
-        } else if (item == 'landmarkData') {
+        } else if (item == 'landmarkedData') {
             var landmarkObj = new Object();
             landmarkObj['image_name'] = imgname;
             landmarkObj['x_coordinate'] = xArray;
             landmarkObj['y_coordinate'] = yArray;
-            landmarkObj['facedirection'] = $("#input_face_direction").val();
-            landmarkObj['eyestatus'] = $("#input_eye_status").val();
-            landmarkObj['mousestatus'] = $("#input_mouse_status").val();
+            landmarkObj['gender'] = $("#input_gender").val();
+            landmarkObj['headpose'] = $("#input_headpose").val();
+            landmarkObj['glasses'] = $("#input_glasses").val();
+            landmarkObj['smile'] = $("#input_smile").val();
+
             inter.push(landmarkObj);
         }
     }
@@ -215,7 +212,7 @@ function submitDatabase(database, imgname) {
     //callback bug,TODO!
     $.ajax({
         type: 'POST',
-        url: server_address + 'submit_landmark',
+        url: server_address + 'facelandmark/submit_facesubtask',
         contentType: 'application/json',
         dataType: "json",
         data: JSON.stringify(database),
@@ -240,7 +237,7 @@ function submitDatabase(database, imgname) {
 $("#btn_submit").click(function() {
     $.ajax({
         type: 'GET',
-        url: server_address + 'get_database',
+        url: server_address + 'facelandmark/get_database',
         contentType: 'application/json',
         dataType: "jsonp",
         jsonp: 'callback',
@@ -261,20 +258,20 @@ $("#btn_submit").click(function() {
                 var inter = res_database[item];
                 if (item == 'needLandmarkedName') {
                     for (var ik = 0; ik < inter.length; ik++) {
-                        if (inter[ik] == curImageName) {
+                        if (inter[ik].split('dataset')[1] == curImageName) {
                             //console.log("need landmark, you can submit!");
 
-                            var face_direction = $("#input_face_direction").val();
-                            var eye_status = $("#input_eye_status").val();
-                            var mouse_status = $("#input_mouse_status").val();
+                            var genderValue = $("#input_gender").val();
+                            var headposeValue = $("#input_headpose").val();
+                            var glassesValue = $("#input_glasses").val();
+                            var smileValue = $("#input_smile").val();
 
 
-
-                            if (xArray.length == maxLabeledPoints && yArray.length == maxLabeledPoints && face_direction <= maxFaceDirection && face_direction >= 0 && eye_status <= maxEyeStatus && eye_status >= 0 && mouse_status <= maxMouseStatus && mouse_status >= 0) {
+                            if (genderValue > 0 && genderValue <= maxGender && headposeValue > 0 && headposeValue <= maxHeadPose && glassesValue > 0 && glassesValue <= maxGlasses && smileValue > 0 && smileValue <= maxSmile) {
                                 //console.log('enough points, you can submit!');
                                 submitDatabase(res_database, curImageName);
                             } else {
-                                alert('please label enough points or attributes value is wrong!');
+                                alert('please check you entered value!');
                             }
 
                             break;
