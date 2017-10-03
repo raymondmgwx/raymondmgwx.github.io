@@ -1,7 +1,7 @@
 <div class="jumbotron">
-    <h6 class="display-4">Anime Facial Points Labeling System</h6>
+    <h6 class="display-4">Face LandMark: SubTask Labeling System</h6>
     <br>
-    <p>example for anime face landmark</p>
+    <p>example for 64 face landmark's sub task</p>
     <br>
     <center> <img style="width:50%;height:50%" src='img/example.png'></center>
 </div>
@@ -9,7 +9,7 @@
 <div class='row'>
     <div class="col-lg-12">
         <center>
-            <p>face landmark system</p>
+            <p>face landmark subtask labeling system</p>
         </center>
     </div>
 </div>
@@ -43,20 +43,26 @@
 <div class="row">
     <div class="col-lg-4">
         <center>
-            <p style="font-size:12px">脸部朝向(左60：0，左30：1，中：2，右60：3，右30：4)</p>
-            <input id="input_face_direction" type="text" value="0" class="form-control text-center">
+            <p style="font-size:12px">gender(male：1，female：2)</p>
+            <input id="input_gender_direction" type="text" value="0" class="form-control text-center">
         </center>
     </div>
     <div class="col-lg-4">
         <center>
-            <p style="font-size:12px">眼睛开闭(全开：0，全闭：1，左开右闭：2，右开左闭：3)</p>
-            <input id="input_eye_status" type="text" value="0" class="form-control text-center">
+            <p style="font-size:12px">smile(smiling：1，not smiling：2)</p>
+            <input id="input_smile_status" type="text" value="0" class="form-control text-center">
         </center>
     </div>
     <div class="col-lg-4">
         <center>
-            <p style="font-size:12px">嘴巴大小(点：0，开：1，闭：2)</p>
-            <input id="input_mouse_status" type="text" value="0" class="form-control text-center">
+            <p style="font-size:12px">glasses(wearing glasses：1，not wearing glasses：2)</p>
+            <input id="input_glasses_status" type="text" value="0" class="form-control text-center">
+        </center>
+    </div>
+    <div class="col-lg-4">
+        <center>
+            <p style="font-size:12px">headpose(left profile：1，left：2，frontal：3, right:4, right profile:5)</p>
+            <input id="input_headpose_status" type="text" value="0" class="form-control text-center">
         </center>
     </div>
 </div>

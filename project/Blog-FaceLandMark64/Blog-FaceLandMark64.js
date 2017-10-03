@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////                                                                      //
-////  AnimeFacialPointSystem//////////   v0.0                                                               //
+////  FaceLandmark64 SubTask//////////   v0.0                                                               //
 //////////////////////////////////////                                                                      //
 //////////////////////////////////////  Copyright 2017-2018,                                                //
-//////////////////////////////////////  Last vist: 9, 19, 2017  by Raymond Wang                             //
+//////////////////////////////////////  Last vist: 10, 03, 2017  by Raymond Wang                             //
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->\
 
@@ -120,26 +120,6 @@ function init_img() {
 }
 
 
-function init_database() {
-    $.ajax({
-        type: 'GET',
-        url: server_address + 'init_database',
-        contentType: 'application/json',
-        dataType: "jsonp",
-        jsonp: 'callback',
-        jsonpCallback: "jsontestback",
-        error: function(XMLHttpReuqest, textStautus, errothrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpReuqest.readyState);
-            console.log(XMLHttpRequest.responseText);
-            console.log(textStautus);
-            console.log(errothrown);
-        },
-        success: function(json) {
-            console.log(json['res']);
-        }
-    });
-}
 
 
 function getNextImage() {
@@ -180,8 +160,6 @@ function reset_img() {
     $("#input_face_direction").val(0);
     $("#input_eye_status").val(0);
     $("#input_mouse_status").val(0);
-    drawBg();
-    drawImg();
 }
 
 //init func
@@ -193,28 +171,7 @@ function init() {
     getNextImage();
 }
 
-img_div.onmousemove = function(e) {
-    var loc = windowPos2CanvasPos(img_div, e.clientX, e.clientY);
-    drawBg();
-    drawImg();
-    drawLabeledPoints();
-    drawGuideLines(loc.x, loc.y);
-    updatePosition(loc.x, loc.y);
-}
 
-img_div.onclick = function(e) {
-
-    if (curIndex < maxLabeledPoints) {
-        xArray.push(curMousePosInCvsX);
-        yArray.push(curMousePosInCvsY);
-        curIndex = curIndex + 1;
-    } else {
-        alert('the maxium of the labeled points is ' + maxLabeledPoints + '. If you make a wrong point, you can reset the status and restart to label the point.');
-    }
-
-
-    //console.log('(' + curMousePosInCvsX + ',' + curMousePosInCvsY + ')');
-}
 
 $("#btn_next").click(function() {
     reset_img();
