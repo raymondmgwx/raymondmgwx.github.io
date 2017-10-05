@@ -184,7 +184,7 @@ var ball = new Ball({
     mass: 1,
     x: 0,
     y: 0,
-    z: 30,
+    z: 100,
     vx: 0,
     vy: 5,
     vz: 25
@@ -458,12 +458,13 @@ function update_param() {
 
     if (restartFlag == true) {
 
+        trajectory = [];
         step = 0;
         skip = 100;
         dt = 0.001;
         g = 9.8;
 
-        var parameter = { radius: 50 };
+        var parameter = { radius: 30 };
         parameter.mass = parseFloat(document.getElementById("input_mass").value);
         parameter.x = parseFloat(document.getElementById("input_x").value);
         parameter.y = parseFloat(document.getElementById("input_y").value);
@@ -487,8 +488,8 @@ function update_param() {
     }
 
 
-    render();
 
+    render();
     scene.remove(line);
 }
 
