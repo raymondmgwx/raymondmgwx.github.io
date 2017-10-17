@@ -42,12 +42,12 @@ function drawImg() {
     img_canvas.drawImage(img, 0, 0);
 }
 
-function drawLabeledPoints() {
+function drawLabeledPoints(ratio_w, ratio_h) {
 
     for (j = 0; j < xArray.length; j++) {
         img_canvas.fillStyle = "red";
         img_canvas.beginPath();
-        img_canvas.arc(xArray[j], yArray[j], 2, 0, 2 * Math.PI, true);
+        img_canvas.arc(xArray[j] * ratio_w, yArray[j] * ratio_h, 2, 0, 2 * Math.PI, true);
         img_canvas.closePath();
         img_canvas.fill();
     }
@@ -60,10 +60,14 @@ function drawLabeledPoints() {
 
 
 function init_img() {
-    img_div.width = img.width;
-    img_div.height = img.height;
-    img_canvas.drawImage(img, 0, 0);
-    drawLabeledPoints();
+    img_div.width = 1024.0;
+    img_div.height = 768.0;
+
+    ratio_w = img_div.width / img.width
+    ratio_h = img_div.height / img.height
+
+    img_canvas.drawImage(img, 0, 0, img.width, img.height, 0, 0, 1024, 768);
+    drawLabeledPoints(ratio_w, ratio_h);
 }
 
 

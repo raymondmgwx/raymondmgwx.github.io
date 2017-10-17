@@ -2,3 +2,4 @@
 *.jpg
 *.png
 *.pts
+server/anime-landmark-server/anime-landmark-server/public/database/face_landmark64.json
