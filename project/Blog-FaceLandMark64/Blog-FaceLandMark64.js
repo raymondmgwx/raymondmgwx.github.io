@@ -10,7 +10,7 @@
 
 
 //----------------------server info
-var server_address = "http://127.0.0.1:3000/";
+var server_address = "http://118.190.204.181:3388/";
 
 
 //--------------------------------------------
@@ -144,9 +144,9 @@ function getNextImage() {
 
             deletepart = curImageName.split('dataset')[0];
             curImageName = curImageName.split('dataset')[1];
-            //console.log(curImageName)
 
-            img.src = server_address + 'images/' + curImageName;
+
+            img.src = server_address + 'images' + curImageName;
             img.onload = init_img;
             // console.log(img.src);
             alert("successful to get the anime image from server!");
