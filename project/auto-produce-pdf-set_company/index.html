@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="raymondmcguire">
+
+    <title>XXX文件自动生成系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="./vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="./vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="./vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="">XXX v0.0</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> 用户信息</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+
+            </ul>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+
+                        <li>
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> 合伙企业信息</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">合伙企业信息填写</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            合伙企业登记（备案）申请书
+                        </div>
+                        <!-- .panel-heading -->
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#info">基本信息</a>
+                                        </h4>
+                                    </div>
+                                    <div id="info" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>公司名称</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>公司注册号</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>主要经营场所</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>生产经营地</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label>联系电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>邮政编码</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#setup">设立</a>
+                                        </h4>
+                                    </div>
+                                    <div id="setup" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>执行事务合伙人</label>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <label> 姓名或名称</label>
+                                                            <input class="form-control" placeholder="请输入">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <label> 委派代表（仅限执行事务合伙人为法人或其他组织时填写）</label>
+                                                            <input class="form-control" placeholder="请输入">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>合伙企业类型</label>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" value="">普通合伙
+                                                                 </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                        <input type="checkbox" value="">特殊的普通合伙  
+                                                                     </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                            <input type="checkbox" value="">有限合伙
+                                                                         </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>出资额</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>经营范围</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>合伙期限</label>
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                        <input type="checkbox" value="">
+                                                                        <input class="form-control" placeholder="请输入">
+                                                                      
+                                                                </label>
+                                                                <label>年</label>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-lg-6">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                            <input type="checkbox" value="">长期
+                                                                         </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label>合伙人数</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <label>其中，有限合伙人数（仅限有限合伙填写）</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>从业人数</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#executeinfo">执行事务合伙人委派代表信息</a>
+                                        </h4>
+                                    </div>
+                                    <div id="executeinfo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>姓名</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label>固定电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>移动电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>电子邮箱</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件类型</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件号码</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#donate_table">出资表</a>
+                                        </h4>
+                                    </div>
+                                    <div id="donate_table" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <button id="add_donate" type="button" class="btn btn-outline btn-default">添加出资人</button>
+                                            <br>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>姓名</th>
+                                                            <th>住所</th>
+                                                            <th>证件及号码</th>
+                                                            <th>责任方式</th>
+                                                            <th>出资方式</th>
+                                                            <th>认缴出资额</th>
+                                                            <th>实缴出资额</th>
+                                                            <th>缴付期限</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="donate_info_table">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#contactinfo">联络员信息</a>
+                                        </h4>
+                                    </div>
+                                    <div id="contactinfo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>姓名</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label>固定电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>移动电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>电子邮箱</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件类型</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件号码</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#finaceinfo">财务负责人信息</a>
+                                        </h4>
+                                    </div>
+                                    <div id="finaceinfo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>姓名</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label>固定电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>移动电话</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>电子邮箱</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件类型</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label>身份证件号码</label>
+                                                    <input class="form-control" placeholder="请输入">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="./vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="./vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./dist/js/sb-admin-2.js"></script>
+
+
+    <script>
+        var donate_table_count = 1;
+
+        function add_donate_table_node() {
+            var donate_table_item = document.createElement('tr');
+            donate_table_item.className = 'info';
+            donate_table_item.innerHTML = "<td>" + donate_table_count +
+                "</td><td><input class='form-control' id=" + 'donate_name_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_addr_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_id_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_res_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_dons_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_adon_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_acdon_' + donate_table_count +
+                "></td><td><input class='form-control' id=" + 'donate_due_' + donate_table_count +
+                "></td>";
+            $("#donate_info_table").append(donate_table_item);
+            donate_table_count += 1;
+        }
+
+        $(document).ready(function() {
+
+
+            add_donate_table_node();
+
+            $('#add_donate').click(function() {
+                add_donate_table_node();
+            });
+
+        });
+    </script>
+</body>
+
+</html>
