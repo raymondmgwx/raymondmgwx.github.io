@@ -298,7 +298,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label>姓名</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_name' class="form-control" placeholder="请输入">
                                                 </div>
                                             </div>
 
@@ -306,32 +306,32 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <label>固定电话</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_tele' class="form-control" placeholder="请输入">
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <label>移动电话</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_mobile' class="form-control" placeholder="请输入">
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label>电子邮箱</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_email' class="form-control" placeholder="请输入">
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label>身份证件类型</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_idtype' class="form-control" placeholder="请输入">
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label>身份证件号码</label>
-                                                    <input class="form-control" placeholder="请输入">
+                                                    <input id='execute_idnumber' class="form-control" placeholder="请输入">
                                                 </div>
                                             </div>
 
@@ -480,6 +480,9 @@
                             </div>
                         </div>
                         <!-- .panel-body -->
+                        <div class="panel-footer">
+                            <button id="convert_execute" type="button" class="btn btn-outline btn-primary">执行事务合伙人信息</button>
+                        </div>
                     </div>
                     <!-- /.panel -->
                 </div>
@@ -537,6 +540,25 @@
 
             $('#add_donate').click(function() {
                 add_donate_table_node();
+            });
+
+            $('#convert_execute').click(function() {
+                var execute_name = $('#execute_name').val();
+                var execute_tele = $('#execute_tele').val();
+                var execute_mobile = $('#execute_mobile').val();
+                var execute_email = $('#execute_email').val();
+                var execute_idtype = $('#execute_idtype').val();
+                var execute_idnumber = $('#execute_idnumber').val();
+
+                var url = './convert-file/execute.html?execute_name=' +
+                    execute_name + '&execute_tele=' +
+                    execute_tele + '&execute_mobile=' +
+                    execute_mobile + '&execute_email=' +
+                    execute_email + '&execute_idtype=' +
+                    execute_idtype + '&execute_idnumber=' +
+                    execute_idnumber;
+
+                window.location.assign(encodeURI(url));
             });
 
         });
