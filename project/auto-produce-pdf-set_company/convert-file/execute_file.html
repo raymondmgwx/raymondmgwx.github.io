@@ -6,6 +6,16 @@
     <meta name="generator" content="Aspose.Words for .NET 15.1.0.0" />
     <title></title>
 
+    <style>
+        @media print {
+            .Noprint {
+                DISPLAY: none;
+            }
+            .PageNext {
+                PAGE-BREAK-AFTER: always
+            }
+        }
+    </style>
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -79,15 +89,15 @@
         <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:Calibri; font-size:10.5pt">&#xa0;</span></p>
     </div>
 
-    <center><button id="print_page" type="button" class="btn btn-outline btn-primary">确认打印/生成pdf</button></center>
+    <center><button id="print_page" type="button" class="btn btn-outline btn-primary" onclick="printArea()">确认打印/生成pdf</button></center>
 
 
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script>
-        function printArea(html) {
+        function printArea() {
             var bodyHtml = document.body.innerHTML;
-            document.body.innerHTML = html;
+            document.body.innerHTML = $('#print_div').html();
             window.print();
             document.body.innerHTML = bodyHtml;
         }
@@ -109,12 +119,6 @@
                 $(properity).text(val);
 
             }, this);
-
-
-            $('#print_page').click(function() {
-                printArea($('#print_div').html());
-            });
-
 
         });
     </script>
