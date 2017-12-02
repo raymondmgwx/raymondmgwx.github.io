@@ -5,10 +5,12 @@
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta name="generator" content="Aspose.Words for .NET 15.1.0.0" />
     <title></title>
+
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div>
+    <div id='print_div'>
         <p style="line-height:26pt; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:SimSun; font-size:14pt">附表1</span></p>
         <p style="line-height:26pt; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:SimSun; font-size:22pt; font-weight:bold">&#xa0;</span></p>
         <p style="line-height:26pt; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:SimSun; font-size:18pt; font-weight:bold">执行事务合伙人（委派代表）信息</span></p>
@@ -76,8 +78,20 @@
         </div>
         <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:Calibri; font-size:10.5pt">&#xa0;</span></p>
     </div>
+
+    <center><button id="print_page" type="button" class="btn btn-outline btn-primary">确认打印/生成pdf</button></center>
+
+
     <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script>
+        function printArea(html) {
+            var bodyHtml = document.body.innerHTML;
+            document.body.innerHTML = html;
+            window.print();
+            document.body.innerHTML = bodyHtml;
+        }
+
         $(document).ready(function() {
 
             var url = decodeURI(location.href);
@@ -90,13 +104,18 @@
                 var val = element.split('=')[1];
 
                 properity = '#' + properity;
-                console.log(properity);
+                //console.log(properity);
 
                 $(properity).text(val);
 
             }, this);
 
-            window.print();
+
+            $('#print_page').click(function() {
+                printArea($('#print_div').html());
+            });
+
+
         });
     </script>
 </body>
