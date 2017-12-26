@@ -121,17 +121,18 @@
                     break;
                 case "Image-Visual-Lab":
                     loadScript(loc + 'lib/jquery-3.1.1.min.js', function() {
+                        loadScript(loc + 'lib/tether.min.js', function() {
+                            loadMultipleScripts(self._imvcWebLibraries, function() {
+                                console.log("WRE imvc web theme successfully loaded.");
+                            });
 
-                        loadMultipleScripts(self._imvcWebLibraries, function() {
-                            console.log("WRE imvc web theme successfully loaded.");
-                        });
-
-                        loadMultipleScripts(self._canvas2dLibraries, function() {
-                            console.log("WRE canvas2d library successfully loaded.");
-                            loadMultipleScripts(self._components, function() {
-                                console.log("WRE components successfully loaded.");
-                                self.boot(function() {
-                                    self.bootstrap.finishLoading();
+                            loadMultipleScripts(self._canvas2dLibraries, function() {
+                                console.log("WRE canvas2d library successfully loaded.");
+                                loadMultipleScripts(self._components, function() {
+                                    console.log("WRE components successfully loaded.");
+                                    self.boot(function() {
+                                        self.bootstrap.finishLoading();
+                                    });
                                 });
                             });
                         });
