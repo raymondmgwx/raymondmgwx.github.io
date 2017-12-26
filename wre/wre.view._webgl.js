@@ -16,10 +16,10 @@ WRE.view._webgl = {
 };
 
 
-WRE.view._webgl._view._init = function (callback) {
+WRE.view._webgl._view._init = function(callback) {
 
 
-    fetchWebGLInfo(function () {
+    fetchWebGLInfo(function() {
         callback();
     });
 
@@ -30,16 +30,18 @@ WRE.view._webgl._view._init = function (callback) {
             alert("required project name（'e=ProjectName'）");
             return
         } else {
-            WRE.view._webgl._projectFile += getReqQuery().e+"/"+getReqQuery().e;
+            WRE.view._webgl._projectFile += getReqQuery().e + "/" + getReqQuery().e;
             WRE.view._webgl._projectName = getReqQuery().e;
             WRE.view._webgl._projectRootPath = WRE.view._webgl._projectFile;
         }
 
         $.when(
             AjaxFile(WRE.view._webgl._projectRootPath + '.html', 'html')
-        ).then(function (canvasHtml) {
+        ).then(function(canvasHtml) {
 
-            WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
+            if (WRE.ui.elements["webgl"] != null) {
+                WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
+            }
 
             $("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '.js" charset="utf-8"></script>');
 

@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->
 
 
-(function () {
+(function() {
 
     function _WRE(config) {
         console.log("Instantiating WRG");
@@ -40,26 +40,39 @@
             loc + 'lib/numeric-1.2.6.min.js',
             loc + 'lib/webgl/webgl-util.js',
             loc + 'lib/webgl/webgl-debug.js',
-			loc + 'lib/webgl/wre.point.js',
-			loc + 'lib/webgl/wre.vector3.js',
+            loc + 'lib/webgl/wre.point.js',
+            loc + 'lib/webgl/wre.vector3.js',
             loc + 'lib/webgl/wre.vector4.js',
             loc + 'lib/webgl/wre.raylines.js',
             loc + 'lib/webgl/wre.mathutils.js',
-			loc + 'lib/webgl/wre.matrix4x4.js',
-			loc + 'lib/webgl/wre.camera.js',
+            loc + 'lib/webgl/wre.matrix4x4.js',
+            loc + 'lib/webgl/wre.camera.js',
             loc + 'lib/webgl/wre.draggablepoints.js',
             loc + 'lib/webgl/wre.inputeventhandler.js',
-			loc + 'lib/webgl/wre.bezier.js',
-			loc + 'lib/webgl/wre.hermite.js',
+            loc + 'lib/webgl/wre.bezier.js',
+            loc + 'lib/webgl/wre.hermite.js',
             loc + 'lib/webgl/wre.bspline.js',
-			loc + 'lib/webgl/wre.beziersurface.js',
+            loc + 'lib/webgl/wre.beziersurface.js',
             loc + 'lib/webgl/wre.nurbsutils.js',
             loc + 'lib/webgl/wre.nurbscurve.js'
         ];
 
-        this._canvas2dLibraries=[
+        this._canvas2dLibraries = [
             loc + 'lib/canvas2d/wre.vector2.js',
             loc + 'lib/canvas2d/wre.2dline.js'
+        ];
+
+        this._imvcWebLibraries = [
+            loc + 'lib/imvc-web-theme/lib/wow/dist/wow.js',
+            loc + 'lib/imvc-web-theme/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js',
+            loc + 'lib/imvc-web-theme/lib/isotope/dist/isotope.pkgd.js',
+            loc + 'lib/imvc-web-theme/lib/imagesloaded/imagesloaded.pkgd.js',
+            loc + 'lib/imvc-web-theme/lib/flexslider/jquery.flexslider.js',
+            loc + 'lib/imvc-web-theme/lib/owl.carousel/dist/owl.carousel.min.js',
+            loc + 'lib/imvc-web-theme/lib/smoothscroll.js',
+            loc + 'lib/imvc-web-theme/lib/magnific-popup/dist/jquery.magnific-popup.js',
+            loc + 'lib/imvc-web-theme/lib/simple-text-rotator/jquery.simple-text-rotator.min.js',
+            loc + 'lib/imvc-web-theme/js/plugins.js'
         ];
 
         this._components = [
@@ -77,26 +90,47 @@
         this.ui = {};
 
 
-        this.bootstrap = function () {
+        this.bootstrap = function() {
             var self = this;
+
+            setUIMode(self);
+
             this.bootstrap.loading(self.config.theme);
 
-            switch(self.config.theme){
+            switch (self.config.theme) {
                 case "W-RayEngine":
-                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function () {
-                        loadScript(loc + 'lib/tether.min.js', function () {
-                            loadMultipleScripts(self._canvas2dLibraries, function () {
+                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function() {
+                        loadScript(loc + 'lib/tether.min.js', function() {
+                            loadMultipleScripts(self._canvas2dLibraries, function() {
                                 console.log("WRE canvas2d library successfully loaded.");
                             });
-        
-        
-                            loadMultipleScripts(self._wreLibraries, function () {
+
+
+                            loadMultipleScripts(self._wreLibraries, function() {
                                 console.log("WRE libraries successfully loaded.");
-                                loadMultipleScripts(self._components, function () {
+                                loadMultipleScripts(self._components, function() {
                                     console.log("WRE components successfully loaded.");
-                                    self.boot(function () {
+                                    self.boot(function() {
                                         self.bootstrap.finishLoading();
                                     });
+                                });
+                            });
+                        });
+                    });
+                    break;
+                case "Image-Visual-Lab":
+                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function() {
+
+                        loadMultipleScripts(self._imvcWebLibraries, function() {
+                            console.log("WRE imvc web theme successfully loaded.");
+                        });
+
+                        loadMultipleScripts(self._canvas2dLibraries, function() {
+                            console.log("WRE canvas2d library successfully loaded.");
+                            loadMultipleScripts(self._components, function() {
+                                console.log("WRE components successfully loaded.");
+                                self.boot(function() {
+                                    self.bootstrap.finishLoading();
                                 });
                             });
                         });
@@ -110,7 +144,7 @@
                 var script = document.createElement("script");
                 script.type = "text/javascript";
                 if (script.readyState) { //IE
-                    script.onreadystatechange = function () {
+                    script.onreadystatechange = function() {
                         if (script.readyState == "loaded" || script.readyState == "complete") {
                             script.onreadystatechange = null;
                             //console.log(url + " loaded.");
@@ -118,13 +152,13 @@
                         }
                     };
                 } else { //Others
-                    script.onload = function () {
+                    script.onload = function() {
                         //console.log(url + " loaded.");
                         callback();
                     };
                 }
                 //script.src = url;
-                script.src = url+ '?' + new Date().getTime();
+                script.src = url + '?' + new Date().getTime();
                 document.getElementsByTagName("head")[0].appendChild(script);
             }
 
@@ -132,7 +166,7 @@
                 // /console.log(urlArray.length);
                 var counter = urlArray.length;
                 for (var i = 0; i < urlArray.length; i++) {
-                    loadScript(urlArray[i], function () {
+                    loadScript(urlArray[i], function() {
                         counter = counter - 1;
                         if (counter == 0) {
                             callback();
@@ -141,7 +175,7 @@
                 }
             }
         };
-        this.bootstrap.loading = function (theme) {
+        this.bootstrap.loading = function(theme) {
             console.log('Start loading...');
             var preload = document.createElement('div');
             preload.setAttribute('id', 'WRE-loading');
@@ -174,7 +208,7 @@
             document.body.appendChild(preload);
             this.loading.dom = preload;
         };
-        this.bootstrap.finishLoading = function () {
+        this.bootstrap.finishLoading = function() {
             document.body.removeChild(this.loading.dom);
             console.log('Loading finished.');
         };
@@ -182,6 +216,36 @@
 
         this.bootstrap();
 
+        function getReqQuery() {
+            if (window.location.href.split('?').length == 1) {
+                return {};
+            }
+            var queryString = window.location.href.split('?')[1];
+
+            var queryObj = {};
+
+            if (queryString != '') {
+                var querys = queryString.split("&");
+                for (var i = 0; i < querys.length; i++) {
+                    var key = querys[i].split('=')[0];
+                    var value = querys[i].split('=')[1];
+                    queryObj[key] = value;
+                }
+            }
+            //var queryObj = $.url().param();
+            //console.log(queryObj);
+            return queryObj;
+        }
+
+        function setUIMode(self) {
+
+            if (getReqQuery().theme != null) {
+                self.config.theme = getReqQuery().theme;
+                console.log("theme set to " + self.config.theme + ".");
+            }
+
+
+        }
 
         function toAbsolute(base, relative) {
             base = base.split('?')[0];
