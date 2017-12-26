@@ -13,11 +13,11 @@ WRE.ui = {
     elements: {}
 };
 
-WRE.ui._init = function () {
+WRE.ui._init = function() {
     console.log("Initiating UI...");
     var initUI = new $.Deferred();
     setUIMode();
-    loadTheme(function () {
+    loadTheme(function() {
         //processElements();
         console.log("UI initialized.");
         initUI.resolve("UI initiation completed.");
@@ -27,8 +27,15 @@ WRE.ui._init = function () {
 
     function setUIMode() {
 
+        if (getReqQuery().ui == null) {
+            alert("default theme!");
+            WRE.ui.uiMode = "default";
+        } else {
+            WRE.ui.uiMode = getReqQuery().ui
+            WRE.config.theme = getReqQuery().ui
+        }
 
-        WRE.ui.uiMode = "default";
+
 
 
         console.log("ui.uiMode set to " + WRE.ui.uiMode + ".");
@@ -40,7 +47,8 @@ WRE.ui._init = function () {
             $("head").append('<script type="text/javascript" src="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/js/wre.ui.' + WRE.ui.uiMode + '.js" charset="utf-8"></script>'),
             $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/' + WRE.ui.uiMode + '.css" />'),
             $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/bootstrap.min.css" />')
-        ).then(function (wreHtml) {
+
+        ).then(function(wreHtml) {
 
             //create html
             var dom = document.createElement('div');
@@ -71,12 +79,6 @@ WRE.ui._init = function () {
 
 };
 
-WRE.ui._build = function (callback) {
+WRE.ui._build = function(callback) {
     callback();
 };
-
-
-
-
-
-
