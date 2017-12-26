@@ -28,6 +28,23 @@
         wow.init();
 
 
+        /* ---------------------------------------------- /*
+         * Scroll top
+         /* ---------------------------------------------- */
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('.scroll-up').fadeIn();
+            } else {
+                $('.scroll-up').fadeOut();
+            }
+        });
+
+        $('a[href="#totop"]').click(function() {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+            return false;
+        });
+
 
         /* ---------------------------------------------- /*
          * Initialization General Scripts for all pages
@@ -335,6 +352,36 @@
         });
 
 
+        /* ---------------------------------------------- /*
+         * Youtube video background
+         /* ---------------------------------------------- */
+
+        $(function() {
+            $(".video-player").mb_YTPlayer();
+        });
+
+        $('#video-play').click(function(event) {
+            event.preventDefault();
+            if ($(this).hasClass('fa-play')) {
+                $('.video-player').playYTP();
+            } else {
+                $('.video-player').pauseYTP();
+            }
+            $(this).toggleClass('fa-play fa-pause');
+            return false;
+        });
+
+        $('#video-volume').click(function(event) {
+            event.preventDefault();
+            if ($(this).hasClass('fa-volume-off')) {
+                $('.video-player').YTPUnmute();
+            } else {
+                $('.video-player').YTPMute();
+            }
+            $(this).toggleClass('fa-volume-off fa-volume-up');
+            return false;
+        });
+
 
         /* ---------------------------------------------- /*
          * Owl Carousel
@@ -376,6 +423,29 @@
             });
 
         });
+
+
+        /* ---------------------------------------------- /*
+         * Blog masonry
+         /* ---------------------------------------------- */
+
+        $('.post-masonry').imagesLoaded(function() {
+            $('.post-masonry').masonry();
+        });
+
+
+        /* ---------------------------------------------- /*
+         * Scroll Animation
+         /* ---------------------------------------------- */
+
+        $('.section-scroll').bind('click', function(e) {
+            var anchor = $(this);
+            $('html, body').stop().animate({
+                scrollTop: $(anchor.attr('href')).offset().top - 50
+            }, 1000);
+            e.preventDefault();
+        });
+
 
     });
 })(jQuery);
