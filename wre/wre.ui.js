@@ -17,7 +17,6 @@ WRE.ui._init = function() {
     console.log("Initiating UI...");
     var initUI = new $.Deferred();
     loadTheme(function() {
-        //processElements();
         console.log("UI initialized.");
         initUI.resolve("UI initiation completed.");
     });
@@ -27,11 +26,9 @@ WRE.ui._init = function() {
     function loadTheme(callback) {
         $.when(
             AjaxFile(WRE.runtime.scriptLocation + "/theme/" + WRE.config.theme + "/" + WRE.ui.uiMode + ".html", 'html'),
-            $("head").append('<script type="text/javascript" src="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/js/wre.ui.' + WRE.ui.uiMode + '.js" charset="utf-8"></script>'),
-            $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/' + WRE.ui.uiMode + '.css" />')
-
+            $("head").append('<link rel="stylesheet" type="text/css" href="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/css/' + WRE.ui.uiMode + '.css" />'),
+            $("head").append('<script type="text/javascript" src="' + WRE.runtime.scriptLocation + '/theme/' + WRE.config.theme + '/js/wre.ui.' + WRE.ui.uiMode + '.js" charset="utf-8"></script>')
         ).then(function(wreHtml) {
-
             //create html
             var dom = document.createElement('div');
             dom.innerHTML = wreHtml;
@@ -47,6 +44,7 @@ WRE.ui._init = function() {
 
         function parseElements() {
             var elements = document.querySelectorAll('[id^=wre_ui_]');
+
             for (var i = 0; i < elements.length; i++) {
                 var name = elements[i].getAttribute('id').replace('wre_ui_', '');
                 WRE.ui.elements[name] = {};

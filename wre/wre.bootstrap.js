@@ -124,6 +124,21 @@
                         loadScript(loc + 'lib/tether.min.js', function() {
                             loadMultipleScripts(self._imvcWebLibraries, function() {
                                 console.log("WRE imvc web theme successfully loaded.");
+                                loadMultipleScripts(self._components, function() {
+                                    console.log("WRE components successfully loaded.");
+                                    self.boot(function() {
+                                        self.bootstrap.finishLoading();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                    break;
+                case "Image-Process-Content":
+                    loadScript(loc + 'lib/jquery-3.1.1.min.js', function() {
+                        loadScript(loc + 'lib/tether.min.js', function() {
+                            loadMultipleScripts(self._imvcWebLibraries, function() {
+                                console.log("WRE imvc web theme successfully loaded.");
                             });
 
                             loadMultipleScripts(self._canvas2dLibraries, function() {

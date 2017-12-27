@@ -39,9 +39,14 @@ WRE.view._webgl._view._init = function(callback) {
             AjaxFile(WRE.view._webgl._projectRootPath + '.html', 'html')
         ).then(function(canvasHtml) {
 
+
             if (WRE.ui.elements["webgl"] != null) {
                 WRE.ui.elements["webgl"].dom.innerHTML = canvasHtml;
+                console.log('detected webgl dom!');
+            } else {
+                console.log('not detected webgl dom!');
             }
+
 
             $("head").append('<script type="text/javascript" src="' + WRE.view._webgl._projectRootPath + '.js" charset="utf-8"></script>');
 
