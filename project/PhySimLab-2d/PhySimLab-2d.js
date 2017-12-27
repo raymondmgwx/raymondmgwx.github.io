@@ -12,6 +12,8 @@ canvasElement.width = canvasElement.clientWidth;
 canvasElement.height = canvasElement.clientHeight;
 var context = canvasElement.getContext('2d');
 
+console.log(canvasElement.width);
+console.log(canvasElement.height);
 
 function addScript() {
     var script = document.createElement("script");
@@ -33,8 +35,8 @@ function drawStart() {
     for (var m = 0; m < n; m++) {
         x = r * Math.cos(theta0 + 2 * Math.PI * m / n);
         y = r * Math.sin(theta0 + 2 * Math.PI * m / n);
-        if (m == 0) context.moveTo(x + 250, y + 250);
-        else context.lineTo(x + 250, y + 250);
+        if (m == 0) context.moveTo(x + canvasElement.width / 2, y + canvasElement.height / 2);
+        else context.lineTo(x + canvasElement.width / 2, y + canvasElement.height / 2);
     }
     context.closePath();
 
