@@ -2,6 +2,10 @@
     <section class="module">
         <div class="container">
 
+            <!--  
+            Draw Polygon
+            =============================================
+            -->
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
                     <h4 class="font-alt mb-0">Paramaters for Hexagon Draw</h4>
@@ -55,6 +59,78 @@
                     <div class="row multi-columns-row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <center> <canvas id="canvas_hexagon_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--  
+            Draw UzaMaki
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for UzaMaki Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="n_u" class="form-control input-sm" type="text" placeholder="n" value="6" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>theta0</label>
+                                    <input id="theta0_u" class="form-control input-sm" type="text" placeholder="theta0" value="0" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>r</label>
+                                    <input id="r_u" class="form-control input-sm" type="text" placeholder="r" value="1" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>a</label>
+                                    <input id="a_u" class="form-control input-sm" type="text" placeholder="a" value="1.05" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>N</label>
+                                    <input id="N_u" class="form-control input-sm" type="text" placeholder="N" value="200" />
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <button id='generate_uzamaki_style1' class="btn btn-border-d btn-round" type="button">Style1</button>
+                        <button id='generate_uzamaki_style2' class="btn btn-border-d btn-round" type="button">Style2</button>
+                        <button id='generate_uzamaki' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">UzaMaki Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_uzamaki_draw" class="canvas-2d"></canvas></center>
                         </div>
                     </div>
                 </div>
