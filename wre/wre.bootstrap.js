@@ -60,7 +60,8 @@
         this._canvas2dLibraries = [
             loc + 'lib/canvas2d/wre.vector2.js',
             loc + 'lib/canvas2d/wre.2dline.js',
-            loc + 'lib/canvas2d/wre.polygon.js'
+            loc + 'lib/canvas2d/wre.polygon.js',
+            loc + 'lib/canvas2d/wre.image.js'
         ];
 
         this._imvcWebLibraries = [

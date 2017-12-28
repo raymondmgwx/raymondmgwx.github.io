@@ -135,6 +135,207 @@
                     </div>
                 </div>
             </div>
+
+            <!--  
+            Draw Random
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Random Image Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_random_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+            Draw Color Model
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Color Model Image Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_colormodel_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+            Draw Gaussian Model
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Gaussian Image Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_gaussian_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+            Draw PlaneWave
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for PlaneWave Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>f0</label>
+                                    <input id="f0_pw" class="form-control input-sm" type="text" placeholder="f0" value="1" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>theta</label>
+                                    <input id="theta_pw" class="form-control input-sm" type="text" placeholder="theta" value="45" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>k</label>
+                                    <input id="k_pw" class="form-control input-sm" type="text" placeholder="k" value="0.05" />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button id='generate_planewave' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">PlaneWave Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_planewave_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+            Draw Mandelbrot
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for Mandelbrot Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>min_a</label>
+                                    <input id="min_a" class="form-control input-sm" type="text" placeholder="min_a" value="-2" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>max_a</label>
+                                    <input id="max_a" class="form-control input-sm" type="text" placeholder="max_a" value="1" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>min_b</label>
+                                    <input id="min_b" class="form-control input-sm" type="text" placeholder="min_b" value="-1" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>max_b</label>
+                                    <input id="max_b" class="form-control input-sm" type="text" placeholder="max_b" value="1" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>infty</label>
+                                    <input id="infty" class="form-control input-sm" type="text" placeholder="infty" value="10" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>step</label>
+                                    <input id="step" class="form-control input-sm" type="text" placeholder="step" value="50" />
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <button id='generate_mandelbrot_style1' class="btn btn-border-d btn-round" type="button">Style1</button>
+                        <button id='generate_mandelbrot_style2' class="btn btn-border-d btn-round" type="button">Style2</button>
+                        <button id='generate_mandelbrot' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Mandelbrot Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_mandelbrot_draw" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+            Ball Anime
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Ball Anime</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_ball_anime" class="canvas-2d"></canvas></center>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_ball_anime2" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
