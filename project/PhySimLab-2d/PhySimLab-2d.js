@@ -46,8 +46,15 @@ canvasElement_ball2.width = canvasElement_ball2.clientWidth;
 canvasElement_ball2.height = canvasElement_ball2.clientHeight;
 var context_ball2 = canvasElement_ball2.getContext('2d');
 
+var canvasElement_lifegame = document.getElementById('canvas_lifegame_anime');
+canvasElement_lifegame.width = canvasElement_lifegame.clientWidth;
+canvasElement_lifegame.height = canvasElement_lifegame.clientHeight;
+var context_lifegame = canvasElement_lifegame.getContext('2d');
+
+
 var draw_polygon = new DrawPolygon();
 var ImgProcess = new ImgProcess();
+var lifeGame = new LifeGame(100, 0.5);
 
 var mandelbrot_flag_step = false;
 
@@ -126,6 +133,26 @@ function drawUzaMaki() {
     context_uzamaki.stroke();
 }
 
+function lifeAnimeGame() {
+
+    var width = canvasElement_lifegame.width;
+    var height = canvasElement_lifegame.height;
+    context_lifegame.clearRect(0, 0, width, height);
+
+    lifeGame.step();
+    var l = width / 100;
+    context_lifegame.beginPath();
+    for (var j = 0; j < 100; j++) {
+        for (var i = 0; i < 100; i++) {
+            var flag = lifeGame.read(i, j);
+            if (flag) context_lifegame.rect(i * l, j * l, l, l);
+        }
+    }
+    context_lifegame.closePath();
+    context_lifegame.fillStyle = "blue";
+    context_lifegame.fill();
+    requestAnimationFrame(lifeAnimeGame);
+}
 
 var ball_R = 50;
 var ball_x = 250,
@@ -256,6 +283,11 @@ function initEvent() {
     document.getElementById("generate_mandelbrot").addEventListener("click", function() {
         drawMandelbrot(mandelbrot_flag_step);
     });
+
+    document.getElementById("reset_lifegame").addEventListener("click", function() {
+        lifeGame.init();
+    });
+
 }
 
 function initCanvas() {
@@ -269,6 +301,7 @@ function initCanvas() {
 
     ballAnimeByEulerFunc();
     ballAnimeByEulerFunc2();
+    lifeAnimeGame();
 }
 
 addScript();

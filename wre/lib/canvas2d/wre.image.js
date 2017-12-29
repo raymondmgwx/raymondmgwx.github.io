@@ -215,3 +215,63 @@ ImgProcess.prototype = {
     }
 
 };
+
+
+var LifeGame = function(size, rate) {
+    this.field = [];
+    this._field = [];
+    this.survival_min = 2;
+    this.survival_max = 3;
+    this.birth_min = 3;
+    this.birth_max = 3;
+    this.rate = rate || 0.5;
+    this.size = size || 100;
+    this.init();
+};
+
+LifeGame.prototype = {
+    init: function() {
+        for (var i = 0; i < this.size; i++) {
+            this.field[i] = new Array(this.size);
+            this._field[i] = new Array(this.size);
+            for (var j = 0; j < this.size; j++) {
+                this.field[i][j] = (Math.random() > this.rate) ? true : false;
+                this._field[i][j] = this.field[i][j];
+            }
+        }
+    },
+    read: function(i, j) {
+        return this.field[i][j];
+    },
+    step: function() {
+        for (var i = 0; i < this.size; i++) {
+            for (var j = 0; j < this.size; j++) {
+                var ip = (i == this.size - 1) ? 0 : i + 1;
+                var im = (i == 0) ? this.size - 1 : i - 1;
+                var jp = (j == this.size - 1) ? 0 : j + 1;
+                var jm = (j == 0) ? this.size - 1 : j - 1;
+
+                var count = 0;
+
+                if (this._field[im][jm]) count++;
+                if (this._field[im][j]) count++;
+                if (this._field[im][jp]) count++;
+                if (this._field[i][jm]) count++;
+                if (this._field[i][jp]) count++;
+                if (this._field[ip][jm]) count++;
+                if (this._field[ip][j]) count++;
+                if (this._field[ip][jp]) count++;
+
+                if (!this.field[i][j] && (count >= this.birth_min && count <= this.birth_max)) this.field[i][j] = true;
+                else if (this.field[i][j] && (count >= this.survival_min && count <= this.survival_max)) this.field[i][j] = true;
+                else if (this.field[i][j] && count < this.survival_min) this.field[i][j] = false;
+                else if (this.field[i][j] && count > this.survival_max) this.field[i][j] = false;
+            }
+        }
+        for (var i = 0; i < this.size; i++) {
+            for (var j = 0; j < this.size; j++) {
+                this._field[i][j] = this.field[i][j];
+            }
+        }
+    }
+}
