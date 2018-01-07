@@ -41,7 +41,7 @@ function insert_user_info(id, phone, address, sysid) {
     exist_user_count += 1;
 }
 
-function insert_reward_info(reward_name, reward_number, status, order_number) {
+function insert_reward_info(reward_name, reward_number, status, order_number, reward_sysid) {
     var reward_item = document.createElement('tr');
     reward_item.className = 'info';
     reward_item.innerHTML = "<td>" + reward_count +
@@ -49,6 +49,7 @@ function insert_reward_info(reward_name, reward_number, status, order_number) {
         "</td><td>" + reward_number +
         "</td><td>" + status +
         "</td><td>" + order_number +
+        "</td><td>" + reward_sysid +
         "</td>";
     $("#reward_list_table").append(reward_item);
     reward_count += 1;
@@ -81,36 +82,68 @@ $(function() {
             var user_info = cur_json_info['user_info'];
             var reward_list = cur_json_info['reward_list'];
 
-            var cur_length = user_info.length;
-            var new_user_info = new Object();
-            var new_reward_info = new Object();
+            var check_same = false;
+            //check
+            user_info.forEach(element => {
+                var id = element['id'];
+                var phone = element['phone'];
 
-            new_user_info['id'] = $('#new_user_id').val();
-            new_user_info['phone'] = $('#new_user_phone').val();
-            new_user_info['address'] = $('#new_user_address').val();
-            new_user_info['systemid'] = 'xsb' + (cur_length + 1);
-
-            new_reward_info['user_systemid'] = new_user_info['systemid'];
-            new_reward_info['reward_name'] = $('#new_user_reward_name').val();
-            new_reward_info['reward_number'] = $('#new_user_reward_number').val();
-            new_reward_info['status'] = '未发货';
-            new_reward_info['order_number'] = '无订单号';
-
-            user_info.push(new_user_info);
-            reward_list.push(new_reward_info);
-
-            var json_info = JSON.stringify(cur_json_info);
-            $.ajax({
-                url: "https://api.myjson.com/bins/jpfbv",
-                type: "PUT",
-                data: json_info,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function(data, textStatus, jqXHR) {
-                    alert('录入新用户成功');
+                if (!check_same) {
+                    if ($('#new_user_id').val() == id && $('#new_user_phone').val() == phone) {
+                        alert('重复ID以及电话！！');
+                        check_same = true;
+                        return;
+                    } else if ($('#new_user_id').val() == id) {
+                        alert('重复ID！！');
+                        check_same = true;
+                        return;
+                    } else if ($('#new_user_phone').val() == phone) {
+                        alert('重复电话！！');
+                        check_same = true;
+                        return;
+                    }
                 }
+
+
             });
+
+            if (!check_same) {
+                var cur_length = user_info.length;
+                var new_user_info = new Object();
+                var new_reward_info = new Object();
+
+                new_user_info['id'] = $('#new_user_id').val();
+                new_user_info['phone'] = $('#new_user_phone').val();
+                new_user_info['address'] = $('#new_user_address').val();
+                new_user_info['systemid'] = 'xsb' + (cur_json_info['curmaxnum'] + 1);
+                cur_json_info['curmaxnum'] += 1;
+
+                new_reward_info['user_systemid'] = new_user_info['systemid'];
+                new_reward_info['reward_name'] = $('#new_user_reward_name').val();
+                new_reward_info['reward_number'] = $('#new_user_reward_number').val();
+                new_reward_info['status'] = '未发货';
+                new_reward_info['order_number'] = '无订单号';
+
+                new_reward_info['reward_sysid'] = 'rw' + cur_json_info['reward_curmaxnum'];
+                cur_json_info['reward_curmaxnum'] += 1;
+
+                user_info.push(new_user_info);
+                reward_list.push(new_reward_info);
+
+                var json_info = JSON.stringify(cur_json_info);
+                $.ajax({
+                    url: "https://api.myjson.com/bins/jpfbv",
+                    type: "PUT",
+                    data: json_info,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data, textStatus, jqXHR) {
+                        alert('录入新用户成功');
+                    }
+                });
+            }
         });
+
     });
 
     $('#cur_user_reward').click(function() {
@@ -127,6 +160,9 @@ $(function() {
             new_reward_info['reward_number'] = $('#cur_user_reward_number').val();
             new_reward_info['status'] = '未发货';
             new_reward_info['order_number'] = '无订单号';
+
+            new_reward_info['reward_sysid'] = 'rw' + cur_json_info['reward_curmaxnum'];
+            cur_json_info['reward_curmaxnum'] += 1;
 
             reward_list.push(new_reward_info);
 
@@ -188,8 +224,9 @@ $(function() {
                         var reward_number = element['reward_number'];
                         var status = element['status'] != null ? element['status'] : '未发货';
                         var order_number = element['order_number'] != null ? element['order_number'] : '无订单号';
+                        var reward_sysid = element['reward_sysid'] != null ? element['reward_sysid'] : 'None';
                         $('#cur_user_sysid').val(user_systemid);
-                        insert_reward_info(reward_name, reward_number, status, order_number);
+                        insert_reward_info(reward_name, reward_number, status, order_number, reward_sysid);
                     }
                 });
 
