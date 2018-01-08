@@ -1,0 +1,116 @@
+<div class="main showcase-page">
+    <section class="module">
+        <div class="container">
+
+            <!--  
+            Draw 2DLattice Gaussian
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for 2DLattice Gaussian</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>center_x</label>
+                                    <input id="center_x" class="form-control input-sm" type="text" placeholder="center_x" value="0" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>center_y</label>
+                                    <input id="center_y" class="form-control input-sm" type="text" placeholder="center_y" value="0" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>sigma2</label>
+                                    <input id="sigma2" class="form-control input-sm" type="text" placeholder="sigma2" value="100" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>z0</label>
+                                    <input id="z0" class="form-control input-sm" type="text" placeholder="z0" value="50" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>lattice_number</label>
+                                    <input id="lattice_number" class="form-control input-sm" type="text" placeholder="lattice_number" value="100" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>lattice_length</label>
+                                    <input id="lattice_length" class="form-control input-sm" type="text" placeholder="lattice_length" value="1" />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button id='generate_lattice_gaussian' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">2DLattice Gaussian</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div id="canvas-gaussian" class="canvas-2d">
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">2DLattice Gaussian Circle Animation</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div id="canvas-gaussian-anime" class="canvas-2d">
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Reference</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <p>遠藤理平（2013）『HTML5による物理シミュレーション 拡散・波動編』 カットシステム．</p>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -61,7 +61,8 @@
             loc + 'lib/canvas2d/wre.vector2.js',
             loc + 'lib/canvas2d/wre.2dline.js',
             loc + 'lib/canvas2d/wre.polygon.js',
-            loc + 'lib/canvas2d/wre.image.js'
+            loc + 'lib/canvas2d/wre.image.js',
+            loc + 'lib/three/control/TrackballControls.js'
         ];
 
         this._imvcWebLibraries = [
@@ -75,7 +76,8 @@
             loc + 'lib/imvc-web-theme/lib/smoothscroll.js',
             loc + 'lib/imvc-web-theme/lib/magnific-popup/dist/jquery.magnific-popup.js',
             loc + 'lib/imvc-web-theme/lib/simple-text-rotator/jquery.simple-text-rotator.min.js',
-            loc + 'lib/imvc-web-theme/js/plugins.js'
+            loc + 'lib/imvc-web-theme/js/plugins.js',
+            loc + 'lib/three/three.min.js'
         ];
 
         this._components = [
@@ -141,14 +143,16 @@
                         loadScript(loc + 'lib/tether.min.js', function() {
                             loadMultipleScripts(self._imvcWebLibraries, function() {
                                 console.log("WRE imvc web theme successfully loaded.");
-                            });
+                                loadMultipleScripts(self._canvas2dLibraries, function() {
+                                    console.log("WRE canvas2d library successfully loaded.");
+                                    loadScript(loc + 'lib/three-demo/wre.lattice_gaussian.js', function() {
+                                        loadMultipleScripts(self._components, function() {
+                                            console.log("WRE components successfully loaded.");
 
-                            loadMultipleScripts(self._canvas2dLibraries, function() {
-                                console.log("WRE canvas2d library successfully loaded.");
-                                loadMultipleScripts(self._components, function() {
-                                    console.log("WRE components successfully loaded.");
-                                    self.boot(function() {
-                                        self.bootstrap.finishLoading();
+                                            self.boot(function() {
+                                                self.bootstrap.finishLoading();
+                                            });
+                                        });
                                     });
                                 });
                             });
