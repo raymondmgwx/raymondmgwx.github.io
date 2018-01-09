@@ -81,7 +81,9 @@
                         <li>
                             <a href="./user.html"><i class="fa fa-dashboard fa-fw"></i>用户信息</a>
                         </li>
-
+                        <li>
+                            <a href="./reward.html"><i class="fa fa-dashboard fa-fw"></i>历史中奖信息</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
@@ -128,43 +130,46 @@
                                 </div>
                             </div>
 
+                            <br>
 
-
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        用户中奖列表
-                                    </div>
-                                    <!-- /.panel-heading -->
-                                    <div class="panel-body">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>用户名</th>
-                                                        <th>奖品名称</th>
-                                                        <th>奖品数量</th>
-                                                        <th>发货状态</th>
-                                                        <th>订单编号</th>
-                                                        <th>奖品System ID</th>
-                                                        <th>删除</th>
-                                                        <th>修改</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id='reward_list_table'>
-                                                </tbody>
-                                            </table>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            用户中奖列表
                                         </div>
-                                        <!-- /.table-responsive -->
+                                        <!-- /.panel-heading -->
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>用户名</th>
+                                                            <th>奖品名称</th>
+                                                            <th>奖品数量</th>
+                                                            <th>发货状态</th>
+                                                            <th>订单编号</th>
+                                                            <th>运费</th>
+                                                            <th>奖品System ID</th>
+                                                            <th>删除</th>
+                                                            <th>修改</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='reward_list_table'>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- /.table-responsive -->
+                                        </div>
+                                        <!-- /.panel-body -->
                                     </div>
-                                    <!-- /.panel-body -->
+                                    <!-- /.panel -->
                                 </div>
-                                <!-- /.panel -->
                             </div>
+
                         </div>
+
 
                     </div>
                     <!-- /.panel -->
@@ -304,6 +309,12 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <input id='e_r_order' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input id='e_r_fee' class="form-control">
                                 </div>
                             </div>
 

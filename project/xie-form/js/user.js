@@ -16,7 +16,7 @@ function insert_user_info(id, phone, address, sysid) {
 }
 
 
-function insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, r_sysid) {
+function insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, fee, r_sysid) {
     var reward_item = document.createElement('tr');
     reward_item.className = 'info';
     reward_item.innerHTML = "<td>" + reward_count +
@@ -25,9 +25,10 @@ function insert_reward_info(user_name, reward_name, reward_number, status, order
         "</td><td>" + reward_number +
         "</td><td>" + status +
         "</td><td>" + order_number +
+        "</td><td>" + fee +
         "</td><td>" + r_sysid +
         "</td><td><button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#delete-modal-reward' data-id=" + sysid + " data-name=" + reward_name + " data-sysid=" + r_sysid + ">删除</button>" +
-        "</td><td><button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-modal-reward' data-id=" + sysid + " data-name=" + reward_name + " data-number=" + reward_number + " data-status=" + status + " data-order_number=" + order_number + " data-sysid=" + r_sysid + ">修改</button></td>";
+        "</td><td><button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-modal-reward' data-id=" + sysid + " data-name=" + reward_name + " data-number=" + reward_number + " data-status=" + status + " data-order_number=" + order_number + " data-fee=" + fee + " data-sysid=" + r_sysid + ">修改</button></td>";
     $("#reward_list_table").append(reward_item);
     reward_count += 1;
 }
@@ -67,8 +68,13 @@ function load_reward_info() {
             var reward_number = element['reward_number'];
             var reward_sysid = element['reward_sysid'] != null ? element['reward_sysid'] : 'None';
             var order_number = element['order_number'] != null ? element['order_number'] : '无订单号';
+            var fee = element['fee'] != null ? element['fee'] : '未设置运费';
             var status = element['status'] != null ? element['status'] : '未发货';
-            insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, reward_sysid);
+
+            if (status != '已发货') {
+                insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, fee, reward_sysid);
+            }
+
         });
     });
 }
@@ -122,6 +128,7 @@ $(function() {
         var status = button.data('status');
         var order_number = button.data('order_number');
         var sysid = button.data('sysid');
+        var fee = button.data('fee');
         var modal = $(this);
 
         modal.find('#e_r_sysid').val(id);
@@ -129,6 +136,7 @@ $(function() {
         modal.find('#e_r_number').val(number);
         modal.find('#e_r_status').val(status);
         modal.find('#e_r_order').val(order_number);
+        modal.find('#e_r_fee').val(fee);
         modal.find('#e_r_r_sysid').val(sysid);
 
     });
@@ -253,6 +261,7 @@ $(function() {
                     element['reward_number'] = $('#e_r_number').val();
                     element['status'] = $('#e_r_status').val();
                     element['order_number'] = $('#e_r_order').val();
+                    element['fee'] = $('#e_r_fee').val();
                 }
             });
 

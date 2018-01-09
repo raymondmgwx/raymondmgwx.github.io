@@ -139,6 +139,7 @@ $(function() {
                     dataType: "json",
                     success: function(data, textStatus, jqXHR) {
                         alert('录入新用户成功');
+                        self.location = self.location;
                     }
                 });
             }
@@ -175,6 +176,7 @@ $(function() {
                 dataType: "json",
                 success: function(data, textStatus, jqXHR) {
                     alert('录入当前用户奖品成功！');
+                    self.location = self.location;
                 }
             });
         });
@@ -197,7 +199,7 @@ $(function() {
                 var address = element['address'];
                 var systemid = element['systemid'];
 
-                if ($('#search_id').val() == id && $('#phone').val() == phone) {
+                if ($('#search_id').val() == id && $('#search_phone').val() == phone) {
                     cur_user_sys_id = systemid;
                     find_user = true;
                     insert_user_info(id, phone, address, systemid);
@@ -205,7 +207,7 @@ $(function() {
                     cur_user_sys_id = systemid;
                     find_user = true;
                     insert_user_info(id, phone, address, systemid);
-                } else if ($('#phone').val() == phone) {
+                } else if ($('#search_phone').val() == phone) {
                     cur_user_sys_id = systemid;
                     find_user = true;
                     insert_user_info(id, phone, address, systemid);
