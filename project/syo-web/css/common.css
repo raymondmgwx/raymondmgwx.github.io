@@ -1,0 +1,817 @@
+section {
+    width: 100%;
+    clear: both;
+    /*position:relative;*/
+}
+
+
+/*----------------------------------------
+ .article
+----------------------------------------*/
+
+.article {
+    width: 35%;
+    box-sizing: border-box;
+    padding: 0 4em 20%;
+    position: relative;
+}
+
+
+/*----------------------------------------
+ .photo
+----------------------------------------*/
+
+.photo {
+    width: 65%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+}
+
+.photo .photobox {
+    width: 100%;
+    height: 100vh;
+    opacity: 0;
+    zoom: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.photo .bg {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    background-position: center;
+    background-color: #FFFFFF !important;
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    -ms-transition: 1s;
+    -o-transition: 1s;
+    transition: 1s;
+}
+
+.photo .caption {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    box-sizing: border-box;
+    background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000', GradientType=0);
+    /* IE6-9 */
+}
+
+.photo .caption span {
+    color: #fff;
+    display: block;
+    font-size: .8em;
+    line-height: 1.4em;
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
+}
+
+.photo .caption2 {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 0;
+}
+
+.photo .caption2 span {
+    background: rgba(255, 255, 255, .9);
+    color: #444;
+    display: inline-block;
+    font-size: .8em;
+    line-height: 1.3em;
+    margin: 0;
+    padding: .5em .5em .2em;
+}
+
+
+/*----------------------------------------
+ .photo .addMgn
+----------------------------------------*/
+
+.addMgn {
+    background-color: #FFFFFF;
+}
+
+.addMgn .bg {
+    width: 80%;
+    height: 80vh;
+    margin: 10vh 10%;
+}
+
+
+/*----------------------------------------
+ .title
+----------------------------------------*/
+
+.title {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 600px;
+    display: block;
+    box-sizing: border-box;
+}
+
+.title h2 {
+    padding: 20px 0;
+    font-size: 40px;
+    font-family: 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ W6 JIS2004', 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ ProN W6', 'HiraMinProN-W6', 'HGæ˜ŽæœE', 'ãƒ¡ã‚¤ãƒªã‚ª', Meiryo, 'ï¼­ï¼³ ï¼°æ˜Žæœ', 'MS PMincho', 'MS æ˜Žæœ', serif;
+    line-height: 1.4;
+}
+
+.title h2.clrGray {
+    font-family: 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ W2 JIS2004', 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ ProN W2', 'HiraMinProN-W2', 'HGæ˜ŽæœE', 'ãƒ¡ã‚¤ãƒªã‚ª', Meiryo, 'ï¼­ï¼³ ï¼°æ˜Žæœ', 'MS PMincho', 'MS æ˜Žæœ', serif;
+}
+
+.title h2 span {
+    display: block;
+    padding: 12px 0px 6px;
+    font-size: 30px;
+}
+
+.title h3 {
+    display: inline-block;
+    margin: 1em 0;
+    /*padding:0 0 0 .2em;*/
+    padding: 0;
+    font-size: 1.5em;
+    font-family: 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ W6 JIS2004', 'ãƒ’ãƒ©ã‚®ãƒŽæ˜Žæœ ProN W6', 'HiraMinProN-W6', 'HGæ˜ŽæœE', 'ãƒ¡ã‚¤ãƒªã‚ª', Meiryo, 'ï¼­ï¼³ ï¼°æ˜Žæœ', 'MS PMincho', 'MS æ˜Žæœ', serif;
+    line-height: 1.4;
+    /*border-left:3px solid;*/
+}
+
+
+/*----------------------------------------
+ .textbox
+----------------------------------------*/
+
+.textbox {
+    margin: 0 auto 5em;
+    padding: 0;
+    max-width: 600px;
+    display: block;
+    box-sizing: border-box;
+}
+
+.textbox p {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-indent: 1em;
+}
+
+.textbox p.image {
+    margin: 0 auto 1rem;
+    width: 100%;
+    text-indent: 0;
+}
+
+.textbox p.image.wsbLogo {
+    width: 100% !important;
+}
+
+.textbox img {
+    width: 100%;
+}
+
+.textbox span {}
+
+
+/*----------------------------------------
+ sectionTop
+----------------------------------------*/
+
+#sectionTop {
+    visibility: visible;
+    /*z-index:1;*/
+    padding-bottom: 50vh;
+}
+
+#sectionTop_cover {
+    width: 100%;
+    height: 100vh;
+    background: url('http://www.asahicom.jp/special/tsukiji/wasabi/images/chapter1/sectionTop_cover_pc.jpg') no-repeat center;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#sectionTop_cover .screen {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .4);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#sectionTop .article {
+    display: table;
+    height: 100vh;
+    padding: 0 4em;
+    padding-bottom: 150vh;
+}
+
+#sectionTop .textbox {
+    display: table-cell;
+    height: 100vh;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+}
+
+#sectionTop .textbox p {
+    margin: 0 auto;
+    max-width: 400px;
+    line-height: 2em;
+}
+
+#sectionTop .textbox p.clrWhite {
+    -moz-animation: topFadeIn 1s ease 2s 1 normal both;
+    -webkit-animation: topFadeIn 1s ease 2s 1 normal both;
+    animation: topFadeIn 1s ease 2s 1 normal both;
+}
+
+
+/*----------------------------------------
+ s3_photoTop
+----------------------------------------*/
+
+#s3_photoTop {}
+
+#s3_photoTop.vPlay {
+    z-index: 99999;
+}
+
+#s3_photoTop .VideoExRespMod {
+    width: 100%;
+    height: 100vh;
+}
+
+#s3_photoTop .VideoExResp {}
+
+#s3_photoTop .VideoExRespInner {}
+
+#s3_photoTop .video-js {
+    position: absolute;
+    width: auto;
+    height: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto -100%;
+}
+
+#s3_photoTop .video-js .vjs-big-play-button {
+    top: 50%;
+    left: 50%;
+}
+
+#s3_photoTop .video-js .vjs-control-bar {
+    /*display:none;*/
+    margin: 0 auto;
+}
+
+
+/*----------------------------------------
+ s4_photoTop
+----------------------------------------*/
+
+#s4_photoTop {}
+
+#s4_photoTop .videobox {
+    width: 100%;
+    margin-top: 10vh;
+}
+
+#s4_photoTop .videobox .caption {
+    position: static;
+    height: auto;
+    padding: 5px 0 0;
+    background: none;
+}
+
+#s4_photoTop .videobox .caption span {
+    position: static;
+    color: #444;
+}
+
+
+/*----------------------------------------
+ trigger
+----------------------------------------*/
+
+.trigger {
+    min-height: 0;
+}
+
+.trigger .Img {
+    display: none;
+}
+
+.trigger .Img img {
+    width: 100%;
+    height: auto;
+}
+
+.trigger .caption {
+    font-size: .8em;
+    line-height: 1.4em;
+}
+
+
+/*----------------------------------------
+ scrlBtn
+----------------------------------------*/
+
+#scrlBtn {
+    position: absolute;
+    top: auto;
+    bottom: 40px;
+    left: 50%;
+    margin-left: -30px;
+    -moz-animation-name: scrlBtn;
+    -webkit-animation-name: scrlBtn;
+    animation-name: scrlBtn;
+    -moz-animation-duration: 4s;
+    -webkit-animation-duration: 4s;
+    animation-duration: 4s;
+    -moz-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+
+#scrlBtn img {
+    width: 60px;
+    height: auto;
+}
+
+
+/*----------------------------------------
+ sectionBtm
+----------------------------------------*/
+
+#sectionBtm {
+    position: relative;
+    z-index: 99;
+}
+
+
+/*----------------------------------------
+ others
+----------------------------------------*/
+
+.right {
+    float: right;
+    right: 0;
+}
+
+.article_right {
+    margin-left: 65%;
+}
+
+.pb5em {
+    padding-bottom: 5em !important;
+}
+
+.pb10em {
+    padding-bottom: 10em !important;
+}
+
+.pb15em {
+    padding-bottom: 15em !important;
+}
+
+.pb20em {
+    padding-bottom: 20em !important;
+}
+
+.pb25em {
+    padding-bottom: 25em !important;
+}
+
+.pb30em {
+    padding-bottom: 30em !important;
+}
+
+.pb25vh {
+    padding-bottom: 25vh !important;
+}
+
+.pb50vh {
+    padding-bottom: 50vh !important;
+}
+
+.pb100vh {
+    padding-bottom: 100vh !important;
+}
+
+.pb150vh {
+    padding-bottom: 150vh !important;
+}
+
+.pb200vh {
+    padding-bottom: 200vh !important;
+}
+
+.fs5em {
+    font-size: 5em !important;
+}
+
+.fs4em {
+    font-size: 4em !important;
+}
+
+.fs3em {
+    font-size: 3em !important;
+}
+
+.fs2em {
+    font-size: 2em !important;
+}
+
+.fs1em {
+    font-size: 1em !important;
+}
+
+.clrWhite {
+    color: #FFFFFF !important;
+}
+
+.clrGray {
+    color: #949494 !important;
+    /*color:#C1C1C1 !important;*/
+}
+
+
+/*--------------------
+ max-width:1024pxï¼ˆiPad Proï¼‰
+--------------------*/
+
+@media screen and (max-width:1024px) {
+    #header #headerinner .asahi-logo {
+        height: 18px;
+    }
+    #header #headerinner h1 img {
+        width: auto;
+        height: 22px;
+        padding: 8px 0 0 0;
+    }
+    #socialbtn {
+        right: 2px;
+    }
+    #socialbtn ul {
+        width: 65px;
+    }
+    #sectionTop {
+        padding-bottom: 10vh !important;
+    }
+    #sectionTop .article {
+        padding-top: 100vh;
+        padding-bottom: 75vh;
+    }
+    #sectionTop_cover {
+        background: url('http://www.asahicom.jp/special/tsukiji/wasabi/images/chapter1/sectionTop_cover_sp.jpg') no-repeat top center;
+        background-size: cover;
+    }
+    #sectionTop_cover .screen {
+        opacity: 0;
+    }
+    #scrlBtn {
+        top: -80px;
+        bottom: auto;
+        -moz-animation-name: scrlBtnTAB;
+        -webkit-animation-name: scrlBtnTAB;
+        animation-name: scrlBtnTAB;
+    }
+    section {
+        visibility: visible !important;
+        margin: 0 auto 5em;
+        padding: 0;
+        width: 90%;
+        box-sizing: border-box;
+        min-width: 300px;
+    }
+    .photo {
+        display: none !important;
+    }
+    .trigger .Img {
+        display: block !important;
+        max-width: 600px;
+        margin: 3em auto 3em;
+        text-indent: initial;
+    }
+    .article {
+        width: 100%;
+        padding: 0 0 2em;
+    }
+    .article_right {
+        margin-left: 0 !important;
+    }
+    .title {
+        text-align: center;
+    }
+    .textbox p.image {
+        width: 70%;
+    }
+    .videobox {
+        width: 100%;
+        max-width: 600px;
+    }
+    .pb30em {
+        padding-bottom: 0 !important;
+    }
+    .pb25vh {
+        padding-bottom: 5vh !important;
+    }
+    .pb50vh {
+        padding-bottom: 5vh !important;
+    }
+    .pb100vh {
+        padding-bottom: 10vh !important;
+    }
+    .pb150vh {
+        padding-bottom: 15vh !important;
+    }
+    .pb200vh {
+        padding-bottom: 20vh !important;
+    }
+}
+
+
+/*--------------------
+ max-width:768pxï¼ˆ.tabï¼‰
+--------------------*/
+
+@media screen and (max-width:768px) {
+    .title h2 {
+        padding: 8px 0;
+        font-size: 28px;
+    }
+    .title h2 span {
+        padding: 4px 0;
+        font-size: 20px;
+    }
+}
+
+
+/*--------------------
+ max-width:480pxï¼ˆ.spï¼‰
+--------------------*/
+
+@media screen and (max-width:480px) {
+    .textbox p.image {
+        width: 100%;
+    }
+    #scrlBtn {
+        top: -80px;
+        bottom: auto;
+        -moz-animation-name: scrlBtnSP;
+        -webkit-animation-name: scrlBtnSP;
+        animation-name: scrlBtnSP;
+    }
+}
+
+
+/*--------------------
+ max-width:320px
+--------------------*/
+
+@media screen and (max-width:320px) {
+    #header #headerinner .asahi-logo {
+        height: 18px;
+        left: 5px;
+    }
+    #socialbtn ul {
+        width: 55px;
+    }
+}
+
+
+/*--------------------
+ keyframes topFadeIn
+--------------------*/
+
+@-moz-keyframes topFadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes topFadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@keyframes topFadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+
+/*--------------------
+ keyframes scrlBtn
+--------------------*/
+
+@-moz-keyframes scrlBtn {
+    0% {
+        bottom: 6%;
+    }
+    50% {
+        bottom: 6%;
+    }
+    55% {
+        bottom: 5%;
+    }
+    60% {
+        bottom: 6%;
+    }
+    100% {
+        bottom: 6%;
+    }
+}
+
+@-webkit-keyframes scrlBtn {
+    0% {
+        bottom: 6%;
+    }
+    50% {
+        bottom: 6%;
+    }
+    55% {
+        bottom: 5%;
+    }
+    60% {
+        bottom: 6%;
+    }
+    100% {
+        bottom: 6%;
+    }
+}
+
+@keyframes scrlBtn {
+    0% {
+        bottom: 6%;
+    }
+    50% {
+        bottom: 6%;
+    }
+    55% {
+        bottom: 5%;
+    }
+    60% {
+        bottom: 6%;
+    }
+    100% {
+        bottom: 6%;
+    }
+}
+
+
+/*--------------------
+ keyframes scrlBtnTAB
+--------------------*/
+
+@-moz-keyframes scrlBtnTAB {
+    0 {
+        top: -12%;
+    }
+    50% {
+        top: -12%;
+    }
+    55% {
+        top: -11%;
+    }
+    60% {
+        top: -12%;
+    }
+    100% {
+        top: -12%;
+    }
+}
+
+@-webkit-keyframes scrlBtnTAB {
+    0% {
+        top: -12%;
+    }
+    50% {
+        top: -12%;
+    }
+    55% {
+        top: -11%;
+    }
+    60% {
+        top: -12%;
+    }
+    100% {
+        top: -12%;
+    }
+}
+
+@keyframes scrlBtnTAB {
+    0% {
+        top: -12%;
+    }
+    50% {
+        top: -12%;
+    }
+    55% {
+        top: -11%;
+    }
+    60% {
+        top: -12%;
+    }
+    100% {
+        top: -12%;
+    }
+}
+
+
+/*--------------------
+ keyframes scrlBtnSP
+--------------------*/
+
+@-moz-keyframes scrlBtnSP {
+    0 {
+        top: -30%;
+    }
+    50% {
+        top: -30%;
+    }
+    55% {
+        top: -29%;
+    }
+    60% {
+        top: -30%;
+    }
+    100% {
+        top: -30%;
+    }
+}
+
+@-webkit-keyframes scrlBtnSP {
+    0% {
+        top: -30%;
+    }
+    50% {
+        top: -30%;
+    }
+    55% {
+        top: -29%;
+    }
+    60% {
+        top: -30%;
+    }
+    100% {
+        top: -30%;
+    }
+}
+
+@keyframes scrlBtnSP {
+    0% {
+        top: -30%;
+    }
+    50% {
+        top: -30%;
+    }
+    55% {
+        top: -29%;
+    }
+    60% {
+        top: -30%;
+    }
+    100% {
+        top: -30%;
+    }
+}

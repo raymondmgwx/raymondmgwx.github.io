@@ -1,0 +1,586 @@
+﻿@charset "UTF-8";
+
+/* 767px以下 */
+@media screen and (max-width: 767px) {
+#topWrapper {
+	overflow: hidden;
+}
+header {
+	height: auto;
+}
+header .headerBlock {
+	padding: 30px 0;
+	height: auto;
+}
+header .headerBlock .logo img {
+	width: 150px;
+	height: auto;
+}
+header .headerBlock .globalNavi {
+	display: none;
+}
+.icons {
+	display: none;
+}
+header .headerBlock p.read {
+	letter-spacing: normal;
+}
+header .headerBlock .logo {
+	margin: 0 0 20px;
+}
+header .headerBlock .illust01 {
+	display: none;
+}
+header .headerBlock .illust02 {
+	display: none;
+}
+header.page .headerBlock {
+	padding: 30px 0 0;
+	height: auto;
+}
+header.page {
+	height: auto;
+}
+header.page .headerBlock p.read {
+	display: block;
+}
+header.page .headerBlock .logo img {
+	width: 120px;
+	height: auto;
+}
+footer {
+	padding: 0 0px 36px;
+}
+footer .footerNavi {
+	margin: 0 0 30px;
+}
+footer .footerNavi ul {
+	display: block;
+	border-top: #5d5d5d dotted 1px;
+}
+footer .footerNavi ul li {
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	color: #bebebe;
+	font-size: 11px;
+	line-height: 40px;
+	width: 50%;
+	box-sizing: border-box;
+	height: 40px;
+	border-bottom: #5d5d5d dotted 1px;
+}
+footer .footerNavi ul li:nth-child(2n-1) {
+	border-right: #5d5d5d dotted 1px;
+}
+footer .footerNavi ul li a {
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+footer .logo img {
+	width: 150px;
+	height: auto;
+}
+.DSbtn {
+	position: fixed;
+	top: 20px;
+	right: 16px;
+	width: 30px;
+	height: 16px;
+	-webkit-transition: ease .5s;
+	transition: ease .5s;
+	cursor: pointer;
+	z-index: 10001;
+	display: block;
+}
+.DSbtn .hambarg:nth-child(1) {
+	position: absolute;
+	top: 0%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background: #505050;
+	-webkit-transition: ease .5s;
+	transition: ease .5s;
+	height: 2px;
+	width: 30px;
+}
+.DSbtn .hambarg:nth-child(2) {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	height: 2px;
+	width: 30px;
+	background: #505050;
+	-webkit-transition: ease .5s;
+	transition: ease .5s;
+}
+.DSbtn .hambarg:nth-child(3) {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	height: 2px;
+	width: 30px;
+	background: #505050;
+	-webkit-transition: ease .5s;
+	transition: ease .5s;
+}
+.DSbtn.action .hambarg:nth-child(1) {
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%) rotate(45deg);
+	transform: translate(-50%, -50%) rotate(45deg);
+	background: #fff;
+}
+.DSbtn.action .hambarg:nth-child(2) {
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	opacity: 0;
+	background: #fff;
+}
+.DSbtn.action .hambarg:nth-child(3) {
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%) rotate(-45deg);
+	transform: translate(-50%, -50%) rotate(-45deg);
+	background: #fff;
+}
+nav.spNavi {
+	display: block;
+	position: fixed;
+	margin: 0;
+	padding: 0;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: 9999;
+	overflow: hidden;
+	opacity: 0;
+	display: none;
+	background-color: rgba(0,0,0,0.8);
+}
+nav.spNavi .spNavi_box {
+	/*background-image:url(../images/spbg.png) ;
+	background-repeat: no-repeat;
+	background-position: center top;
+	background-size: cover;*/
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: -30px;
+	opacity: 0;
+}
+nav.spNavi .spNavi_block {
+	position: absolute;
+	top: 50%;
+	left: 10px;
+	right: 10px;
+	margin-top: -216.5px;
+}
+nav.spNavi .contentTitle {
+	font-family: Georgia, Times New Roman, "游明朝", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro", "ＭＳ 明朝", serif;
+	text-align: center;
+	margin: 0 0 20px;
+	font-size: 20px;
+	letter-spacing: 1px;
+	color: #fff;
+}
+nav.spNavi .contentName {
+	font-family: Georgia, Times New Roman, "游明朝", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro", "ＭＳ 明朝", serif;
+	text-align: center;
+	margin: 0 0 10px;
+	font-size: 14px;
+	letter-spacing: 1px;
+	color: #fff;
+}
+nav.spNavi ul {
+	display: block;
+	margin: 0 0 10px;
+	padding: 0;
+}
+nav.spNavi ul li {
+	float: left;
+	list-style: none;
+	margin: 0 0 1px;
+	padding: 0;
+	color: #fff;
+	font-size: 11px;
+	line-height: 40px;
+	width: 50%;
+	box-sizing: border-box;
+	height: 40px;
+}
+nav.spNavi ul li a {
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color: #fff;
+	text-decoration: none;
+	background-color: rgba(80, 80, 80, 0.9);
+	margin: 0;
+}
+nav.spNavi ul li:nth-child(2n-1) a {
+	margin: 0 1px 0 0;
+}
+section.introduction .about h1 {
+	font-size: 20px;
+}
+section.introduction .about {
+	padding: 50px 20px;
+}
+section.introduction p.read {
+	font-size: 11px;
+	text-align: left;
+}
+section.introduction p.readen {
+	text-align: left;
+}
+section.introduction p br.sp {
+	display: none;
+}
+section.introduction .banner ul li a span.caption {
+	font-size: 11px;
+	padding: 0 20px;
+}
+section.introduction .banner ul li {
+	float: none;
+	width: 100%;
+	padding: 0;
+	height: auto;
+}
+section.introduction .banner ul li a {
+	display: block;
+	padding: 20px 0;
+	position: static;
+}
+section.introduction .banner ul li a span.table {
+	display: block;
+	height: auto;
+}
+section.introduction .banner ul li a span.tableCell {
+	display: block;
+}
+section.postList {
+	padding: 50px 0 0;
+}
+section.articles h1 span {
+	font-size: 24px;
+}
+section.information .subInfo h3 {
+	font-size: 12px;
+	margin: 0 0 5px;
+}
+section.other .policy p {
+	font-size: 16px;
+}
+section.other h1 span {
+	padding: 4px;
+	font-size: 14px;
+	letter-spacing: 1px;
+}
+section.other .policy dt {
+	font-size: 14px;
+}
+section.mission h1 {
+	margin: 0 0 20px;
+}
+section.mission h1 span {
+	padding: 4px;
+	font-size: 14px;
+	letter-spacing: 1px;
+}
+section.what h1 {
+	margin: 0 0 20px;
+}
+section.what h1 span {
+	padding: 4px;
+	font-size: 14px;
+	letter-spacing: 1px;
+}
+section.what .main {
+	margin: 0 0 20px;
+	overflow: hidden;
+}
+section.what .main img {
+	width: 200%;
+	margin: 0 -50%;
+	height: auto;
+}
+section.single .entry p {
+	margin: 0 0 10px;
+	padding: 0;
+	font-size: 14px;
+	line-height: 2.0em;
+}
+section.relatedList ul li {
+	padding: 0 0 20px;
+	width: 100%;
+}
+section.relatedList ul li .block .caption h3 {
+	font-size: 11px;
+}
+.pager_area .share ul li {
+	margin: 0 10px;
+}
+.pager_area .share ul li img {
+	width: 36px;
+	height: auto;
+}
+.pager_area .share {
+	margin: 0 0 0 -84px;
+	top: 40px;
+}
+section.relatedList h2 {
+	margin: 0px 0 20px;
+	font-size: 16px;
+	letter-spacing: 1px;
+}
+.pager_area {
+	margin: 40px 0 50px;
+}
+article.page {
+	padding: 0 20px 50px;
+	background-size: 100% auto;
+}
+section.what {
+	padding: 30px 0 0;
+}
+section.mission {
+	padding: 30px 0 0;
+}
+section.mission p {
+	font-size: 12px;
+}
+section.mission p br {
+	display: none;
+}
+section.mission p span {
+	font-size: 12px;
+}
+section.postList h2 {
+	margin: 0 0 20px;
+	font-size: 18px;
+	letter-spacing: 1px;
+}
+section.postList ul {
+	margin: 0px;
+	padding: 0 20px;
+}
+section.postList ul li {
+	float: none;
+	width: 100%;
+	margin: 0;
+	padding: 0 0 20px 0;
+	box-sizing: border-box;
+	list-style: none;
+}
+section.postList ul li .block .caption h3 {
+	margin: 0 0 8px;
+	font-size: 13px;
+}
+section.postList.mb {
+	padding: 30px 0 50px;
+}
+section.information .subInfo {
+	padding: 0 20px 30px;
+}
+section.information .subInfo h2 {
+	font-size: 16px;
+	margin: 0 0 20px;
+	text-align: center;
+}
+section.information .tag h2 {
+	text-align: center;
+	font-size: 16px;
+}
+section.information .subInfo .recent {
+	float: none;
+	width: 100%;
+	padding: 0 0 30px 0;
+}
+section.information .subInfo .rank {
+	float: none;
+	width: 100%;
+	padding: 0 0 0 0;
+}
+section.information .subInfo ul li {
+	padding: 0 0 15px 120px;
+}
+section.information .tag .tagBlock {
+	padding: 0 20px;
+}
+section.mission p.read {
+	margin: 0 0 30px;
+	font-size: 13px;
+	text-align: left;
+}
+section.mission h2 br.sp {
+	display: block;
+}
+section.mission h2 {
+	text-align: center;
+	font-size: 20px;
+}
+section.mission h2 span.en {
+	font-size: 16px;
+}
+section.mission h2 span.num {
+	font-size: 40px;
+}
+section.mission .missionBlock01 {
+	margin: 0 0 50px;
+	padding: 0 0 0 0;
+}
+section.mission .missionBlock01 .illust {
+	position: static;
+	text-align: center;
+}
+section.mission .missionBlock01 .illust img {
+	width: 50%;
+	height: auto;
+}
+section.mission .missionBlock02 {
+	margin: 0 0 50px;
+	padding: 0 0 0 0;
+}
+section.mission .missionBlock02 .illust {
+	position: static;
+	text-align: center;
+	;
+}
+section.mission .missionBlock02 .illust img {
+	width: 50%;
+	height: auto;
+}
+section.mission .missionBlock03 {
+	padding: 0 0 0 0;
+}
+section.mission .missionBlock03 p {
+	padding: 0 0 0 0;
+}
+section.mission .missionBlock03 .illust {
+	position: static;
+	text-align: center;
+	;
+}
+section.mission .missionBlock03 .illust img {
+	width: 50%;
+	height: auto;
+}
+section.what p {
+	font-size: 13px;
+}
+section.what h2 {
+	font-size: 16px;
+	padding: 10px 0 0;
+}
+section.articles ul {
+	margin: 0;
+	padding: 0 20px;
+}
+section.articles ul li {
+	width: 100%;
+	padding: 0 0 20px;
+}
+section.articles .title {
+	margin: 0 0 30px;
+}
+section.other {
+	padding: 30px 0 0;
+}
+section.other h1 {
+	margin: 0 0 20px;
+}
+section.other .contact p {
+	font-size: 13px;
+	text-align: left;
+}
+section.other .contact p br {
+	display: none;
+}
+section.other .contact dl {
+	margin: 0 0 20px;
+	padding: 0 0 20px;
+	font-size: 13px;
+}
+#zip, #pref {
+	width: 100%!important;
+}
+section.other .contact dt {
+	margin: 0 0 10px;
+	position: static;
+	width: auto;
+	height: auto;
+	line-height: 1;
+}
+input[type="submit"] {
+	width: 100%;
+}
+.submit {
+	text-align: center;
+	position: relative;
+	margin: 0 0 30px;
+}
+section.other .policy dl {
+	font-size: 12px;
+}
+section.other .recruit p.read {
+	font-size: 14px;
+}
+section.other .recruit p {
+	font-size: 13px;
+}
+section.other .recruit a.btn {
+	width: 100%;
+}
+section.relatedList ul {
+	margin: 0;
+	padding: 0 20px 30px;
+}
+section.single {
+	padding: 30px 20px;
+}
+section.single h2 {
+	text-align: left;
+	margin: 0 0 10px;
+	padding: 0 0 10px;
+	font-size: 16px;
+}
+section.single p.spec {
+	line-height: 1.8em;
+	text-align: left;
+	margin: 0 0 30px;
+}
+section.introduction .main img {
+	width: 200%;
+	height: auto;
+	margin: 0 -50%;
+}
+section.single .entry .detailBlock {
+	margin: 30px 0 0;
+}
+section.single .entry .detailBlock .detailBox {
+	padding: 30px 0 30px 0;
+}
+section.single .entry .detailBlock .detailBox p {
+	font-size: 13px;
+}
+section.single .entry .detailBlock .detailBox .map {
+	width: 100%;
+	margin: 20px 0 0;
+	position: static;
+}
+section.single .entry .detailBlock .detailBox h3 {
+	font-size: 13px;
+	margin: 0 0 5px;
+}
+}/* 767px以下 *

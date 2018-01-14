@@ -1,0 +1,229 @@
+﻿@charset "UTF-8";
+
+
+
+@media print, screen and (min-width: 768px) and (max-width:959px) {
+	#topWrapper {
+    overflow: hidden;
+}
+header .headerBlock .globalNavi li{
+	    margin: 0 30px;
+}
+.icons {
+    right: 0 !important;
+}
+	.icons ul li {
+    margin: 0 0 0 2px;
+}
+	header .headerBlock .globalNavi.fixed li {
+    margin: 0 30px !important;
+}
+	.fixed {
+         position: absolute!important;
+    margin: 0;
+    left: 0;
+    bottom: 0!important;
+		top: inherit !important;
+		box-shadow:none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+}
+	
+	
+.headerBlock .globalNavi ul li .category {
+    margin-left: -60px;
+    width: 120px;
+}
+section.introduction .about h1 {
+    font-size: 20px;
+}	
+section.introduction .about {
+    padding: 50px 30px;
+}	
+section.introduction p.read {
+    font-size: 11px;
+
+}	
+section.introduction .banner ul li a span.caption {
+    font-size: 11px;
+    padding: 0 20px;
+}	
+	
+	
+	section.articles h1 span {
+    font-size: 24px;
+}
+	section.information .subInfo h3 {
+        font-size: 12px;
+    margin: 0 0 5px;
+}
+	section.other .policy p {
+    font-size: 16px;
+}
+	section.other h1 span {
+    padding: 6px;
+    font-size: 17px;
+}
+	section.other .policy dt {
+    font-size: 14px;
+}
+	section.mission h1 span {
+    padding: 6px;
+    font-size: 17px;
+}
+	section.what h1 span {
+    padding: 6px;
+    font-size: 17px;
+}
+	section.single .entry p {
+    margin: 0 0 14px;
+    padding: 0;
+    font-size: 14px;
+    line-height: 2.0em;
+}
+	section.relatedList ul li {
+    padding: 0 0 30px 30px;
+		width: 50%;
+}
+	section.relatedList ul li .block .caption h3 {
+    font-size: 11px;
+}
+	.pager_area .share ul li {
+    margin: 0 10px;
+}
+	.pager_area .share ul li img{
+		width: 36px;
+		height: auto;
+}
+	.pager_area .share {
+    margin: -17.5px 0 0 -84px;
+}
+	.pager_area {
+    margin: 40px 0 0 0;
+}
+
+article.page {
+    padding: 0 30px 150px;
+	background-size: 100% auto;
+}
+
+section.mission p {
+    font-size: 12px;
+}
+	section.mission p br{
+		display: none;
+	}
+	
+	section.mission p span {
+    font-size: 12px;
+}
+	section.postList ul {
+    margin: 0 0 0 -30px;
+    padding: 0 30px;
+}
+	
+	section.postList ul li{
+	float: left;
+	width: 50%;
+	margin: 0;
+	padding: 0 0 30px 30px;
+	box-sizing:border-box;
+	list-style: none;
+}
+	section.postList ul li .block .caption h3 {
+    margin: 0 0 8px;
+    font-size: 13px;
+}
+	section.postList.mb {
+    padding: 60px 0;
+}
+	section.information .subInfo {
+    padding: 0 30px 60px;
+}
+	section.information .subInfo ul li {
+   
+    padding: 0 0 15px 120px;
+}
+	section.information .tag .tagBlock {
+    padding: 0 30px;
+}
+	section.mission p.read {
+    margin: 0 0 60px;
+    font-size: 13px;
+}
+	section.mission .missionBlock01 {
+    margin: 0 0 100px;
+    padding: 0 280px 0 0;
+}
+	section.mission .missionBlock01 .illust {
+    right: 20px;
+}
+	section.mission .missionBlock02 {
+    margin: 0 0 100px;
+    padding: 0 0 0 282px;
+}
+	section.mission .missionBlock03 {
+    padding: 0 0 0 0;
+}
+	section.mission .missionBlock03  p {
+    padding: 0 200px 0 0;
+}
+	section.mission .missionBlock03 .illust {
+    top: -20px;
+    right: 0;
+}
+	section.what p {
+    font-size: 13px;
+}
+	section.what h2 {
+    font-size: 18px;
+}
+	
+	section.articles ul {
+    margin: 0 0 0 -30px;
+    padding: 0 30px;
+}
+	section.articles ul li {
+    width: 50%;
+    padding: 0 0 30px 30px;
+
+}
+	section.articles .title {
+    margin: 0 0 30px;
+}
+	section.other .contact p {
+    font-size: 12px;
+}
+	section.other .contact dl {
+    margin: 0 0 20px;
+    padding: 0 0 20px 200px;
+    font-size: 13px;
+}
+	section.other .policy dl {
+    font-size: 12px;
+}
+	
+	section.relatedList ul {
+    margin: 0 0 0 -30px;
+    padding: 0 30px 50px;
+}
+	section.single {
+    padding: 70px 30px;
+
+}
+	
+		section.single h2 {
+    text-align: left;
+			    margin: 0 0 10px;
+    padding: 0 0 10px;
+	}
+	section.single p.spec {
+    line-height: 1.8em;
+    text-align: left;
+}
+	section.introduction .main img {
+    width: 150%;
+    height: auto;
+    margin: 0 -25%;
+}
+}

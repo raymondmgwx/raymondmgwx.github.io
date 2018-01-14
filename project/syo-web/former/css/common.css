@@ -1,0 +1,2059 @@
+﻿@charset "UTF-8";
+
+/* 1023px以上 */
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    min-height: 100%;
+    font-family: "游明朝", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro", 'Noto Sans Japanese', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ 明朝", serif;
+    font-size: 13px;
+    background: #252525;
+    /* padding: 10px;*/
+}
+
+.bottomFrame {
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: #252525;
+}
+
+.topFrame {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #000000;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: block;
+}
+
+
+/* progress classes
+----------------------------------------------------------------------*/
+
+#progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -100px;
+    z-index: 99999;
+    background: #000;
+}
+
+#progressBlock {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -57.5px 0 0 -80px;
+    z-index: 2;
+    line-height: 0;
+    opacity: 0.7;
+    z-index: 100000;
+    text-align: center;
+}
+
+#progressBlock .logo {
+    width: 160px;
+    height: 115px;
+    ;
+    display: block;
+    margin: 0 0 8px
+}
+
+#progressBlock .load {
+    width: 24px;
+    height: 24px;
+    ;
+}
+
+#progressBar {
+    width: 0;
+    background: #151515;
+    position: absolute;
+    top: 0;
+    bottom: 0px;
+    left: 0px;
+}
+
+
+/* pager classes
+----------------------------------------------------------------------*/
+
+.pager_area {
+    clear: both;
+    text-align: center;
+    margin: 70px 0 0 0;
+    position: relative;
+}
+
+.pager_area .left {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.pager_area .right {
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+.pager_area .left a {
+    padding: 0 0 0 30px;
+    background: url(../fonts/ar_right.svg) no-repeat left;
+    font-family: Georgia, Times New Roman, Times, serif;
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+}
+
+.pager_area .right a {
+    padding: 0 30px 0 0;
+    background: url(../fonts/ar_left.svg) no-repeat right;
+    font-family: Georgia, Times New Roman, Times, serif;
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+}
+
+.pager_area a:hover {
+    color: #575757;
+}
+
+.pager_area .share {
+    margin: -24px 0 0 -118.5px;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    line-height: 0;
+}
+
+.pager_area .share ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.pager_area .share ul li {
+    float: left;
+    margin: 0 15px;
+    padding: 0;
+    line-height: 0;
+    list-style: none;
+}
+
+
+/* form classes
+----------------------------------------------------------------------*/
+
+.wpcf7-text {
+    background: #fff;
+    width: 100%;
+    border: #717171 dotted 1px;
+    padding: 15px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+#zip,
+#pref {
+    width: 40%!important;
+}
+
+.wpcf7-textarea {
+    background: #fff;
+    width: 100%;
+    border: #717171 dotted 1px;
+    padding: 15px;
+    box-sizing: border-box;
+    height: 150px;
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+div.wpcf7 .ajax-loader {
+    visibility: hidden;
+    display: inline-block;
+    background-image: url(../images/loader.gif)!important;
+    width: 16px;
+    height: 16px;
+    border: none;
+    padding: 0;
+    margin: -8px 0 0 110px!important;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.submit {
+    text-align: center;
+    position: relative;
+}
+
+input[type="submit"] {
+    background: #000;
+    border: none;
+    width: 300px;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+div.wpcf7-validation-errors {
+    border: none !important;
+    background: #B3B3B3;
+    color: #fff;
+}
+
+span.wpcf7-not-valid-tip {
+    padding-top: 10px;
+    font-size: 13px !important;
+}
+
+div.wpcf7-mail-sent-ok {
+    border: none !important;
+    background: #FE5A67;
+    color: #fff;
+}
+
+div.wpcf7-response-output {
+    margin: 0 !important;
+    padding: 5px 0!important;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+}
+
+div.wpcf7 {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* common classes
+----------------------------------------------------------------------*/
+
+#topWrapper {
+    margin: 0;
+    position: relative;
+    z-index: 5;
+    background: #f4f3f3;
+}
+
+#wrapper {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    background: #f4f3f3;
+}
+
+header {
+    height: 414px;
+    margin: 0;
+    padding: 0;
+    background: #f4f3f3;
+    position: relative;
+    z-index: 10;
+}
+
+header.page {
+    height: 304px;
+    margin: 0;
+    padding: 0;
+    background: #f4f3f3;
+}
+
+header .headerBlock {
+    margin: 0 auto;
+    padding: 66px 0 110px;
+    position: relative;
+    height: 238px;
+}
+
+header.page .headerBlock {
+    margin: 0 auto;
+    padding: 66px 0 0;
+    position: relative;
+    height: 238px;
+}
+
+header .headerBlock .logo {
+    margin: 0 0 38px;
+    padding: 0;
+    line-height: 0;
+    text-align: center;
+}
+
+header .headerBlock p.read {
+    text-align: center;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6em;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+header.page .headerBlock p.read {
+    display: none;
+}
+
+header .headerBlock .illust01 {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    margin-left: -382px;
+}
+
+header .headerBlock .illust02 {
+    position: absolute;
+    top: 159px;
+    right: 50%;
+    margin-right: -397px;
+}
+
+header.page .headerBlock .illust01 {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -382px;
+}
+
+header.page .headerBlock .illust02 {
+    position: absolute;
+    top: 59px;
+    right: 50%;
+    margin-right: -397px;
+}
+
+header .headerBlock .globalNavi {
+    position: absolute;
+    margin: 0;
+    padding: 30px 0 25px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 0;
+    background: #f4f3f3;
+    webkit-transition: ease .3s;
+    transition: ease .3s;
+}
+
+header.page .headerBlock .globalNavi {
+    position: absolute;
+    margin: 0;
+    padding: 30px 0 25px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 0;
+    background: #f4f3f3;
+    webkit-transition: ease .3s;
+    transition: ease .3s;
+}
+
+.fixed {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: inherit !important;
+    right: 0;
+    z-index: 8000;
+    box-shadow: 0px 4px 8px -4px #5e5e5e;
+    -moz-box-shadow: 0px 4px 8px -4px #5e5e5e;
+    -webkit-box-shadow: 0px 4px 8px -4px #5e5e5e;
+}
+
+.headerBlock .globalNavi ul {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.headerBlock .globalNavi ul li {
+    float: left;
+    margin: 0 60px;
+    padding: 0;
+    list-style: none;
+    font-size: 11px;
+    position: relative;
+    line-height: 1;
+    -webkit-transition: ease .5s;
+    transition: ease .5s;
+}
+
+.headerBlock .globalNavi ul li.pull {
+    cursor: pointer;
+}
+
+.headerBlock .globalNavi ul li span {
+    margin: 0;
+    padding: 0 20px 0 0;
+    background: url(../images/ar_001.svg) no-repeat right;
+    cursor: pointer;
+}
+
+.headerBlock .globalNavi ul li a {
+    color: #000;
+    text-decoration: none;
+}
+
+.headerBlock .globalNavi ul li .category {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    margin-left: -65px;
+    width: 130px;
+    background-color: rgb(0, 0, 0);
+    display: none;
+}
+
+.headerBlock .globalNavi ul li .category ul {
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.headerBlock .globalNavi ul li .category ul li {
+    margin: 0!important;
+    padding: 0;
+    float: none;
+    height: 69px;
+    line-height: 69px;
+    border-bottom: 1px dotted #5f5b5b;
+    -webkit-transition: inherit;
+    transition: inherit;
+}
+
+.headerBlock .globalNavi ul li .category ul li a {
+    padding: 0 20px;
+    height: 69px;
+    line-height: 69px;
+    display: block;
+    text-decoration: none;
+    color: #fff;
+}
+
+.headerBlock .globalNavi ul li .category ul li a:hover {
+    background: #4a4a4a;
+}
+
+footer {
+    margin: 0;
+    padding: 26px 30px 36px;
+    background: #252525;
+    text-align: center;
+}
+
+footer .footerNavi {
+    margin: 0 0 68px;
+    padding: 0;
+    text-align: center;
+    line-height: 0;
+}
+
+footer .footerNavi ul {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+footer .footerNavi ul li {
+    float: left;
+    list-style: none;
+    margin: 0 40px;
+    padding: 0;
+    color: #bebebe;
+    font-size: 11px;
+    line-height: 1;
+}
+
+footer .footerNavi ul li a {
+    color: #bebebe;
+    text-decoration: none;
+}
+
+footer .footerNavi ul li a:hover {
+    color: #fff;
+}
+
+footer .logo {
+    margin: 0 0 26px;
+    padding: 0;
+    line-height: 0;
+    text-align: center;
+}
+
+footer p.read {
+    text-align: center;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    margin: 0 0 32px;
+    padding: 0;
+    line-height: 1.6em;
+    font-size: 10px;
+    color: #bebebe;
+    letter-spacing: 1px;
+}
+
+footer p.copyright {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    color: #bebebe;
+}
+
+nav.spNavi {
+    display: none;
+}
+
+.icons {
+    position: fixed;
+    top: 0;
+    right: 50px;
+    z-index: 9999;
+    -webkit-transition: ease .5s;
+    transition: ease .5s;
+}
+
+.icons ul {
+    margin: 0;
+    padding: 0;
+}
+
+.icons ul li {
+    float: left;
+    margin: 0 0 0 4px;
+    padding: 0;
+    list-style: none;
+}
+
+.icons ul li img {
+    width: 20px;
+    height: 18px;
+}
+
+.icons ul li a {
+    display: block;
+    margin: 0;
+    padding: 12px 8px;
+    background: #000;
+    line-height: 0;
+}
+
+.icons ul li span {
+    display: block;
+    margin: 0;
+    padding: 12px 8px;
+    background: #000;
+    line-height: 0;
+    cursor: pointer;
+}
+
+article.page {
+    background-image: url(../images/mapbg.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding: 0 0 200px;
+    position: relative;
+}
+
+article.page.mb {
+    background-image: url(../images/mapbg.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding: 0;
+}
+
+
+/* top classes
+----------------------------------------------------------------------*/
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+}
+
+.topLogo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -72px 0 0 -100px;
+    z-index: 2;
+    line-height: 0;
+    opacity: 0.7;
+}
+
+.topLogo img {
+    width: 200px;
+    height: 144px;
+}
+
+.mouse {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    margin: 0 0 0 -25px;
+    z-index: 2;
+    line-height: 0;
+    text-align: center;
+}
+
+.mouse span {
+    display: block;
+    text-align: center;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    color: #b3b3b2;
+    line-height: 1;
+    padding: 0;
+}
+
+.mouse img {
+    width: 50px;
+    height: auto;
+    opacity: 0.7;
+}
+
+.sm-slider {
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+section.introduction {
+    margin: 0;
+    padding: 0;
+}
+
+section.introduction .main {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+section.introduction .main img {
+    width: 100%;
+    height: auto;
+}
+
+section.introduction .about {
+    margin: 0;
+    padding: 86px 0;
+    background: #252525;
+}
+
+section.introduction .about h1 {
+    font-family: Georgia, Times New Roman, Times, serif;
+    text-align: center;
+    margin: 0 0 20px;
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    color: #bebebe;
+}
+
+section.introduction p.read {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 2.0em;
+    font-size: 12px;
+    color: #bebebe;
+}
+
+section.introduction p.readen {
+    margin: 0;
+    padding: 20px 0 0;
+    text-align: center;
+    line-height: 2.0em;
+    font-size: 12px;
+    color: #bebebe;
+}
+
+section.introduction .banner {
+    margin: 0;
+    padding: 0;
+}
+
+section.introduction .banner ul {
+    margin: 0;
+    padding: 0;
+}
+
+section.introduction .banner ul li {
+    float: left;
+    width: 33.33%;
+    margin: 0;
+    padding: 0;
+    height: 310px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    list-style: none;
+    position: relative;
+}
+
+section.introduction .banner ul li.bnr01 {
+    background-image: url(../images/banner_001.jpg);
+}
+
+section.introduction .banner ul li.bnr02 {
+    background-image: url(../images/banner_002.jpg);
+}
+
+section.introduction .banner ul li.bnr03 {
+    background-image: url(../images/banner_003.jpg);
+}
+
+section.introduction .banner ul li a {
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    color: #000;
+    text-decoration: none;
+}
+
+section.introduction .banner ul li a span.table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+section.introduction .banner ul li a span.tableCell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+section.introduction .banner ul li a span.title {
+    text-align: center;
+    display: block;
+    font-size: 18px;
+    font-family: Georgia, Times New Roman, "游明朝", YuMincho, "Hiragino Mincho ProN", "Hiragino Mincho Pro", , 'Noto Sans Japanese', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ 明朝", serif;
+}
+
+section.introduction .banner ul li a span.caption {
+    text-align: center;
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+section.postList {
+    margin: 0;
+    padding: 100px 0 0;
+    background: #f4f3f3;
+}
+
+section.postList.mb {
+    padding: 100px 0;
+}
+
+section.postList h2 {
+    font-family: Georgia, Times New Roman, Times, serif;
+    text-align: center;
+    margin: 0 0 48px;
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+section.postList ul {
+    margin: 0 0 0 -50px;
+    padding: 0 75px;
+    display: -moz-box;
+    display: -ms-box;
+    display: -webkit-flexbox;
+    display: -moz-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    -webkit-box-lines: multiple;
+    -moz-box-lines: multiple;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+section.postList ul li {
+    float: left;
+    width: 25%;
+    margin: 0;
+    padding: 0 0 50px 50px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+section.postList ul li .block {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+section.postList ul li .block .thumb {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+section.postList ul li .block .thumb img {
+    width: 100%;
+    height: auto;
+}
+
+section.postList ul li .block .caption {
+    padding: 20px 20px 45px;
+    min-height: 80px;
+}
+
+section.postList ul li .block .caption h3 {
+    margin: 0 0 10px;
+    padding: 0;
+    font-size: 14px;
+}
+
+section.postList ul li .block .caption p {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    line-height: 1.8em;
+}
+
+section.postList ul li .block .caption p span {
+    font-style: italic;
+}
+
+section.postList ul li .block .caption a {
+    color: #000;
+    text-decoration: none;
+    font-weight: normal!important;
+}
+
+section.postList ul li .block .caption a:hover {
+    color: #545454;
+    text-decoration: none;
+}
+
+section.postList ul li .block .caption a.more {
+    display: block;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 0 34px 0 0;
+    background: url(../fonts/ar_left.svg) no-repeat right;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal!important;
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1462px) {
+    section.postList ul li {
+        float: left;
+        width: 33.333333%;
+        margin: 0;
+        padding: 0 0 35px 35px;
+        box-sizing: border-box;
+        list-style: none;
+    }
+    section.postList ul li .block .caption h3 {
+        margin: 0 0 8px;
+        font-size: 13px;
+    }
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1260px) {
+    section.postList ul {
+        margin: 0 0 0 -35px;
+        padding: 0 50px;
+    }
+    section.postList {
+        padding: 50px 0 0;
+    }
+    section.postList.mb {
+        padding: 50px 0 50px;
+    }
+}
+
+
+/* misiion classes
+----------------------------------------------------------------------*/
+
+section.mission {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 0 0;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+
+section.mission h1 {
+    margin: 0 0 60px;
+    padding: 1px 0;
+    border-top: #252525 solid 2px;
+    border-bottom: #252525 solid 2px;
+}
+
+section.mission h1 span {
+    border-top: #252525 solid 1px;
+    border-bottom: #252525 solid 1px;
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+section.mission p.read {
+    margin: 0 0 100px;
+    padding: 0;
+    line-height: 2.0em;
+    text-align: center;
+    font-size: 14px;
+}
+
+section.mission h2 {
+    font-size: 30px;
+    margin: 0 0 30px;
+    padding: 0;
+}
+
+section.mission h2 br.sp {
+    display: none;
+}
+
+section.mission h2 span.en {
+    font-size: 20px;
+    padding: 0 10px 0 0;
+}
+
+section.mission h2 span.num {
+    font-size: 60px;
+    padding: 0 10px 0 0;
+    line-height: 1;
+}
+
+section.mission p {
+    margin: 0 0 20px;
+    padding: 0;
+    line-height: 2.0em;
+    font-size: 14px;
+}
+
+section.mission p span {
+    font-weight: bold;
+    font-size: 15px;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+section.mission .missionBlock01 {
+    margin: 0 0 140px;
+    padding: 0 330px 0 0;
+    position: relative;
+}
+
+section.mission .missionBlock01 .illust {
+    position: absolute;
+    top: 100px;
+    right: 40px;
+}
+
+section.mission .missionBlock02 {
+    margin: 0 0 140px;
+    padding: 0 0 0 322px;
+    position: relative;
+}
+
+section.mission .missionBlock02 .illust {
+    position: absolute;
+    top: 0px;
+    left: 30px;
+}
+
+section.mission .missionBlock03 {
+    margin: 0;
+    padding: 0 352px 0 0;
+    position: relative;
+}
+
+section.mission .missionBlock03 .illust {
+    position: absolute;
+    top: -100px;
+    right: 80px;
+}
+
+
+/* misiion classes
+----------------------------------------------------------------------*/
+
+section.what {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 0 0;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+
+section.what h1 {
+    margin: 0 0 60px;
+    padding: 1px 0;
+    border-top: #252525 solid 2px;
+    border-bottom: #252525 solid 2px;
+}
+
+section.what .main {
+    margin: 0 0 60px;
+    padding: 0;
+    line-height: 0;
+}
+
+section.what h1 span {
+    border-top: #252525 solid 1px;
+    border-bottom: #252525 solid 1px;
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+section.what .about {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 800px;
+}
+
+section.what h2 {
+    font-size: 20px;
+    margin: 0 0 10px;
+    padding: 30px 0 0;
+    text-indent: -10px;
+}
+
+section.what p {
+    margin: 0 0 20px;
+    padding: 0;
+    line-height: 2.0em;
+    font-size: 14px;
+}
+
+
+/* list classes
+----------------------------------------------------------------------*/
+
+section.articles {
+    margin: 0;
+    padding: 30px 0;
+    background: #f4f3f3;
+}
+
+section.articles .title {
+    padding: 0 50px;
+    margin: 0 0 60px;
+}
+
+section.articles h1 {
+    margin: 0 auto;
+    padding: 1px 0;
+    max-width: 1000px;
+}
+
+section.articles h1 span {
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-size: 30px;
+    letter-spacing: 4px;
+    line-height: 1.1em;
+}
+
+section.articles h1 b {
+    font-size: 14px;
+    padding: 0 0 0 0;
+    letter-spacing: normal;
+    display: block;
+}
+
+section.articles ul {
+    margin: 0 0 0 -50px;
+    padding: 0 75px;
+    display: -moz-box;
+    display: -ms-box;
+    display: -webkit-flexbox;
+    display: -moz-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    -webkit-box-lines: multiple;
+    -moz-box-lines: multiple;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+section.articles ul li {
+    float: left;
+    width: 25%;
+    margin: 0;
+    padding: 0 0 50px 50px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+section.articles ul li .block {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+section.articles ul li .block .thumb {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+section.articles ul li .block .thumb img {
+    width: 100%;
+    height: auto;
+}
+
+section.articles ul li .block .caption {
+    padding: 20px 20px 45px;
+    min-height: 80px;
+}
+
+section.articles ul li .block .caption h3 {
+    margin: 0 0 10px;
+    padding: 0;
+    font-size: 14px;
+}
+
+section.articles ul li .block .caption p {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    line-height: 1.8em;
+}
+
+section.articles ul li .block .caption p span {
+    font-style: italic;
+}
+
+section.articles ul li .block .caption a {
+    color: #000;
+    text-decoration: none;
+}
+
+section.articles ul li .block .caption a:hover {
+    color: #545454;
+    text-decoration: none;
+}
+
+section.articles ul li .block .caption a.more {
+    display: block;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 0 34px 0 0;
+    background: url(../fonts/ar_left.svg) no-repeat right;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+section.information .subInfo {
+    margin: 0 auto;
+    padding: 0 75px 75px;
+    max-width: 1360px;
+}
+
+section.information .subInfo h2 {
+    font-size: 18px;
+    margin: 0 0 30px;
+    padding: 0;
+    font-family: Georgia, Times New Roman, Times, serif;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+section.information .subInfo h3 {
+    margin: 0 0 10px;
+    padding: 0;
+    font-size: 14px;
+}
+
+section.information .subInfo h3 a {
+    color: #000;
+    text-decoration: none;
+}
+
+section.information .subInfo h3 a:hover {
+    color: #575757;
+    text-decoration: none;
+}
+
+section.information .subInfo p {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    line-height: 1.8em;
+}
+
+section.information .subInfo p span {
+    font-style: italic;
+}
+
+section.information .subInfo p a {
+    color: #000;
+    text-decoration: none;
+}
+
+section.information .subInfo p a:hover {
+    color: #545454;
+    text-decoration: none;
+}
+
+section.information .subInfo a.more {
+    display: block;
+    position: absolute;
+    bottom: 15px;
+    right: 0px;
+    padding: 0;
+    width: 23px;
+    height: 17px;
+    background: url(../fonts/ar_left.svg) no-repeat right;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+    text-indent: -9999px;
+}
+
+section.information .subInfo ul {
+    margin: 0;
+    padding: 0;
+}
+
+section.information .subInfo ul li {
+    list-style: none;
+    margin: 0 0 15px;
+    padding: 0 0 15px 130px;
+    border-bottom: #b3b3b3 dotted 1px;
+    position: relative;
+    min-height: 77px;
+}
+
+section.information .subInfo ul li .thumb {
+    width: 104px;
+    height: 77px;
+    line-height: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+section.information .subInfo ul li .thumb img {
+    width: 104px;
+    height: 77px;
+}
+
+section.information .subInfo .recent {
+    float: left;
+    width: 50%;
+    padding: 0 25px 0 0;
+    box-sizing: border-box;
+}
+
+section.information .subInfo .rank {
+    float: right;
+    width: 50%;
+    padding: 0 0 0 25px;
+    box-sizing: border-box;
+}
+
+section.information .subInfo .rank ul li:nth-child(1):before {
+    content: "no.1";
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    font-size: 24px;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-style: italic;
+}
+
+section.information .subInfo .rank ul li:nth-child(2):before {
+    content: "no.2";
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    font-size: 24px;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-style: italic;
+}
+
+section.information .subInfo .rank ul li:nth-child(3):before {
+    content: "no.3";
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    font-size: 24px;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-style: italic;
+}
+
+section.information .subInfo .rank ul li:nth-child(4):before {
+    content: "no.4";
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    font-size: 24px;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-style: italic;
+}
+
+section.information .tag {
+    margin: 0;
+    padding: 30px 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+section.information .tag h2 {
+    color: #fff;
+    font-size: 16px;
+    margin: 0 0 20px;
+    padding: 0;
+    font-family: Georgia, Times New Roman, Times, serif;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+section.information .tag .tagBlock {
+    margin: 0 auto;
+    padding: 0 75px;
+    max-width: 1360px;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+
+section.information .tag .tagBlock a {
+    display: inline-block;
+    margin: 0 10px 10px 0;
+    padding: 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+section.information .tag .tagBlock a:hover {
+    color: #bebebe;
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1462px) {
+    section.articles ul li {
+        float: left;
+        width: 33.333333%;
+        margin: 0;
+        padding: 0 0 35px 35px;
+        box-sizing: border-box;
+        list-style: none;
+    }
+    section.articles ul li .block .caption h3 {
+        margin: 0 0 8px;
+        font-size: 13px;
+    }
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1260px) {
+    section.articles ul {
+        margin: 0 0 0 -35px;
+        padding: 0 50px;
+    }
+    section.information .subInfo {
+        margin: 0 auto;
+        padding: 0 50px 50px;
+    }
+}
+
+section.relatedList {
+    margin: 0;
+    padding: 0;
+    background: #f4f3f3;
+}
+
+section.relatedList h2 {
+    font-family: Georgia, Times New Roman, Times, serif;
+    text-align: center;
+    margin: 50px 0 48px;
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+section.relatedList ul {
+    margin: 0 0 0 -50px;
+    padding: 0 75px 100px;
+    display: -moz-box;
+    display: -ms-box;
+    display: -webkit-flexbox;
+    display: -moz-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    -webkit-box-lines: multiple;
+    -moz-box-lines: multiple;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+section.relatedList ul li {
+    float: left;
+    width: 25%;
+    margin: 0;
+    padding: 0 0 0 50px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+section.relatedList ul li .block {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+section.relatedList ul li .block .thumb {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+section.relatedList ul li .block .thumb img {
+    width: 100%;
+    height: auto;
+}
+
+section.relatedList ul li .block .caption {
+    padding: 20px 20px 45px;
+    min-height: 80px;
+}
+
+section.relatedList ul li .block .caption h3 {
+    margin: 0 0 10px;
+    padding: 0;
+    font-size: 14px;
+}
+
+section.relatedList ul li .block .caption p {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    line-height: 1.8em;
+}
+
+section.relatedList ul li .block .caption p span {
+    font-style: italic;
+}
+
+section.relatedList ul li .block .caption a {
+    color: #000;
+    text-decoration: none;
+    font-weight: normal!important;
+}
+
+section.relatedList ul li .block .caption a:hover {
+    color: #545454;
+    text-decoration: none;
+}
+
+section.relatedList ul li .block .caption a.more {
+    display: block;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 0 34px 0 0;
+    background: url(../images/ar_left.svg) no-repeat right;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal!important;
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1360px) {
+    section.relatedList ul li {
+        padding: 0 0 0 20px;
+    }
+    section.relatedList ul li .block .caption h3 {
+        font-size: 12px;
+    }
+    section.relatedList ul {
+        margin: 0 0 0 -20px;
+    }
+    section.relatedList ul li .block .caption {
+        padding: 16px 16px 45px;
+    }
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1260px) {
+    section.relatedList ul {
+        padding: 0 50px 50px;
+    }
+}
+
+section.single {
+    margin: 0 auto;
+    padding: 0px 0;
+    background: #f4f3f3;
+    max-width: 1000px;
+}
+
+section.single h2 {
+    text-align: center;
+    margin: 0 0 20px;
+    padding: 0 0 20px;
+    border-bottom: #252525 solid 1px;
+    font-size: 18px;
+    line-height: 1.6em;
+}
+
+section.single p.spec {
+    margin: 0 0 60px;
+    padding: 0;
+    font-size: 12px;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    line-height: 1.8em;
+    text-align: center;
+}
+
+section.single p.spec span {
+    font-style: italic;
+}
+
+section.single p.spec a {
+    color: #000;
+    text-decoration: none;
+}
+
+section.single p.spec a:hover {
+    color: #545454;
+    text-decoration: none;
+}
+
+section.single .entry {
+    margin: 0;
+    padding: 0;
+}
+
+section.single .entry p {
+    margin: 0 0 14px;
+    padding: 0;
+    font-size: 15px;
+    line-height: 2.0em;
+}
+
+section.single .entry p img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 0 14px;
+}
+
+section.single .entry p a {
+    color: #0071b5;
+    text-decoration: underline;
+}
+
+section.single .entry p a:hover {
+    text-decoration: none;
+}
+
+section.single .entry .detailBlock {
+    margin: 70px 0 0;
+    padding: 1px 0;
+    border-top: #252525 solid 2px;
+    border-bottom: #252525 solid 2px;
+}
+
+section.single .entry .detailBlock .detailBox {
+    border-top: #252525 solid 1px;
+    border-bottom: #252525 solid 1px;
+    margin: 0;
+    padding: 32px 50% 32px 0;
+    position: relative;
+    min-height: 220px;
+}
+
+section.single .entry .detailBlock .detailBox p {
+    font-size: 13px;
+    line-height: 1.8em;
+}
+
+section.single .entry .detailBlock .detailBox .map {
+    width: 48%;
+    height: 220px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 32px;
+    right: 0;
+}
+
+section.single .entry .detailBlock .detailBox .map iframe {
+    border: #252525 solid 1px!important;
+    box-sizing: border-box;
+}
+
+section.single .entry .detailBlock .detailBox .title {
+    font-size: 18px;
+    margin: 0 0 10px;
+    padding: 0;
+    font-family: Georgia, Times New Roman, Times, serif;
+    letter-spacing: 1px;
+}
+
+section.single .entry .detailBlock .detailBox h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 3px;
+    padding: 0;
+}
+
+.mapIllust {
+    position: fixed;
+    padding: 10px;
+    box-sizing: border-box;
+    line-height: 0;
+    top: -120%;
+    left: 0;
+    right: 0;
+    bottom: 120%;
+    z-index: 9997;
+    -webkit-transition: ease .5s;
+    transition: ease .5s;
+}
+
+.mapIllust.on {
+    top: 0%;
+    bottom: 0%;
+}
+
+.mapIllust .pict {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 0px 0px 14px -3px #000000;
+    -moz-box-shadow: 0px 0px 14px -3px #000000;
+    -webkit-box-shadow: 0px 0px 14px -3px #000000;
+}
+
+.mapIllust .pict .title {
+    position: absolute;
+    letter-spacing: 2px;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    background-color: #000;
+    font-family: Roboto, Helvetica, Arial, "Hiragino sans", ヒラギノ角ゴシック, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", YuGothic, 游ゴシック, Meiryo, メイリオ, sans-serif;
+    z-index: 5;
+}
+
+.mapIllust .pict .title span {
+    padding: 0px 0 0px 30px;
+    background: url(../fonts/icon_002.svg) no-repeat left;
+    display: inline-block;
+    height: 40px;
+}
+
+.mapIllust .pict .dragscroll {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 2;
+    background: #000;
+}
+
+.mapIllust .pict img {
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: -o-grab;
+    cursor: grab;
+}
+
+li .block .thumb {
+    background: #000;
+}
+
+li .block .thumb a {
+    -webkit-transition: ease .3s;
+    transition: ease .3s;
+}
+
+li .block .thumb a:hover {
+    opacity: 0.5;
+}
+
+
+/* other classes
+----------------------------------------------------------------------*/
+
+section.other {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 0 0;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+
+section.other h1 {
+    margin: 0 0 60px;
+    padding: 1px 0;
+    border-top: #252525 solid 2px;
+    border-bottom: #252525 solid 2px;
+}
+
+section.other h1 span {
+    border-top: #252525 solid 1px;
+    border-bottom: #252525 solid 1px;
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+section.other .policy {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 800px;
+    line-height: 2.0em;
+}
+
+section.other .policy p {
+    margin: 0 0 40px;
+    padding: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 2.0em;
+}
+
+section.other .policy dl {
+    margin: 0 0 30px;
+    padding: 0 0 30px;
+    font-size: 13px;
+    border-bottom: #b3b3b3 dotted 1px;
+}
+
+section.other .policy dt {
+    margin: 0 0 5px;
+    padding: 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+section.other .policy dd {
+    margin: 0;
+    padding: 0;
+}
+
+section.other .policy dd b {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 0;
+}
+
+section.other .recruit p.read {
+    margin: 0 0 20px;
+    padding: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 2.0em;
+}
+
+section.other .recruit p {
+    margin: 0 0 40px;
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+    line-height: 2.0em;
+}
+
+section.other .recruit a.btn {
+    width: 300px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #bebebe;
+    background: #252525;
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+section.other .recruit a.btn:hover {
+    background: #000;
+}
+
+section.other .contact {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 800px;
+    line-height: 2.0em;
+}
+
+section.other .contact p {
+    margin: 0 0 40px;
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+    line-height: 2.0em;
+}
+
+section.other .contact dl {
+    margin: 0 0 30px;
+    padding: 0 0 30px 200px;
+    position: relative;
+    font-size: 14px;
+    border-bottom: #b3b3b3 dotted 1px;
+}
+
+section.other .contact dt {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 54px;
+    line-height: 54px;
+}
+
+section.other .contact dt span {
+    display: block;
+    padding: 0;
+    background: #ff6a6a;
+    color: #fff;
+    text-align: center;
+    border-radius: 11px;
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    width: 42px;
+    height: 22px;
+    line-height: 22px;
+    right: 0;
+    top: 50%;
+    margin-top: -11px;
+    position: absolute;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+section.other .contact dd {
+    margin: 0;
+    padding: 0;
+}
+
+section.other .contact dd label {
+    display: block;
+    margin: 0 0 10px;
+}
+
+section.other .contact dd label.end {
+    margin: 0;
+}
+
+section.information {
+    background: #f4f3f3;
+}
+
+@media print,
+screen and (min-width: 1190px) and (max-width:1400px) {
+    header .headerBlock .globalNavi.fixed li {
+        margin: 0 40px;
+    }
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1190px) {
+    header .headerBlock .globalNavi li {
+        margin: 0 46px;
+    }
+    .icons {
+        right: 0;
+    }
+    .icons ul li {
+        margin: 0 0 0 2px;
+    }
+    header .headerBlock .globalNavi.fixed li {
+        margin: 0 28px;
+    }
+    .headerBlock .globalNavi ul li .category {
+        margin-left: -60px;
+        width: 120px;
+    }
+    section.articles h1 span {
+        font-size: 24px;
+    }
+    section.information .subInfo h3 {
+        font-size: 13px;
+    }
+    section.other .policy p {
+        font-size: 16px;
+    }
+    section.other h1 span {
+        padding: 6px;
+        font-size: 17px;
+    }
+    section.other .policy dt {
+        font-size: 14px;
+    }
+    section.mission h1 span {
+        padding: 6px;
+        font-size: 17px;
+    }
+    section.what h1 span {
+        padding: 6px;
+        font-size: 17px;
+    }
+    section.single .entry p {
+        margin: 0 0 14px;
+        padding: 0;
+        font-size: 14px;
+        line-height: 2.0em;
+    }
+    section.relatedList ul li {
+        padding: 0 0 0 16px;
+    }
+    section.relatedList ul li .block .caption h3 {
+        font-size: 11px;
+    }
+    .pager_area .share ul li {
+        margin: 0 10px;
+    }
+    .pager_area .share ul li img {
+        width: 36px;
+        height: auto;
+    }
+    .pager_area .share {
+        margin: -17.5px 0 0 -84px;
+    }
+    .pager_area {
+        margin: 40px 0 0 0;
+    }
+}
+
+@media print,
+screen and (min-width: 960px) and (max-width:1060px) {
+    article.page {
+        padding: 0 30px 150px;
+    }
+    section.mission p {
+        font-size: 13px;
+    }
+    section.mission p span {
+        font-size: 13px;
+    }
+}

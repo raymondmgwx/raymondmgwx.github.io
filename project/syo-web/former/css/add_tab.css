@@ -1,0 +1,25 @@
+﻿@charset "UTF-8";
+.mapIllust .pict .dragscroll {
+    overflow: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+.fixed {
+         position: absolute!important;
+    margin: 0;
+    left: 0;
+    bottom: 0!important;
+		top: inherit !important;
+	box-shadow:none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+}
+.icons {
+    right: 30px;
+}
+header .headerBlock .globalNavi.fixed li {
+    margin: 0 46px;
+}
+
+#topWrapper{
+	display: none;
+}

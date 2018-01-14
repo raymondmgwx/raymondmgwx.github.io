@@ -1,0 +1,14 @@
+﻿@charset "utf-8";
+/*
+Theme Name: 東東京
+Theme URI: 
+Description: 
+Version: 1.0
+Author: KENTA KAJI
+Author URI: 
+*/
+@import url("normalize.css");
+@import url("common.css");
+@import url("tab.css");
+@import url("sp.css");
+@import url("sublimeslideshow.css");
