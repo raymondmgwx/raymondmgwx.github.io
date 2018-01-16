@@ -2,25 +2,18 @@ $(function() {
 
     //create login json file
     //https://api.myjson.com/bins/jpfbv
+	//https://api.myjson.com/bins/14ctu5
     /*$.ajax({
         url: "https://api.myjson.com/bins",
         type: "POST",
         data: '{' +
-            '"login": [' +
-            '{' +
-            '    "acc": "admin",' +
-            '    "pwd": "admin"' +
-            ' },' +
-            ' {' +
-            '    "acc": "adminw",' +
-            '      "pwd": "adminw"' +
-            '  }' +
-            ' ]' +
-            ' }',
+			'"allow": true,'+
+			'"recentloginTime": "2018/01/16"'+
+			'}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
-            alert(data);
+            console.log(data);
         }
     });*/
 
