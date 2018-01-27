@@ -2,6 +2,36 @@ var exist_user_count = 1;
 var reward_count = 1;
 
 
+function insert_user_infoByDataTable(tb_user, id, phone, address, sysid) {
+    tb_user.row.add([
+        exist_user_count,
+        id,
+        phone,
+        address,
+        sysid,
+        "<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-modal' data-id=" + id + " data-phone=" + phone + " data-address=" + address + " data-sysid=" + sysid + ">修改</button>",
+        "<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#delete-modal' data-id=" + id + ">删除</button>"
+    ]).draw(false);
+    exist_user_count += 1;
+}
+
+function insert_reward_infoByDataTable(tb_reward, user_name, reward_name, reward_number, status, order_number, sysid, fee, r_sysid) {
+    tb_reward.row.add([
+        reward_count,
+        user_name,
+        reward_name,
+        reward_number,
+        status,
+        order_number,
+        fee,
+        r_sysid,
+        "<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-modal-reward' data-id=" + sysid + " data-name=" + reward_name + " data-number=" + reward_number + " data-status=" + status + " data-order_number=" + order_number + " data-fee=" + fee + " data-sysid=" + r_sysid + ">修改</button>",
+        "<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#delete-modal-reward' data-id=" + sysid + " data-name=" + reward_name + " data-sysid=" + r_sysid + ">删除</button>"
+
+    ]).draw(false);
+    reward_count += 1;
+}
+
 function insert_user_info(id, phone, address, sysid) {
     var exist_user_item = document.createElement('tr');
     exist_user_item.innerHTML = "<td>" + exist_user_count +
@@ -33,7 +63,7 @@ function insert_reward_info(user_name, reward_name, reward_number, status, order
     reward_count += 1;
 }
 
-function load_user_info() {
+function load_user_info(tb_user) {
     $.get("https://api.myjson.com/bins/jpfbv", function(data, textStatus, jqXHR) {
 
         var user_info = data['user_info'];
@@ -43,12 +73,13 @@ function load_user_info() {
             var phone = element['phone'];
             var address = element['address'];
             var systemid = element['systemid'];
-            insert_user_info(id, phone, address, systemid);
+            //insert_user_info(id, phone, address, systemid);
+            insert_user_infoByDataTable(tb_user, id, phone, address, systemid)
         });
     });
 }
 
-function load_reward_info() {
+function load_reward_info(tb_reward) {
     $.get("https://api.myjson.com/bins/jpfbv", function(data, textStatus, jqXHR) {
 
         var reward_list = data['reward_list'];
@@ -72,7 +103,8 @@ function load_reward_info() {
             var status = element['status'] != null ? element['status'] : '未发货';
 
             if (status != '已发货') {
-                insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, fee, reward_sysid);
+                //insert_reward_info(user_name, reward_name, reward_number, status, order_number, sysid, fee, reward_sysid);
+                insert_reward_infoByDataTable(tb_reward, user_name, reward_name, reward_number, status, order_number, sysid, fee, reward_sysid);
             }
 
         });
@@ -83,8 +115,13 @@ function load_reward_info() {
 
 $(function() {
 
-    load_user_info();
-    load_reward_info();
+
+
+    var tb_user = $('#user_list').DataTable();
+    var tb_reward = $('#user_reward').DataTable();
+
+    load_user_info(tb_user);
+    load_reward_info(tb_reward);
 
     $('#delete-modal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);

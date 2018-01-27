@@ -176,7 +176,7 @@ $(function() {
                 dataType: "json",
                 success: function(data, textStatus, jqXHR) {
                     alert('录入当前用户奖品成功！');
-                    self.location = self.location;
+                    //self.location = self.location;
                 }
             });
         });
