@@ -90,7 +90,7 @@
                             </div>
                         </div>
 
-                        <button id='calculate_kcs' class="btn btn-border-d btn-round" type="button">计算开敞式幂曲线实用堰参数</button>
+                        <button id='calculate_kcs' class="btn btn-border-d btn-round" type="button">计算开敞式幂曲线实用堰泄流量</button>
                     </center>
 
                 </div>
@@ -98,7 +98,7 @@
 
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
-                    <h4 class="font-alt mb-0">计算结果(Q:流量)</h4>
+                    <h4 class="font-alt mb-0">计算结果(Q:泄流量)</h4>
                     <hr class="divider-w mt-10 mb-20">
                     <div class="row multi-columns-row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
@@ -106,6 +106,99 @@
                                 <div class="form-group">
                                     <label>Q</label>
                                     <input id="q" class="form-control input-sm" type="text" placeholder="q" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+           宽顶堰
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">宽顶堰参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&m ——流量系数\\&{\epsilon} ——侧收缩系数\\&n ——孔数\\&b ——单孔宽度(m)\\&H ——堰上水头(m)\\&v_0 ——堰前行进流速(m/s)\\&P_1 ——上游堰高(m)\end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="wcw_n" class="form-control input-sm" type="text" placeholder="n" value="2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>b</label>
+                                    <input id="wcw_b" class="form-control input-sm" type="text" placeholder="b" value="11" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>epsilon</label>
+                                    <input id="wcw_epsilon" class="form-control input-sm" type="text" placeholder="epsilon" value="0.977" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="wcw_h" class="form-control input-sm" type="text" placeholder="H" value="4.8" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="wcw_v0" class="form-control input-sm" type="text" placeholder="v0" value="3" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>P1</label>
+                                    <input id="wcw_p1" class="form-control input-sm" type="text" placeholder="p1" value="5.2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='wcw_chkedge'> 堰进口底坎边缘是否方角 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button id='calculate_wcw' class="btn btn-border-d btn-round" type="button">计算宽顶堰泄流量</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(Q:泄流量)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="wcw_q" class="form-control input-sm" type="text" placeholder="Q" value="" readonly/>
                                 </div>
                             </center>
                         </div>
