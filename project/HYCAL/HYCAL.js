@@ -36,6 +36,15 @@ function addScript() {
     document.getElementsByTagName("head")[0].appendChild(script_math);
 }
 
+//带胸墙实用堰-带胸墙孔口泄流能力
+function dxqsyy(D, H, v0, mu, b, n) {
+    var H0 = H + v0 * v0 / (2 * g);
+    var B = n * b;
+    var Q = mu * B * D * Math.sqrt(2 * g * H0);
+    return Q;
+}
+
+//驼峰堰
 function tfy(type, epsilon, n, b, H, v0, p1) {
     var H0 = H + v0 * v0 / (2 * g);
     //console.log(H0);
@@ -156,6 +165,19 @@ function initEvent() {
         var chk_type = document.getElementById('tfy_chktype').checked;
         var q = tfy(chk_type, epsilon, n, b, H, v0, p1);
         document.getElementById("tfy_q").value = q;
+    });
+
+    document.getElementById("calculate_dxqsyy").addEventListener("click", function() {
+
+        var D = parseFloat(document.getElementById("dxqsyy_D").value);
+        var H = parseFloat(document.getElementById("dxqsyy_H").value);
+        var v0 = parseFloat(document.getElementById("dxqsyy_v0").value);
+        var mu = parseFloat(document.getElementById("dxqsyy_mu").value);
+        var b = parseFloat(document.getElementById("dxqsyy_b").value);
+        var n = parseFloat(document.getElementById("dxqsyy_n").value);
+
+        var q = dxqsyy(D, H, v0, mu, b, n);
+        document.getElementById("dxqsyy_q").value = q;
     });
 }
 

@@ -298,6 +298,90 @@
                     </div>
                 </div>
             </div>
+
+            <!--  
+           带胸墙孔口泄流能力
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">带胸墙实用堰参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&B ——孔口总净宽(m) \\&b ——单孔宽度(m) \\&n ——孔数目 \\&D ——孔口高度(m) \\&D ——自由出流时堰上孔口中心线作用水头，淹没出流时为上下游水位差(m) \\&v_0 ——堰前{3H_0}到{6H_0}处断面的平均流速(m/s) \\&H_d ——定型设计水头,可取孔口中心线至水库校核水位，即最大作用水头{H_{max}}的56{\%}到77{\%}(m) \\&{\mu} ——孔口自由出流流量系数 \end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="dxqsyy_n" class="form-control input-sm" type="text" placeholder="n" value="4" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>b</label>
+                                    <input id="dxqsyy_b" class="form-control input-sm" type="text" placeholder="b" value="15" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="dxqsyy_H" class="form-control input-sm" type="text" placeholder="H" value="15" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="dxqsyy_v0" class="form-control input-sm" type="text" placeholder="v0" value="2.6" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>D</label>
+                                    <input id="dxqsyy_D" class="form-control input-sm" type="text" placeholder="D" value="8" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>mu</label>
+                                    <input id="dxqsyy_mu" class="form-control input-sm" type="text" placeholder="mu" value="0.66" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button id='calculate_dxqsyy' class="btn btn-border-d btn-round" type="button">计算带胸墙孔口泄流能力</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(Q:泄流量)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="dxqsyy_q" class="form-control input-sm" type="text" placeholder="Q" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 </div>
