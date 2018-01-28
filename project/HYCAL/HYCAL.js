@@ -18,6 +18,12 @@ var WcwEdgeType = {
     ROUND: false
 };
 
+//驼峰堰类型
+var tfyType = {
+    A: true,
+    B: false
+};
+
 
 function addScript() {
     var script = document.createElement("script");
@@ -28,6 +34,31 @@ function addScript() {
     script_math.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML";
     document.getElementsByTagName("head")[0].appendChild(script);
     document.getElementsByTagName("head")[0].appendChild(script_math);
+}
+
+function tfy(type, epsilon, n, b, H, v0, p1) {
+    var H0 = H + v0 * v0 / (2 * g);
+    //console.log(H0);
+    var m = 0;
+    var p1dH0 = p1 / H0;
+    //console.log(p1dH0);
+    //identify param m
+    if (type == tfyType.A) {
+        if (p1dH0 <= 0.24) {
+            m = 0.385 + 0.171 * Math.pow(p1dH0, -0.0657);
+        } else {
+            m = 0.414 * Math.pow(p1dH0, -0.0652);
+        }
+    } else if (type == tfyType.B) {
+        if (p1dH0 <= 0.34) {
+            m = 0.385 + 0.224 * Math.pow(p1dH0, 0.934);
+        } else {
+            m = 0.452 * Math.pow(p1dH0, -0.032);
+        }
+    }
+    //console.log(m);
+    var Q = m * epsilon * n * b * Math.pow(2 * g, 0.5) * Math.pow(H0, 1.5);
+    return Q;
 }
 
 //计算宽顶堰
@@ -80,7 +111,7 @@ function kcsmqx(sigma_m, c, m, epsilon, b, n, h, h_p, v0, p1) {
 function initEvent() {
 
 
-    //计算开敞式幂曲线实用堰参数  按钮
+    //计算开敞式幂曲线实用堰  按钮
     document.getElementById("calculate_kcs").addEventListener("click", function() {
         var sigma_m = parseFloat(document.getElementById("sigma_m").value);
         var c = parseFloat(document.getElementById("c").value);
@@ -109,6 +140,22 @@ function initEvent() {
         var chk_edge = document.getElementById('wcw_chkedge').checked;
         var q = WideCrestWeir(chk_edge, epsilon, n, b, H, v0, p1);
         document.getElementById("wcw_q").value = q;
+    });
+
+    //驼峰堰
+
+    document.getElementById("calculate_tfy").addEventListener("click", function() {
+
+        var epsilon = parseFloat(document.getElementById("tfy_epsilon").value);
+        var b = parseFloat(document.getElementById("tfy_b").value);
+        var n = parseFloat(document.getElementById("tfy_n").value);
+        var H = parseFloat(document.getElementById("tfy_h").value);
+        var v0 = parseFloat(document.getElementById("tfy_v0").value);
+        var p1 = parseFloat(document.getElementById("tfy_p1").value);
+
+        var chk_type = document.getElementById('tfy_chktype').checked;
+        var q = tfy(chk_type, epsilon, n, b, H, v0, p1);
+        document.getElementById("tfy_q").value = q;
     });
 }
 

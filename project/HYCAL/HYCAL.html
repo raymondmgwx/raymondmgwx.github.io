@@ -205,6 +205,99 @@
                     </div>
                 </div>
             </div>
+
+            <!--  
+           驼峰堰
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">驼峰堰参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&P_1 ——上游堰高(m)\\&H_0 ——计入行进流速的堰上水头(m)\\&m ——流量系数\end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="tfy_n" class="form-control input-sm" type="text" placeholder="n" value="2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>b</label>
+                                    <input id="tfy_b" class="form-control input-sm" type="text" placeholder="b" value="25" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>epsilon</label>
+                                    <input id="tfy_epsilon" class="form-control input-sm" type="text" placeholder="epsilon" value="0.817" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="tfy_h" class="form-control input-sm" type="text" placeholder="H" value="4.525" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="tfy_v0" class="form-control input-sm" type="text" placeholder="v0" value="3.5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>P1</label>
+                                    <input id="tfy_p1" class="form-control input-sm" type="text" placeholder="p1" value="2.5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='tfy_chktype'> 是否为A型
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button id='calculate_tfy' class="btn btn-border-d btn-round" type="button">计算驼峰堰泄流量</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(Q:泄流量)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="tfy_q" class="form-control input-sm" type="text" placeholder="Q" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
