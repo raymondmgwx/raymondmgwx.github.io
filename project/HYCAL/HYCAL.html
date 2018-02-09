@@ -382,6 +382,120 @@
                 </div>
             </div>
 
+            <!--  
+           泄槽水面线计算
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">泄槽水面线参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&Q_c ——单个泄槽流量(m^{3}/s) \\&b_c ——糙率 \\&n ——单个泄槽宽(m) \\&i ——泄槽底坡 \\&{\phi} ——流速系数，一般0.95左右 \\&g ——重力加速度,取9.8 (m/s^{2}) \\&H_0 ——计算起始断面渠底以上总水头 \\&{\theta} ——泄槽底板与水面夹角 \\&L ——泄槽长(m) \\&{\varsigma} ——掺气水深系数，取1～1.4s/m \end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Qc</label>
+                                    <input id="ssfl_qc" class="form-control input-sm" type="text" placeholder="Qc" value="7300" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>bc</label>
+                                    <input id="ssfl_bc" class="form-control input-sm" type="text" placeholder="bc" value="25" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="ssfl_n" class="form-control input-sm" type="text" placeholder="n" value="0.014" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>i</label>
+                                    <input id="ssfl_i" class="form-control input-sm" type="text" placeholder="i" value="0.1" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>phi</label>
+                                    <input id="ssfl_phi" class="form-control input-sm" type="text" placeholder="phi" value="0.95" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H_0</label>
+                                    <input id="ssfl_h0" class="form-control input-sm" type="text" placeholder="h0" value="34.5449" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>L</label>
+                                    <input id="ssfl_l" class="form-control input-sm" type="text" placeholder="L" value="615.34" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>N</label>
+                                    <input id="ssfl_bn" class="form-control input-sm" type="text" placeholder="N" value="5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>alpha</label>
+                                    <input id="ssfl_alpha" class="form-control input-sm" type="text" placeholder="alpha" value="1.05" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='ssfl_ssytype' checked> 是否为实用堰
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button id='calculate_ssfl' class="btn btn-border-d btn-round" type="button">计算泄槽水面线</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(断面水深)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="ssfl_outh" class="form-control input-sm" type="text" placeholder="H" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 </div>

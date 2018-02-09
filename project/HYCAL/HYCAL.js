@@ -24,6 +24,10 @@ var tfyType = {
     B: false
 };
 
+var syyType = {
+    syy: true,
+    kdy: false
+};
 
 function addScript() {
     var script = document.createElement("script");
@@ -34,6 +38,102 @@ function addScript() {
     script_math.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML";
     document.getElementsByTagName("head")[0].appendChild(script);
     document.getElementsByTagName("head")[0].appendChild(script_math);
+}
+
+
+
+//泄槽水面线SGD
+function eqfm(h, theta, alpha, qc, bc) {
+    var v = qc / (bc * h);
+    return h * Math.cos(theta) + alpha * v * v / (2 * g);
+}
+
+
+
+function ssfl_sgd(learning_rate, lastH, bc, qc, n, theta, i, alpha, deltaL, precision) {
+
+    var h = lastH;
+    var lastR = bc * h / (bc + 2 * h);
+    var lastv = qc / (bc * h);
+    var lastC = Math.pow(lastR, 1 / 6) * 1 / n;
+
+    for (var ii = 0; ii < 10000; ii++) {
+        var R = bc * h / (bc + 2 * h);
+        var v = qc / (bc * h);
+        var C = Math.pow(R, 1 / 6) * 1 / n;
+        var aver_v = (lastv + v) / 2;
+        var aver_R = (lastR + R) / 2;
+        var aver_C = (lastC + C) / 2;
+        var J = aver_v * aver_v / (aver_R * aver_C * aver_C);
+        var rightValue = ((eqfm(lastH, theta, alpha, qc, bc) + deltaL * (i - J)) - (alpha * v * v / (2 * g))) / (Math.cos(theta));
+        h -= learning_rate * (rightValue - h);
+
+        var chkValue = Math.abs((eqfm(h, theta, alpha, qc, bc) - eqfm(lastH, theta, alpha, qc, bc)) / (i - J) - deltaL);
+        if (chkValue < precision) {
+            //success
+            return h;
+        }
+    }
+
+    return -1;
+
+}
+
+//泄槽水面线计算
+function slotSurfaceLine(type, Qc, b_c, n, i, phi, H_0, N, L, alpha) {
+
+    var h_k = Math.pow((Qc * Qc) / (b_c * b_c * g), 1 / 3);
+    var R_k = b_c * h_k / (b_c + 2 * h_k);
+    var C_k = 1 / n * Math.pow(R_k, 1 / 6);
+    var i_k = ((Qc * Qc) / (b_c * b_c)) / (h_k * h_k * C_k * C_k * R_k);
+    var outStr = "L断面水深：";
+
+    var h0 = 0;
+    var learning_rate = 0.01;
+    var theta = Math.atan(i);
+    var precision = 0.001;
+    if (i > i_k) {
+        //急流
+        if (type == syyType.syy) {
+            //实用堰
+            //SGD
+
+
+            //identify h0
+            for (var t = 0; t < 10000; t++) {
+                var h0_right = (Qc / b_c / (phi * Math.sqrt(2 * g * (H_0 - h0 * Math.cos(theta)))));
+                h0 -= learning_rate * (h0 - h0_right);
+
+                var chkValue = Math.abs(h0 - (Qc / b_c / (phi * Math.sqrt(2 * g * (H_0 - h0 * Math.cos(theta))))));
+                if (chkValue < precision) {
+                    //success
+                    break;
+                }
+            }
+
+        } else if (type == syyType.kdy) {
+            //宽顶堰
+            h0 = h_k;
+
+        }
+
+        //identify h0 - hn
+        var delta_L = L / (N - 1);
+        var outH = h0;
+        //console.log(outH);
+        outStr += outH.toFixed(3) + "|";
+        for (var nn = 0; nn < N - 1; nn++) {
+            outH = ssfl_sgd(learning_rate, outH, b_c, Qc, n, theta, i, alpha, delta_L, precision);
+            outStr += outH.toFixed(3) + "|";
+            //console.log(outH);
+        }
+
+    } else {
+        //输出缓流
+        outStr += "缓流";
+    }
+
+    return outStr;
 }
 
 //带胸墙实用堰-带胸墙孔口泄流能力
@@ -120,6 +220,22 @@ function kcsmqx(sigma_m, c, m, epsilon, b, n, h, h_p, v0, p1) {
 function initEvent() {
 
 
+    document.getElementById("calculate_ssfl").addEventListener("click", function() {
+
+        var Qc = parseFloat(document.getElementById("ssfl_qc").value);
+        var b_c = parseFloat(document.getElementById("ssfl_bc").value);
+        var n = parseFloat(document.getElementById("ssfl_n").value);
+        var i = parseFloat(document.getElementById("ssfl_i").value);
+        var phi = parseFloat(document.getElementById("ssfl_phi").value);
+        var H_0 = parseFloat(document.getElementById("ssfl_h0").value);
+        var N = parseFloat(document.getElementById("ssfl_bn").value);
+        var L = parseFloat(document.getElementById("ssfl_l").value);
+        var alpha = parseFloat(document.getElementById("ssfl_alpha").value);
+        var chk_type = document.getElementById('ssfl_ssytype').checked;
+
+        var res = slotSurfaceLine(chk_type, Qc, b_c, n, i, phi, H_0, N, L, alpha);
+        document.getElementById("ssfl_outh").value = res;
+    });
     //计算开敞式幂曲线实用堰  按钮
     document.getElementById("calculate_kcs").addEventListener("click", function() {
         var sigma_m = parseFloat(document.getElementById("sigma_m").value);
