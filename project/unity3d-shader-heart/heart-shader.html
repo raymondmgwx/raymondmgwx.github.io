@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <title>跳动的心 - shader [RaymondMcGuire]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            color: #ffffff;
+            font-family: Monospace;
+            font-size: 13px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #000000;
+            margin: 0px;
+            overflow: hidden;
+        }
+        
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        a {
+            color: #ffffff;
+        }
+        
+        #oldie a {
+            color: #da0
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container"></div>
+    <div id="info"> 跳动的心 shader webgl demo. created by <a href="https://raymondmcguire.github.io/?e=imvc_lab&&theme=Image-Visual-Lab" target="_blank" rel="noopener">RaymondMcGuire</a> 参考：<a href="http://blog.csdn.net/candycat1992/article/details/44040273">【ShaderToy】跳动的心</a></div>
+    <script src="./js/three.min.js"></script>
+
+    <script src="./js/Detector.js"></script>
+    <script src="./js/libs/stats.min.js"></script>
+    <script src="./js/libs/dat.gui.min.js"></script>
+
+    <script id="vertexShader" type="x-shader/x-vertex">
+
+        void main() { gl_Position = vec4( position, 1.0 ); }
+
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-fragment">
+
+        uniform vec2 resolution; uniform float time;uniform float _Blur;uniform float _Eccentricity; uniform vec4 _BackgroundColor; uniform vec4 _HeartColor; uniform float _Duration; void main() { vec2 p = (2.0 * gl_FragCoord.xy - resolution.xy) / min(resolution.y,resolution.x);
+        p.y -= 0.25; vec3 bcol = vec3(1.0, 0.8, 0.7 - 0.07*p.y)*(1.0 - 0.25*length(p)); bcol = _BackgroundColor.xyz * (1.0 - _Eccentricity * length(p)); float tt = mod(time, 1.5) / 1.5; tt = mod(time, _Duration) / _Duration; float ss = pow(tt, .2)*0.5
+        + 0.5; ss = 1.0 + ss * 0.5*sin(tt*6.2831*3.0 + p.y*0.5)*exp(-tt * 4.0); p *= vec2(0.5, 1.5) + ss * vec2(0.5, -0.5); float a = atan(p.x, p.y) / 3.141593; float r = length(p); float h = abs(a); float d = (13.0*h - 22.0*h*h + 10.0*h*h*h) / (6.0 -
+        5.0*h); float s = 1.0 - 0.5*clamp(r / d, 0.0, 1.0); s = 0.75 + 0.75*p.x; s *= 1.0 - 0.25*r; s = 0.5 + 0.6*s; s *= 0.5 + 0.5*pow(1.0 - clamp(r / d, 0.0, 1.0), 0.1); vec3 hcol = vec3(1.0, 0.5*r, 0.3)*s; hcol = _HeartColor.xyz *s; vec3 col = mix(bcol,
+        hcol, smoothstep(-0.01, 0.01, d - r)); col = mix(bcol, hcol, smoothstep(-_Blur, _Blur, d - r)); gl_FragColor=vec4(col,1.0); }
+
+    </script>
+
+    <script>
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+        var container, stats;
+
+        var camera, scene, renderer;
+
+        var uniforms;
+
+        init();
+        animate();
+
+        function initUi() {
+
+
+            var heartParam = {
+                eccentricity: 0.25,
+                duration: 1.5,
+                blur: 0.01
+            };
+
+            function guiChanged() {
+
+                uniforms._Eccentricity.value = heartParam.eccentricity;
+                uniforms._Duration.value = heartParam.duration;
+                uniforms._Blur.value = heartParam.blur;
+                renderer.render(scene, camera);
+
+            }
+
+            var gui = new dat.GUI();
+
+            gui.add(heartParam, "eccentricity", 0, 0.5, 0.01).onChange(guiChanged);
+            gui.add(heartParam, "duration", 0.0, 1, 0.01).onChange(guiChanged);
+            gui.add(heartParam, "blur", 0.0, 2, 0.1).onChange(guiChanged);
+
+            guiChanged();
+        }
+
+        function init() {
+
+            container = document.getElementById('container');
+
+            camera = new THREE.Camera();
+            camera.position.z = 1;
+
+            scene = new THREE.Scene();
+
+            var geometry = new THREE.PlaneBufferGeometry(2, 2);
+
+            uniforms = {
+                time: {
+                    value: 1.0
+                },
+                resolution: {
+                    value: new THREE.Vector2()
+                },
+                _Eccentricity: {
+                    value: 0.25
+                },
+                _BackgroundColor: {
+                    value: new THREE.Vector4(1.0, 0.8, 0.7, 1.0)
+                },
+                _HeartColor: {
+                    value: new THREE.Vector4(1.0, 0.5, 0.3, 1.0)
+                },
+                _Duration: {
+                    value: 1.5
+                },
+                _Blur: {
+                    value: 0.01
+                }
+            };
+
+            var material = new THREE.ShaderMaterial({
+
+                uniforms: uniforms,
+                vertexShader: document.getElementById('vertexShader').textContent,
+                fragmentShader: document.getElementById('fragmentShader').textContent
+
+            });
+
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            stats = new Stats();
+            container.appendChild(stats.dom);
+
+            initUi();
+
+            onWindowResize();
+            window.addEventListener('resize', onWindowResize, false);
+
+        }
+
+        function onWindowResize(event) {
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            uniforms.resolution.value.x = renderer.domElement.width;
+            uniforms.resolution.value.y = renderer.domElement.height;
+
+        }
+
+        //
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            render();
+            stats.update();
+
+        }
+
+        function render() {
+
+            uniforms.time.value += 0.01;
+
+            renderer.render(scene, camera);
+
+        }
+    </script>
+
+</body>
+
+</html>
