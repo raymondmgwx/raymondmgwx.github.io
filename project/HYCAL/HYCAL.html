@@ -496,6 +496,84 @@
                 </div>
             </div>
 
+
+            <!--  
+           侧槽断溢流前缘的总长度
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">侧槽断溢流前缘参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&L ——侧槽段溢流前沿总长度，m；侧槽溢洪道一般不设置闸门；\\&Q ——溢洪道最大泄流流量，m^{3}/s\\&m ——流量系数，根据堰型选用；可采用实用堰、宽顶堰河梯形堰等，实际工程以实用堰居多 \\&{\varsigma}_k ——侧槽溢流堰侧收缩系数，无闸实用堰，两边侧墙圆角到直角取0.7到1.0 \\&H ——堰上水头，m，取堰前3H_0 到 6H_0处\\&v_0 ——引渠的行进流速，m/s \\&g ——重力加速度，m/s^{2}，取9.8\\&H_0 ——计入行进流速的堰上水头，m\end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="ccdyl_q" class="form-control input-sm" type="text" placeholder="Q" value="424" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>m</label>
+                                    <input id="ccdyl_m" class="form-control input-sm" type="text" placeholder="m" value="0.5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="ccdyl_h" class="form-control input-sm" type="text" placeholder="H" value="2.2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="ccdyl_v0" class="form-control input-sm" type="text" placeholder="v0" value="1.02" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>varsigma_k</label>
+                                    <input id="ccdyl_varsigma_k" class="form-control input-sm" type="text" placeholder="varsigma" value="0.88" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <button id='calculate_ccdyl' class="btn btn-border-d btn-round" type="button">计算侧槽断溢流前缘总长度</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(L:总长度)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>L</label>
+                                    <input id="ccdyl_l" class="form-control input-sm" type="text" placeholder="L" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 </div>

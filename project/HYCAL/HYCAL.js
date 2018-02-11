@@ -24,6 +24,7 @@ var tfyType = {
     B: false
 };
 
+//实用堰类型
 var syyType = {
     syy: true,
     kdy: false
@@ -40,6 +41,17 @@ function addScript() {
     document.getElementsByTagName("head")[0].appendChild(script_math);
 }
 
+//侧槽断水面线
+function ccssm() {
+
+}
+
+//侧槽断溢流前缘的总长度
+function ccdyl(Q, m, H, v0, varsigma_k) {
+    var H0 = H + v0 * v0 / (2 * g);
+    var L = Q / (varsigma_k * m * Math.sqrt(2 * g) * Math.pow(H0, 3 / 2));
+    return L;
+}
 
 
 //泄槽水面线SGD
@@ -47,8 +59,6 @@ function eqfm(h, theta, alpha, qc, bc) {
     var v = qc / (bc * h);
     return h * Math.cos(theta) + alpha * v * v / (2 * g);
 }
-
-
 
 function ssfl_sgd(learning_rate, lastH, bc, qc, n, theta, i, alpha, deltaL, precision) {
 
@@ -207,12 +217,6 @@ function kcsmqx(sigma_m, c, m, epsilon, b, n, h, h_p, v0, p1) {
     } else {
         h0 = h;
     }
-
-    //console.log(c);
-    //console.log(m);
-    //console.log(epsilon);
-    //console.log(sigma_m);
-    //console.log(b);
     var Q = c * m * n * epsilon * sigma_m * b * Math.sqrt(2 * g) * Math.pow(h0, 1.5);
     return Q;
 }
@@ -265,6 +269,21 @@ function initEvent() {
         var chk_edge = document.getElementById('wcw_chkedge').checked;
         var q = WideCrestWeir(chk_edge, epsilon, n, b, H, v0, p1);
         document.getElementById("wcw_q").value = q;
+    });
+
+
+    //侧槽断溢流前缘的总长度
+
+    document.getElementById("calculate_ccdyl").addEventListener("click", function() {
+
+        var Q = parseFloat(document.getElementById("ccdyl_q").value);
+        var m = parseFloat(document.getElementById("ccdyl_m").value);
+        var H = parseFloat(document.getElementById("ccdyl_h").value);
+        var v0 = parseFloat(document.getElementById("ccdyl_v0").value);
+        var varsigma_k = parseFloat(document.getElementById("ccdyl_varsigma_k").value);
+
+        var l = ccdyl(Q, m, H, v0, varsigma_k);
+        document.getElementById("ccdyl_l").value = l;
     });
 
     //驼峰堰
