@@ -78,7 +78,9 @@
             var heartParam = {
                 eccentricity: 0.25,
                 duration: 1.5,
-                blur: 0.01
+                blur: 0.01,
+                backgroundcolor: [255.0, 255 * 0.8, 255 * 0.7, 1.0],
+                heartcolor: [255.0, 255 * 0.5, 255 * 0.3, 1.0]
             };
 
             function guiChanged() {
@@ -86,6 +88,8 @@
                 uniforms._Eccentricity.value = heartParam.eccentricity;
                 uniforms._Duration.value = heartParam.duration;
                 uniforms._Blur.value = heartParam.blur;
+                uniforms._BackgroundColor.value.set(heartParam.backgroundcolor[0] / 255, heartParam.backgroundcolor[1] / 255, heartParam.backgroundcolor[2] / 255, heartParam.backgroundcolor[3]);
+                uniforms._HeartColor.value.set(heartParam.heartcolor[0] / 255, heartParam.heartcolor[1] / 255, heartParam.heartcolor[2] / 255, heartParam.heartcolor[3]);
                 renderer.render(scene, camera);
 
             }
@@ -95,7 +99,8 @@
             gui.add(heartParam, "eccentricity", 0, 0.5, 0.01).onChange(guiChanged);
             gui.add(heartParam, "duration", 0.0, 1, 0.01).onChange(guiChanged);
             gui.add(heartParam, "blur", 0.0, 2, 0.1).onChange(guiChanged);
-
+            gui.addColor(heartParam, 'backgroundcolor').onChange(guiChanged);
+            gui.addColor(heartParam, 'heartcolor').onChange(guiChanged);
             guiChanged();
         }
 
