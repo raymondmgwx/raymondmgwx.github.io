@@ -41,17 +41,69 @@ function addScript() {
     document.getElementsByTagName("head")[0].appendChild(script_math);
 }
 
-//侧槽断水面线
-function ccssm() {
-
-}
-
 //侧槽断溢流前缘的总长度
 function ccdyl(Q, m, H, v0, varsigma_k) {
     var H0 = H + v0 * v0 / (2 * g);
     var L = Q / (varsigma_k * m * Math.sqrt(2 * g) * Math.pow(H0, 3 / 2));
     return L;
 }
+//侧槽断水面线sgd
+function ccssm_sgd(nz, bs, bm, Q, L, N, sn, delta, lastH, lastv, lastR, lastQ, deltaH) {
+    var learning_rate = 0.01;
+    var bn = bs + (bm - bs) / L * (L - (sn - 1) * L / (N - 1));
+    var Qn = Q - (Q / L) * (sn - 1) * (L / (N - 1));
+
+    for (var ii = 0; ii < 10000; ii++) {
+        var hn = lastH + deltaH - delta;
+        var vn = Qn / (bn * hn);
+        var Rn = bn * hn / (bn + 2 * hn);
+        var aver_v = (lastv + vn) / 2;
+        var aver_R = (lastR + Rn) / 2;
+        var aver_J = aver_v * aver_v * nz * nz / (Math.pow(aver_R, 4 / 3));
+        var _deltaH = (lastQ * (lastv + vn) / (g * (lastQ + Qn))) * ((lastv - vn) + vn * (lastQ - Qn) / lastQ) + aver_J * L / (N - 1);
+        var _hn = lastH + _deltaH - delta;
+        deltaH -= learning_rate * (deltaH - _deltaH);
+        var chk = Math.abs(_hn - hn);
+        if (chk < 0.001) {
+            //console.log("_______________________");
+            //console.log("当前断面n下标:" + sn);
+            //console.log("deltaH:" + deltaH);
+            //console.log("H:" + hn);
+            return [hn, deltaH, vn, Rn, Qn];
+        }
+    }
+}
+
+//侧槽断水面线
+function ccssm(Q, m, H, v0, varsigma_k, bs, bm, N, nz, i) {
+    var L = ccdyl(Q, m, H, v0, varsigma_k);
+    var hk = Math.pow(Q * Q / (bm * bm * g), 1 / 3);
+    var hm = hk * (1.2 - 0.3 * ((bs / bm) - 1));
+    var outStr = "侧槽内水面线水深：";
+    var n = 1;
+    var bn = bs + (bm - bs) / L * (L - (n - 1) * L / (N - 1));
+    var vn = Q / (bn * hm);
+    var Rn = bn * hm / (bn + 2 * hm);
+
+    var Qn = Q;
+    var deltaH = 0;
+    var delta = i * L / (N - 1);
+
+    outStr += hm.toFixed(4) + "|";
+
+    for (var ii = 2; ii < N + 1; ii++) {
+        res = ccssm_sgd(nz, bs, bm, Q, L, N, ii, delta, hm, vn, Rn, Qn, deltaH);
+        hm = res[0];
+        outStr += hm.toFixed(4) + "|";
+        deltaH = res[1];
+        vn = res[2];
+        Rn = res[3];
+        Qn = res[4];
+    }
+
+    return outStr;
+}
+
 
 
 //泄槽水面线SGD
@@ -224,6 +276,37 @@ function kcsmqx(sigma_m, c, m, epsilon, b, n, h, h_p, v0, p1) {
 function initEvent() {
 
 
+    //侧槽断溢流前缘的总长度
+
+    document.getElementById("calculate_ccdyl").addEventListener("click", function() {
+
+        var Q = parseFloat(document.getElementById("ccdyl_q").value);
+        var m = parseFloat(document.getElementById("ccdyl_m").value);
+        var H = parseFloat(document.getElementById("ccdyl_h").value);
+        var v0 = parseFloat(document.getElementById("ccdyl_v0").value);
+        var varsigma_k = parseFloat(document.getElementById("ccdyl_varsigma_k").value);
+
+        var l = ccdyl(Q, m, H, v0, varsigma_k);
+        document.getElementById("ccdyl_l").value = l;
+    });
+    //侧槽断水面线
+    document.getElementById("calculate_ccssm").addEventListener("click", function() {
+
+        var Q = parseFloat(document.getElementById("ccssm_q").value);
+        var m = parseFloat(document.getElementById("ccssm_m").value);
+        var H = parseFloat(document.getElementById("ccssm_h").value);
+        var v0 = parseFloat(document.getElementById("ccssm_v0").value);
+        var epsilon = parseFloat(document.getElementById("ccssm_epsilon").value);
+        var bs = parseFloat(document.getElementById("ccssm_bs").value);
+        var bm = parseFloat(document.getElementById("ccssm_bm").value);
+        var N = parseFloat(document.getElementById("ccssm_n").value);
+        var nz = parseFloat(document.getElementById("ccssm_nz").value);
+        var i = parseFloat(document.getElementById("ccssm_i").value);
+
+        var res = ccssm(Q, m, H, v0, epsilon, bs, bm, N, nz, i);
+        document.getElementById("ccssm_outh").value = res;
+    });
+    //泄槽水面线
     document.getElementById("calculate_ssfl").addEventListener("click", function() {
 
         var Qc = parseFloat(document.getElementById("ssfl_qc").value);
@@ -272,19 +355,6 @@ function initEvent() {
     });
 
 
-    //侧槽断溢流前缘的总长度
-
-    document.getElementById("calculate_ccdyl").addEventListener("click", function() {
-
-        var Q = parseFloat(document.getElementById("ccdyl_q").value);
-        var m = parseFloat(document.getElementById("ccdyl_m").value);
-        var H = parseFloat(document.getElementById("ccdyl_h").value);
-        var v0 = parseFloat(document.getElementById("ccdyl_v0").value);
-        var varsigma_k = parseFloat(document.getElementById("ccdyl_varsigma_k").value);
-
-        var l = ccdyl(Q, m, H, v0, varsigma_k);
-        document.getElementById("ccdyl_l").value = l;
-    });
 
     //驼峰堰
 
