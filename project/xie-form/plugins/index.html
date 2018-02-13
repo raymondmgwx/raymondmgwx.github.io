@@ -1,0 +1,633 @@
+
+<!-- saved from url=(0124)http://www.zbmate.com/thirdplugin/show?u=4e320cce8acd4ea4a597af2b07fb62bc&c=Y2hhbm5lbCUzRGRvdXl1dHYlMjZyb29taWQlM0Q1MjQ3NTc= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>智播 | OBS云插件 | zbmate</title>
+  <meta name="keywords" content="智播,直播,OBS,云插件,浏览器插件,全屏弹幕,斗鱼弹幕助手,虎牙弹幕助手,B站弹幕助手,战旗弹幕助手,全民弹幕助手 ,熊猫弹幕助手,龙珠弹幕助手,直播伴侣">
+  <meta name="description" content="智播,直播,OBS,云插件,浏览器插件,全屏弹幕,斗鱼弹幕助手,虎牙弹幕助手,B站弹幕助手,战旗弹幕助手,全民弹幕助手 ,熊猫弹幕助手,龙珠弹幕助手,直播伴侣">
+  <style>
+    @font-face {
+  font-family:'SF Pro SC';
+  font-style:normal;
+  font-weight:400;
+  src:url("/fonts/PingFang-Regular.eot");
+  src:url("/fonts/PingFangSC-Regular.woff") format("woff");
+}
+html, body {
+  background-color: transparent;
+	font-family:  'Microsoft YaHei', 'SF Pro SC', 'Open Sans' ;
+  overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+@keyframes QiaqiaA {
+  from {
+    transform: translate(8em, 0)  scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    transform: translate(8em, 0) scale3d(.9, .9, .9) rotate3d(5em, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    transform: translate(8em, 0) scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    transform:  translate(8em, 0) scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@-webkit-keyframes QiaqiaA {
+  from {
+    transform: translate(8em, 0)  scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    transform: translate(8em, 0) scale3d(.9, .9, .9) rotate3d(5em, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    transform: translate(8em, 0) scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    transform:  translate(8em, 0) scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+
+@keyframes ResizeA {
+  from {
+    transform: scale(1, 1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(4, 4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1, 1);
+    opacity: 0.2;
+  }
+}
+@-webkit-keyframes ResizeA {
+  from {
+    transform: scale(1, 1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(4, 4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1, 1);
+    opacity: 0.2;
+  }
+}
+
+.zbdonation_list {
+  list-style-type: none;
+  width: 18em;
+  margin-left: -2.6em;
+	margin-top:0.6em;
+  padding-left: 0px;
+}
+
+.zbdonation_row {
+	display:block;
+	max-height: 1.5em;
+  margin: -0.6em 0.2em;
+  border-radius: 1em;
+  border:  0.05em solid #fafa99 ;
+  padding: 0.1em;
+  background-color: #db6f51;
+  transform: scale(0.7) translate(0, 0);
+  transition: transform .3s ease-in-out;
+  animation: QiaqiaA 1s;
+	-webkit-animation: QiaqiaA 1s;
+}
+
+.zbdonation_badge {
+	display: inline-block;
+  border-radius: 50%;
+	margin: 0 0.2em 0 0.1em;
+	position: relative;
+	height: 1.5em;
+  width: 1.5em;
+	vertical-align: middle;
+}
+
+.zbdonation_float {
+	position: absolute;
+  top: -0.1em;
+	right: 0.5em;
+}
+
+.zbdonation_gift {
+	display: inline-block;
+  border-radius: 50%;
+	margin: 0px 0px 0px 0px;
+	position: relative;
+	height: 1.8em;
+  width: 1.8em;
+	vertical-align: middle;
+}
+
+.zbdonation_name {
+  text-align: left;
+	line-height: 1.5em;
+	max-height: 1.5em;
+	max-width: 10em;
+  padding-right: 0.3em;
+	padding-left: 0.3em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #fafa99;
+
+}
+
+.zbdonation_message {
+	font-size: 60%;
+	vertical-align: middle;
+	line-height:1.5em;
+	height:1.5em;
+	margin: auto;
+  text-align: right;
+  padding-right: 0.3em;
+  display: inline-block;
+  word-wrap: break-word;
+  white-space:nowrap;
+}
+
+.zbdonation_mult {
+  text-align: right;
+  display: inline-block;
+	line-height:1.5em;
+	height:1.5em;
+	vertical-align: middle;
+  /*float: right;*/
+  padding-right: 0.4em;
+  color: #fafa99;
+  /*white-space:nowrap;*/
+	font-size: 60%;
+}
+
+.zbdonation_mult::after {
+  content: attr(data-content) "";
+	text-shadow: none;
+	position: absolute;
+	left: -1em;
+	top: 0.2em;
+	width: 100%;
+  height: 100%;
+	color: #fafa99;
+	font-size: 400%;
+  z-order:99;
+  animation: ResizeA 1s forwards;
+	-webkit-animation: ResizeA 1s forwards;
+}
+
+#zbdonation_log {
+	text-shadow: 0 0 4px #000, 0 0 1px #000;
+	font-family: 'SF Pro SC','Microsoft YaHei';
+	font-weight: bold;
+	font-size: 42;
+	color: #fafafa;
+	display: block;
+	position: fixed;
+}
+
+.resizefont {
+	animation: ResizeA 1s ease .3s;
+	-webkit-animation: ResizeA 1s ease .3s;
+}
+  </style>
+  <script src="https://cdn.bootcss.com/pubsub-js/1.5.7/pubsub.min.js"></script>
+  <script src="http://cdn.bootcss.com/socket.io/1.7.2/socket.io.min.js"></script>
+  <script src="./js/libzb.min.js"></script><style type="text/css" abt="234"></style>
+  <script>//console.log('a')
+</script><script>doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                'pps_pps': {
+                    'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
+                    'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
+                },
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if (/http:\/\/v.youku.com\/v_show\/.*/.test(window.location.href)){
+                    var tag = document.getElementById("playerBox").getAttribute("player")
+                    if (tag == "adt"){
+                        console.log("adt adv")
+                        return;
+                    }
+                }
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+// 20140730
+(function cnbeta() {
+    if (document.URL.indexOf('cnbeta.com') >= 0) {
+        var elms = document.body.querySelectorAll("p>embed");
+        Array.prototype.forEach.call(elms, function(elm) {
+            elm.style.marginLeft = "0px";
+        });
+    }
+})();
+//baidu
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+// 20140922
+(function kill_360() {
+    if (document.URL.indexOf('so.com') >= 0) {
+        document.getElementById("e_idea_pp").style.display = none;
+    }
+})();
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+  <body>
+    <div id="zbdonation_log">
+  <ul class="zbdonation_list">
+    <!--li class="zbdonation_row">
+    <span class="zbdonation_name">
+      <img src="https://apic.douyucdn.cn/upload/avatar/000/18/61/78_avatar_middle.jpg" class="zbdonation_badge">superway117</span>
+    <span class="zbdonation_message">佛跳墙</span>
+      <span class="zbdonation_mult">x10</span>
+      <div class="zbdonation_float"><img src="https://i.h2.pdim.gs/edc5df65b07b10a6a283b557abcaf0af.png" class="zbdonation_gift"></div>
+      
+  </li-->
+</ul>
+</div>
+<script src="http://lib.sinaapp.com/js/jquery/2.2.4/jquery-2.2.4.min.js"></script>
+<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+    <script>
+      window.channel = 'douyutv';
+      window.roomid = '524757';
+    </script>
+
+    <script>
+      var max_cnt = 7;
+var en_avatar = true;
+var gift_throttle = 0;
+
+var connected = false;
+PubSub.subscribe("connect",
+    function(msg, data) {
+        connected = true;
+    });
+PubSub.subscribe("disconnect",
+    function(msg, data) {
+        connected = false;
+    });
+PubSub.subscribe("chatmsg",
+    function(msg, data) {
+        //data.nn is nick name
+        //data.ic is avatar
+        //data.txt is txt
+    });
+PubSub.subscribe("uenter",
+    function(msg, data) {
+        //data.nn is nick name
+        //data.ic is avatar
+    });
+PubSub.subscribe("dgb",
+    function(msg, data) {
+        //data.nn is nick name
+        //data.ic is avatar
+        //data.gift.name is gift name
+        //data.gift.icon is gift icon link
+	if( data.gift.price !== undefined) {
+	        if (data.gift.price >= gift_throttle) {
+	            //appendText(data);
+	            giftlist.push(data);
+	            window.setTimeout(appendText, 1000);
+	        }
+	}
+
+    });
+zbmate.connect();
+
+var blocalstore=false;
+function initstorage()
+{  
+    // localStorage
+    if (window.localStorage) {
+        console.log("localStore");
+        blocalstore = true;
+    } else {
+        return;
+    }
+    //
+    var current_date = new Date().getTime();
+
+    if((current_date-parseInt(localStorage.getItem("localtime_big"))) < 8*60*60*1000) {
+    } else {
+        localStorage.removeItem("localtime_big");
+        localStorage.removeItem("localhtml_big");
+        console.log("localStore clear");
+        return;
+    }
+    var tmphtml=localStorage.getItem("localhtml_big");
+    //console.log(tmphtml);
+    if(tmphtml) {
+        $(".zbdonation_list").html(tmphtml);
+        cleanlist();
+    }
+}
+
+function updatestorage()
+{
+    if(blocalstore===false) {return;}
+	localStorage.setItem("localtime_big",new Date().getTime());
+    localStorage.setItem("localhtml_big",$(".zbdonation_list").html());
+    //console.log("=>"+$(".zbdonation_list").html());
+}
+initstorage();
+
+var sHex = "#db6f51";
+var sAlpha = 100.0;
+sAlpha = 99; /*0~100*/
+sAlpha = sAlpha.toFixed(1) / 100.0;
+
+console.log(sAlpha);
+
+String.prototype.colorRgba = function(alph) {
+    var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+    var i;
+
+    var sColor = this.toLowerCase();
+    if (sColor && reg.test(sColor)) {
+        if (sColor.length === 4) {
+            var sColorNew = "#";
+            for (i = 1; i < 4; i += 1) {
+                sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+            }
+            sColor = sColorNew;
+        }
+        //hex
+        var sColorChange = [];
+        for (i = 1; i < 7; i += 2) {
+            sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
+        }
+        return "RGBA(" + sColorChange.join(",") + "," + alph + ")";
+    } else {
+        return sColor;
+    }
+};
+
+
+var sRgbColor = sHex.colorRgba(sAlpha);
+
+var giftlist = [];
+var banimating = false;
+
+function appendText() {
+    var txt1;
+    var txt2;
+
+    if(banimating===true){
+        window.setTimeout(appendText, 1000);
+        return;
+    }
+    var loglen = $(".zbdonation_row").length;
+    if (loglen > max_cnt) {
+        window.setTimeout(cleanlist, 1000);
+        return;
+    }
+    if (giftlist.length < 1) {
+        return;
+    }
+    var data = giftlist[0];
+    var shotcnt = 0;
+    if (giftlist.length > 1) {
+        for (var i = 0; i < giftlist.length; i++) {
+            if ((giftlist[i].nn == data.nn) && (giftlist[i].gift.name == data.gift.name) && (giftlist[i].gfcnt == data.gfcnt)) {
+                shotcnt++;
+            } else {
+                break;
+            }
+        }
+    }
+
+    var giftcount = 1;
+    if (shotcnt <= 1) {
+        giftlist.splice(0, 1);
+        giftcount = Number(data.gfcnt);
+    } else {
+        giftlist.splice(0, shotcnt + 1);
+        giftcount = Number(data.gfcnt * shotcnt);
+    }
+
+    var bMerge=false;
+    $( ".zbdonation_row" ).each(function( index ) {
+        if( ($(this).attr('zb-user')===data.nn) && ($(this).attr('zb-gift')===data.gift.name) ) {
+            var currentcount = Number($(this).attr('zb-giftcnt'));
+            //console.log("merge:" + data.gift.name+currentcount);
+            banimating = true;
+            currentcount = currentcount + giftcount;
+
+            $(this).find(".zbdonation_mult").one("animationend webkitAnimationEnd",cleanmulti);
+            $(this).find(".zbdonation_mult").addClass("resizefont");
+            $(this).find(".zbdonation_mult").text( "x"+currentcount );
+            $(this).find(".zbdonation_mult").attr('data-content', currentcount);
+            $(this).attr('zb-giftcnt', currentcount );
+            bMerge=true;
+            return;
+        }
+    });
+    if(bMerge) {
+        updatestorage();
+        window.setTimeout(appendText, 1500);
+    	return;
+    }
+
+    if (en_avatar) {
+        txt2 = "<img src='TemplateAvi' class='zbdonation_badge' />";
+    } else {
+        txt2 = "";
+    }
+    var txtstyle = " style='background-color:" + sRgbColor + "'";
+    txtstyle =  txtstyle + " zb-user='" + data.nn + "' zb-gift='" + data.gift.name + "' zb-giftcnt='" + giftcount + "'";
+    txt1 = "<li class='zbdonation_row'" + txtstyle + "><span class='zbdonation_name'>" + txt2 + "TemplateName</span><span class='zbdonation_message'>TemplateMsg</span><span class='zbdonation_mult'>xTemplateCount</span><div class='zbdonation_float'><img src='TemplateImg' class='zbdonation_gift'></div></li>"; // Create text with HTML
+    //preload image
+    new Image().src = data.nn;
+    if (data.gift.gif) {
+        txt2 = txt1.replace(new RegExp('TemplateImg', 'g'), data.gift.gif);
+    } else {
+        txt2 = txt1.replace(new RegExp('TemplateImg', 'g'), data.gift.icon);
+    }
+    txt1 = txt2.replace("TemplateName", data.nn);
+    txt2 = txt1.replace("TemplateMsg", data.gift.name);
+    txt1 = txt2.replace("TemplateCount", giftcount);
+    txt2 = txt1.replace("TemplateAvi", data.ic);
+
+    banimating = true;
+    $(".zbdonation_list").append(txt2);
+
+    $(".zbdonation_row").one("animationend webkitAnimationEnd",cleanlist);
+}
+
+
+function cleanlist() {
+    banimating = false;
+    var loglen = $(".zbdonation_row").length;
+    if (loglen > max_cnt) {
+        banimating = true;
+        $(".zbdonation_row").first().slideUp("slow",
+            function() {
+                $(this).remove();
+                banimating = false;
+                window.setTimeout(appendText, 1);
+                updatestorage();
+            });
+    } else {
+        window.setTimeout(appendText, 1);
+    }
+}
+
+function cleanmulti()
+{
+    $(this).removeClass("resizefont");
+    banimating = false;
+}
+    </script>
+
+    <video id="msgaudio" controls="" name="msgaudio" style="display: none" type="audio/mp3" paused="">
+
+
+
+</video>
+
+  
+</body></html>
