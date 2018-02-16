@@ -543,8 +543,8 @@
 
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label>varsigma_k</label>
-                                    <input id="ccdyl_varsigma_k" class="form-control input-sm" type="text" placeholder="varsigma" value="0.88" />
+                                    <label>epsilon</label>
+                                    <input id="ccdyl_varsigma_k" class="form-control input-sm" type="text" placeholder="epsilon" value="0.88" />
                                 </div>
                             </div>
 
@@ -567,6 +567,117 @@
                                 <div class="form-group">
                                     <label>L</label>
                                     <input id="ccdyl_l" class="form-control input-sm" type="text" placeholder="L" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  
+           侧槽断水面线计算
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">侧槽断水面线参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&L ——侧槽段溢流前沿总长度，m；侧槽溢洪道一般不设置闸门 \\&Q ——溢洪道最大泄流流量(m^{3}/s) \\&m ——流量系数，根据堰型选用；可采用实用堰、宽顶堰河梯形堰等，实际工程以实用堰居多 \\&H ——堰上水头，m，取堰前{3H_0}到{6H_0}处 \\&v_0 ——引渠的行进流速，m/s \\&{\alpha} ——动能修正系数，近似取1 \\&{\epsilon}_k ——侧槽溢流堰侧收缩系数，无闸实用堰，两边侧墙圆角到直角取0.7~1.0 \\&H_0
+                        ——计入行进流速的堰上水头，m \\&n_z ——糙率 \\&b_s ——侧槽首端断面宽度，m \\&b_m ——侧槽末端断面宽度，m\\&i ——侧槽槽底坡\\&g ——重力加速度，m/s^{2}，取9.8\\&N——需要计算断面数 \end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="ccssm_q" class="form-control input-sm" type="text" placeholder="Q" value="423.62" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>m</label>
+                                    <input id="ccssm_m" class="form-control input-sm" type="text" placeholder="m" value="0.5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="ccssm_h" class="form-control input-sm" type="text" placeholder="H" value="2.2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="ccssm_v0" class="form-control input-sm" type="text" placeholder="i" value="1.02" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>epsilon</label>
+                                    <input id="ccssm_epsilon" class="form-control input-sm" type="text" placeholder="epsilon" value="0.88" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>bs</label>
+                                    <input id="ccssm_bs" class="form-control input-sm" type="text" placeholder="bs" value="7" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>bm</label>
+                                    <input id="ccssm_bm" class="form-control input-sm" type="text" placeholder="bm" value="17" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>N</label>
+                                    <input id="ccssm_n" class="form-control input-sm" type="text" placeholder="N" value="5" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>nz</label>
+                                    <input id="ccssm_nz" class="form-control input-sm" type="text" placeholder="nz" value="0.014" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>i</label>
+                                    <input id="ccssm_i" class="form-control input-sm" type="text" placeholder="i" value="0.0171" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id='calculate_ccssm' class="btn btn-border-d btn-round" type="button">计算侧槽水面线</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(水面线水深)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>H</label>
+                                    <input id="ccssm_outh" class="form-control input-sm" type="text" placeholder="H" value="" readonly/>
                                 </div>
                             </center>
                         </div>
