@@ -76,7 +76,7 @@
 
             var user_info = data['user_info'];
             user_info.forEach(element => {
-
+                console.log(element['id']);
                 if (element['current_grid'] != null && element['current_level'] != null) {
                     var current_grid = element['current_grid'];
                     var current_level = element['current_level'];
@@ -104,7 +104,7 @@
 
         for (var r = 0; r < res_rank_list.length; r++) {
             insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
-            console.log(res_rank_list[r].name);
+
         }
     }
 
