@@ -29,9 +29,6 @@
     level_number[3] = 400
     level_number[4] = 500
 
-
-    var rank_list = new Array();
-
     var rank_user_count = 1;
     var rank_max = 10;
 
@@ -73,6 +70,8 @@
     function load_rank_info() {
         $("#ranking_list").children().remove();
 
+        var rank_list = new Array();
+        var current_ranklist_num = 0;
         $.get("https://api.myjson.com/bins/jpfbv", function(data, textStatus, jqXHR) {
 
             var user_info = data['user_info'];
@@ -87,12 +86,14 @@
 
                         for (var index = 0; index < startIndex - 1; index++) {
                             gridnumber += level_number[index];
+
                         }
                     }
 
                     user.gridnum = gridnumber;
                     user.name = element['id'];
                     rank_list.push(user);
+                    current_ranklist_num += 1;
                 }
             });
 
@@ -100,9 +101,7 @@
 
         var res_rank_list = sortRankList(rank_list);
         var rank_user_count = 1;
-        console.log(res_rank_list.length);
-        for (var r = 0; r < res_rank_list.length; r++) {
-            console.log(res_rank_list[r].name);
+        for (var r = 0; r < current_ranklist_num; r++) {
             insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
         }
     }
