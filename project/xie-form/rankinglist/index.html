@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>raymondmg-plugins-ranking list</title>
+    <link rel="stylesheet" href="css/normalize3.0.2.min.css" />
+    <link rel="stylesheet" href="css/css.css?v=15" />
+</head>
+
+<body>
+
+    <section id="ranking"> <span id="ranking_title">游戏排行榜</span>
+        <section id="ranking_list">
+        </section>
+    </section>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var level_number = new Array(5)
+    level_number[0] = 150
+    level_number[1] = 200
+    level_number[2] = 300
+    level_number[3] = 400
+    level_number[4] = 500
+
+
+    var rank_list = new Array();
+
+    var rank_user_count = 1;
+    var rank_max = 10;
+
+    function sortRankList(arr) {
+
+        var flag = arr.length;
+        var k = 0;
+        for (var i = 0; i < flag; i++) {
+            k = flag;
+            flag = 0;
+            for (var j = 0; j < k; j++) {
+                if (arr[j].gridnum > arr[j + 1].gridnum) {
+                    flag = j;
+                    var tmp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = tmp;
+                }
+            }
+        }
+
+        arr.reverse();
+        return arr;
+    }
+
+    function insert_rank_info(rank, name, gridnum) {
+        var rank_user_item = document.createElement('section');
+        rank_user_item.className = 'box';
+        rank_user_item.innerHTML =
+            "<section class='col_1'>" + rank +
+            "</section><section class='col_2'><img src='images/pic.jpg'/>" +
+            "</section><section class='col_3'>" + name +
+            "</section><section class='col_4'>" + gridnum +
+            "</section>";
+        $("#ranking_list").append(rank_user_item);
+        rank_user_count += 1;
+    }
+
+    function load_rank_info() {
+        $("#ranking_list").children().remove();
+
+        $.get("https://api.myjson.com/bins/jpfbv", function(data, textStatus, jqXHR) {
+
+            var user_info = data['user_info'];
+            user_info.forEach(element => {
+
+                if (element['current_grid'] != null && element['current_level'] != null) {
+                    var current_grid = element['current_grid'];
+                    var current_level = element['current_level'];
+
+                    var user = new Object();
+                    var gridnumber = parseInt(current_grid);
+                    var startIndex = parseInt(current_level);
+                    if (startIndex > 1) {
+
+                        for (var index = 0; index < startIndex - 1; index++) {
+                            gridnumber += level_number[index];
+                        }
+                    }
+
+                    user.gridnum = gridnumber;
+                    user.name = element['id'];
+                    rank_list.push(user);
+                }
+            });
+
+        });
+
+        var res_rank_list = sortRankList(rank_list);
+        var rank_user_count = 1;
+
+        for (var r = 0; r < res_rank_list.length; r++) {
+            insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
+        }
+    }
+
+    load_rank_info();
+</script>
+
+</html>
