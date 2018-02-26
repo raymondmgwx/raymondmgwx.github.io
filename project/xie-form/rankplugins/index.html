@@ -33,26 +33,30 @@
     var rank_max = 10;
 
     function sortRankList(arr) {
-
-        var flag = arr.length;
-        var k = 0;
-        for (var i = 0; i < flag; i++) {
-            k = flag;
-            flag = 0;
-            for (var j = 0; j < k - 1; j++) {
+        console.log(arr);
+        var k = arr.length - 1;
+        var pos = 0;
+        for (var i = 0; i < arr.length - 1; i++) {
+            var flag = 0;
+            for (var j = 0; j < k; j++) {
                 if (arr[j].gridnum > arr[j + 1].gridnum) {
-                    flag = j;
                     var tmp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = tmp;
+                    flag = 1;
+                    pos = j;
                 }
+            }
+
+            k = pos;
+
+            if (flag == 0) {
+                break;
             }
         }
 
         console.log(arr);
-        var resArray = arr.reverse();
-        console.log(resArray);
-        return resArray;
+        return arr;
     }
 
     function insert_rank_info(rank, name, gridnum) {
