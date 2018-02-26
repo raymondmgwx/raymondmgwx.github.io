@@ -33,7 +33,6 @@
     var rank_max = 10;
 
     function sortRankList(arr) {
-        console.log(arr);
         var k = arr.length - 1;
         var pos = 0;
         for (var i = 0; i < arr.length - 1; i++) {
@@ -54,9 +53,7 @@
                 break;
             }
         }
-
-        console.log(arr);
-        return arr;
+        return arr.reverse();
     }
 
     function insert_rank_info(rank, name, gridnum) {
