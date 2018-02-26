@@ -34,13 +34,12 @@
 
     function sortRankList(arr) {
 
-        console.log(arr[0].gridnum);
         var flag = arr.length;
         var k = 0;
         for (var i = 0; i < flag; i++) {
             k = flag;
             flag = 0;
-            for (var j = 0; j < k; j++) {
+            for (var j = 0; j < k - 1; j++) {
                 if (arr[j].gridnum > arr[j + 1].gridnum) {
                     flag = j;
                     var tmp = arr[j];
