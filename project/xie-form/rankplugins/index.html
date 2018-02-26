@@ -102,6 +102,8 @@
         var res_rank_list = sortRankList(rank_list);
         var rank_user_count = 1;
         for (var r = 0; r < current_ranklist_num; r++) {
+            console.log(res_rank_list[r].name);
+            console.log(res_rank_list[r].gridnum);
             insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
         }
     }
