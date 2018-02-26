@@ -53,10 +53,10 @@ a {
 
 #ranking {
     display: block;
-    width: 40%;
+    width: 30%;
     height: 70%;
     position: absolute;
-    left: 5%;
+    left: 30%;
     top: 10%;
     border: 2px #f9820d solid;
     background-color: #fff;
