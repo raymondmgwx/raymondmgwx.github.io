@@ -65,6 +65,7 @@
             "</section><section class='col_3'>" + name +
             "</section><section class='col_4'>" + gridnum +
             "</section>";
+        console.log(rank_user_item);
         $("#ranking_list").append(rank_user_item);
         rank_user_count += 1;
     }
@@ -99,10 +100,10 @@
 
         var res_rank_list = sortRankList(rank_list);
         var rank_user_count = 1;
-        console.log(res_rank_list);
+        console.log(res_rank_list.length);
         for (var r = 0; r < res_rank_list.length; r++) {
+            console.log(res_rank_list[r].name);
             insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
-
         }
     }
 
