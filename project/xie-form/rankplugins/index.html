@@ -49,8 +49,10 @@
             }
         }
 
-        arr.reverse();
-        return arr;
+        console.log(arr);
+        var resArray = arr.reverse();
+        console.log(resArray);
+        return resArray;
     }
 
     function insert_rank_info(rank, name, gridnum) {
@@ -97,7 +99,7 @@
             });
 
             var res_rank_list = sortRankList(rank_list);
-            var rank_user_count = 1;
+            rank_user_count = 1;
             for (var r = 0; r < current_ranklist_num; r++) {
                 insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
             }
