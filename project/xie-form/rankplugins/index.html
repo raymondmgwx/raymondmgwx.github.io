@@ -56,20 +56,40 @@
         return arr.reverse();
     }
 
-    function insert_rank_info(rank, name, gridnum) {
+    function insert_rank_info(rank, name, gridnum, shards) {
         var rank_user_item = document.createElement('section');
         rank_user_item.className = 'box';
+
+        var top_rank1 = "<section class='col_1' title='1'>";
+        var top_rank2 = "<section class='col_1' title='2'>";
+        var top_rank3 = "<section class='col_1' title='3'>";
+
+        var normal_rank = "<section class='col_1'>";
+
+        var inner_rank = "";
+
+        if (rank == 1) {
+            inner_rank = top_rank1;
+        } else if (rank == 2) {
+            inner_rank = top_rank2;
+        } else if (rank == 3) {
+            inner_rank = top_rank3;
+        } else {
+            inner_rank = normal_rank;
+        }
+
         rank_user_item.innerHTML =
-            "<section class='col_1'>" + rank +
-            "</section><section class='col_2'><img src='images/pic.jpg'/>" +
+            inner_rank + rank +
             "</section><section class='col_3'>" + name +
-            "</section><section class='col_4'>" + gridnum +
+            "</section><section class='col_4'>" + gridnum + "格" +
+            "</section><section class='col_5'>" + "碎片:" + shards +
             "</section>";
         $("#ranking_list").append(rank_user_item);
         rank_user_count += 1;
     }
 
     function load_rank_info() {
+        console.log("load data from database");
         $("#ranking_list").children().remove();
         var current_ranklist_num = 0;
         var rank_list = new Array();
@@ -80,9 +100,11 @@
                 if (element['current_grid'] != null && element['current_level'] != null) {
                     var current_grid = element['current_grid'];
                     var current_level = element['current_level'];
+                    var current_shards = element['figure_shards'];
                     var user = new Object();
                     var gridnumber = parseInt(current_grid);
                     var startIndex = parseInt(current_level);
+                    var shardnum = parseInt(current_shards);
                     if (startIndex > 1) {
 
                         for (var index = 0; index < startIndex - 1; index++) {
@@ -92,6 +114,7 @@
                     }
 
                     user.gridnum = gridnumber;
+                    user.shardnum = shardnum;
                     user.name = element['id'];
                     rank_list.push(user);
                     current_ranklist_num += 1;
@@ -101,7 +124,9 @@
             var res_rank_list = sortRankList(rank_list);
             rank_user_count = 1;
             for (var r = 0; r < current_ranklist_num; r++) {
-                insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum);
+                if (r < 10) {
+                    insert_rank_info(rank_user_count, res_rank_list[r].name, res_rank_list[r].gridnum, res_rank_list[r].shardnum);
+                }
             }
         });
 
@@ -109,6 +134,7 @@
     }
 
     load_rank_info();
+    setInterval(load_rank_info, 1000000);
 </script>
 
 </html>
