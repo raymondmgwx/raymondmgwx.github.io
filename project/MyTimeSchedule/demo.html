@@ -46,9 +46,19 @@
                 },
                 customButtons: {
                     clearButton: {
-                        text: '清空!',
+                        text: '清空',
                         click: function() {
-                            alert('clicked the custom button!');
+                            $.ajax({
+                                url: "https://api.myjson.com/bins/10qj3h",
+                                type: "PUT",
+                                data: JSON.stringify(new Array()),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function(data, textStatus, jqXHR) {
+                                    alert('清除数据成功');
+                                    self.location = self.location;
+                                }
+                            });
                         }
                     }
                 },
