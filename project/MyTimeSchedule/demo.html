@@ -13,20 +13,20 @@
     <script src='./plugins/lib/locale-all.js'></script>
     <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
     <script>
-        $(function() {
-            var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
+        $(function() { // document ready
 
             $('#calendar').fullCalendar({
                 themeSystem: 'bootstrap3',
                 minTime: '06:00:00',
-                selectable: true,
-                eventLimit: true,
                 defaultView: 'agendaDay',
                 defaultDate: Date.now(),
+                editable: true,
+                selectable: true,
+                eventLimit: true, // allow "more" link when too many events
                 header: {
                     left: 'prev,next,today',
                     center: 'title',
-                    right: 'month,agendaWeek,agendaDay,listMonth'
+                    right: 'agendaDay,agendaWeek,month'
                 },
                 events: {
                     url: 'https://api.myjson.com/bins/10qj3h',
@@ -34,97 +34,19 @@
                         alert("获取事件错误!");
                     }
                 },
-                select: function(startDate, endDate) {
 
-                    $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
-                        var cur_json_info = data;
-                        var newEvent = new Object();
-                        var eventStr = prompt('请输入事件名！');
-                        if (eventStr == "" || eventStr == null) return;
-
-                        var max = 2;
-                        var min = 0
-                        var rnd_color = Math.floor(Math.random() * (max - min + 1) + min)
-
-                        newEvent["start"] = startDate;
-                        newEvent["end"] = endDate;
-                        newEvent["id"] = Date.now();
-                        newEvent["color"] = colorList[rnd_color];
-                        newEvent["title"] = "编号:" + newEvent["id"] + "\n 内容:" + eventStr;
-                        cur_json_info.push(newEvent);
-
-                        $.ajax({
-                            url: "https://api.myjson.com/bins/10qj3h",
-                            type: "PUT",
-                            data: JSON.stringify(cur_json_info),
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function(data, textStatus, jqXHR) {
-                                alert('录入事件成功');
-                                self.location = self.location;
-                            }
-                        });
-                    });
+                select: function(start, end, jsEvent, view, resource) {
+                    console.log(
+                        'select',
+                        start.format(),
+                        end.format(),
+                        resource ? resource.id : '(no resource)'
+                    );
                 }
             });
 
+
             $('#calendar').fullCalendar('option', 'locale', 'zh-cn');
-
-            $('#btn_clear').click(function(e) {
-                $.ajax({
-                    url: "https://api.myjson.com/bins/10qj3h",
-                    type: "PUT",
-                    data: JSON.stringify(new Array()),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(data, textStatus, jqXHR) {
-                        alert('清除数据成功');
-                        self.location = self.location;
-                    }
-                });
-            });
-
-            $('#btn_deletebynumber').click(function(e) {
-                $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
-                    var cur_json_info = data;
-                    var numStr = prompt('请输入要删除的事件编号！');
-                    if (numStr == "" || numStr == null) return;
-                    var count = 0;
-                    var del_index = 0;
-                    var flag = false;
-                    cur_json_info.forEach(element => {
-                        var id = element['id'];
-                        if (id == numStr) {
-                            del_index = count;
-                            flag = true;
-                            return;
-                        }
-                        count += 1;
-                    });
-
-
-                    if (flag) {
-                        cur_json_info.splice(del_index, 1);
-                        var json_info = JSON.stringify(cur_json_info);
-
-
-                        $.ajax({
-                            url: "https://api.myjson.com/bins/10qj3h",
-                            type: "PUT",
-                            data: json_info,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function(data, textStatus, jqXHR) {
-                                alert('删除指定事件成功');
-                                self.location = self.location;
-                            }
-                        });
-                    } else {
-                        alert('无法找到指定事件!');
-                    }
-
-                });
-            });
 
         });
     </script>
