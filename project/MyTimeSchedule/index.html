@@ -78,13 +78,21 @@
                 eventClick: function(eventObj) {
                     var con = confirm("是否删除当前事件?");
                     if (con == true) {
-                        var del_index = 0;
+                        var newEventArray = new Array(currentEvent.length - 1);
                         var count = 0;
+                        for (var index = 0; index < currentEvent.length; index++) {
+                            var element = currentEvent[index];
+                            var id = element['id'];
+                            if (id != eventObj.id) {
+                                newEventArray[count] = element;
+                                count++;
+                            }
+                        }
 
                         $.ajax({
                             url: "https://api.myjson.com/bins/10qj3h",
                             type: "PUT",
-                            data: JSON.stringify(currentEvent),
+                            data: JSON.stringify(newEventArray),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function(data, textStatus, jqXHR) {
