@@ -15189,7 +15189,7 @@
                     'class': AgendaView_1.default,
                     defaults: {
                         allDaySlot: true,
-                        slotDuration: '00:15:00',
+                        slotDuration: '00:30:00',
                         slotEventOverlap: true // a bad name. confused with overlap/constraint system
                     }
                 });
