@@ -8,10 +8,10 @@
     <link href='./plugins/lib/scheduler.css' rel='stylesheet' />
     <script src='./plugins/lib/moment.min.js'></script>
     <script src='./plugins/lib/jquery.min.js'></script>
-    <script src='./plugins/lib/fullcalendar.min.js'></script>
+    <script src='./plugins/lib/fullcalendar.js'></script>
     <script src='./plugins/lib/scheduler.js'></script>
     <script src='./plugins/lib/locale-all.js'></script>
-	<link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
+    <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
     <script>
         $(function() { // document ready
 
@@ -111,6 +111,9 @@
                     );
                 }
             });
+
+
+            $('#calendar').fullCalendar('option', 'locale', 'zh-cn');
 
         });
     </script>
