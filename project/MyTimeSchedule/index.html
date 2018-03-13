@@ -6,7 +6,6 @@
 
 
     <link href='./plugins/lib/fullcalendar.min.css' rel='stylesheet' />
-    <link href='https://bootswatch.com/3/lumen/bootstrap.min.css' rel='stylesheet' />
     <link href='./plugins/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
     <link href='./plugins/lib/scheduler.css' rel='stylesheet' />
     <script src='./plugins/lib/moment.min.js'></script>
@@ -14,6 +13,21 @@
     <script src='./plugins/lib/fullcalendar.min.js'></script>
     <script src='./plugins/lib/scheduler.js'></script>
     <script src='./plugins/lib/locale-all.js'></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+            font-size: 14px;
+        }
+        
+        #calendar {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+    </style>
+    <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
     <script>
         $(function() {
             var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
@@ -133,19 +147,6 @@
 
         });
     </script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
-            font-size: 14px;
-        }
-        
-        #calendar {
-            max-width: 900px;
-            margin: 50px auto;
-        }
-    </style>
 </head>
 
 <body>
