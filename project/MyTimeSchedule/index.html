@@ -37,12 +37,20 @@
                 minTime: '06:00:00',
                 selectable: true,
                 eventLimit: true,
+                defaultView: 'agendaDay',
+                defaultDate: Date.now(),
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,agendaWeek,listMonth'
+                    right: 'month,agendaWeek,agendaDay,listMonth'
                 },
-                defaultView: 'agendaWeek',
+
+                events: {
+                    url: 'https://api.myjson.com/bins/10qj3h',
+                    error: function() {
+                        alert("获取事件错误!");
+                    }
+                },
                 select: function(startDate, endDate) {
 
                     $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
@@ -74,12 +82,6 @@
                             }
                         });
                     });
-                },
-                events: {
-                    url: 'https://api.myjson.com/bins/10qj3h',
-                    error: function() {
-                        alert("获取事件错误!");
-                    }
                 }
             });
 
