@@ -32,61 +32,13 @@
                     deleteButton: {
                         text: 'clear',
                         click: function() {
-                            $.ajax({
-                                url: "https://api.myjson.com/bins/10qj3h",
-                                type: "PUT",
-                                data: JSON.stringify(new Array()),
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json",
-                                success: function(data, textStatus, jqXHR) {
-                                    alert('清除数据成功');
-                                    self.location = self.location;
-                                }
-                            });
+
                         }
                     },
                     deleteButtonByNum: {
                         text: 'delete',
                         click: function() {
-                            $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
-                                var cur_json_info = data;
-                                var numStr = prompt('请输入要删除的事件编号！');
-                                if (numStr == "" || numStr == null) return;
-                                var count = 0;
-                                var del_index = 0;
-                                var flag = false;
-                                cur_json_info.forEach(element => {
-                                    var id = element['id'];
-                                    if (id == numStr) {
-                                        del_index = count;
-                                        flag = true;
-                                        return;
-                                    }
-                                    count += 1;
-                                });
 
-
-                                if (flag) {
-                                    cur_json_info.splice(del_index, 1);
-                                    var json_info = JSON.stringify(cur_json_info);
-
-
-                                    $.ajax({
-                                        url: "https://api.myjson.com/bins/10qj3h",
-                                        type: "PUT",
-                                        data: json_info,
-                                        contentType: "application/json; charset=utf-8",
-                                        dataType: "json",
-                                        success: function(data, textStatus, jqXHR) {
-                                            alert('删除指定事件成功');
-                                            self.location = self.location;
-                                        }
-                                    });
-                                } else {
-                                    alert('无法找到指定事件!');
-                                }
-
-                            });
                         }
                     }
                 },
