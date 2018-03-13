@@ -13,7 +13,7 @@
     <script src='./plugins/lib/locale-all.js'></script>
     <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
     <script>
-        $(function() { // document ready
+        $(function() {
 
             $('#calendar').fullCalendar({
                 themeSystem: 'bootstrap3',
@@ -22,7 +22,7 @@
                 defaultDate: Date.now(),
                 editable: true,
                 selectable: true,
-                eventLimit: true, // allow "more" link when too many events
+                eventLimit: true,
                 header: {
                     left: 'prev,next,today',
                     center: 'title',
