@@ -18,7 +18,7 @@
             $('#calendar').fullCalendar({
                 customButtons: {
                     deleteButton: {
-                        text: '清空',
+                        text: 'clear',
                         click: function() {
                             $.ajax({
                                 url: "https://api.myjson.com/bins/10qj3h",
@@ -34,7 +34,7 @@
                         }
                     },
                     deleteButtonByNum: {
-                        text: '删除指定编号事件',
+                        text: 'delete',
                         click: function() {
                             $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
                                 var cur_json_info = data;
