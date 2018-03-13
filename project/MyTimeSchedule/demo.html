@@ -29,6 +29,7 @@
 
     <script>
         var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
+        var currentEvent = new Array();
         $(function() {
 
             $('#calendar').fullCalendar({
@@ -64,8 +65,44 @@
                     deleteButton: {
                         text: '删除指定编号事件',
                         click: function() {
+                            var cur_json_info = currentEvent;
+                            var numStr = prompt('请输入要删除的事件编号！');
+                            if (numStr == "" || numStr == null) return;
+                            var count = 0;
+                            var del_index = 0;
+                            var flag = false;
+                            cur_json_info.forEach(element => {
+                                var id = element['id'];
+                                if (id == numStr) {
+                                    del_index = count;
+                                    flag = true;
+                                    return;
+                                }
+                                count += 1;
+                            });
 
+
+                            if (flag) {
+                                cur_json_info.splice(del_index, 1);
+                                var json_info = JSON.stringify(cur_json_info);
+
+
+                                $.ajax({
+                                    url: "https://api.myjson.com/bins/10qj3h",
+                                    type: "PUT",
+                                    data: json_info,
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function(data, textStatus, jqXHR) {
+                                        alert('删除指定事件成功');
+                                        self.location = self.location;
+                                    }
+                                });
+                            } else {
+                                alert('无法找到指定事件!');
+                            }
                         }
+
                     }
                 },
                 events: {
@@ -111,6 +148,9 @@
 
             $('#calendar').fullCalendar('option', 'locale', 'zh-cn');
 
+            $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
+                currentEvent = data;
+            });
         });
     </script>
 </body>
