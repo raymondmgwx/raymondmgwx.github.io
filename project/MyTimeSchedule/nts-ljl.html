@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <link href='./plugins/lib/fullcalendar.min.css' rel='stylesheet' />
+    <link href='./plugins/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <link href='./plugins/lib/scheduler.css' rel='stylesheet' />
+    <script src='./plugins/lib/moment.min.js'></script>
+    <script src='./plugins/lib/jquery.min.js'></script>
+    <script src='./plugins/lib/fullcalendar.js'></script>
+    <script src='./plugins/lib/scheduler.js'></script>
+    <script src='./plugins/lib/locale-all.js'></script>
+    <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
+    <link href='./plugins/lib/all.css' rel='stylesheet' />
+    <title>日程安排(卢进玲)</title>
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id='calendar'></div>
+
+
+    <script>
+        var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
+        var currentEvent = new Array();
+        $(function() {
+
+            $('#calendar').fullCalendar({
+                themeSystem: 'bootstrap4',
+                minTime: '06:00:00',
+                slotDuration: '00:15:00',
+                slotLabelFormat: 'h:mm a',
+                defaultView: 'agendaWeek',
+                defaultDate: Date.now(),
+                selectable: true,
+                eventLimit: true,
+                header: {
+                    left: 'prev,next today clearButton',
+                    center: 'title',
+                    right: 'agendaDay,agendaWeek,month,listMonth'
+                },
+                customButtons: {
+                    clearButton: {
+                        text: '清空',
+                        click: function() {
+                            var con = confirm("是否清除所有事件?");
+                            if (con == true) {
+                                $.ajax({
+                                    url: "https://api.myjson.com/bins/trcnp",
+                                    type: "PUT",
+                                    data: JSON.stringify(new Array()),
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function(data, textStatus, jqXHR) {
+                                        alert('清除数据成功');
+                                        self.location = self.location;
+                                    }
+                                });
+                            }
+
+                        }
+                    }
+                },
+                events: {
+                    url: 'https://api.myjson.com/bins/trcnp',
+                    error: function() {
+                        alert("获取事件错误!");
+                    }
+                },
+                eventClick: function(eventObj) {
+                    var con = confirm("是否删除当前事件?");
+                    if (con == true) {
+                        var newEventArray = new Array(currentEvent.length - 1);
+                        var count = 0;
+                        for (var index = 0; index < currentEvent.length; index++) {
+                            var element = currentEvent[index];
+                            var id = element['id'];
+                            if (id != eventObj.id) {
+                                newEventArray[count] = element;
+                                count++;
+                            }
+                        }
+
+                        $.ajax({
+                            url: "https://api.myjson.com/bins/trcnp",
+                            type: "PUT",
+                            data: JSON.stringify(newEventArray),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function(data, textStatus, jqXHR) {
+                                alert('删除当前事件成功');
+                                self.location = self.location;
+                            }
+                        });
+                    }
+
+                },
+                select: function(start, end, jsEvent, view, resource) {
+                    $.get("https://api.myjson.com/bins/trcnp", function(data, textStatus, jqXHR) {
+                        var cur_json_info = data;
+                        var newEvent = new Object();
+                        var eventStr = prompt('请输入事件名！');
+                        if (eventStr == "" || eventStr == null) return;
+
+                        var max = 2;
+                        var min = 0
+                        var rnd_color = Math.floor(Math.random() * (max - min + 1) + min)
+
+                        newEvent["start"] = start;
+                        newEvent["end"] = end;
+                        newEvent["id"] = Date.now();
+                        //newEvent["color"] = colorList[rnd_color];
+                        newEvent["title"] = "编号:" + newEvent["id"] + "\n 内容:" + eventStr;
+                        cur_json_info.push(newEvent);
+
+                        $.ajax({
+                            url: "https://api.myjson.com/bins/trcnp",
+                            type: "PUT",
+                            data: JSON.stringify(cur_json_info),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function(data, textStatus, jqXHR) {
+                                alert('录入事件成功');
+                                self.location = self.location;
+                            }
+                        });
+                    });
+                }
+            });
+
+
+            $('#calendar').fullCalendar('option', 'locale', 'zh-cn');
+
+            $.get("https://api.myjson.com/bins/trcnp", function(data, textStatus, jqXHR) {
+                currentEvent = data;
+            });
+        });
+    </script>
+</body>
+
+</html>
