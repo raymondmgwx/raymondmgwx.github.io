@@ -12,6 +12,35 @@
     <script src='./plugins/lib/scheduler.js'></script>
     <script src='./plugins/lib/locale-all.js'></script>
     <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+            font-size: 14px;
+        }
+        
+        #calendar {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id='calendar'></div>
+
+
+    <!-- 
+
+    <center><button id="btn_clear" type="button" class="btn btn-outline btn-primary">清空数据</button></center>
+
+    <br>
+    <center><button id="btn_deletebynumber" type="button" class="btn btn-outline btn-primary">删除指定编号事件</button></center>
+ -->
     <script>
         var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
         $(function() {
@@ -128,35 +157,6 @@
             });
         });
     </script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
-            font-size: 14px;
-        }
-        
-        #calendar {
-            max-width: 900px;
-            margin: 50px auto;
-        }
-    </style>
-</head>
-
-<body>
-
-
-    <div id='calendar'></div>
-
-
-    <!-- 
-
-    <center><button id="btn_clear" type="button" class="btn btn-outline btn-primary">清空数据</button></center>
-
-    <br>
-    <center><button id="btn_deletebynumber" type="button" class="btn btn-outline btn-primary">删除指定编号事件</button></center>
- -->
-
 </body>
 
 </html>
