@@ -16,6 +16,18 @@
         $(function() { // document ready
 
             $('#calendar').fullCalendar({
+                themeSystem: 'bootstrap3',
+                minTime: '06:00:00',
+                defaultView: 'agendaDay',
+                defaultDate: '2018-03-07',
+                editable: true,
+                selectable: true,
+                eventLimit: true, // allow "more" link when too many events
+                header: {
+                    left: 'prev,next today deleteButton deleteButtonByNum',
+                    center: 'title',
+                    right: 'agendaDay,agendaTwoDay,agendaWeek,month'
+                },
                 customButtons: {
                     deleteButton: {
                         text: 'clear',
@@ -77,18 +89,6 @@
                             });
                         }
                     }
-                },
-                themeSystem: 'bootstrap3',
-                minTime: '06:00:00',
-                defaultView: 'agendaDay',
-                defaultDate: '2018-03-07',
-                editable: true,
-                selectable: true,
-                eventLimit: true, // allow "more" link when too many events
-                header: {
-                    left: 'prev,next today deleteButton deleteButtonByNum',
-                    center: 'title',
-                    right: 'agendaDay,agendaTwoDay,agendaWeek,month'
                 },
                 views: {
                     agendaTwoDay: {
