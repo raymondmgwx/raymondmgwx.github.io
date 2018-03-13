@@ -14,13 +14,6 @@
     <link href='./plugins/lib/bootstrap.min.css' rel='stylesheet' />
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
-            font-size: 14px;
-        }
-        
         #calendar {
             max-width: 900px;
             margin: 50px auto;
@@ -33,13 +26,6 @@
 
     <div id='calendar'></div>
 
-
-
-
-    <center><button id="btn_clear" type="button" class="btn btn-outline btn-primary">清空数据</button></center>
-
-    <br>
-    <center><button id="btn_deletebynumber" type="button" class="btn btn-outline btn-primary">删除指定编号事件</button></center>
 
     <script>
         var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
@@ -54,9 +40,17 @@
                 selectable: true,
                 eventLimit: true,
                 header: {
-                    left: 'prev,next,today',
+                    left: 'prev,next,today,clearButton',
                     center: 'title',
                     right: 'agendaDay,agendaWeek,month,listMonth'
+                },
+                customButtons: {
+                    clearButton: {
+                        text: '清空!',
+                        click: function() {
+                            alert('clicked the custom button!');
+                        }
+                    }
                 },
                 events: {
                     url: 'https://api.myjson.com/bins/10qj3h',
