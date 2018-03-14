@@ -30,6 +30,11 @@ var syyType = {
     kdy: false
 };
 
+var shapeType = {
+    RECTANGLE: false,
+    LADDER: true
+}
+
 function addScript() {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -39,6 +44,145 @@ function addScript() {
     script_math.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML";
     document.getElementsByTagName("head")[0].appendChild(script);
     document.getElementsByTagName("head")[0].appendChild(script_math);
+}
+
+//渠道水力学计算
+function mqjyls(st, b, i, n, Q, m) {
+    var h = 0;
+    if (st == shapeType.RECTANGLE)
+        h = Math.pow(n * Q / (Math.pow(2, 1 / 3) * Math.sqrt(i)), 3 / 8);
+    else if (st == shapeType.LADDER)
+        h = Math.pow(Math.pow(2, 8 / 3) * n * Q / (4 * (2 * Math.sqrt(1 + m * m) - m) * Math.sqrt(i)), 3 / 8);
+
+    var learning_rate = 0.01;
+
+    for (var ii = 0; ii < 10000; ii++) {
+        if (st == shapeType.RECTANGLE) {
+            var omiga = b * h;
+            var x = b + 2 * h;
+            var R = omiga / x;
+            var Q_0 = (omiga * Math.pow(R, 3 / 2) * Math.sqrt(i)) / n;
+            h -= learning_rate * (h - n * Q / (b * Math.pow(R, 3 / 2) * Math.sqrt(i)));
+        } else if (st == shapeType.LADDER) {
+            var omiga = (b + m * h) * h;
+            var x = b + 2 * h * Math.sqrt(1 + m * m);
+            var R = omiga / x;
+            var Q_0 = (omiga * Math.pow(R, 3 / 2) * Math.sqrt(i)) / n;
+            h -= learning_rate * (h - n * Q / (Math.pow(R, 3 / 2) * Math.sqrt(i) * (b + m * h)));
+        }
+
+        var chk = Math.abs(Q_0 - Q);
+        if (chk < 0.001) {
+            var v = Q / omiga
+            var resArray = [h, v];
+            return resArray;
+        }
+    }
+}
+
+//明渠非均匀流水面线计算
+function mqfjyls(type_y, st, phi, h1, alpha, Q, b, m, nz, i, L, N) {
+
+    var res_mqjyls = mqjyls(st, b, i, nz, Q, m);
+
+    var h0 = res_mqjyls[0];
+    var learning_rate = 0.01;
+    var hk = 0;
+    var Ak = 0;
+    var xk = 0;
+    var Bk = 0;
+
+    if (st == shapeType.RECTANGLE) {
+        hk = Math.pow((alpha * Q * Q) / (b * b * g), 1 / 3);
+        Ak = b * hk;
+        xk = b + 2 * hk;
+        Bk = b;
+    } else if (st == shapeType.LADDER) {
+        for (var ii = 0; ii < 10000; ii++) {
+            var targetVal = alpha * Q * Q / g;
+            hk -= learning_rate * ((((Math.pow((b + m * hk), 3) * hk * hk * hk) / (2 * m * targetVal)) - b / (2 * m)) - hk);
+            calValue = (Math.pow((b + m * hk), 3) * hk * hk * hk) / (b + 2 * m * hk);
+            chk = Math.abs(calValue - targetVal);
+            if (chk < 0.001) {
+                Ak = (b + m * hk) * hk;
+                xk = b + 2 * hk * Math.pow(1 + m * m, 0.5);
+                Bk = b + m * hk;
+                break;
+            }
+        }
+    }
+
+    var Rk = Ak / xk;
+    var Ck = Math.pow(Rk, 1 / 6) * 1 / nz;
+    var ik = g * xk / (alpha * Ck * Ck * Bk);
+
+    var Value_H = 0;
+
+    var sltypeStr = "";
+    if (i > ik) {
+        if (h1 > hk && hk > h0) {
+            //console.log("急流a2型壅水曲线");
+            sltypeStr = "急流a2型壅水曲线";
+        } else if (hk > h1 && h1 > h0) {
+            //console.log("急流b2型降水曲线");
+            sltypeStr = "急流b2型壅水曲线";
+        } else if (hk > h0 && h0 > h1) {
+            //console.log("急流c2型壅水曲线");
+            sltypeStr = "急流c2型壅水曲线";
+        }
+
+        if (type_y == syyType.syy) {
+            //实用堰
+            //SGD
+
+
+            //identify h0
+            for (var t = 0; t < 10000; t++) {
+                var h0_right = (Qc / b_c / (phi * Math.sqrt(2 * g * (H_0 - h0 * Math.cos(theta)))));
+                h0 -= learning_rate * (h0 - h0_right);
+
+                var chkValue = Math.abs(h0 - (Qc / b_c / (phi * Math.sqrt(2 * g * (H_0 - h0 * Math.cos(theta))))));
+                if (chkValue < precision) {
+                    //success
+                    Value_H = h0;
+                    break;
+                }
+            }
+
+        } else if (type_y == syyType.kdy) {
+            //宽顶堰
+            Value_H = h_k;
+
+        }
+
+    } else {
+        if (h1 > h0 && h0 > hk) {
+            //console.log("缓流a1型壅水曲线");
+            sltypeStr = "缓流a1型壅水曲线";
+        } else if (h0 > h1 && h1 > hk) {
+            //console.log("缓流b1型降水曲线");
+            sltypeStr = "缓流b1型壅水曲线";
+        } else if (h0 > hk && hk > h1) {
+            //console.log("缓流c1型壅水曲线");
+            sltypeStr = "缓流c1型壅水曲线";
+        }
+
+        Value_H = h1;
+    }
+
+
+    var outStr = "L断面水深：";
+    var delta_L = L / (N - 1);
+    var theta = Math.atan(i);
+
+    outStr += Value_H.toFixed(3) + "|";
+    for (var nn = 0; nn < N - 1; nn++) {
+        Value_H = ssfl_sgd(st, m, 0.01, Value_H, b, Q, nz, theta, i, alpha, delta_L, 0.001);
+        outStr += Value_H.toFixed(3) + "|";
+        //console.log(Value_H);
+    }
+
+    return [sltypeStr, outStr];
 }
 
 //侧槽断溢流前缘的总长度
@@ -112,32 +256,65 @@ function eqfm(h, theta, alpha, qc, bc) {
     return h * Math.cos(theta) + alpha * v * v / (2 * g);
 }
 
-function ssfl_sgd(learning_rate, lastH, bc, qc, n, theta, i, alpha, deltaL, precision) {
+function ssfl_sgd(sType, m, learning_rate, lastH, bc, qc, n, theta, i, alpha, deltaL, precision) {
 
     var h = lastH;
-    var lastR = bc * h / (bc + 2 * h);
-    var lastv = qc / (bc * h);
+    var omega = 0;
+    var x = 0;
+
+    if (sType == shapeType.RECTANGLE) {
+        omega = bc * h;
+        x = (bc + 2 * h);
+    } else if (sType == shapeType.LADDER) {
+        omega = (bc + m * h) * h;
+        x = (bc + 2 * h * Math.sqrt(1 + m * m));
+    }
+
+    var lastR = omega / x;
+    var lastv = qc / omega;
     var lastC = Math.pow(lastR, 1 / 6) * 1 / n;
 
+    var min_Val = 99999;
+    var min_h = 0;
+    var flag = true;
     for (var ii = 0; ii < 10000; ii++) {
-        var R = bc * h / (bc + 2 * h);
-        var v = qc / (bc * h);
+
+        if (sType == shapeType.RECTANGLE) {
+            omega = bc * h;
+            x = (bc + 2 * h);
+        } else if (sType == shapeType.LADDER) {
+            omega = (bc + m * h) * h;
+            x = (bc + 2 * h * Math.sqrt(1 + m * m));
+        }
+
+        var R = omega / x;
+        var v = qc / omega;
         var C = Math.pow(R, 1 / 6) * 1 / n;
         var aver_v = (lastv + v) / 2;
         var aver_R = (lastR + R) / 2;
         var aver_C = (lastC + C) / 2;
         var J = aver_v * aver_v / (aver_R * aver_C * aver_C);
         var rightValue = ((eqfm(lastH, theta, alpha, qc, bc) + deltaL * (i - J)) - (alpha * v * v / (2 * g))) / (Math.cos(theta));
-        h -= learning_rate * (rightValue - h);
+        h -= learning_rate * Math.abs(h - rightValue);
 
-        var chkValue = Math.abs((eqfm(h, theta, alpha, qc, bc) - eqfm(lastH, theta, alpha, qc, bc)) / (i - J) - deltaL);
+        var chkValue = Math.abs(Math.abs((eqfm(h, theta, alpha, qc, bc) - eqfm(lastH, theta, alpha, qc, bc)) / (i - J)) - deltaL);
+
+        if (chkValue < min_Val && flag) {
+            min_Val = chkValue;
+            min_h = h;
+        } else {
+            flag = false;
+        }
+
         if (chkValue < precision) {
             //success
             return h;
         }
     }
 
-    return -1;
+    //console.log("精度无法达到,当前精度为:" + min_Val);
+    //console.log("h为:" + min_h);
+    return min_h;
 
 }
 
@@ -185,7 +362,7 @@ function slotSurfaceLine(type, Qc, b_c, n, i, phi, H_0, N, L, alpha) {
         //console.log(outH);
         outStr += outH.toFixed(3) + "|";
         for (var nn = 0; nn < N - 1; nn++) {
-            outH = ssfl_sgd(learning_rate, outH, b_c, Qc, n, theta, i, alpha, delta_L, precision);
+            outH = ssfl_sgd(false, 0, learning_rate, outH, b_c, Qc, n, theta, i, alpha, delta_L, precision);
             outStr += outH.toFixed(3) + "|";
             //console.log(outH);
         }
@@ -276,6 +453,43 @@ function kcsmqx(sigma_m, c, m, epsilon, b, n, h, h_p, v0, p1) {
 function initEvent() {
 
 
+
+    //明渠非均匀流水力计算参数
+    document.getElementById("calculate_mqfjyls").addEventListener("click", function() {
+
+        var b = parseFloat(document.getElementById("mqfjyls_b").value);
+        var i = parseFloat(document.getElementById("mqfjyls_i").value);
+        var nz = parseFloat(document.getElementById("mqfjyls_n").value);
+        var Q = parseFloat(document.getElementById("mqfjyls_q").value);
+        var m = parseFloat(document.getElementById("mqfjyls_m").value);
+        var phi = parseFloat(document.getElementById("mqfjyls_phi").value);
+        var alpha = parseFloat(document.getElementById("mqfjyls_alpha").value);
+        var h1 = parseFloat(document.getElementById("mqfjyls_h1").value);
+        var L = parseFloat(document.getElementById("mqfjyls_l").value);
+        var N = parseFloat(document.getElementById("mqfjyls_bign").value);
+        var st = document.getElementById('mqfjyls_stype').checked;
+        var yt = document.getElementById('mqfjyls_ytype').checked;
+
+        var res = mqfjyls(yt, st, phi, h1, alpha, Q, b, m, nz, i, L, N);
+
+        document.getElementById("mqfjyls_res_0").value = res[0];
+        document.getElementById("mqfjyls_res_1").value = res[1];
+    });
+
+    //明渠均匀流水力计算参数
+    document.getElementById("calculate_mqjyls").addEventListener("click", function() {
+
+        var b = parseFloat(document.getElementById("mqjyls_b").value);
+        var i = parseFloat(document.getElementById("mqjyls_i").value);
+        var n = parseFloat(document.getElementById("mqjyls_n").value);
+        var Q = parseFloat(document.getElementById("mqjyls_q").value);
+        var m = parseFloat(document.getElementById("mqjyls_m").value);
+        var shape = document.getElementById('mqjyls_stype').checked;
+
+        var res = mqjyls(shape, b, i, n, Q, m);
+        document.getElementById("mqjyls_res_h").value = res[0];
+        document.getElementById("mqjyls_res_v0").value = res[1];
+    });
     //侧槽断溢流前缘的总长度
 
     document.getElementById("calculate_ccdyl").addEventListener("click", function() {
@@ -388,3 +602,24 @@ function initEvent() {
 
 addScript();
 initEvent();
+
+// L = 3386;
+// N = 7;
+// var outStr = "L断面水深：";
+// var delta_L = L / (N - 1);
+// var outH = 8.95;
+// var m = 2;
+// var i = 0.0003333333;
+// var Qc = 500;
+// var n = 0.025;
+// var theta = Math.atan(i);
+// var alpha = 1.05;
+// var b_c = 45;
+// //console.log(outH);
+// outStr += outH.toFixed(3) + "|";
+// for (var nn = 0; nn < N - 1; nn++) {
+//     outH = ssfl_sgd(true, m, 0.01, outH, b_c, Qc, n, theta, i, alpha, delta_L, 0.001);
+//     outStr += outH.toFixed(3) + "|";
+//     console.log(outH);
+// }
+// console.log(outStr);

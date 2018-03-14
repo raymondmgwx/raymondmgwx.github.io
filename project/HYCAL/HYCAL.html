@@ -685,6 +685,237 @@
                 </div>
             </div>
 
+            <!--  
+           明渠均匀流水力计算
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">明渠均匀流水力计算参数</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&Q ——流量，m^{3}/s\\&{\omega} ——渠道过流断面面积，m^{2} \\&x ——湿周,m \\&R ——水力半径，m\\&B ——梯形渠道水面宽度，m \\&b ——梯形渠道底部宽度或矩形断面宽度，m\\&m ——边坡系数\\&h ——水深，m\end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='mqjyls_stype' checked> 是否为梯形
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>b</label>
+                                    <input id="mqjyls_b" class="form-control input-sm" type="text" placeholder="b" value="2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>i</label>
+                                    <input id="mqjyls_i" class="form-control input-sm" type="text" placeholder="i" value="0.002" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="mqjyls_n" class="form-control input-sm" type="text" placeholder="n" value="0.015" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="mqjyls_q" class="form-control input-sm" type="text" placeholder="Q" value="10" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>m</label>
+                                    <input id="mqjyls_m" class="form-control input-sm" type="text" placeholder="m" value="1.25" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <button id='calculate_mqjyls' class="btn btn-border-d btn-round" type="button">计算明渠均匀流水力</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(h:水深，v0:流速)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <center>
+                                <div class="form-group">
+                                    <label>h</label>
+                                    <input id="mqjyls_res_h" class="form-control input-sm" type="text" placeholder="h" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <center>
+                                <div class="form-group">
+                                    <label>v0</label>
+                                    <input id="mqjyls_res_v0" class="form-control input-sm" type="text" placeholder="v0" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  
+           明渠非均匀流水力计算
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">明渠非均匀流水力计算</h4>
+                    <hr class="divider-w mt-10 mb-20">
+
+                    <p>
+                        \begin{align}&Q ——流量，m^{3}/s\\&{\omega} ——渠道过流断面面积，m^{2} \\&x ——湿周,m \\&R ——水力半径，m\\&B ——梯形渠道水面宽度，m \\&b ——梯形渠道底部宽度或矩形断面宽度，m\\&m ——边坡系数\\&h ——水深，m\\&L ——侧槽段溢流前沿总长度，m；侧槽溢洪道一般不设置闸门 \\&{\alpha} ——动能修正系数，近似取1 \\&n_z ——糙率 \\&N——需要计算断面数\end{align}
+                    </p>
+
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='mqfjyls_stype' checked> 是否为梯形
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                          <input type="checkbox" id='mqfjyls_ytype' checked> 是否为实用堰
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>L</label>
+                                    <input id="mqfjyls_l" class="form-control input-sm" type="text" placeholder="L" value="3386" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>N</label>
+                                    <input id="mqfjyls_bign" class="form-control input-sm" type="text" placeholder="N" value="7" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>phi</label>
+                                    <input id="mqfjyls_phi" class="form-control input-sm" type="text" placeholder="phi" value="0.95" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>i</label>
+                                    <input id="mqfjyls_i" class="form-control input-sm" type="text" placeholder="i" value="0.000333333" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>n</label>
+                                    <input id="mqfjyls_n" class="form-control input-sm" type="text" placeholder="n" value="0.025" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Q</label>
+                                    <input id="mqfjyls_q" class="form-control input-sm" type="text" placeholder="Q" value="500" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>m</label>
+                                    <input id="mqfjyls_m" class="form-control input-sm" type="text" placeholder="m" value="2" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>h1</label>
+                                    <input id="mqfjyls_h1" class="form-control input-sm" type="text" placeholder="h1" value="8.95" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>b</label>
+                                    <input id="mqfjyls_b" class="form-control input-sm" type="text" placeholder="b" value="45" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>alpha</label>
+                                    <input id="mqfjyls_alpha" class="form-control input-sm" type="text" placeholder="alpha" value="1" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button id='calculate_mqfjyls' class="btn btn-border-d btn-round" type="button">计算明渠非均匀流水力</button>
+                    </center>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">计算结果(水流类型，断面水深)</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>水流类型</label>
+                                    <input id="mqfjyls_res_0" class="form-control input-sm" type="text" placeholder="水流类型" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <div class="form-group">
+                                    <label>断面水深</label>
+                                    <input id="mqfjyls_res_1" class="form-control input-sm" type="text" placeholder="断面水深" value="" readonly/>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
