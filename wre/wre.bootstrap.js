@@ -80,6 +80,11 @@
             loc + 'lib/three/three.min.js'
         ];
 
+        this._imvcThreeJsDemoLibraries = [
+            loc + 'lib/three-demo/wre.lattice_gaussian.js',
+            loc + 'lib/three-demo/wre.colormap2d.js'
+        ];
+
         this._components = [
             loc + 'wre.util.js',
             loc + 'wre.runtime.js',
@@ -145,7 +150,7 @@
                                 console.log("WRE imvc web theme successfully loaded.");
                                 loadMultipleScripts(self._canvas2dLibraries, function() {
                                     console.log("WRE canvas2d library successfully loaded.");
-                                    loadScript(loc + 'lib/three-demo/wre.lattice_gaussian.js', function() {
+                                    loadMultipleScripts(self._imvcThreeJsDemoLibraries, function() {
                                         loadMultipleScripts(self._components, function() {
                                             console.log("WRE components successfully loaded.");
 
