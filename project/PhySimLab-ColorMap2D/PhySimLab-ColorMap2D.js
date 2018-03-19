@@ -30,6 +30,14 @@ var gaussianColorMap = new ColorMap_2D(gaussian_canvas, gaussian_track, gaussian
 var gaussian_lattice = gaussianColorMap.lattice;
 
 
+var step = 0;
+var omega = Math.PI / 50;
+var R = 20;
+var sigma = 300;
+var z_ = 50;
+var N = 100;
+var l = 1;
+
 function loop() {
 
     rgb_track.update();
@@ -39,18 +47,14 @@ function loop() {
 
 function loop1() {
     hsl_track.update();
+
     hsl_renderer.clear();
     hsl_renderer.render(hsl_scene, hsl_camera);
+
 }
 
 
-var step = 0;
-var omega = Math.PI / 50;
-var R = 20;
-var sigma = 300;
-var z_ = 50;
-var N = 100;
-var l = 1;
+
 
 function loop2() {
     step++;
@@ -83,7 +87,7 @@ function loop2() {
     gaussian_lattice.geometry.colorsNeedUpdate = true;
     gaussian_renderer.clear();
     gaussian_renderer.render(gaussian_scene, gaussian_camera);
-    //requestAnimationFrame(loop2);
+    requestAnimationFrame(loop2);
 }
 
 function addScript() {

@@ -127,12 +127,11 @@ ColorMap_2D.prototype = {
 
                         geometry.faces.push(new THREE.Face3((N + 1) * j + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i, null, color1));
                         geometry.faces.push(new THREE.Face3((N + 1) * (j + 1) + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i + 1, null, color2));
-                        var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, vertexColors: THREE.VertexColors });
-                        this.lattice = new THREE.Mesh(geometry, material);
-                        scene.add(this.lattice);
                     }
                 }
-
+                var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, vertexColors: THREE.VertexColors });
+                this.lattice = new THREE.Mesh(geometry, material);
+                scene.add(this.lattice);
                 break;
             case "gaussian":
                 var geometry = new THREE.Geometry();
@@ -168,12 +167,11 @@ ColorMap_2D.prototype = {
 
                         geometry.faces.push(new THREE.Face3((N + 1) * j + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i, null, color1));
                         geometry.faces.push(new THREE.Face3((N + 1) * (j + 1) + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i + 1, null, color2));
-                        var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, vertexColors: THREE.VertexColors });
-                        this.lattice = new THREE.Mesh(geometry, material);
-                        scene.add(this.lattice);
                     }
                 }
-
+                var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, vertexColors: THREE.VertexColors });
+                this.lattice = new THREE.Mesh(geometry, material);
+                scene.add(this.lattice);
                 break;
         }
     }
