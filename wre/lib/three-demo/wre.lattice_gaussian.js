@@ -12,7 +12,6 @@
 
 var Lattice_Gaussian = function(canvasElement, trackball, scene, camera, renderer) {
     this.canvasElement = canvasElement;
-    this.step = 0;
     this.initScene(renderer);
     this.initCamera(trackball, camera);
     this.initLight(scene);
@@ -108,7 +107,7 @@ Lattice_Gaussian.prototype = {
 
         geometry.computeFaceNormals();
         geometry.computeVertexNormals();
-        var material = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
+        var material = new THREE.MeshPhongMaterial({ color: 0xFF0000, side: THREE.DoubleSide, specular: 0xffffff, shininess: 250 });
         this.lattice = new THREE.Mesh(geometry, material);
         scene.add(this.lattice);
     }

@@ -67,6 +67,7 @@
 
         this._imvcWebLibraries = [
             loc + 'lib/bootstrap/bootstrap.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js',
             loc + 'lib/imvc-web-theme/lib/wow/dist/wow.js',
             loc + 'lib/imvc-web-theme/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js',
             loc + 'lib/imvc-web-theme/lib/isotope/dist/isotope.pkgd.js',
