@@ -173,6 +173,9 @@ ColorMap_2D.prototype = {
                 this.lattice = new THREE.Mesh(geometry, material);
                 scene.add(this.lattice);
                 break;
+            case "gaussian_worker":
+                console.log("webworker-external init object!");
+                break;
         }
     }
 };

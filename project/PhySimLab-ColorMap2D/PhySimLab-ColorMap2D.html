@@ -37,6 +37,46 @@
                 </div>
             </div>
 
+            <br>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Pre Calculate for ColorMap Gaussian Animation</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <br>
+                    <center>
+                        <div class="row multi-columns-row">
+
+
+                            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <div class="progress">
+                                    <div id='colormap_progress_bar' class="progress-bar pb-dark" aria-valuenow="0" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span class="font-alt"></span></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+                            <div class="col-sm-12 col-md-12 col-lg-12"> <button id='colormap_gaussian_anime_webworker_calculate' class="btn btn-border-d btn-round" type="button">Start Calculate(WebWorker)</button></div>
+                        </div>
+                    </center>
+                    <h4 class="font-alt mb-0">Paramaters for ColorMap Gaussian Animation</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <br>
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <input id="colormap_anime_slider" data-slider-id='cmSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id='colormap_gaussian_anime' class="btn btn-border-d btn-round" type="button">Start</button>
+                        <a id='colormap_gaussian_anime_export' class="btn btn-border-d btn-round" target="_blank">Export PNG</a>
+                    </center>
+
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
                     <h4 class="font-alt mb-0">2DColor Map-gaussian</h4>
