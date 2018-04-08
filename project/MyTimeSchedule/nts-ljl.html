@@ -61,7 +61,8 @@
                                     dataType: "json",
                                     success: function(data, textStatus, jqXHR) {
                                         alert('清除数据成功');
-                                        self.location = self.location;
+                                        $('#calendar').fullCalendar('refetchEvents');
+                                        currentEvent = data;
                                     }
                                 });
                             }
@@ -97,7 +98,8 @@
                             dataType: "json",
                             success: function(data, textStatus, jqXHR) {
                                 alert('删除当前事件成功');
-                                self.location = self.location;
+                                $('#calendar').fullCalendar('refetchEvents');
+                                currentEvent = data;
                             }
                         });
                     }
@@ -129,7 +131,8 @@
                             dataType: "json",
                             success: function(data, textStatus, jqXHR) {
                                 alert('录入事件成功');
-                                self.location = self.location;
+                                $('#calendar').fullCalendar('refetchEvents');
+                                currentEvent = data;
                             }
                         });
                     });
