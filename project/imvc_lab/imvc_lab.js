@@ -446,6 +446,7 @@
             e.preventDefault();
         });
 
+        var a_idx = 0;
         $("body").click(function(e) {
             var a = new Array("POWERFUL", "DEMOCRACY", "CIVILITY", "HARMONY", "FREEOOM", "EQUALITY", "LOVE", "JUSTICE", "RULE OF LAW", "PATRIOTIC", "DEDICATION", "INTEGRITY", "FRIENDSHIP", "JINGJING");
             var $i = $("<span/>").text(a[a_idx]);
