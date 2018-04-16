@@ -118,7 +118,7 @@
                         var min = 0
                         var rnd_color = Math.floor(Math.random() * (max - min + 1) + min)
 
-                        for (var i = 0; i < int(eventRecycleTime); i++) {
+                        for (var i = 0; i < parseInt(eventRecycleTime); i++) {
                             var newEvent = new Object();
                             newEvent["start"] = start.setDate(start.getDate() + 7 * i);;
                             newEvent["end"] = end.setDate(end.getDate() + 7 * i);;
