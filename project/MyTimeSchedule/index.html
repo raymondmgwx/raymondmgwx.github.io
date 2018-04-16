@@ -29,6 +29,7 @@
 
 
     <script>
+
         var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
         var currentEvent = new Array();
         $(function () {
@@ -118,14 +119,19 @@
                         var min = 0
                         var rnd_color = Math.floor(Math.random() * (max - min + 1) + min)
 
+                        var newEvent = new Array();
                         for (var i = 0; i < parseInt(eventRecycleTime); i++) {
-                            var newEvent = new Object();
-                            newEvent["start"] = start.setDate(start.getDate() + 7 * i);;
-                            newEvent["end"] = end.setDate(end.getDate() + 7 * i);;
-                            newEvent["id"] = Date.now();
+                            newEvent.push(new Object());
+                        }
+                        for (var i = 0; i < parseInt(eventRecycleTime); i++) {
+
+                            newEvent[i]["start"] = moment(start).add(7 * i, 'days');
+                            newEvent[i]["end"] = moment(end).add(7 * i, 'days');
+                            newEvent[i]["id"] = Date.now() + newEvent[i]["start"];
                             //newEvent["color"] = colorList[rnd_color];
-                            newEvent["title"] = "编号:" + newEvent["id"] + "\n 内容:" + eventStr;
-                            cur_json_info.push(newEvent);
+                            newEvent[i]["title"] = "编号:" + newEvent[i]["id"] + "\n 内容:" + eventStr;
+                            cur_json_info.push(newEvent[i]);
+
                         }
 
 
