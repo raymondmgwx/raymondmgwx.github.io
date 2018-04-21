@@ -29,9 +29,10 @@
 
 
     <script>
+
         var colorList = ["#7FFFAA", "#FFB6C1", "#DEB887"];
         var currentEvent = new Array();
-        $(function() {
+        $(function () {
 
             $('#calendar').fullCalendar({
                 themeSystem: 'bootstrap4',
@@ -50,7 +51,7 @@
                 customButtons: {
                     clearButton: {
                         text: '清空',
-                        click: function() {
+                        click: function () {
                             var con = confirm("是否清除所有事件?");
                             if (con == true) {
                                 $.ajax({
@@ -59,7 +60,7 @@
                                     data: JSON.stringify(new Array()),
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
-                                    success: function(data, textStatus, jqXHR) {
+                                    success: function (data, textStatus, jqXHR) {
                                         alert('清除数据成功');
                                         $('#calendar').fullCalendar('refetchEvents');
                                         currentEvent = data;
@@ -72,11 +73,11 @@
                 },
                 events: {
                     url: 'https://api.myjson.com/bins/10qj3h',
-                    error: function() {
+                    error: function () {
                         alert("获取事件错误!");
                     }
                 },
-                eventClick: function(eventObj) {
+                eventClick: function (eventObj) {
                     var con = confirm("是否删除当前事件?");
                     if (con == true) {
                         var newEventArray = new Array(currentEvent.length - 1);
@@ -96,7 +97,7 @@
                             data: JSON.stringify(newEventArray),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
-                            success: function(data, textStatus, jqXHR) {
+                            success: function (data, textStatus, jqXHR) {
                                 alert('删除当前事件成功');
                                 $('#calendar').fullCalendar('refetchEvents');
                                 currentEvent = data;
@@ -105,23 +106,34 @@
                     }
 
                 },
-                select: function(start, end, jsEvent, view, resource) {
-                    $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
+                select: function (start, end, jsEvent, view, resource) {
+                    $.get("https://api.myjson.com/bins/10qj3h", function (data, textStatus, jqXHR) {
                         var cur_json_info = data;
-                        var newEvent = new Object();
+
                         var eventStr = prompt('请输入事件名！');
                         if (eventStr == "" || eventStr == null) return;
+                        var eventRecycleTime = prompt('请输入事件循环次数！');
+                        if (eventRecycleTime == "" || eventRecycleTime == null) return;
 
                         var max = 2;
                         var min = 0
                         var rnd_color = Math.floor(Math.random() * (max - min + 1) + min)
 
-                        newEvent["start"] = start;
-                        newEvent["end"] = end;
-                        newEvent["id"] = Date.now();
-                        //newEvent["color"] = colorList[rnd_color];
-                        newEvent["title"] = "编号:" + newEvent["id"] + "\n 内容:" + eventStr;
-                        cur_json_info.push(newEvent);
+                        var newEvent = new Array();
+                        for (var i = 0; i < parseInt(eventRecycleTime); i++) {
+                            newEvent.push(new Object());
+                        }
+                        for (var i = 0; i < parseInt(eventRecycleTime); i++) {
+
+                            newEvent[i]["start"] = moment(start).add(7 * i, 'days');
+                            newEvent[i]["end"] = moment(end).add(7 * i, 'days');
+                            newEvent[i]["id"] = Date.now() + newEvent[i]["start"];
+                            //newEvent["color"] = colorList[rnd_color];
+                            newEvent[i]["title"] = "编号:" + newEvent[i]["id"] + "\n 内容:" + eventStr;
+                            cur_json_info.push(newEvent[i]);
+
+                        }
+
 
                         $.ajax({
                             url: "https://api.myjson.com/bins/10qj3h",
@@ -129,7 +141,7 @@
                             data: JSON.stringify(cur_json_info),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
-                            success: function(data, textStatus, jqXHR) {
+                            success: function (data, textStatus, jqXHR) {
                                 alert('录入事件成功');
                                 //self.location = self.location;
                                 $('#calendar').fullCalendar('refetchEvents');
@@ -143,7 +155,7 @@
 
             $('#calendar').fullCalendar('option', 'locale', 'zh-cn');
 
-            $.get("https://api.myjson.com/bins/10qj3h", function(data, textStatus, jqXHR) {
+            $.get("https://api.myjson.com/bins/10qj3h", function (data, textStatus, jqXHR) {
                 currentEvent = data;
             });
         });
