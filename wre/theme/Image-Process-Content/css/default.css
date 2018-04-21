@@ -3129,3 +3129,40 @@ blockquote {
         width: 100%;
     }
 }
+
+
+/**
+Perspective Transform css
+*/
+
+#perpective_transform {
+    position: relative;
+    width: 86px;
+    height: 478px;
+    background-color: #FFF;
+    padding: 0px;
+    -moz-box-shadow: 0 0 30px #CCC;
+    -webkit-box-shadow: 0 0 30px #CCC;
+    -o-box-shadow: 0 0 30px #CCC;
+    -ms-box-shadow: 0 0 30px #CCC;
+    box-shadow: 0 0 30px #CCC;
+}
+
+.pt_img {
+    position: relative;
+    width: 86px;
+    height: 478px;
+    background-image: url(../images/normal_road.jpg);
+    background-size: cover;
+}
+
+.pt {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    margin-left: -15px;
+    margin-top: -15px;
+    border-radius: 15px;
+    background-color: #F00;
+    cursor: pointer;
+}
