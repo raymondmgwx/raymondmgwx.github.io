@@ -1,0 +1,248 @@
+{
+	"metadata": {
+		"type": "App"
+	},
+	"project": {
+		"gammaInput": false,
+		"gammaOutput": false,
+		"shadows": true,
+		"vr": false
+	},
+	"camera": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"object": {
+			"uuid": "7471113A-3F25-4EC4-B7BD-7975F0F7AD70",
+			"type": "PerspectiveCamera",
+			"name": "Camera",
+			"matrix": [0.967962,0,-0.251097,0,-0.074395,0.955101,-0.286788,0,0.239823,0.29628,0.924502,0,64.09537,34.584911,366.211008,1],
+			"fov": 50,
+			"zoom": 1,
+			"near": 0.1,
+			"far": 100000,
+			"focus": 10,
+			"aspect": 1.230861,
+			"filmGauge": 35,
+			"filmOffset": 0
+		}
+	},
+	"scene": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"geometries": [
+			{
+				"uuid": "51BB3E54-D2DF-4576-9953-FB8E940588B5",
+				"type": "PlaneGeometry",
+				"width": 1000,
+				"height": 1000,
+				"widthSegments": 1,
+				"heightSegments": 1
+			}],
+		"materials": [
+			{
+				"uuid": "4AE8130E-B6A8-47BC-ACCF-060973C74044",
+				"type": "MeshPhongMaterial",
+				"color": 12632256,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 30,
+				"depthFunc": 3,
+				"depthTest": true,
+				"depthWrite": true
+			}],
+		"object": {
+			"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
+			"type": "Scene",
+			"name": "Scene",
+			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+			"children": [
+				{
+					"uuid": "B7CBBC6F-EC26-49B5-8D0D-67D9C535924B",
+					"type": "Group",
+					"name": "Dummy",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,100,400,1],
+					"children": [
+						{
+							"uuid": "60B69C58-4201-43FD-815E-AD2EDFBBD0CE",
+							"type": "PerspectiveCamera",
+							"name": "PerspectiveCamera",
+							"matrix": [1,0,0,0,0,0,-1,0,0,1,0,0,0,666.584948,-401.70514,1],
+							"fov": 50,
+							"zoom": 1,
+							"near": 100,
+							"far": 10000,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}]
+				},
+				{
+					"uuid": "A460C230-DC88-4A8F-A3FB-AA0FE735F3ED",
+					"type": "Mesh",
+					"name": "Plane",
+					"matrix": [0.003879,0,0.559987,0,0.189995,0,-0.001316,0,0,0.11,0,0,0,-50,0,1],
+					"geometry": "51BB3E54-D2DF-4576-9953-FB8E940588B5",
+					"material": "4AE8130E-B6A8-47BC-ACCF-060973C74044"
+				},
+				{
+					"uuid": "3412781E-27CC-43C3-A5DB-54C0C8E42ED6",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,60,-29.313019,-228.11886,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "B1BF8275-2899-43CA-A894-5B8F18DEB0FA",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				},
+				{
+					"uuid": "AB2FDD61-CD69-4BE5-BE56-6B56701EB0D6",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,60,-29,219.593018,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "EACD6A3D-61D6-4B80-8BCC-79571B5E0378",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				},
+				{
+					"uuid": "94B2F0FA-B4D1-4A23-B5F4-B2E570901B52",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-60,-29,-232.908125,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "DC164FC1-2992-413D-B288-835CF5A0C46F",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				},
+				{
+					"uuid": "0C6FD0E5-4F27-45A8-A0FC-D87C540EA14E",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-60,-29,12.012444,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "45DEC146-FDEE-41B5-A53C-01BE22C53AC2",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				},
+				{
+					"uuid": "E0495445-D2FD-483B-970C-7B878D025A2C",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,60,-29,13.445546,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "709ECFCE-A466-4311-A65C-A2B340389A15",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				},
+				{
+					"uuid": "AEACF2B8-1BFE-4A2D-8F01-A04A4102B0F5",
+					"type": "PointLight",
+					"name": "PointLight 2",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-60,-29,221.635453,1],
+					"color": 16776960,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "B1F9E704-1773-46B1-AFA6-587BAE6F218E",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				}],
+			"background": 11184810
+		}
+	},
+	"scripts": {
+		"60B69C58-4201-43FD-815E-AD2EDFBBD0CE": [
+			{
+				"name": "Player Camera",
+				"source": "player.setCamera( this );"
+			}]
+	}
+}
