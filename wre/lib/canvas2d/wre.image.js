@@ -23,6 +23,60 @@ ImgProcess.prototype = {
         }
         return imageData;
     },
+    CalculateDDA: function(canvasElement, x1, y1, x2, y2) {
+        var context = canvasElement.getContext('2d');
+        context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+        var width = canvasElement.width;
+        var height = canvasElement.height;
+
+        if (x1 >= width || x1 < 0 || y1 >= height || y1 < 0 || x2 >= width || x2 < 0 || y2 >= height || y2 < 0) return;
+
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var n = 0;
+        var xinc = 0;
+        var yinc = 0;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            n = Math.abs(dx);
+            if (n == 0) {
+                xinc = 0;
+                yinc = dy / n;
+            } else {
+                xinc = dx / n;
+                yinc = dy / n;
+            }
+        } else {
+            n = Math.abs(dy);
+            if (n == 0) {
+                yinc = 0;
+                xinc = dx / n;
+            } else {
+                xinc = dx / n;
+                yinc = dy / n;
+            }
+        }
+
+
+
+
+
+        var bitmapData = [];
+        var x = x1;
+        var y = y1;
+        for (var i = 1; i <= n; i++) {
+            var index = (parseInt(x + 0.5) + parseInt(y + 0.5) * width) * 4;
+            bitmapData[index + 0] = 0;
+            bitmapData[index + 1] = 0;
+            bitmapData[index + 2] = 0;
+            bitmapData[index + 3] = 255;
+            x += xinc;
+            y += yinc;
+
+        }
+        var imageData = this.GetImageDataByBitmap(canvasElement, bitmapData);
+        context.putImageData(imageData, 0, 0);
+    },
     CreateRandomImage: function(canvasElement) {
         var context = canvasElement.getContext('2d');
         context.clearRect(0, 0, canvasElement.width, canvasElement.height);

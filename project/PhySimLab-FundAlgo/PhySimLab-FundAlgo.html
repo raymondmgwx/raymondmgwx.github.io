@@ -1,0 +1,69 @@
+<div class="main showcase-page">
+    <section class="module">
+        <div class="container">
+
+            <!--  
+            Draw DDA
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for DDA Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>x1</label>
+                                    <input id="x1" class="form-control input-sm" type="text" placeholder="x1" value="6" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>y1</label>
+                                    <input id="y1" class="form-control input-sm" type="text" placeholder="y1" value="0" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>x2</label>
+                                    <input id="x2" class="form-control input-sm" type="text" placeholder="x2" value="0" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>y2</label>
+                                    <input id="y2" class="form-control input-sm" type="text" placeholder="y2" value="200" />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button id='generate_dda' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">DDA Draw</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_dda" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
