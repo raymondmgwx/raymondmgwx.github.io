@@ -23,6 +23,61 @@ ImgProcess.prototype = {
         }
         return imageData;
     },
+    CalculateBresenMan: function(canvasElement, x1, y1, x2, y2) {
+        var context = canvasElement.getContext('2d');
+        context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+        var width = canvasElement.width;
+        var height = canvasElement.height;
+
+        if (x1 >= width || x1 < 0 || y1 >= height || y1 < 0 || x2 >= width || x2 < 0 || y2 >= height || y2 < 0) return;
+
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var x = x1;
+        var y = y1;
+        var stepx = 1;
+        var stepy = 1;
+        if (x1 > x2) stepx = -1;
+        if (y1 > y2) stepy = -1;
+
+        var bitmapData = [];
+        if (dx > dy) {
+            var e = dy * 2 - dx;
+            for (var i = 0; i <= dx; i++) {
+                var index = (parseInt(x) + parseInt(y) * width) * 4;
+                bitmapData[index + 0] = 0;
+                bitmapData[index + 1] = 0;
+                bitmapData[index + 2] = 0;
+                bitmapData[index + 3] = 255;
+                x += stepx;
+                e += dy;
+                if (e >= 0) {
+                    y += stepy;
+                    e -= dx;
+                }
+            }
+        } else {
+            var e = dx * 2 - dy;
+            for (var i = 0; i <= dy; i++) {
+                var index = (parseInt(x) + parseInt(y) * width) * 4;
+                bitmapData[index + 0] = 0;
+                bitmapData[index + 1] = 0;
+                bitmapData[index + 2] = 0;
+                bitmapData[index + 3] = 255;
+                y += stepy;
+                e += dx;
+                if (e >= 0) {
+                    x += stepx;
+                    e -= dy;
+                }
+            }
+        }
+
+
+        var imageData = this.GetImageDataByBitmap(canvasElement, bitmapData);
+        context.putImageData(imageData, 0, 0);
+    },
     CalculateDDA: function(canvasElement, x1, y1, x2, y2) {
         var context = canvasElement.getContext('2d');
         context.clearRect(0, 0, canvasElement.width, canvasElement.height);
