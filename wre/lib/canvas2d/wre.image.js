@@ -23,7 +23,7 @@ ImgProcess.prototype = {
         }
         return imageData;
     },
-    CalculateBresenMan: function(canvasElement, x1, y1, x2, y2) {
+    CalculateBreseHam: function(canvasElement, x1, y1, x2, y2) {
         var context = canvasElement.getContext('2d');
         context.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
@@ -45,7 +45,7 @@ ImgProcess.prototype = {
         if (dx > dy) {
             var e = dy * 2 - dx;
             for (var i = 0; i <= dx; i++) {
-                var index = (parseInt(x) + parseInt(y) * width) * 4;
+                var index = (x + y * width) * 4;
                 bitmapData[index + 0] = 0;
                 bitmapData[index + 1] = 0;
                 bitmapData[index + 2] = 0;

@@ -21,13 +21,13 @@ function addScript() {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-function drawBresenham(x1, y1, x2, y2) {
+function drawBreseham(x1, y1, x2, y2) {
     x1 = parseInt(x1);
     y1 = parseInt(y1);
     x2 = parseInt(x2);
     y2 = parseInt(y2);
 
-    ImgProcess.CalculateBresenMan(canvasElement_dda, x1, y1, x2, y2);
+    ImgProcess.CalculateBreseHam(canvasElement_dda, x1, y1, x2, y2);
 }
 
 function drawDDA(x1, y1, x2, y2) {
@@ -47,7 +47,7 @@ function initEvent() {
         var x2 = document.getElementById("x2").value;
         var y2 = document.getElementById("y2").value;
 
-        drawBresenham(x1, y1, x2, y2);
+        drawBreseham(x1, y1, x2, y2);
     });
 }
 
@@ -57,7 +57,7 @@ function initCanvas() {
     var x2 = document.getElementById("x2").value;
     var y2 = document.getElementById("y2").value;
 
-    drawBresenham(x1, y1, x2, y2);
+    drawBreseham(x1, y1, x2, y2);
 }
 
 addScript();
