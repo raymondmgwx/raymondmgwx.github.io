@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>FOVE DATA VISUALIZTION</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="./utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="left:10%;width:80%;position: relative">
+        <canvas id="canvas-x"></canvas>
+        <canvas id="canvas-y"></canvas>
+    </div>
+    <br>
+    <script>
+        var configx = {
+            type: 'line',
+            data: {},
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'FOVE DATA X'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '時間'
+                        },
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return parseFloat(value).toFixed(3);
+                            },
+                            autoSkip: true,
+                            maxTicksLimit: 10,
+                            stepSize: .01
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '座標(10^-2)'
+                        }
+                    }]
+                }
+            }
+        };
+        var configy = {
+            type: 'line',
+            data: {},
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'FOVE DATA Y'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '時間'
+                        },
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return parseFloat(value).toFixed(3);
+                            },
+                            autoSkip: true,
+                            maxTicksLimit: 10,
+                            stepSize: .01
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '座標(10^-2)'
+                        }
+                    }]
+                }
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById('canvas-x').getContext('2d');
+            var cty = document.getElementById('canvas-y').getContext('2d');
+
+            window.foveDataX = new Chart(ctx, configx);
+            window.foveDataY = new Chart(cty, configy);
+
+            $.get('./data.csv', function(data) {
+
+                var result = $.csv.toObjects(data);
+
+
+                configx.data["datasets"] = new Array();
+                configx.data["labels"] = new Array();
+                configy.data["datasets"] = new Array();
+                configy.data["labels"] = new Array();
+
+                var lxColor = window.chartColors.red;
+                var lxData = {
+                    label: '左目x座標',
+                    backgroundColor: lxColor,
+                    borderColor: lxColor,
+                    data: [],
+                    fill: false
+                };
+
+                var lyColor = window.chartColors.orange;
+                var lyData = {
+                    label: '左目y座標',
+                    backgroundColor: lyColor,
+                    borderColor: lyColor,
+                    data: [],
+                    fill: false
+                };
+
+                var rxColor = window.chartColors.yellow;
+                var rxData = {
+                    label: '右目x座標',
+                    backgroundColor: rxColor,
+                    borderColor: rxColor,
+                    data: [],
+                    fill: false
+                };
+
+                var ryColor = window.chartColors.green;
+                var ryData = {
+                    label: '右目y座標',
+                    backgroundColor: ryColor,
+                    borderColor: ryColor,
+                    data: [],
+                    fill: false
+                };
+
+                result.forEach(function(res) {
+                    lxData.data.push(res.lx * 100);
+                    lyData.data.push(res.ly * 100);
+                    rxData.data.push(res.rx * 100);
+                    ryData.data.push(res.ry * 100);
+                    configx.data.labels.push(res.t);
+                    configy.data.labels.push(res.t);
+                });
+                configx.data.datasets.push(lxData);
+                configy.data.datasets.push(lyData);
+                configx.data.datasets.push(rxData);
+                configy.data.datasets.push(ryData);
+                window.foveDataX.update();
+                window.foveDataY.update();
+            })
+        };
+    </script>
+</body>
+
+</html>
