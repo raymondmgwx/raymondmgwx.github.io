@@ -4,7 +4,7 @@
 <head>
     <title>FOVE DATA VISUALIZTION</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-    <script src="./project/fove-data-visualization/utils.js"></script>
+    <script src="./utils.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js"></script>
     <style>
@@ -117,7 +117,7 @@
             window.foveDataX = new Chart(ctx, configx);
             window.foveDataY = new Chart(cty, configy);
 
-            $.get('./project/fove-data-visualization/data.csv', function(data) {
+            $.get('./data.csv', function(data) {
 
                 var result = $.csv.toObjects(data);
 
