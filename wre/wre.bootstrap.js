@@ -83,7 +83,8 @@
 
         this._imvcThreeJsDemoLibraries = [
             loc + 'lib/three-demo/wre.lattice_gaussian.js',
-            loc + 'lib/three-demo/wre.colormap2d.js'
+            loc + 'lib/three-demo/wre.colormap2d.js',
+            loc + 'lib/three-demo/wre.diffusion_equation.js'
         ];
 
         this._components = [
