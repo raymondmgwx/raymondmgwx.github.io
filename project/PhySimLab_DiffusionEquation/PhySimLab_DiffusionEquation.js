@@ -7,14 +7,20 @@
 //////////////////////////////////////                                                                      //
 /////////////////////////////////////////////////////////////////////////////////////////////////WANG  XU///-->
 var L = 100;
+var N = 100;
+var simType = "WaterAndCopper";
+var hts_x = 75;
+var hts_y = N / 2;
+
 var cde_scene = new THREE.Scene();
 var cde_canvas = document.getElementById('canvas-cde');
 var cde_camera = camera = new THREE.OrthographicCamera(-L / 2, L / 2, L / 2, -L / 2, 1, 100);
 var cde_track = new THREE.TrackballControls(cde_camera);
 var cde_renderer = new THREE.WebGLRenderer({ antialias: true });
 
-
-var diffusion_equation_1 = new DiffusionEquation(cde_canvas, cde_track, cde_scene, cde_camera, cde_renderer);
+var env_tmp = parseFloat(document.getElementById("env_tmp").value);
+var hts_tmp = parseFloat(document.getElementById("hts_tmp").value);
+var diffusion_equation_1 = new DiffusionEquation(cde_canvas, cde_track, cde_scene, cde_camera, cde_renderer, hts_tmp, env_tmp, hts_x, hts_y, N, L, simType);
 
 
 
@@ -29,12 +35,19 @@ function addScript() {
 function initEvent() {
 
     document.getElementById("copper_diffusion_anime").addEventListener("click", function() {
-        //console.log(diffusion_equation_1.stopFlag);
         if (diffusion_equation_1.stopFlag) {
+            document.getElementById("copper_diffusion_anime").innerText = "Stop";
             diffusion_equation_1.stopFlag = false;
         } else {
+            document.getElementById("copper_diffusion_anime").innerText = "Start";
             diffusion_equation_1.stopFlag = true;
         }
+    });
+
+    document.getElementById("copper_diffusion_anime_re").addEventListener("click", function() {
+        diffusion_equation_1.calculateReadyFlag = false;
+        diffusion_equation_1.stopFlag = true;
+        diffusion_equation_1.calculateFlag = true;
     });
 
 
@@ -42,12 +55,9 @@ function initEvent() {
 }
 
 function loop() {
-    //console.log("run");
     if (diffusion_equation_1.calculateReadyFlag) {
-        //console.log("run");
         if (diffusion_equation_1.stopFlag == false || diffusion_equation_1.step == 0 || diffusion_equation_1.changeFlag == true) {
             if (!diffusion_equation_1.stopFlag) {
-                //console.log("run");
                 for (var k = 0; k < diffusion_equation_1.skip; k++) {
                     diffusion_equation_1.step++;
                     for (var i = 1; i <= diffusion_equation_1.N - 1; i++) {
@@ -92,9 +102,9 @@ function loop() {
                             diffusion_equation_1.T[0][i][j] = diffusion_equation_1.T[1][i][j];
                         }
                     }
-                    //console.log(diffusion_equation_1.T[0][diffusion_equation_1.N / 5][diffusion_equation_1.N / 2]);
+
                     //heat source
-                    diffusion_equation_1.T[0][diffusion_equation_1.N / 5][diffusion_equation_1.N / 2] = 100;
+                    diffusion_equation_1.heatSource();
                 }
             }
             var a = 0;
@@ -144,9 +154,74 @@ function loop() {
         console.log("remove");
         cde_scene.remove(diffusion_equation_1.lattice);
         for (var i = 0; i < diffusion_equation_1.cubes.length; i++) {
-            cde_scene.remove(diffusion_equation_1.diffusion_equation_1.cubes[i]);
+            cde_scene.remove(diffusion_equation_1.cubes[i]);
         }
-        diffusion_equation_1.initObject();
+        //init Object
+        cde_camera.left = -L / 2;
+        cde_camera.right = L / 2;
+        cde_camera.top = L / 2;
+        cde_camera.bottom = -L / 2;
+        cde_camera.updateProjectionMatrix();
+
+        var l = L / N;
+        diffusion_equation_1.step = 0;
+
+        //reset param
+        diffusion_equation_1.env_tmp = parseFloat(document.getElementById("env_tmp").value);
+        diffusion_equation_1.hts_tmp = parseFloat(document.getElementById("hts_tmp").value);
+        diffusion_equation_1.initCondition();
+
+        var geometry = new THREE.Geometry();
+        var colors = new Array();
+
+        for (j = 0; j <= N; j++) {
+            for (i = 0; i <= N; i++) {
+                var x = (-N / 2 + i) * l;
+                var y = (-N / 2 + j) * l;
+                var vertex = new THREE.Vector3(x, y, 0);
+                geometry.vertices.push(vertex);
+                colors.push(new THREE.Color().setRGB(0, 0, 0));
+            }
+        }
+
+        for (var j = 0; j < N; j++) {
+            for (var i = 0; i < N; i++) {
+                var color1 = [];
+                var color2 = [];
+                color1[0] = colors[(N + 1) * j + i];
+                color1[1] = colors[(N + 1) * j + i + 1];
+                color1[2] = colors[(N + 1) * (j + 1) + i];
+
+                color2[0] = colors[(N + 1) * (j + 1) + i];
+                color2[1] = colors[(N + 1) * j + i + 1];
+                color2[2] = colors[(N + 1) * (j + 1) + i + 1];
+
+                geometry.faces.push(new THREE.Face3((N + 1) * j + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i, null, color1));
+                geometry.faces.push(new THREE.Face3((N + 1) * (j + 1) + i, (N + 1) * j + i + 1, (N + 1) * (j + 1) + i + 1, null, color2));
+            }
+        }
+        var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, vertexColors: THREE.VertexColors });
+        diffusion_equation_1.lattice = new THREE.Mesh(geometry, material);
+        cde_scene.add(diffusion_equation_1.lattice);
+
+        if (simType == "WaterAndCopper") {
+            var geometry = new THREE.CubeGeometry(100 * l, 20 * l, 1);
+
+            var material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
+            for (var i = 0; i < 3; i++) {
+                diffusion_equation_1.cubes[i] = new THREE.Mesh(geometry, material);
+                cde_scene.add(diffusion_equation_1.cubes[i]);
+            }
+            diffusion_equation_1.cubes[0].position.set(0, 0, 0);
+            diffusion_equation_1.cubes[1].position.set(25 * l, 60 * l, 0);
+            diffusion_equation_1.cubes[1].rotation.set(0, 0, Math.PI / 2);
+            diffusion_equation_1.cubes[2].position.set(25 * l, -60 * l, 0);
+            diffusion_equation_1.cubes[2].rotation.set(0, 0, Math.PI / 2);
+        }
+
+
+        diffusion_equation_1.calculateReadyFlag = true;
+
         diffusion_equation_1.calculateFlag = false;
     }
 

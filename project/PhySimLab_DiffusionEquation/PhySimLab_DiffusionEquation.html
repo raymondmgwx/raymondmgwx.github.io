@@ -7,14 +7,32 @@
                     <hr class="divider-w mt-10 mb-20">
                     <center>
 
+                        <div class="row multi-columns-row">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>environment temperature</label>
+                                    <input id="env_tmp" class="form-control input-sm" type="text" placeholder="env_tmp" value="0" />
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>heat source temperature</label>
+                                    <input id="hts_tmp" class="form-control input-sm" type="text" placeholder="hts_tmp" value="150" />
+                                </div>
+
+                            </div>
+                        </div>
+
                         <button id='copper_diffusion_anime' class="btn btn-border-d btn-round" type="button">Start</button>
+                        <button id='copper_diffusion_anime_re' class="btn btn-border-d btn-round" type="button">ReCalculate</button>
                     </center>
 
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
-                    <h4 class="font-alt mb-0">Copper Diffusion</h4>
+                    <h4 class="font-alt mb-0">Copper Heat Diffusion</h4>
                     <hr class="divider-w mt-10 mb-20">
                     <div class="row multi-columns-row">
                         <div class="col-sm-12 col-md-12 col-lg-12">

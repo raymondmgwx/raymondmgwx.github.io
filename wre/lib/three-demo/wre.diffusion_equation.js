@@ -15,10 +15,8 @@ var step = 0;
 
 var dt = 0.1;
 var dx = 0.01;
-var skip = 10;
+var skip = 100;
 
-
-var T0 = 0;
 
 var Tmax = 100;
 var Tmin = 0;
@@ -32,14 +30,26 @@ var w = 0.1;
 
 var tn = 2;
 
-var DiffusionEquation = function(canvasElement, trackball, scene, camera, renderer) {
+var DiffusionEquation = function(canvasElement, trackball, scene, camera, renderer, hts_tmp, env_tmp, hts_px, hts_py, p_N, p_L, simType) {
+    this.hts_tmp = hts_tmp;
+    this.env_tmp = env_tmp;
+    this.hts_px = hts_px;
+    this.hts_py = hts_py;
+    this.simType = simType;
+
     this.step = step;
+
+
+    N = p_N;
+    L = p_L;
+    l = L / N;
     this.N = N;
     this.L = L;
+
     this.dt = dt;
     this.dx = dx;
     this.skip = skip;
-    this.T0 = T0;
+
     this.Tmax = Tmax;
     this.Tmin = Tmin;
     this.d_Ca = d_Ca;
@@ -57,7 +67,13 @@ var DiffusionEquation = function(canvasElement, trackball, scene, camera, render
     this.D = [];
     this.cubes = []
     this.T = new Array(tn);
-    this.initDiffCoeff();
+
+    if (simType == "WaterAndCopper") {
+        this.initDiffCoeff();
+    } else if (simType == "Copper") {
+        this.initDiffCoeffCopper();
+    }
+
 
     this.canvasElement = canvasElement;
     this.initScene(renderer);
@@ -159,19 +175,23 @@ DiffusionEquation.prototype = {
         this.lattice = new THREE.Mesh(geometry, material);
         scene.add(this.lattice);
 
+        if (this.simType == "WaterAndCopper") {
+            var geometry = new THREE.CubeGeometry(100 * l, 20 * l, 1);
 
-        var geometry = new THREE.CubeGeometry(100 * l, 20 * l, 1);
+            var material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
+            for (var i = 0; i < 3; i++) {
+                this.cubes[i] = new THREE.Mesh(geometry, material);
+                scene.add(this.cubes[i]);
+            }
+            this.cubes[0].position.set(0, 0, 0);
+            this.cubes[1].position.set(25 * l, 60 * l, 0);
+            this.cubes[1].rotation.set(0, 0, Math.PI / 2);
+            this.cubes[2].position.set(25 * l, -60 * l, 0);
+            this.cubes[2].rotation.set(0, 0, Math.PI / 2);
+        } else if (this.simType == "Copper") {
 
-        var material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
-        for (var i = 0; i < 3; i++) {
-            this.cubes[i] = new THREE.Mesh(geometry, material);
-            scene.add(this.cubes[i]);
         }
-        this.cubes[0].position.set(0, 0, 0);
-        this.cubes[1].position.set(25 * l, 60 * l, 0);
-        this.cubes[1].rotation.set(0, 0, Math.PI / 2);
-        this.cubes[2].position.set(25 * l, -60 * l, 0);
-        this.cubes[2].rotation.set(0, 0, Math.PI / 2);
+
 
         this.calculateReadyFlag = true;
     },
@@ -193,6 +213,17 @@ DiffusionEquation.prototype = {
             }
         }
     },
+    initDiffCoeffCopper: function() {
+        for (var i = 0; i <= N; i++) {
+            this.D[i] = [];
+            for (var j = 0; j <= N; j++) {
+                this.D[i][j] = d_Ca;
+            }
+        }
+    },
+    heatSource: function() {
+        this.T[0][this.hts_px][this.hts_py] = this.hts_tmp;
+    },
     initCondition: function() {
         for (var t = 0; t < tn; t++) {
             this.T[t] = new Array(N);
@@ -201,11 +232,11 @@ DiffusionEquation.prototype = {
                 for (j = 0; j <= N; j++) {
                     var x = (-N / 2 + i) * l;
                     var y = (-N / 2 + j) * l;
-                    this.T[t][i][j] = T0;
+                    this.T[t][i][j] = this.env_tmp;
                 }
             }
         }
         //heat source
-        this.T[0][N / 5][N / 2] = 100;
+        this.heatSource();
     }
 };
