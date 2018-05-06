@@ -21,8 +21,8 @@ var skip = 100;
 var Tmax = 100;
 var Tmin = 0;
 
-var d_Ca = 112E-6; //銅
-var d_H2O = 0.14E-6; //水
+var d_Ca = 112E-6;
+var d_H2O = 0.14E-6;
 
 var y0 = 0;
 var x0 = N / 4 * dx;
@@ -70,7 +70,7 @@ var DiffusionEquation = function(canvasElement, trackball, scene, camera, render
 
     if (simType == "WaterAndCopper") {
         this.initDiffCoeff();
-    } else if (simType == "Copper") {
+    } else if (simType == "PointHeatSource" || "LineHeatSource") {
         this.initDiffCoeffCopper();
     }
 
@@ -222,7 +222,14 @@ DiffusionEquation.prototype = {
         }
     },
     heatSource: function() {
-        this.T[0][this.hts_px][this.hts_py] = this.hts_tmp;
+        if (this.simType != "LineHeatSource") {
+            this.T[0][this.hts_px][this.hts_py] = this.hts_tmp;
+            //console.log(this.hts_px);
+        } else {
+            for (var i = 0; i <= N; i++) {
+                this.T[0][i][N / 2] = this.hts_tmp;
+            }
+        }
     },
     initCondition: function() {
         for (var t = 0; t < tn; t++) {
@@ -230,8 +237,6 @@ DiffusionEquation.prototype = {
             for (i = 0; i <= N; i++) {
                 this.T[t][i] = new Array(N);
                 for (j = 0; j <= N; j++) {
-                    var x = (-N / 2 + i) * l;
-                    var y = (-N / 2 + j) * l;
                     this.T[t][i][j] = this.env_tmp;
                 }
             }

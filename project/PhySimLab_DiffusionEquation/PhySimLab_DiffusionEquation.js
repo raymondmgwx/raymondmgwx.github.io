@@ -51,6 +51,37 @@ function initEvent() {
     });
 
 
+    document.getElementById("copper_diffusion_point").addEventListener("click", function() {
+        document.getElementById("copper_diffusion_anime").innerText = "Start";
+        diffusion_equation_1.simType = "PointHeatSource";
+        diffusion_equation_1.hts_px = N / 2;
+        diffusion_equation_1.initDiffCoeffCopper();
+        diffusion_equation_1.calculateReadyFlag = false;
+        diffusion_equation_1.stopFlag = true;
+        diffusion_equation_1.calculateFlag = true;
+    });
+
+    document.getElementById("copper_diffusion_line").addEventListener("click", function() {
+        document.getElementById("copper_diffusion_anime").innerText = "Start";
+        diffusion_equation_1.simType = "LineHeatSource";
+        diffusion_equation_1.initDiffCoeffCopper();
+        diffusion_equation_1.calculateReadyFlag = false;
+        diffusion_equation_1.stopFlag = true;
+        diffusion_equation_1.calculateFlag = true;
+    });
+
+    document.getElementById("copper_diffusion_point_water").addEventListener("click", function() {
+        document.getElementById("copper_diffusion_anime").innerText = "Start";
+        diffusion_equation_1.simType = "WaterAndCopper";
+        diffusion_equation_1.hts_px = 75;
+        diffusion_equation_1.initDiffCoeff();
+        diffusion_equation_1.calculateReadyFlag = false;
+        diffusion_equation_1.stopFlag = true;
+        diffusion_equation_1.calculateFlag = true;
+    });
+
+
+
     loop();
 }
 
@@ -151,7 +182,7 @@ function loop() {
             diffusion_equation_1.lattice.geometry.normalsNeedUpdate = false;
         }
     } else if (diffusion_equation_1.calculateFlag) {
-        console.log("remove");
+        //console.log("remove");
         cde_scene.remove(diffusion_equation_1.lattice);
         for (var i = 0; i < diffusion_equation_1.cubes.length; i++) {
             cde_scene.remove(diffusion_equation_1.cubes[i]);
@@ -204,7 +235,7 @@ function loop() {
         diffusion_equation_1.lattice = new THREE.Mesh(geometry, material);
         cde_scene.add(diffusion_equation_1.lattice);
 
-        if (simType == "WaterAndCopper") {
+        if (diffusion_equation_1.simType == "WaterAndCopper") {
             var geometry = new THREE.CubeGeometry(100 * l, 20 * l, 1);
 
             var material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
