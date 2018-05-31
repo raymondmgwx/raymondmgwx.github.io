@@ -16,16 +16,18 @@ initData.data_load = function() {
 
     var loading = function(d) {
         var APP_ID = appId;
-        var API_URL = "https://api.e-stat.go.jp/rest/2.1/app/json/getStatsDatas";
+        var API_URL = "http://api.e-stat.go.jp/rest/2.0t/app/json/getStatsData";
         var statsDataId = statIds;
 
         var GET_URL = API_URL;
         GET_URL += "?appId=" + escape(APP_ID);
         GET_URL += "&statsDataId=" + escape(statsDataId);
-        $.getJSON(GET_URL, function(jsonData) {})
-            .success(function(jsonData) {
-                console.log(jsonData);
-            })
+        $.ajax({
+            url: GET_URL,
+            type: 'POST'
+        }).done((data) => {
+            console.log(data);
+        })
     }
     loading();
 }
