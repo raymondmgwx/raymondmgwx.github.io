@@ -1,0 +1,1 @@
+sudo tsc --out ../scripts/sampler.js Entity.ts Component.ts HashSet.ts test.ts Config.ts
