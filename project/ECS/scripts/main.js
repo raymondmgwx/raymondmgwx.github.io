@@ -35,30 +35,17 @@ var ECS;
         return Component;
     }());
     ECS.Component = Component;
-    var AppearanceComponent = /** @class */ (function (_super) {
-        __extends(AppearanceComponent, _super);
-        function AppearanceComponent(rgb, size) {
-            if (rgb === void 0) { rgb = [0, 100, 150]; }
-            if (size === void 0) { size = (1 + (Math.random() * 30 | 0)); }
-            var _this = _super.call(this, "appearance") || this;
-            _this.rgb = rgb;
-            _this.size = size;
+    var JsonDataComponent = /** @class */ (function (_super) {
+        __extends(JsonDataComponent, _super);
+        function JsonDataComponent(value) {
+            if (value === void 0) { value = ""; }
+            var _this = _super.call(this, "jsondata") || this;
+            _this.data = value;
             return _this;
         }
-        return AppearanceComponent;
+        return JsonDataComponent;
     }(Component));
-    ECS.AppearanceComponent = AppearanceComponent;
-    var HealthComponent = /** @class */ (function (_super) {
-        __extends(HealthComponent, _super);
-        function HealthComponent(value) {
-            if (value === void 0) { value = 20; }
-            var _this = _super.call(this, "health") || this;
-            _this.value = value;
-            return _this;
-        }
-        return HealthComponent;
-    }(Component));
-    ECS.HealthComponent = HealthComponent;
+    ECS.JsonDataComponent = JsonDataComponent;
     var PositionComponent = /** @class */ (function (_super) {
         __extends(PositionComponent, _super);
         function PositionComponent(x, y) {
@@ -72,28 +59,6 @@ var ECS;
         return PositionComponent;
     }(Component));
     ECS.PositionComponent = PositionComponent;
-    var PlayerControllerComponent = /** @class */ (function (_super) {
-        __extends(PlayerControllerComponent, _super);
-        function PlayerControllerComponent(enable) {
-            if (enable === void 0) { enable = true; }
-            var _this = _super.call(this, "playercontroller") || this;
-            _this.enable = enable;
-            return _this;
-        }
-        return PlayerControllerComponent;
-    }(Component));
-    ECS.PlayerControllerComponent = PlayerControllerComponent;
-    var CollisionComponent = /** @class */ (function (_super) {
-        __extends(CollisionComponent, _super);
-        function CollisionComponent(enable) {
-            if (enable === void 0) { enable = true; }
-            var _this = _super.call(this, "collision") || this;
-            _this.enable = enable;
-            return _this;
-        }
-        return CollisionComponent;
-    }(Component));
-    ECS.CollisionComponent = CollisionComponent;
 })(ECS || (ECS = {}));
 var Utils;
 (function (Utils) {
@@ -137,7 +102,8 @@ var Utils;
 var ECS;
 (function (ECS) {
     var Entity = /** @class */ (function () {
-        function Entity() {
+        function Entity(name) {
+            this.name = name;
             this.id = (+new Date()).toString(16) +
                 (Math.random() * 100000000 | 0).toString(16) +
                 this.count;
@@ -162,12 +128,95 @@ var ECS;
     }());
     ECS.Entity = Entity;
 })(ECS || (ECS = {}));
+/* =========================================================================
+ *
+ *  LoadData.ts
+ *  load data from json file
+ *
+ * ========================================================================= */
+/// <reference path="./System.ts" />
+var Utils;
+(function (Utils) {
+    function loadData(path, jsondata, callback) {
+        var cxhr = new XMLHttpRequest();
+        cxhr.open('GET', path, true);
+        cxhr.onreadystatechange = function () {
+            if (cxhr.readyState === 4 && cxhr.status === 200) {
+                jsondata.data = cxhr.responseText;
+                if (callback)
+                    callback();
+            }
+        };
+        cxhr.send(null);
+    }
+    Utils.loadData = loadData;
+})(Utils || (Utils = {}));
+/* =========================================================================
+ *
+ *  System.ts
+ *  game execute logical
+ *
+ * ========================================================================= */
+/// <reference path="./Entity.ts" />
+/// <reference path="./LoadData.ts" />
+/// <reference path="./HashSet.ts" />
+var ECS;
+(function (ECS) {
+    var System = /** @class */ (function () {
+        function System(name) {
+            this.name = name;
+        }
+        System.prototype.Execute = function () {
+            console.log("[" + this.name + "]System Execute!");
+        };
+        return System;
+    }());
+    ECS.System = System;
+    var LoadingSystem = /** @class */ (function (_super) {
+        __extends(LoadingSystem, _super);
+        function LoadingSystem(entities) {
+            var _this = _super.call(this, "loading") || this;
+            _this.entities = entities;
+            return _this;
+        }
+        LoadingSystem.prototype.Execute = function () {
+            _super.prototype.Execute.call(this);
+            Utils.loadData('./data/tip.json', this.entities.get("tip_entity").components.get("jsondata"), function () {
+                console.log("load tip data finished!");
+                Utils.loadData('./data/country.json', this.entities.get("country_entity").components.get("jsondata"), function () {
+                    console.log("load country data finished!");
+                    //print json
+                    console.log(this.entities.get("tip_entity").components.get("jsondata").data);
+                    console.log(this.entities.get("country_entity").components.get("jsondata").data);
+                });
+            });
+        };
+        return LoadingSystem;
+    }(System));
+    ECS.LoadingSystem = LoadingSystem;
+})(ECS || (ECS = {}));
 /// <reference path="./Component.ts" />
 /// <reference path="./Entity.ts" />
 /// <reference path="./HashSet.ts" />
-var human = new ECS.Entity();
-var hair = new ECS.AppearanceComponent();
-var hand = new ECS.PositionComponent();
-human.addComponent(hair);
-human.addComponent(hand);
-human.removeComponent(hand);
+var entity_tip = new ECS.Entity("tip_entity");
+entity_tip.addComponent(new ECS.JsonDataComponent());
+var entity_country = new ECS.Entity("country_entity");
+entity_country.addComponent(new ECS.JsonDataComponent());
+var entities = new Utils.HashSet();
+entities.add(entity_tip.name, entity_tip);
+entities.add(entity_country.name, entity_country);
+var load_system = new ECS.LoadingSystem(entities);
+var load = function () {
+    if (!Detector.webgl) {
+        Detector.addGetWebGLMessage();
+    }
+    else {
+        var mapImage = new Image();
+        mapImage.src = './images/map_outline.png';
+        mapImage.onload = function () {
+            console.log("load image data finished!");
+            load_system.Execute();
+        };
+    }
+    ;
+};

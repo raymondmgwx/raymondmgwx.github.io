@@ -8,16 +8,16 @@
 /// <reference path="./HashSet.ts" />
  module ECS{
     export class Entity{
+        name:string;
         id: string;
         count :number;
         components:Utils.HashSet<Component>;
-        constructor() {
+        constructor(name:string) {
+            this.name = name;
             this.id = (+new Date()).toString(16) + 
             (Math.random() * 100000000 | 0).toString(16) +
-            this.count;
-            
+            this.count;          
             this.count++;
-
             this.components = new Utils.HashSet<Component>();
         }
         addComponent(component:Component){
