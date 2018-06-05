@@ -48,7 +48,7 @@ module ECS {
                                 var timeBins = JSON.parse((<JsonDataComponent>this.entities.get("history_entity").components.get("jsondata")).data).timeBins;
                                 var missileLookup = JSON.parse((<JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata")).data);
                                 var latlonData = JSON.parse((<JsonDataComponent>this.entities.get("country_entity").components.get("jsondata")).data);
-                                ThreeJS.initThreeJs(mapImage);
+                                ThreeJS.initThreeJs(mapImage,timeBins,missileLookup,latlonData);
                                 ThreeJS.animate();
                             });
                         });
