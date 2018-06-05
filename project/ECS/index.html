@@ -14,15 +14,20 @@
         <div>
             <table id="marker_template" class="marker" style="left:'0px';top:'0px'">
                 <tr>
-                    <td><span id="testText" class="test"></span>
+                    <td>
+                        <span id="testText" class="test"></span>
                         <div class="close"></div>
                     </td>
                 </tr>
                 <tr>
-                    <td><span id="detailText" class="detail"></span></td>
+                    <td>
+                        <span id="detailText" class="detail"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td><span id="descriptionText" class="description"></span></td>
+                    <td>
+                        <span id="descriptionText" class="description"></span>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -34,6 +39,64 @@
                 <!-- 3D webgl canvas here -->
             </div>
         </div>
+
+        <script type="x-shader/x-vertex" id="vertexshader">
+                			uniform float amplitude;
+                			attribute float size;
+                			attribute vec3 customColor;
+                
+                			varying vec3 vColor;
+                
+                			void main() {
+                
+                				vColor = customColor;
+                
+                				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                
+                				gl_PointSize = size;
+                
+                				gl_Position = projectionMatrix * mvPosition;
+                
+                			}
+                		</script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+                			uniform vec3 color;
+                			uniform sampler2D texture;
+                
+                			varying vec3 vColor;
+                
+                			void main() {
+                
+                				gl_FragColor = vec4( color * vColor, 1.0 );
+                				gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+                
+                			}
+                		</script>
+
+        <!-- Custom Shader Code for atmospheric glow -->
+        <script type="x-shader/x-vertex" id="vertexShaderAtmosphere">
+                			varying vec3 vNormal;
+                			varying vec3 vPosition;
+                
+                			void main() {
+                				vNormal = normalize( normalMatrix * normal );
+                				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                				vPosition = normalize( vec3( mvPosition.x, mvPosition.y, mvPosition.z ) );
+                				gl_Position = projectionMatrix * mvPosition;
+                			}
+                		</script>
+
+        <!-- fragment shader a.k.a. pixel shader -->
+        <script type="x-shader/x-vertex" id="fragmentShaderAtmosphere">
+                			varying vec3 vNormal;
+                			varying vec3 vPosition;
+                
+                			void main() {
+                				float intensity = dot( vNormal, vPosition ) * 2.5 - 1.92;
+                				gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
+                			}
+                		</script>
 
         <script src="./scripts/three.js/Detector.js"></script>
         <script src="./scripts/three.js/three.min.js"></script>
