@@ -490,7 +490,7 @@ module ECS {
             //clouds
 
             var cloudsMesh = new THREE.Mesh(
-                new THREE.SphereGeometry(radius + 0.6, segments, segments),
+                new THREE.SphereGeometry(radius + 1, segments, segments),
                 new THREE.MeshPhongMaterial({
                     map: new THREE.TextureLoader().load('./images/fair_clouds_4k.png'),
                     transparent: true
@@ -587,6 +587,8 @@ module ECS {
             this.GlobalParams.set("scene", scene);
             this.GlobalParams.set("camera", camera);
             this.GlobalParams.set("renderer",renderer);
+            this.GlobalParams.set("cloudsMesh",cloudsMesh);
+            this.GlobalParams.set("timeLast",Date.now());
         }
         render() {
             this.GlobalParams.get("renderer").clear();
@@ -594,7 +596,7 @@ module ECS {
         }
         AnimeUpdate() {
             var camera = this.GlobalParams.get("camera");
-            
+            var cloudMesh = this.GlobalParams.get("cloudsMesh");
             var EventListenerGlobalParams = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
             var rotateVX = EventListenerGlobalParams.get("rotateVX");
             var rotateVY = EventListenerGlobalParams.get("rotateVY");
@@ -608,6 +610,9 @@ module ECS {
             var tilt = EventListenerGlobalParams.get("tilt");
             var scaleTarget = EventListenerGlobalParams.get("scaleTarget");
             var rotating = this.GlobalParams.get("rotating");
+
+            this.GlobalParams.set("timeNow",Date.now());
+            cloudMesh.rotation.y+=(1/16 * (this.GlobalParams.get("timeNow")-this.GlobalParams.get("timeLast")))/1000;
 
             if (rotateTargetX !== undefined && rotateTargetY !== undefined) {
                 rotateVX += (rotateTargetX - rotateX) * 0.012;
@@ -663,6 +668,7 @@ module ECS {
                 }
             }
 
+            this.GlobalParams.set("timeLast",Date.now());
 
             EventListenerGlobalParams.set("rotateTargetX", rotateTargetX);
             EventListenerGlobalParams.set("rotateTargetY", rotateTargetY);

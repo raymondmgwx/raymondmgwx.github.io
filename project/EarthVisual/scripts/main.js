@@ -771,7 +771,7 @@ var ECS;
             indexedMapTexture.magFilter = THREE.NearestFilter;
             indexedMapTexture.minFilter = THREE.NearestFilter;
             //clouds
-            var cloudsMesh = new THREE.Mesh(new THREE.SphereGeometry(radius + 0.6, segments, segments), new THREE.MeshPhongMaterial({
+            var cloudsMesh = new THREE.Mesh(new THREE.SphereGeometry(radius + 1, segments, segments), new THREE.MeshPhongMaterial({
                 map: new THREE.TextureLoader().load('./images/fair_clouds_4k.png'),
                 transparent: true
             }));
@@ -841,6 +841,8 @@ var ECS;
             this.GlobalParams.set("scene", scene);
             this.GlobalParams.set("camera", camera);
             this.GlobalParams.set("renderer", renderer);
+            this.GlobalParams.set("cloudsMesh", cloudsMesh);
+            this.GlobalParams.set("timeLast", Date.now());
         };
         ThreeJsSystem.prototype.render = function () {
             this.GlobalParams.get("renderer").clear();
@@ -848,6 +850,7 @@ var ECS;
         };
         ThreeJsSystem.prototype.AnimeUpdate = function () {
             var camera = this.GlobalParams.get("camera");
+            var cloudMesh = this.GlobalParams.get("cloudsMesh");
             var EventListenerGlobalParams = this.MainSystem.OtherSystems.get("eventlistener").GlobalParams;
             var rotateVX = EventListenerGlobalParams.get("rotateVX");
             var rotateVY = EventListenerGlobalParams.get("rotateVY");
@@ -861,6 +864,8 @@ var ECS;
             var tilt = EventListenerGlobalParams.get("tilt");
             var scaleTarget = EventListenerGlobalParams.get("scaleTarget");
             var rotating = this.GlobalParams.get("rotating");
+            this.GlobalParams.set("timeNow", Date.now());
+            cloudMesh.rotation.y += (1 / 16 * (this.GlobalParams.get("timeNow") - this.GlobalParams.get("timeLast"))) / 1000;
             if (rotateTargetX !== undefined && rotateTargetY !== undefined) {
                 rotateVX += (rotateTargetX - rotateX) * 0.012;
                 rotateVY += (rotateTargetY - rotateY) * 0.012;
@@ -903,6 +908,7 @@ var ECS;
                     scaleTarget = undefined;
                 }
             }
+            this.GlobalParams.set("timeLast", Date.now());
             EventListenerGlobalParams.set("rotateTargetX", rotateTargetX);
             EventListenerGlobalParams.set("rotateTargetY", rotateTargetY);
             EventListenerGlobalParams.set("rotateX", rotateX);
@@ -982,10 +988,10 @@ var ECS;
         };
         EventListenerSystem.prototype.onMouseWheel = function (event) {
             var delta = 0;
-            if (event.wheelDelta) {
+            if (event.wheelDelta) { /* IE/Opera. */
                 delta = event.wheelDelta / 120;
             }
-            else if (event.detail) {
+            else if (event.detail) { // firefox
                 delta = -event.detail / 3;
             }
             if (delta) {
@@ -1166,10 +1172,10 @@ var ECS;
             }, true);
             masterContainer.addEventListener('mousewheel', function (event) {
                 var delta = 0;
-                if (event.wheelDelta) {
+                if (event.wheelDelta) { /* IE/Opera. */
                     delta = event.wheelDelta / 120;
                 }
-                else if (event.detail) {
+                else if (event.detail) { // firefox
                     delta = -event.detail / 3;
                 }
                 if (delta) {
@@ -1181,10 +1187,10 @@ var ECS;
             masterContainer.addEventListener('DOMMouseScroll', function (e) {
                 var event = window.event || e;
                 var delta = 0;
-                if (event.wheelDelta) {
+                if (event.wheelDelta) { /* IE/Opera. */
                     delta = event.wheelDelta / 120;
                 }
-                else if (event.detail) {
+                else if (event.detail) { // firefox
                     delta = -event.detail / 3;
                 }
                 if (delta) {
