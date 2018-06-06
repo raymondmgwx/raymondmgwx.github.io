@@ -4,7 +4,6 @@
  *  Each entity can obtain many components
  *
  * ========================================================================= */
-/// <reference path="./Config.ts" />
 /// <reference path="./HashSet.ts" />
 module ECS {
     export class Component {

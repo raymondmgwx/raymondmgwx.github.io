@@ -21,7 +21,7 @@
             this.components = new Utils.HashSet<Component>();
         }
         addComponent(component:Component){
-            this.components.add(component.name,component);
+            this.components.set(component.name,component);
             console.log("add ["+component.name+"] component");
         }
         removeComponent(component:Component){

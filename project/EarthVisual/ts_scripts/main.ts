@@ -15,10 +15,10 @@ entity_missile.addComponent(new ECS.JsonDataComponent());
 let entity_history = new ECS.Entity("history_entity");
 entity_history.addComponent(new ECS.JsonDataComponent());
 let entities = new Utils.HashSet<ECS.Entity>();
-entities.add(entity_tip.name, entity_tip);
-entities.add(entity_country.name, entity_country);
-entities.add(entity_missile.name, entity_missile);
-entities.add(entity_history.name, entity_history);
+entities.set(entity_tip.name, entity_tip);
+entities.set(entity_country.name, entity_country);
+entities.set(entity_missile.name, entity_missile);
+entities.set(entity_history.name, entity_history);
 
 let load_system = new ECS.LoadingSystem(entities);
 

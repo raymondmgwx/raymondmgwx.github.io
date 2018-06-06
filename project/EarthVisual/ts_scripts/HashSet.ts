@@ -8,10 +8,10 @@ module Utils{
             this.items = {};
         }
     
-        add(key: string, value: T): void {
+        set(key: string, value: T): void {
             this.items[key] = value;
         }
-    
+
         delete(key: string): boolean {
             return delete this.items[key];
         }
