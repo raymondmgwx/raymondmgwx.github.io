@@ -19,6 +19,7 @@ module ThreeJS {
     var selectableTests = [];
     var glContainer = document.getElementById('glContainer');
     var dpr = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    var lookupCanvas, lookupTexture;
     var outcomeLookup = {
         'success': 'Success',
         'failure': 'Failure',
@@ -105,7 +106,7 @@ module ThreeJS {
         //	go through the data from year, and find all relevant geometries
         for (let i of bin) {
             var set = i;
-            
+
             var relevantOutcomeCategory = $.inArray(set.outcome, outcomeCategories) >= 0;
             var relevantMissileCategory = $.inArray(set.missile, missileCategories) >= 0;
 
@@ -260,7 +261,7 @@ module ThreeJS {
     }
 
     function wrap(value, min, rangeSize) {
-        rangeSize-=min;
+        rangeSize -= min;
         while (value < min) {
             value += rangeSize;
         }
@@ -271,7 +272,7 @@ module ThreeJS {
     var previouslySelectedTest = null;
     var selectableTests = [];
     var testData = new Object();
-    export function selectVisualization(missileLookup:any,facilityData:any,testData: any, linearData: any, year: any, tests: any, outcomeCategories: any, missileCategories: any) {
+    export function selectVisualization(missileLookup: any, facilityData: any, testData: any, linearData: any, year: any, tests: any, outcomeCategories: any, missileCategories: any) {
         //	we're only doing one test for now so...
         var cName = tests[0].toUpperCase();
 
@@ -345,13 +346,105 @@ module ThreeJS {
 
         //d3Graphs.initGraphs();
     }
+    var countryColorMap = {
+        'PE': 1,
+        'BF': 2, 'FR': 3, 'LY': 4, 'BY': 5, 'PK': 6, 'ID': 7, 'YE': 8, 'MG': 9, 'BO': 10, 'CI': 11, 'DZ': 12, 'CH': 13, 'CM': 14, 'MK': 15, 'BW': 16, 'UA': 17,
+        'KE': 18, 'TW': 19, 'JO': 20, 'MX': 21, 'AE': 22, 'BZ': 23, 'BR': 24, 'SL': 25, 'ML': 26, 'CD': 27, 'IT': 28, 'SO': 29, 'AF': 30, 'BD': 31, 'DO': 32, 'GW': 33,
+        'GH': 34, 'AT': 35, 'SE': 36, 'TR': 37, 'UG': 38, 'MZ': 39, 'JP': 40, 'NZ': 41, 'CU': 42, 'VE': 43, 'PT': 44, 'CO': 45, 'MR': 46, 'AO': 47, 'DE': 48, 'SD': 49,
+        'TH': 50, 'AU': 51, 'PG': 52, 'IQ': 53, 'HR': 54, 'GL': 55, 'NE': 56, 'DK': 57, 'LV': 58, 'RO': 59, 'ZM': 60, 'IR': 61, 'MM': 62, 'ET': 63, 'GT': 64, 'SR': 65,
+        'EH': 66, 'CZ': 67, 'TD': 68, 'AL': 69, 'FI': 70, 'SY': 71, 'KG': 72, 'SB': 73, 'OM': 74, 'PA': 75, 'AR': 76, 'GB': 77, 'CR': 78, 'PY': 79, 'GN': 80, 'IE': 81,
+        'NG': 82, 'TN': 83, 'PL': 84, 'NA': 85, 'ZA': 86, 'EG': 87, 'TZ': 88, 'GE': 89, 'SA': 90, 'VN': 91, 'RU': 92, 'HT': 93, 'BA': 94, 'IN': 95, 'CN': 96, 'CA': 97,
+        'SV': 98, 'GY': 99, 'BE': 100, 'GQ': 101, 'LS': 102, 'BG': 103, 'BI': 104, 'DJ': 105, 'AZ': 106, 'MY': 107, 'PH': 108, 'UY': 109, 'CG': 110, 'RS': 111, 'ME': 112, 'EE': 113,
+        'RW': 114, 'AM': 115, 'SN': 116, 'TG': 117, 'ES': 118, 'GA': 119, 'HU': 120, 'MW': 121, 'TJ': 122, 'KH': 123, 'KR': 124, 'HN': 125, 'IS': 126, 'NI': 127, 'CL': 128, 'MA': 129,
+        'LR': 130, 'NL': 131, 'CF': 132, 'SK': 133, 'LT': 134, 'ZW': 135, 'LK': 136, 'IL': 137, 'LA': 138, 'KP': 139, 'GR': 140, 'TM': 141, 'EC': 142, 'BJ': 143, 'SI': 144, 'NO': 145,
+        'MD': 146, 'LB': 147, 'NP': 148, 'ER': 149, 'US': 150, 'KZ': 151, 'AQ': 152, 'SZ': 153, 'UZ': 154, 'MN': 155, 'BT': 156, 'NC': 157, 'FJ': 158, 'KW': 159, 'TL': 160, 'BS': 161,
+        'VU': 162, 'FK': 163, 'GM': 164, 'QA': 165, 'JM': 166, 'CY': 167, 'PR': 168, 'PS': 169, 'BN': 170, 'TT': 171, 'CV': 172, 'PF': 173, 'WS': 174, 'LU': 175, 'KM': 176, 'MU': 177,
+        'FO': 178, 'ST': 179, 'AN': 180, 'DM': 181, 'TO': 182, 'KI': 183, 'FM': 184, 'BH': 185, 'AD': 186, 'MP': 187, 'PW': 188, 'SC': 189, 'AG': 190, 'BB': 191, 'TC': 192, 'VC': 193,
+        'LC': 194, 'YT': 195, 'VI': 196, 'GD': 197, 'MT': 198, 'MV': 199, 'KY': 200, 'KN': 201, 'MS': 202, 'BL': 203, 'NU': 204, 'PM': 205, 'CK': 206, 'WF': 207, 'AS': 208, 'MH': 209,
+        'AW': 210, 'LI': 211, 'VG': 212, 'SH': 213, 'JE': 214, 'AI': 215, 'MF_1_': 216, 'GG': 217, 'SM': 218, 'BM': 219, 'TV': 220, 'NR': 221, 'GI': 222, 'PN': 223, 'MC': 224, 'VA': 225,
+        'IM': 226, 'GU': 227, 'SG': 228
+    };
 
-    function getHistoricalData(timeBins:any) {
+    // function highlightCountry(countries: any, countryData: any) {
+    //     var countryCodes = [];
+    //     for (var i in countries) {
+    //         var code = findCode(countries[i]);
+    //         countryCodes.push(code);
+    //     }
+
+    //     var ctx = lookupCanvas.getContext('2d');
+    //     ctx.clearRect(0, 0, 256, 1);
+
+    //     var pickMask = countries.length == 0 ? 0 : 1;
+    //     var oceanFill = 10 * pickMask;
+    //     ctx.fillStyle = 'rgb(' + oceanFill + ',' + oceanFill + ',' + oceanFill + ')';
+    //     ctx.fillRect(0, 0, 1, 1);
+
+    //     var selectedCountryCode = selectedCountry.countryCode;
+
+    //     for (var i in countryCodes) {
+    //         var countryCode = countryCodes[i];
+    //         var colorIndex = countryColorMap[countryCode];
+
+    //         var mapColor = countryData[countries[i]].mapColor;
+    //         // var fillCSS = '#ff0000';
+    //         var fillCSS = '#333333';
+    //         if (countryCode === selectedCountryCode)
+    //             fillCSS = '#eeeeee'
+
+    //         ctx.fillStyle = fillCSS;
+    //         ctx.fillRect(colorIndex, 0, 1, 1);
+    //     }
+
+    //     lookupTexture.needsUpdate = true;
+    // }
+
+    // function getPickColor(countryData: any) {
+
+    //     highlightCountry([], countryData);
+
+    //     mapUniforms['outlineLevel'].value = 0;
+    //     lookupTexture.needsUpdate = true;
+
+    //     renderer.autoClear = false;
+    //     renderer.autoClearColor = false;
+    //     renderer.autoClearDepth = false;
+    //     renderer.autoClearStencil = false;
+    //     renderer.preserve
+
+    //     renderer.clear();
+    //     renderer.render(scene, camera);
+
+    //     var gl = renderer.context;
+    //     gl.preserveDrawingBuffer = true;
+
+    //     var mx = (Utils.getMouseX() + renderer.context.canvas.width / 2);
+    //     var my = (-Utils.getMouseY() + renderer.context.canvas.height / 2);
+    //     mx = Math.floor(mx);
+    //     my = Math.floor(my);
+
+    //     var buf = new Uint8Array(4);
+    //     gl.readPixels(mx, my, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+
+    //     renderer.autoClear = true;
+    //     renderer.autoClearColor = true;
+    //     renderer.autoClearDepth = true;
+    //     renderer.autoClearStencil = true;
+
+    //     gl.preserveDrawingBuffer = false;
+
+    //     mapUniforms['outlineLevel'].value = 1;
+
+
+    //     return buf[0];
+    // }
+
+    function getHistoricalData(timeBins: any) {
         var history = [];
-    
+
         var outcomeCategories = selectionData.getOutcomeCategories();
         var missileCategories = selectionData.getMissileCategories();
-    
+
         for (var i in timeBins) {
             var yearBin = timeBins[i].data;
             var value = { successes: 0, failures: 0, unknowns: 0 };
@@ -359,13 +452,13 @@ module ThreeJS {
                 var set = yearBin[s];
                 var outcomeName = set.outcome;
                 var missileName = set.missile;
-    
+
                 var relevantCategory = ($.inArray(outcomeName, outcomeCategories) >= 0) &&
                     ($.inArray(missileName, missileCategories) >= 0);
-    
+
                 if (relevantCategory == false)
                     continue;
-    
+
                 if (outcomeName === 'success')
                     value.successes++;
                 else if (outcomeName === 'failure')
@@ -379,7 +472,7 @@ module ThreeJS {
         return history;
     }
 
-    export function initThreeJs(mapImage: any, timeBins: any, missileLookup: any, latlonData: any) {
+    export function initThreeJs(timeBins: any, missileLookup: any, latlonData: any) {
 
         scene = new THREE.Scene();
         scene.matrixAutoUpdate = false;
@@ -387,14 +480,14 @@ module ThreeJS {
         scene2d = new THREE.Scene();
         scene.add(new THREE.AmbientLight(0x505050));
 
-        var light1 = new THREE.SpotLight(0xeeeeee, 3);
-        light1.position.x = 730;
-        light1.position.y = 520;
+        var light1 = new THREE.SpotLight(0xeeeeee, 2);
+        light1.position.x = 1730;
+        light1.position.y = 1520;
         light1.position.z = 626;
         light1.castShadow = true;
         scene.add(light1);
 
-        var light2 = new THREE.PointLight(0x222222, 14.8);
+        var light2 = new THREE.PointLight(0x222222, 14);
         light2.position.x = -640;
         light2.position.y = -500;
         light2.position.z = -1000;
@@ -403,18 +496,28 @@ module ThreeJS {
         rotating = new THREE.Object3D();
         scene.add(rotating);
 
-        var MapTexture = new THREE.Texture(mapImage);
-        MapTexture.needsUpdate = true;
+        // var MapTexture = new THREE.Texture(mapImage);
+        // MapTexture.needsUpdate = true;
 
-        var mapMaterial = new THREE.MeshBasicMaterial({
-            map: MapTexture,
-            polygonOffset: true,
-            polygonOffsetFactor: 1,
-            polygonOffsetUnits: 1
-        });
+        // var mapMaterial = new THREE.MeshBasicMaterial({
+        //     map: MapTexture,
+        //     polygonOffset: true,
+        //     polygonOffsetFactor: 1,
+        //     polygonOffsetUnits: 1
+        // });
 
+        var mapMaterial = new THREE.MeshPhongMaterial({
+            map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
+            bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
+            bumpScale: 0.005,
+            specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
+            specular: new THREE.Color('grey')
+        })
 
-        sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(100, 40, 40), mapMaterial);
+        var radius = 100;
+        var segments = 40;
+
+        sphere = new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), mapMaterial);
         sphere.doubleSided = false;
         sphere.rotation.x = Math.PI;
         sphere.rotation.y = -Math.PI / 2;
@@ -422,6 +525,33 @@ module ThreeJS {
         sphere.id = "base";
         rotating.add(sphere);
 
+        //map index
+        lookupCanvas = document.createElement('canvas');
+        lookupCanvas.width = 256;
+        lookupCanvas.height = 1;
+
+        lookupTexture = new THREE.Texture(lookupCanvas);
+        lookupTexture.magFilter = THREE.NearestFilter;
+        lookupTexture.minFilter = THREE.NearestFilter;
+        lookupTexture.needsUpdate = true;
+
+        var indexedMapTexture = new THREE.TextureLoader().load('./images/map_indexed.png');
+
+        indexedMapTexture.needsUpdate = true;
+        indexedMapTexture.magFilter = THREE.NearestFilter;
+        indexedMapTexture.minFilter = THREE.NearestFilter;
+
+        //clouds
+
+        var cloudsMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(radius + 0.6, segments, segments),
+            new THREE.MeshPhongMaterial({
+                map: new THREE.TextureLoader().load('./images/fair_clouds_4k.png'),
+                transparent: true
+            })
+        );
+        scene.add(cloudsMesh);
+        rotating.add(cloudsMesh)
 
         //load history data
         for (var i in timeBins) {
@@ -472,9 +602,9 @@ module ThreeJS {
         var latestTest = latestBin.data[latestBin.data.length - 1];
         var selectedTestName = latestTest.testName;
 
-        selectionData = new Selection(selectedYear, selectedTestName,missileLookup);
+        selectionData = new Selection(selectedYear, selectedTestName, missileLookup);
 
-        selectVisualization(missileLookup,facilityData,vizilines,timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup));
+        selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup));
 
 
 

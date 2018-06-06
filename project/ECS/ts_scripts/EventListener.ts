@@ -54,6 +54,14 @@ module Utils {
         return rotateVY;
     }
 
+    export function getMouseX() {
+        return mouseX;
+    }
+
+    export function getMouseY() {
+        return mouseY;
+    }
+
     export function setScaleTarget(val: any) {
         scaleTarget = val;
     }
@@ -140,7 +148,11 @@ module Utils {
         }
     }
 
+    //click current country
     function onClick(event) {
+        if (Math.abs(pressX - mouseX) > 3 || Math.abs(pressY - mouseY) > 3)
+            return;
+        //var pickColorIndex = getPickColor();
     }
 
     function onKeyDown(event) {
