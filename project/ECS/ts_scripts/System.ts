@@ -32,11 +32,6 @@ module ECS {
 
             // var mapImage = new Image();
             // mapImage.src = './images/2_no_clouds_4k.jpg';
-            // var bumpImage = new Image();
-            // bumpImage.src = './images/elev_bump_4k.jpg';
-            // var specImage = new Image();
-            // specImage.src = './images/water_4k.png';
-
             //console.log("load image data finished!");
             Utils.loadData('./data/tip.json', <JsonDataComponent>this.entities.get("tip_entity").components.get("jsondata"), function () {
                 console.log("load tip data finished!");
@@ -55,8 +50,18 @@ module ECS {
                     });
                 });
             });
+        }
+    }
 
 
+    export class MainSystem extends System {
+        JsonDatas: Utils.HashSet<any>;
+        constructor(jsonDatas: Utils.HashSet<any>) {
+            super("main");
+            this.JsonDatas = jsonDatas;
+        }
+        Execute() {
+            super.Execute();
         }
     }
 
