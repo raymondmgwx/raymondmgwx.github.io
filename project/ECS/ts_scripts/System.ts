@@ -12,6 +12,7 @@ module ECS {
 
     export class System {
         name: string;
+        GlobalDatas: ECS.Entity;
         constructor(name: string) {
             this.name = name;
         }
@@ -44,6 +45,17 @@ module ECS {
                             var timeBins = JSON.parse((<JsonDataComponent>this.entities.get("history_entity").components.get("jsondata")).data).timeBins;
                             var missileLookup = JSON.parse((<JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata")).data);
                             var latlonData = JSON.parse((<JsonDataComponent>this.entities.get("country_entity").components.get("jsondata")).data);
+
+                            let entity_GlobalData = new ECS.Entity("global_entity");
+                            let global_data = new Utils.HashSet<any>();
+                            global_data.add("timeBins", timeBins);
+                            global_data.add("missileLookup", missileLookup);
+                            global_data.add("latlonData", latlonData);
+                            entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+
+                            let other_systems = new Utils.HashSet<System>();
+                            let main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
+
                             ThreeJS.initThreeJs(timeBins, missileLookup, latlonData);
                             ThreeJS.animate();
                         });
@@ -55,13 +67,18 @@ module ECS {
 
 
     export class MainSystem extends System {
-        JsonDatas: Utils.HashSet<any>;
-        constructor(jsonDatas: Utils.HashSet<any>) {
+        OtherSystems: Utils.HashSet<System>;
+        constructor(GlobalDatas: ECS.Entity, othSystems: Utils.HashSet<System>) {
             super("main");
-            this.JsonDatas = jsonDatas;
+            this.GlobalDatas = GlobalDatas;
+            this.OtherSystems = othSystems;
         }
         Execute() {
             super.Execute();
+            this.OtherSystems.forEach(function (key, val) {
+                (<System>val).GlobalDatas = this.GlobalDatas;
+                (<System>val).Execute();
+            });
         }
     }
 

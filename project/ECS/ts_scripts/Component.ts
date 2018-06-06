@@ -5,6 +5,7 @@
  *
  * ========================================================================= */
 /// <reference path="./Config.ts" />
+/// <reference path="./HashSet.ts" />
 module ECS {
     export class Component {
         name: string;
@@ -14,20 +15,18 @@ module ECS {
     }
 
     export class JsonDataComponent extends Component {
-        data:string
+        data: string
         constructor(value: string = "") {
             super("jsondata");
             this.data = value;
         }
     }
 
-    export class PositionComponent extends Component {
-        x: number;
-        y: number;
-        constructor(x: number = 20 + (Math.random() * (ECS.canvasWidth - 20) | 0), y: number = 20 + (Math.random() * (ECS.canvasHeight - 20) | 0)) {
-            super("position");
-            this.x = x;
-            this.y = y;
+    export class GlobalComponent extends Component {
+        data: Utils.HashSet<any>;
+        constructor(data: Utils.HashSet<any>) {
+            super("global");
+            this.data = data;
         }
     }
 }

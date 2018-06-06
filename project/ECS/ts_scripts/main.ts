@@ -5,6 +5,7 @@
 
 declare var Detector: any;
 
+
 let entity_tip = new ECS.Entity("tip_entity");
 entity_tip.addComponent(new ECS.JsonDataComponent());
 let entity_country = new ECS.Entity("country_entity");

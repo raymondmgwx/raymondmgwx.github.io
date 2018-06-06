@@ -19,47 +19,6 @@ var ECS;
     ECS.canvasWidth = 600;
     ECS.canvasHeight = 400;
 })(ECS || (ECS = {}));
-/* =========================================================================
- *
- *  Component.ts
- *  Each entity can obtain many components
- *
- * ========================================================================= */
-/// <reference path="./Config.ts" />
-var ECS;
-(function (ECS) {
-    var Component = /** @class */ (function () {
-        function Component(name) {
-            this.name = name;
-        }
-        return Component;
-    }());
-    ECS.Component = Component;
-    var JsonDataComponent = /** @class */ (function (_super) {
-        __extends(JsonDataComponent, _super);
-        function JsonDataComponent(value) {
-            if (value === void 0) { value = ""; }
-            var _this = _super.call(this, "jsondata") || this;
-            _this.data = value;
-            return _this;
-        }
-        return JsonDataComponent;
-    }(Component));
-    ECS.JsonDataComponent = JsonDataComponent;
-    var PositionComponent = /** @class */ (function (_super) {
-        __extends(PositionComponent, _super);
-        function PositionComponent(x, y) {
-            if (x === void 0) { x = 20 + (Math.random() * (ECS.canvasWidth - 20) | 0); }
-            if (y === void 0) { y = 20 + (Math.random() * (ECS.canvasHeight - 20) | 0); }
-            var _this = _super.call(this, "position") || this;
-            _this.x = x;
-            _this.y = y;
-            return _this;
-        }
-        return PositionComponent;
-    }(Component));
-    ECS.PositionComponent = PositionComponent;
-})(ECS || (ECS = {}));
 var Utils;
 (function (Utils) {
     ;
@@ -91,6 +50,45 @@ var Utils;
     }());
     Utils.HashSet = HashSet;
 })(Utils || (Utils = {}));
+/* =========================================================================
+ *
+ *  Component.ts
+ *  Each entity can obtain many components
+ *
+ * ========================================================================= */
+/// <reference path="./Config.ts" />
+/// <reference path="./HashSet.ts" />
+var ECS;
+(function (ECS) {
+    var Component = /** @class */ (function () {
+        function Component(name) {
+            this.name = name;
+        }
+        return Component;
+    }());
+    ECS.Component = Component;
+    var JsonDataComponent = /** @class */ (function (_super) {
+        __extends(JsonDataComponent, _super);
+        function JsonDataComponent(value) {
+            if (value === void 0) { value = ""; }
+            var _this = _super.call(this, "jsondata") || this;
+            _this.data = value;
+            return _this;
+        }
+        return JsonDataComponent;
+    }(Component));
+    ECS.JsonDataComponent = JsonDataComponent;
+    var GlobalComponent = /** @class */ (function (_super) {
+        __extends(GlobalComponent, _super);
+        function GlobalComponent(data) {
+            var _this = _super.call(this, "global") || this;
+            _this.data = data;
+            return _this;
+        }
+        return GlobalComponent;
+    }(Component));
+    ECS.GlobalComponent = GlobalComponent;
+})(ECS || (ECS = {}));
 /* =========================================================================
  *
  *  Entity.js
@@ -1151,10 +1149,6 @@ var ECS;
             _super.prototype.Execute.call(this);
             // var mapImage = new Image();
             // mapImage.src = './images/2_no_clouds_4k.jpg';
-            // var bumpImage = new Image();
-            // bumpImage.src = './images/elev_bump_4k.jpg';
-            // var specImage = new Image();
-            // specImage.src = './images/water_4k.png';
             //console.log("load image data finished!");
             Utils.loadData('./data/tip.json', this.entities.get("tip_entity").components.get("jsondata"), function () {
                 console.log("load tip data finished!");
@@ -1167,6 +1161,14 @@ var ECS;
                             var timeBins = JSON.parse(this.entities.get("history_entity").components.get("jsondata").data).timeBins;
                             var missileLookup = JSON.parse(this.entities.get("missile_entity").components.get("jsondata").data);
                             var latlonData = JSON.parse(this.entities.get("country_entity").components.get("jsondata").data);
+                            var entity_GlobalData = new ECS.Entity("global_entity");
+                            var global_data = new Utils.HashSet();
+                            global_data.add("timeBins", timeBins);
+                            global_data.add("missileLookup", missileLookup);
+                            global_data.add("latlonData", latlonData);
+                            entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+                            var other_systems = new Utils.HashSet();
+                            var main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
                             ThreeJS.initThreeJs(timeBins, missileLookup, latlonData);
                             ThreeJS.animate();
                         });
@@ -1177,6 +1179,24 @@ var ECS;
         return LoadingSystem;
     }(System));
     ECS.LoadingSystem = LoadingSystem;
+    var MainSystem = /** @class */ (function (_super) {
+        __extends(MainSystem, _super);
+        function MainSystem(GlobalDatas, othSystems) {
+            var _this = _super.call(this, "main") || this;
+            _this.GlobalDatas = GlobalDatas;
+            _this.OtherSystems = othSystems;
+            return _this;
+        }
+        MainSystem.prototype.Execute = function () {
+            _super.prototype.Execute.call(this);
+            this.OtherSystems.forEach(function (key, val) {
+                val.GlobalDatas = this.GlobalDatas;
+                val.Execute();
+            });
+        };
+        return MainSystem;
+    }(System));
+    ECS.MainSystem = MainSystem;
 })(ECS || (ECS = {}));
 /// <reference path="./Component.ts" />
 /// <reference path="./System.ts" />
