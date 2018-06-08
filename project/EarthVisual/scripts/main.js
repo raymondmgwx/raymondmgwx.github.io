@@ -347,6 +347,131 @@ var Utils;
         return Selection;
     }());
     Utils.Selection = Selection;
+    function long2tile(lon, zoom) {
+        return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom)));
+    }
+    Utils.long2tile = long2tile;
+    function lat2tile(lat, zoom) {
+        return (Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)));
+    }
+    Utils.lat2tile = lat2tile;
+    function tile2long(x, z) {
+        return (x / Math.pow(2, z) * 360 - 180);
+    }
+    Utils.tile2long = tile2long;
+    function tile2lat(y, z) {
+        var n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
+        return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
+    }
+    Utils.tile2lat = tile2lat;
+    function measure(R, lat1, lon1, lat2, lon2) {
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d * 1000;
+    }
+    Utils.measure = measure;
+    function lonOffsetMeter2lon(R, lon, lat, x) {
+        return x / (R * Math.cos(lat)) + lon;
+    }
+    Utils.lonOffsetMeter2lon = lonOffsetMeter2lon;
+    function latOffsetMeter2lat(R, lat, y) {
+        return (y / R) + lat;
+    }
+    Utils.latOffsetMeter2lat = latOffsetMeter2lat;
+    var geoTiles = {};
+    var geoTileQueue = [];
+    function getTileMesh(r, zoom, ytile, MAX_TILEMESH) {
+        var id = 'tile_' + zoom + '_' + ytile;
+        if (!(geoTiles.hasOwnProperty(id))) {
+            geoTiles[id] = new THREE.Geometry();
+            var myGeometry = geoTiles[id];
+            geoTileQueue.push(id);
+            if (geoTileQueue.length > MAX_TILEMESH) {
+                delete geoTiles[geoTileQueue.shift()];
+            }
+            var lon1 = tile2long(0, zoom);
+            var lat1 = tile2lat(ytile, zoom);
+            var lon2 = tile2long(1, zoom);
+            var lat2 = tile2lat(ytile + 1, zoom);
+            /*************************
+             *            ^ Y         *
+             *            |           *
+             *            |           *
+             *            |           *
+             *            -------> X  *
+             *           /            *
+             *          /             *
+             *         / Z            *
+             *************************/
+            /***************************
+             *       B        C         *
+             *                          *
+             *                          *
+             *                          *
+             *      A          D        *
+             ***************************/
+            var rUp = r * Math.cos(lat1 * Math.PI / 180);
+            var rDown = r * Math.cos(lat2 * Math.PI / 180);
+            var Ax = rDown * Math.sin(lon1 * Math.PI / 180);
+            var Ay = r * Math.sin(lat2 * Math.PI / 180);
+            var Az = rDown * Math.cos(lon1 * Math.PI / 180);
+            var Bx = rUp * Math.sin(lon1 * Math.PI / 180);
+            var By = r * Math.sin(lat1 * Math.PI / 180);
+            var Bz = rUp * Math.cos(lon1 * Math.PI / 180);
+            var Cx = rUp * Math.sin(lon2 * Math.PI / 180);
+            var Cy = r * Math.sin(lat1 * Math.PI / 180);
+            var Cz = rUp * Math.cos(lon2 * Math.PI / 180);
+            var Dx = rDown * Math.sin(lon2 * Math.PI / 180);
+            var Dy = r * Math.sin(lat2 * Math.PI / 180);
+            var Dz = rDown * Math.cos(lon2 * Math.PI / 180);
+            myGeometry.vertices.push(new THREE.Vector3(Ax, Ay, Az), new THREE.Vector3(Bx, By, Bz), new THREE.Vector3(Cx, Cy, Cz), new THREE.Vector3(Dx, Dy, Dz));
+            myGeometry.faces.push(new THREE.Face3(0, 2, 1));
+            myGeometry.faces.push(new THREE.Face3(0, 3, 2));
+            myGeometry.faceVertexUvs[0].push([
+                new THREE.Vector2(0.0, 0.0),
+                new THREE.Vector2(1.0, 1.0),
+                new THREE.Vector2(0.0, 1.0)
+            ]);
+            myGeometry.faceVertexUvs[0].push([
+                new THREE.Vector2(0.0, 0.0),
+                new THREE.Vector2(1.0, 0.0),
+                new THREE.Vector2(1.0, 1.0)
+            ]);
+            myGeometry.uvsNeedUpdate = true;
+        }
+        return new THREE.Mesh(geoTiles[id]);
+    }
+    Utils.getTileMesh = getTileMesh;
+    var textures = {};
+    var textureQueue = [];
+    function textureFactory(TILE_PROVIDER, MAX_TILEMESH, zoom_, xtile_, ytile_, onLoaded) {
+        var id = 'tile_' + zoom_ + '_' + xtile_ + '_' + ytile_;
+        var textureLoader = new THREE.TextureLoader();
+        // textures[id] = {};
+        if (!(textures.hasOwnProperty(id))) {
+            var url = TILE_PROVIDER + '/' +
+                zoom_ + '/' +
+                ((zoom_ > 0) ? (xtile_ % Math.pow(2, zoom_)) : 0) + '/' +
+                ((zoom_ > 0) ? (ytile_ % Math.pow(2, zoom_)) : 0) + '.png';
+            textureLoader.load(url, function (texture) {
+                textures[id] = texture;
+                textureQueue.push(id);
+                if (textureQueue.length > MAX_TILEMESH) {
+                    delete textures[textureQueue.shift()];
+                }
+                onLoaded(texture);
+            });
+        }
+        else {
+            onLoaded(textures[id]);
+        }
+    }
+    Utils.textureFactory = textureFactory;
 })(Utils || (Utils = {}));
 /* =========================================================================
  *
@@ -714,12 +839,116 @@ var ECS;
             }
             //d3Graphs.initGraphs();
         };
+        ThreeJsSystem.prototype.UpdateOSMTile = function (p_lon, p_lat, zoom) {
+            var xtile = Utils.long2tile(p_lon, zoom);
+            var ytile = Utils.lat2tile(p_lat, zoom);
+            var tiles = {};
+            var nextMinXtile, nextMaxXtile;
+            var rotating = this.GlobalParams.get("rotating");
+            var tileGroup = this.GlobalParams.get("tileGroup");
+            var tileGroups = this.GlobalParams.get("tileGroups");
+            var ZOOM_MIN = this.GlobalParams.get("ZOOM_MIN");
+            var ZOOM_SHIFT_SIZE = this.GlobalParams.get("ZOOM_SHIFT_SIZE");
+            var MAX_TILEMESH = this.GlobalParams.get("MAX_TILEMESH");
+            var TILE_PROVIDER = this.GlobalParams.get("TILE_PROVIDER");
+            var radius = this.GlobalParams.get("radius");
+            rotating.remove(tileGroups);
+            tileGroups = new THREE.Object3D(); //create an empty container
+            rotating.add(tileGroups);
+            //console.log('zoom_ start:', Math.max(zoom, ZOOM_MIN));
+            //console.log('zoom_ end:', Math.max(zoom - ZOOM_SHIFT_SIZE, ZOOM_MIN) + 1);
+            for (var zoom_ = Math.max(zoom, ZOOM_MIN); zoom_ > Math.max(zoom - ZOOM_SHIFT_SIZE, ZOOM_MIN); zoom_--) {
+                var zShift = zoom - zoom_;
+                tileGroup[zShift] = new THREE.Object3D();
+                tileGroups.add(tileGroup[zShift]);
+                // var zoom_ = zoom - zShift;
+                if (zoom_ < 0 && zShift > 0) {
+                    continue;
+                }
+                var size = 2;
+                var factor = Math.pow(2, zShift);
+                var xtile_ = Math.floor(xtile / factor);
+                var ytile_ = Math.floor(ytile / factor);
+                if (zoom < 8) {
+                    var size = 3;
+                }
+                else if (zoom < 10) {
+                    var size = 2;
+                }
+                else {
+                    size = 1;
+                }
+                var minXtile = Math.floor((xtile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
+                var maxXtile = Math.floor((xtile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
+                var minYtile = Math.floor((ytile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
+                var maxYtile = Math.floor((ytile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
+                // console.log({
+                //     'zoom_': zoom_,
+                //     'xtile_': xtile_,
+                //     'ytile_': ytile_,
+                //     'minXtile': minXtile,
+                //     'maxXtile': maxXtile,
+                //     'minYtile': minYtile,
+                //     'maxYtile': maxYtile,
+                //     'lon':p_lon,
+                //     'p_lat':p_lat
+                // })
+                var modulus = (zoom_ > 0) ? Math.pow(2, zoom_) : 0;
+                for (var atile = minXtile; atile <= maxXtile; atile++) {
+                    for (var btile = minYtile; btile <= maxYtile; btile++) {
+                        var lon1 = Utils.tile2long(atile, zoom_);
+                        var lat1 = Utils.tile2lat(btile, zoom_);
+                        var lon2 = Utils.tile2long(atile + 1, zoom_);
+                        var lat2 = Utils.tile2lat(btile + 1, zoom_);
+                        var lat = (lat1 + lat2) / 2;
+                        var lon = (lon1 + lon2) / 2;
+                        var widthUp = Utils.measure(radius, lat1, lon1, lat1, lon2);
+                        var widthDown = Utils.measure(radius, lat2, lon1, lat2, lon2);
+                        var widthSide = Utils.measure(radius, lat1, lon1, lat2, lon1);
+                        var id = 'z_' + zoom_ + '_' + atile + "_" + btile;
+                        for (var zzz = 1; zzz <= 2; zzz++) {
+                            var idNext = 'z_' + (zoom_ - zzz) + '_' + Math.floor(atile / Math.pow(2, zzz)) + "_" + Math.floor(btile / Math.pow(2, zzz));
+                            tiles[idNext] = {};
+                        }
+                        if (!tiles.hasOwnProperty(id)) {
+                            var tileEarth = new THREE.Object3D(); //create an empty container
+                            tileEarth.rotation.set(0, (lon1 + 180) * Math.PI / 180, 0);
+                            tileGroup[zShift].add(tileEarth);
+                            var tileMesh = Utils.getTileMesh(radius, zoom_, btile, MAX_TILEMESH);
+                            tileEarth.add(tileMesh);
+                            (function (yourTileMesh, yourZoom, yourXtile, yourYtile) {
+                                var onLoaded = function (texture) {
+                                    // MeshFaceMaterial
+                                    yourTileMesh.material = new THREE.MeshBasicMaterial({
+                                        map: texture
+                                    });
+                                };
+                                Utils.textureFactory(TILE_PROVIDER, MAX_TILEMESH, yourZoom, yourXtile, yourYtile, onLoaded);
+                            })(tileMesh, zoom_, atile % modulus, btile % modulus);
+                        }
+                    }
+                }
+            }
+            this.GlobalParams.set("xtile", xtile);
+            this.GlobalParams.set("ytile", ytile);
+            this.GlobalParams.set("rotating", rotating);
+            this.GlobalParams.set("tileGroups", tileGroups);
+            this.GlobalParams.set("tileGroup", tileGroup);
+        };
         ThreeJsSystem.prototype.InitThreeJs = function () {
             var glContainer = document.getElementById('glContainer');
             var dpr = window.devicePixelRatio ? window.devicePixelRatio : 1;
             this.GlobalParams.set("dpr", dpr);
             this.GlobalParams.set("selectedTest", null);
             var selectableTests = [];
+            //osm tile groups
+            var TILE_PROVIDER = 'http://a.tile.openstreetmap.org';
+            var ZOOM_SHIFT_SIZE = 10;
+            var ZOOM_MIN = 5;
+            var MAX_TILEMESH = 500;
+            var tileGroup = [];
+            var tileGroups;
+            //Global Data
             var global_data = this.GlobalDatas.components.get("global").data;
             var latlonData = global_data.get("latlonData");
             var missileLookup = global_data.get("missileLookup");
@@ -742,22 +971,22 @@ var ECS;
             scene.add(light2);
             var rotating = new THREE.Object3D();
             scene.add(rotating);
-            var mapMaterial = new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('./images/map_outline.png'),
-                polygonOffset: true,
-                polygonOffsetFactor: 1,
-                polygonOffsetUnits: 1
+            // var mapMaterial = new THREE.MeshBasicMaterial({
+            //     map: new THREE.TextureLoader().load('./images/map_outline.png'),
+            //     polygonOffset: true,
+            //     polygonOffsetFactor: 1,
+            //     polygonOffsetUnits: 1
+            // });
+            var mapMaterial = new THREE.MeshPhongMaterial({
+                map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
+                bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
+                bumpScale: 0.005,
+                specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
+                specular: new THREE.Color('grey')
             });
-            // var mapMaterial = new THREE.MeshPhongMaterial({
-            //     map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
-            //     bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
-            //     bumpScale: 0.005,
-            //     specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
-            //     specular: new THREE.Color('grey')
-            // })
             var radius = 100;
-            var segments = 40;
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), mapMaterial);
+            var segments = 64;
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;
@@ -781,7 +1010,6 @@ var ECS;
                 map: new THREE.TextureLoader().load('./images/fair_clouds_4k.png'),
                 transparent: true
             }));
-            scene.add(cloudsMesh);
             rotating.add(cloudsMesh);
             //load history data
             for (var i in timeBins) {
@@ -832,30 +1060,47 @@ var ECS;
             renderer.autoClear = false;
             renderer.sortObjects = false;
             renderer.generateMipmaps = false;
-            glContainer.appendChild(renderer.domElement);
             //event listener
-            this.MainSystem.OtherSystems.get("eventlistener").InitEventListener();
+            //(<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).InitEventListener();
             //	-----------------------------------------------------------------------------
             //	Setup camera
             var aspect = window.innerWidth / window.innerHeight;
-            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 20000);
-            camera.position.z = 400;
-            camera.position.y = 0;
-            camera.lookAt(scene.position);
-            camera.zoom = 0.5;
+            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 10000);
+            camera.up.set(0, 0, 1);
+            camera.position.z = 800;
+            //camera.position.y = 0;
+            //camera.lookAt(scene.position);
+            //camera.zoom = 0.5;
             scene.add(camera);
+            var controls = new THREE.EarthControls(camera, renderer.domElement);
+            glContainer.appendChild(renderer.domElement);
             this.GlobalParams.set("scene", scene);
+            this.GlobalParams.set("zoom", 0);
+            this.GlobalParams.set("controls", controls);
+            this.GlobalParams.set("lonStamp", 0);
+            this.GlobalParams.set("latStamp", 0);
             this.GlobalParams.set("camera", camera);
             this.GlobalParams.set("renderer", renderer);
             this.GlobalParams.set("cloudsMesh", cloudsMesh);
+            this.GlobalParams.set("tileGroup", tileGroup);
+            this.GlobalParams.set("tileGroups", tileGroups);
+            this.GlobalParams.set("ZOOM_SHIFT_SIZE", ZOOM_SHIFT_SIZE);
+            this.GlobalParams.set("ZOOM_MIN", ZOOM_MIN);
+            this.GlobalParams.set("MAX_TILEMESH", MAX_TILEMESH);
+            this.GlobalParams.set("TILE_PROVIDER", TILE_PROVIDER);
+            this.GlobalParams.set("radius", radius);
             this.GlobalParams.set("timeLast", Date.now());
         };
         ThreeJsSystem.prototype.render = function () {
             this.GlobalParams.get("renderer").clear();
             this.GlobalParams.get("renderer").render(this.GlobalParams.get("scene"), this.GlobalParams.get("camera"));
         };
+        ThreeJsSystem.prototype.GetDistance = function (lat1, lat2, lon1, lon2) {
+        };
         ThreeJsSystem.prototype.AnimeUpdate = function () {
             var camera = this.GlobalParams.get("camera");
+            var renderer = this.GlobalParams.get("renderer");
+            var scene = this.GlobalParams.get("scene");
             var cloudMesh = this.GlobalParams.get("cloudsMesh");
             var EventListenerGlobalParams = this.MainSystem.OtherSystems.get("eventlistener").GlobalParams;
             var rotateVX = EventListenerGlobalParams.get("rotateVX");
@@ -870,6 +1115,12 @@ var ECS;
             var tilt = EventListenerGlobalParams.get("tilt");
             var scaleTarget = EventListenerGlobalParams.get("scaleTarget");
             var rotating = this.GlobalParams.get("rotating");
+            var osmTile = this.GlobalParams.get("osmTile");
+            var ZOOM_MIN = this.GlobalParams.get("ZOOM_MIN");
+            var ZOOM_SHIFT_SIZE = this.GlobalParams.get("ZOOM_SHIFT_SIZE");
+            var oldZoom = this.GlobalParams.get("zoom");
+            var zoom = this.GlobalParams.get("zoom");
+            var controls = this.GlobalParams.get("controls");
             this.GlobalParams.set("timeNow", Date.now());
             cloudMesh.rotation.y += (1 / 16 * (this.GlobalParams.get("timeNow") - this.GlobalParams.get("timeLast"))) / 1000;
             if (rotateTargetX !== undefined && rotateTargetY !== undefined) {
@@ -879,41 +1130,63 @@ var ECS;
                     rotateTargetX = undefined;
                     rotateTargetY = undefined;
                 }
+                rotateX += rotateVX;
+                rotateY += rotateVY;
+                rotateVX *= 0.98;
+                rotateVY *= 0.98;
+                if (dragging || rotateTargetX !== undefined) {
+                    rotateVX *= 0.6;
+                    rotateVY *= 0.6;
+                }
+                if (rotateX < -rotateXMax) {
+                    rotateX = -rotateXMax;
+                    rotateVX *= -0.95;
+                }
+                if (rotateX > rotateXMax) {
+                    rotateX = rotateXMax;
+                    rotateVX *= -0.95;
+                }
+                //rotating.rotation.x = rotateX;
+                //rotating.rotation.y = rotateY;
+                // controls.rotateLeft(rotateVY*180/Math.PI);
+                // controls.rotateUp(rotateVX*180/Math.PI);
+                // controls.update();
             }
-            rotateX += rotateVX;
-            rotateY += rotateVY;
-            rotateVX *= 0.98;
-            rotateVY *= 0.98;
-            if (dragging || rotateTargetX !== undefined) {
-                rotateVX *= 0.6;
-                rotateVY *= 0.6;
-            }
-            if (rotateX < -rotateXMax) {
-                rotateX = -rotateXMax;
-                rotateVX *= -0.95;
-            }
-            if (rotateX > rotateXMax) {
-                rotateX = rotateXMax;
-                rotateVX *= -0.95;
-            }
-            rotating.rotation.x = rotateX;
-            rotating.rotation.y = rotateY;
-            if (tiltTarget !== undefined) {
-                tilt += (tiltTarget - tilt) * 0.012;
-                camera.position.y = 300 * Math.sin(-tilt);
-                camera.position.z = 100 + 300 * Math.cos(-tilt);
-                camera.lookAt(new THREE.Vector3(0, 0, 100));
-                if (Math.abs(tiltTarget - tilt) < 0.05) {
-                    tiltTarget = undefined;
+            // if (scaleTarget !== undefined) {
+            //     //camera.zoom *= Math.pow(scaleTarget / camera.zoom, 0.012);
+            //     //camera.updateProjectionMatrix();
+            //     controls.zoomCamera(scaleTarget);
+            //     if (Math.abs(Math.log(scaleTarget / camera.zoom)) < 0.05) {
+            //         scaleTarget = undefined;
+            //     }
+            // }
+            var dist = new THREE.Vector3().copy(controls.object.position).sub(controls.target).length();
+            var zoom = Math.floor(Math.max(Math.min(Math.floor(15 - Math.log2(dist)), ZOOM_MIN + ZOOM_SHIFT_SIZE), ZOOM_MIN));
+            var latStamp = this.GlobalParams.get("latStamp");
+            var lonStamp = this.GlobalParams.get("lonStamp");
+            var xtile = this.GlobalParams.get("xtile");
+            var ytile = this.GlobalParams.get("ytile");
+            if (lonStamp != controls.getLongitude() || latStamp != controls.getLatitude()) {
+                lonStamp = controls.getLongitude();
+                latStamp = controls.getLatitude();
+                rotating.rotation.set(latStamp * Math.PI / 180, (-lonStamp) * Math.PI / 180, 0);
+                var oldXtile = xtile;
+                var oldYtile = ytile;
+                xtile = Utils.long2tile(lonStamp, zoom);
+                ytile = Utils.lat2tile(latStamp, zoom);
+                if (Math.abs(oldXtile - xtile) >= 1 ||
+                    Math.abs(oldYtile - ytile) >= 1) {
+                    this.UpdateOSMTile(lonStamp, latStamp, zoom);
                 }
             }
-            if (scaleTarget !== undefined) {
-                camera.zoom *= Math.pow(scaleTarget / camera.zoom, 0.012);
-                camera.updateProjectionMatrix();
-                if (Math.abs(Math.log(scaleTarget / camera.zoom)) < 0.05) {
-                    scaleTarget = undefined;
-                }
+            else if (Math.abs(zoom - oldZoom) >= 1) {
+                this.UpdateOSMTile(lonStamp, latStamp, zoom);
             }
+            this.GlobalParams.set("zoom", zoom);
+            this.GlobalParams.set("latStamp", latStamp);
+            this.GlobalParams.set("lonStamp", lonStamp);
+            this.GlobalParams.set("xtile", xtile);
+            this.GlobalParams.set("ytile", ytile);
             this.GlobalParams.set("timeLast", Date.now());
             EventListenerGlobalParams.set("rotateTargetX", rotateTargetX);
             EventListenerGlobalParams.set("rotateTargetY", rotateTargetY);
@@ -924,7 +1197,9 @@ var ECS;
             EventListenerGlobalParams.set("tilt", tilt);
             EventListenerGlobalParams.set("tiltTarget", tiltTarget);
             EventListenerGlobalParams.set("scaleTarget", scaleTarget);
+            this.GlobalParams.set("controls", controls);
             this.GlobalParams.set("rotating", rotating);
+            this.GlobalParams.set("osmTile", osmTile);
             this.GlobalParams.set("camera", camera);
         };
         ThreeJsSystem.prototype.Execute = function () {
@@ -973,9 +1248,9 @@ var ECS;
             _this.GlobalParams.set("tilt", tilt);
             _this.GlobalParams.set("tiltTarget", tiltTarget);
             _this.GlobalParams.set("scaleTarget", scaleTarget);
-            var keyboard = new THREEx.KeyboardState();
-            _this.GlobalParams.set("keyboard", keyboard);
             return _this;
+            // var keyboard = new THREEx.KeyboardState();
+            // this.GlobalParams.set("keyboard", keyboard);
         }
         EventListenerSystem.prototype.constrain = function (v, min, max) {
             if (v < min)
@@ -994,10 +1269,10 @@ var ECS;
         };
         EventListenerSystem.prototype.onMouseWheel = function (event) {
             var delta = 0;
-            if (event.wheelDelta) { /* IE/Opera. */
+            if (event.wheelDelta) {
                 delta = event.wheelDelta / 120;
             }
-            else if (event.detail) { // firefox
+            else if (event.detail) {
                 delta = -event.detail / 3;
             }
             if (delta) {
@@ -1018,7 +1293,6 @@ var ECS;
             this.GlobalParams.set("tiltTarget", undefined);
         };
         EventListenerSystem.prototype.InitEventListener = function () {
-            var _this = this;
             var masterContainer = document.getElementById('visualization');
             var passive = false;
             var options = Object.defineProperty({}, 'passive', {
@@ -1026,185 +1300,178 @@ var ECS;
                     passive = true;
                 }
             });
-            document.addEventListener('testPassiveEventSupport', function () { }, options);
-            document.removeEventListener('testPassiveEventSupport', function () { }, options);
-            document.addEventListener('mousemove', function (event) {
-                _this.GlobalParams.set("pmouseX", _this.GlobalParams.get("mouseX"));
-                _this.GlobalParams.set("pmouseY", _this.GlobalParams.get("mouseY"));
-                if (event instanceof MouseEvent) {
-                    _this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
-                }
-                else {
-                    _this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
-                }
-                if (_this.GlobalParams.get("dragging") && !('ontouchmove' in document && event instanceof TouchEvent && event.touches.length > 1)) {
-                    if (_this.GlobalParams.get("keyboard").pressed("shift") == false) {
-                        var rotateVY = _this.GlobalParams.get("rotateVY");
-                        var rotateVX = _this.GlobalParams.get("rotateVX");
-                        rotateVY += (_this.GlobalParams.get("mouseX") - _this.GlobalParams.get("pmouseX")) / 2 * Math.PI / 180 * 0.1;
-                        rotateVX += (_this.GlobalParams.get("mouseY") - _this.GlobalParams.get("pmouseY")) / 2 * Math.PI / 180 * 0.1;
-                        _this.GlobalParams.set("rotateVX", rotateVX);
-                        _this.GlobalParams.set("rotateVY", rotateVY);
-                    }
-                    else {
-                        _this.handleTiltWheel((_this.GlobalParams.get("mouseY") - _this.GlobalParams.get("pmouseY")) * 0.1);
-                    }
-                }
-                if (_this.GlobalParams.get("dragging") && 'ontouchmove' in document && event instanceof TouchEvent) {
-                    event.preventDefault();
-                }
-            }, true);
-            document.addEventListener('touchmove', function (event) {
-                _this.GlobalParams.set("pmouseX", _this.GlobalParams.get("mouseX"));
-                _this.GlobalParams.set("pmouseY", _this.GlobalParams.get("mouseY"));
-                if (event instanceof MouseEvent) {
-                    _this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
-                }
-                else {
-                    _this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
-                }
-                if (_this.GlobalParams.get("dragging") && !('ontouchmove' in document && event instanceof TouchEvent && event.touches.length > 1)) {
-                    if (_this.GlobalParams.get("keyboard").pressed("shift") == false) {
-                        var rotateVY = _this.GlobalParams.get("rotateVY");
-                        var rotateVX = _this.GlobalParams.get("rotateVX");
-                        rotateVY += (_this.GlobalParams.get("mouseX") - _this.GlobalParams.get("pmouseX")) / 2 * Math.PI / 180 * 0.1;
-                        rotateVX += (_this.GlobalParams.get("mouseY") - _this.GlobalParams.get("pmouseY")) / 2 * Math.PI / 180 * 0.1;
-                        _this.GlobalParams.set("rotateVX", rotateVX);
-                        _this.GlobalParams.set("rotateVY", rotateVY);
-                    }
-                    else {
-                        _this.handleTiltWheel((_this.GlobalParams.get("mouseY") - _this.GlobalParams.get("pmouseY")) * 0.1);
-                    }
-                }
-                if (_this.GlobalParams.get("dragging") && 'ontouchmove' in document && event instanceof TouchEvent) {
-                    event.preventDefault();
-                }
-            }, passive ? { capture: true, passive: false } : true);
-            document.addEventListener('windowResize', function () { }, false);
-            document.addEventListener('mousedown', function (event) {
-                if (typeof event.target.className === 'string' && event.target.className.indexOf('noMapDrag') !== -1) {
-                    return;
-                }
-                if (event instanceof MouseEvent) {
-                    _this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
-                }
-                else {
-                    _this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
-                }
-                _this.GlobalParams.set("dragging", true);
-                _this.GlobalParams.set("pressX", _this.GlobalParams.get("mouseX"));
-                _this.GlobalParams.set("pressY", _this.GlobalParams.get("mouseY"));
-                _this.GlobalParams.set("rotateTargetX", undefined);
-                _this.GlobalParams.set("tiltTarget", undefined);
-                _this.GlobalParams.set("scaleTarget", undefined);
-                if ('ontouchstart' in document && event instanceof TouchEvent && event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, true);
-            document.addEventListener('touchstart', function (event) {
-                if (typeof event.target.className === 'string' && event.target.className.indexOf('noMapDrag') !== -1) {
-                    return;
-                }
-                if (event instanceof MouseEvent) {
-                    _this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
-                }
-                else {
-                    _this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
-                    _this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
-                }
-                _this.GlobalParams.set("dragging", true);
-                _this.GlobalParams.set("pressX", _this.GlobalParams.get("mouseX"));
-                _this.GlobalParams.set("pressY", _this.GlobalParams.get("mouseY"));
-                _this.GlobalParams.set("rotateTargetX", undefined);
-                _this.GlobalParams.set("tiltTarget", undefined);
-                _this.GlobalParams.set("scaleTarget", undefined);
-                if ('ontouchstart' in document && event instanceof TouchEvent && event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, passive ? { capture: true, passive: false } : true);
-            document.addEventListener('mouseup', function (event) {
-                _this.GlobalParams.set("dragging", false);
-                if ('ontouchend' in document && event instanceof TouchEvent) {
-                    var now = new Date().getTime();
-                    if (now - _this.GlobalParams.get("touchEndTime") < 500) {
-                        event.preventDefault();
-                    }
-                    _this.GlobalParams.set("touchEndTime", now);
-                }
-            }, false);
-            document.addEventListener('touchend', function (event) {
-                _this.GlobalParams.set("dragging", false);
-                if ('ontouchend' in document && event instanceof TouchEvent) {
-                    var now = new Date().getTime();
-                    if (now - _this.GlobalParams.get("touchEndTime") < 500) {
-                        event.preventDefault();
-                    }
-                    _this.GlobalParams.set("touchEndTime", now);
-                }
-            }, false);
-            document.addEventListener('touchcancel', function (event) {
-                _this.GlobalParams.set("dragging", false);
-                if ('ontouchend' in document && event instanceof TouchEvent) {
-                    var now = new Date().getTime();
-                    if (now - _this.GlobalParams.get("touchEndTime") < 500) {
-                        event.preventDefault();
-                    }
-                    _this.GlobalParams.set("touchEndTime", now);
-                }
-            }, false);
-            var mc = new Hammer(document);
-            mc.get('pinch').set({ enable: true });
-            mc.get('pan').set({ threshold: 0, pointers: 3, direction: Hammer.DIRECTION_VERTICAL });
-            mc.on('pinchstart pinchmove', function (event) {
-                if (event.type === 'pinchmove') {
-                    _this.handleMWheel(Math.log(event.scale / _this.GlobalParams.get("pscale")) * 10);
-                }
-                _this.GlobalParams.set("pscale", event.scale);
-            });
-            mc.on('panmove', function (event) {
-                _this.handleTiltWheel(event.velocityY);
-            });
-            masterContainer.addEventListener('click', function (event) {
-                if (Math.abs(_this.GlobalParams.get("pressX") - _this.GlobalParams.get("mouseX")) > 3 || Math.abs(_this.GlobalParams.get("pressY") - _this.GlobalParams.get("mouseY")) > 3)
-                    return;
-                //var pickColorIndex = getPickColor();
-            }, true);
-            masterContainer.addEventListener('mousewheel', function (event) {
-                var delta = 0;
-                if (event.wheelDelta) { /* IE/Opera. */
-                    delta = event.wheelDelta / 120;
-                }
-                else if (event.detail) { // firefox
-                    delta = -event.detail / 3;
-                }
-                if (delta) {
-                    _this.handleMWheel(delta);
-                }
-                event.returnValue = false;
-            }, false);
-            //	firefox
-            masterContainer.addEventListener('DOMMouseScroll', function (e) {
-                var event = window.event || e;
-                var delta = 0;
-                if (event.wheelDelta) { /* IE/Opera. */
-                    delta = event.wheelDelta / 120;
-                }
-                else if (event.detail) { // firefox
-                    delta = -event.detail / 3;
-                }
-                if (delta) {
-                    _this.handleMWheel(delta);
-                }
-                event.returnValue = false;
-            }, false);
-            document.addEventListener('keydown', function () { }, false);
+            // document.addEventListener('testPassiveEventSupport', () => { }, options);
+            // document.removeEventListener('testPassiveEventSupport', () => { }, options);
+            // document.addEventListener('mousemove', (event: any) => {
+            //     this.GlobalParams.set("pmouseX", this.GlobalParams.get("mouseX"));
+            //     this.GlobalParams.set("pmouseY", this.GlobalParams.get("mouseY"));
+            //     if (event instanceof MouseEvent) {
+            //         this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
+            //     } else {
+            //         this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
+            //     }
+            //     if (this.GlobalParams.get("dragging") && !('ontouchmove' in document && event instanceof TouchEvent && event.touches.length > 1)) {
+            //         if (this.GlobalParams.get("keyboard").pressed("shift") == false) {
+            //             var rotateVY = this.GlobalParams.get("rotateVY");
+            //             var rotateVX = this.GlobalParams.get("rotateVX");
+            //             rotateVY += (this.GlobalParams.get("mouseX") - this.GlobalParams.get("pmouseX")) / 2 * Math.PI / 180 * 0.1;
+            //             rotateVX += (this.GlobalParams.get("mouseY") - this.GlobalParams.get("pmouseY")) / 2 * Math.PI / 180 * 0.1;
+            //             this.GlobalParams.set("rotateVX", rotateVX);
+            //             this.GlobalParams.set("rotateVY", rotateVY);
+            //         } else {
+            //             this.handleTiltWheel((this.GlobalParams.get("mouseY") - this.GlobalParams.get("pmouseY")) * 0.1);
+            //         }
+            //     }
+            //     //pan event: mouse left drag
+            //     if (this.GlobalParams.get("dragging") && 'ontouchmove' in document && event instanceof TouchEvent) {
+            //         event.preventDefault();
+            //     }
+            // }, true);
+            // document.addEventListener('touchmove', (event: any) => {
+            //     this.GlobalParams.set("pmouseX", this.GlobalParams.get("mouseX"));
+            //     this.GlobalParams.set("pmouseY", this.GlobalParams.get("mouseY"));
+            //     if (event instanceof MouseEvent) {
+            //         this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
+            //     } else {
+            //         this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
+            //     }
+            //     if (this.GlobalParams.get("dragging") && !('ontouchmove' in document && event instanceof TouchEvent && event.touches.length > 1)) {
+            //         if (this.GlobalParams.get("keyboard").pressed("shift") == false) {
+            //             var rotateVY = this.GlobalParams.get("rotateVY");
+            //             var rotateVX = this.GlobalParams.get("rotateVX");
+            //             rotateVY += (this.GlobalParams.get("mouseX") - this.GlobalParams.get("pmouseX")) / 2 * Math.PI / 180 * 0.1;
+            //             rotateVX += (this.GlobalParams.get("mouseY") - this.GlobalParams.get("pmouseY")) / 2 * Math.PI / 180 * 0.1;
+            //             this.GlobalParams.set("rotateVX", rotateVX);
+            //             this.GlobalParams.set("rotateVY", rotateVY);
+            //         } else {
+            //             this.handleTiltWheel((this.GlobalParams.get("mouseY") - this.GlobalParams.get("pmouseY")) * 0.1);
+            //         }
+            //     }
+            //     if (this.GlobalParams.get("dragging") && 'ontouchmove' in document && event instanceof TouchEvent) {
+            //         event.preventDefault();
+            //     }
+            // }, passive ? { capture: true, passive: false } : true);
+            // document.addEventListener('windowResize', () => { }, false);
+            // document.addEventListener('mousedown', (event: any) => {
+            //     if (typeof event.target.className === 'string' && event.target.className.indexOf('noMapDrag') !== -1) {
+            //         return;
+            //     }
+            //     if (event instanceof MouseEvent) {
+            //         this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
+            //     } else {
+            //         this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
+            //     }
+            //     this.GlobalParams.set("dragging", true);
+            //     this.GlobalParams.set("pressX", this.GlobalParams.get("mouseX"));
+            //     this.GlobalParams.set("pressY", this.GlobalParams.get("mouseY"));
+            //     this.GlobalParams.set("rotateTargetX", undefined);
+            //     this.GlobalParams.set("tiltTarget", undefined);
+            //     this.GlobalParams.set("scaleTarget", undefined);
+            //     if ('ontouchstart' in document && event instanceof TouchEvent && event.touches.length > 1) {
+            //         event.preventDefault();
+            //     }
+            // }, true);
+            // document.addEventListener('touchstart', (event: any) => {
+            //     if (typeof event.target.className === 'string' && event.target.className.indexOf('noMapDrag') !== -1) {
+            //         return;
+            //     }
+            //     if (event instanceof MouseEvent) {
+            //         this.GlobalParams.set("mouseX", event.clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.clientY - window.innerHeight * 0.5);
+            //     } else {
+            //         this.GlobalParams.set("mouseX", event.touches[0].clientX - window.innerWidth * 0.5);
+            //         this.GlobalParams.set("mouseY", event.touches[0].clientY - window.innerHeight * 0.5);
+            //     }
+            //     this.GlobalParams.set("dragging", true);
+            //     this.GlobalParams.set("pressX", this.GlobalParams.get("mouseX"));
+            //     this.GlobalParams.set("pressY", this.GlobalParams.get("mouseY"));
+            //     this.GlobalParams.set("rotateTargetX", undefined);
+            //     this.GlobalParams.set("tiltTarget", undefined);
+            //     this.GlobalParams.set("scaleTarget", undefined);
+            //     if ('ontouchstart' in document && event instanceof TouchEvent && event.touches.length > 1) {
+            //         event.preventDefault();
+            //     }
+            // }, passive ? { capture: true, passive: false } : true);
+            // document.addEventListener('mouseup', (event: any) => {
+            //     this.GlobalParams.set("dragging", false);
+            //     if ('ontouchend' in document && event instanceof TouchEvent) {
+            //         var now = new Date().getTime();
+            //         if (now - this.GlobalParams.get("touchEndTime") < 500) {
+            //             event.preventDefault();
+            //         }
+            //         this.GlobalParams.set("touchEndTime", now);
+            //     }
+            // }, false);
+            // document.addEventListener('touchend', (event: any) => {
+            //     this.GlobalParams.set("dragging", false);
+            //     if ('ontouchend' in document && event instanceof TouchEvent) {
+            //         var now = new Date().getTime();
+            //         if (now - this.GlobalParams.get("touchEndTime") < 500) {
+            //             event.preventDefault();
+            //         }
+            //         this.GlobalParams.set("touchEndTime", now);
+            //     }
+            // }, false);
+            // document.addEventListener('touchcancel', (event: any) => {
+            //     this.GlobalParams.set("dragging", false);
+            //     if ('ontouchend' in document && event instanceof TouchEvent) {
+            //         var now = new Date().getTime();
+            //         if (now - this.GlobalParams.get("touchEndTime") < 500) {
+            //             event.preventDefault();
+            //         }
+            //         this.GlobalParams.set("touchEndTime", now);
+            //     }
+            // }, false);
+            // var mc = new Hammer(document);
+            // mc.get('pinch').set({ enable: true });
+            // mc.get('pan').set({ threshold: 0, pointers: 3, direction: Hammer.DIRECTION_VERTICAL });
+            // mc.on('pinchstart pinchmove', (event: any) => {
+            //     if (event.type === 'pinchmove') {
+            //         this.handleMWheel(Math.log(event.scale / this.GlobalParams.get("pscale")) * 10);
+            //     }
+            //     this.GlobalParams.set("pscale", event.scale);
+            // });
+            // mc.on('panmove', (event: any) => {
+            //     this.handleTiltWheel(event.velocityY);
+            // });
+            // masterContainer.addEventListener('click', (event: any) => {
+            //     if (Math.abs(this.GlobalParams.get("pressX") - this.GlobalParams.get("mouseX")) > 3 || Math.abs(this.GlobalParams.get("pressY") - this.GlobalParams.get("mouseY")) > 3)
+            //         return;
+            //     //var pickColorIndex = getPickColor();
+            // }, true);
+            // masterContainer.addEventListener('mousewheel', (event: any) => {
+            //     var delta = 0;
+            //     if (event.wheelDelta) { /* IE/Opera. */
+            //         delta = event.wheelDelta / 120;
+            //     } else if (event.detail) { // firefox
+            //         delta = -event.detail / 3;
+            //     }
+            //     if (delta) {
+            //         this.handleMWheel(delta);
+            //     }
+            //     event.returnValue = false;
+            // }, false);
+            // //	firefox
+            // masterContainer.addEventListener('DOMMouseScroll', (e: any) => {
+            //     var event = window.event || e;
+            //     var delta = 0;
+            //     if (event.wheelDelta) { /* IE/Opera. */
+            //         delta = event.wheelDelta / 120;
+            //     } else if (event.detail) { // firefox
+            //         delta = -event.detail / 3;
+            //     }
+            //     if (delta) {
+            //         this.handleMWheel(delta);
+            //     }
+            //     event.returnValue = false;
+            // }, false);
+            // document.addEventListener('keydown', () => { }, false);
         };
         EventListenerSystem.prototype.Execute = function () {
             _super.prototype.Execute.call(this);
