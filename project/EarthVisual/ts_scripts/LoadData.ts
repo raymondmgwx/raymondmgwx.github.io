@@ -28,7 +28,6 @@ module Utils {
     }
 
     export function loadGeoData(latlonData: any) {
-        var sphereRad = 1;
         var rad = 100;
         var facilityData = new Object();
         for (var i in latlonData.facilities) {
@@ -39,7 +38,7 @@ module Utils {
             var lat = facility.lat;
 
             var phi = Math.PI / 2 - lat * Math.PI / 180;
-            var theta = 2 * Math.PI - lon * Math.PI / 180 + Math.PI * 0.055;
+            var theta = 2 * Math.PI - lon * Math.PI / 180;
 
             var center = new THREE.Vector3();
             center.x = Math.sin(phi) * Math.cos(theta) * rad;
@@ -81,7 +80,6 @@ module Utils {
 
         //	end of the line
         var end = landing.center;
-
         //	midpoint for the curve
         var mid = start.clone().lerp(end, 0.5);
         mid.normalize();
@@ -164,7 +162,6 @@ module Utils {
 
     export function buildDataVizGeometries(linearData: any,missileLookup:any,facilityData:any) {
 
-        var sphereRad = 1;
         var rad = 100;
         var loadLayer = document.getElementById('loading');
         var testData = new Object();
@@ -207,7 +204,7 @@ module Utils {
                 var lon = landing.lon - 90;
                 var lat = landing.lat;
                 var phi = Math.PI / 2 - lat * Math.PI / 180;
-                var theta = 2 * Math.PI - (lon - 9.9) * Math.PI / 180;
+                var theta = 2 * Math.PI - lon * Math.PI / 180;
 
                 var lcenter = new THREE.Vector3();
                 lcenter.x = Math.sin(phi) * Math.cos(theta) * rad;

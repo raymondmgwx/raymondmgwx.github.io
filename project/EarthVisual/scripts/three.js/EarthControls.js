@@ -756,7 +756,7 @@ THREE.EarthControls = function(object, domElement) {
         event.preventDefault();
         event.stopPropagation();
         switch (event.touches.length) {
-            case 1: // one-fingered touch: rotate
+            case 1: // one-fingered touch: pan
                 if (scope.enablePan === false) return;
                 if (state !== STATE.TOUCH_PAN) return; // is this needed?...
                 handleTouchMovePan(event);
@@ -767,7 +767,7 @@ THREE.EarthControls = function(object, domElement) {
                 if (state !== STATE.TOUCH_DOLLY) return; // is this needed?...
                 handleTouchMoveDolly(event);
                 break;
-            case 3: // three-fingered touch: pan
+            case 3: // three-fingered touch: rotate
                 if (scope.enableRotate === false) return;
                 if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
                 handleTouchMoveRotate(event);

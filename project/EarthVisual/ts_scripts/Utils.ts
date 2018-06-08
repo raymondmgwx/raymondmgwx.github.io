@@ -115,6 +115,7 @@ module Utils {
              *      A          D        *
              ***************************/
 
+            
             var rUp = r  * Math.cos(lat1 * Math.PI / 180);
             var rDown = r  * Math.cos(lat2 * Math.PI / 180);
 

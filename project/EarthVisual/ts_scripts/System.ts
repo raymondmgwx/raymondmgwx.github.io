@@ -120,7 +120,7 @@ module ECS {
     declare var THREE: any;
     declare var THREEx: any;
     declare var $: any;
-    declare var Math:any;
+    declare var Math: any;
 
     export class ThreeJsSystem extends System {
         GlobalParams: Utils.HashSet<any>;
@@ -385,39 +385,39 @@ module ECS {
             visualizationMesh.add(mesh);
             this.GlobalParams.set("visualizationMesh", visualizationMesh);
 
-            var EventListenerGlobeParam = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
-            if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
-                if (this.GlobalParams.get("selectedTest")) {
-                    var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
-                    var landing = this.GlobalParams.get("selectedTest").landingLocation;
+            // var EventListenerGlobeParam = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
+            // if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
+            //     if (this.GlobalParams.get("selectedTest")) {
+            //         var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
+            //         var landing = this.GlobalParams.get("selectedTest").landingLocation;
 
-                    EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
-                    var targetY0 = -((facility.lon + landing.lon) / 2 - 9.9) * Math.PI / 180;
-                    var piCounter = 0;
-                    while (true) {
-                        var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
-                        var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
-                        if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-                            EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
-                            break;
-                        } else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-                            EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
-                            break;
-                        }
-                        piCounter++;
-                        EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
-                    }
+            //         EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
+            //         var targetY0 = -((facility.lon + landing.lon) / 2 - 9.9) * Math.PI / 180;
+            //         var piCounter = 0;
+            //         while (true) {
+            //             var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
+            //             var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
+            //             if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
+            //                 break;
+            //             } else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
+            //                 break;
+            //             }
+            //             piCounter++;
+            //             EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
+            //         }
 
-                    EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
-                    EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
+            //         EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
+            //         EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
 
-                    EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
-                }
-            }
+            //         EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
+            //     }
+            // }
 
             //d3Graphs.initGraphs();
         }
-        UpdateOSMTile(p_lon: any, p_lat: any,zoom:any) {
+        UpdateOSMTile(p_lon: any, p_lat: any, zoom: any) {
 
             var xtile = Utils.long2tile(p_lon, zoom);
             var ytile = Utils.lat2tile(p_lat, zoom);
@@ -457,7 +457,7 @@ module ECS {
                     var size = 3;
                 } else if (zoom < 10) {
                     var size = 2;
-                }else{
+                } else {
                     size = 1;
                 }
                 var minXtile = Math.floor((xtile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
@@ -488,9 +488,9 @@ module ECS {
                         var lat = (lat1 + lat2) / 2;
                         var lon = (lon1 + lon2) / 2;
 
-                        var widthUp = Utils.measure(radius,lat1, lon1, lat1, lon2);
-                        var widthDown = Utils.measure(radius,lat2, lon1, lat2, lon2);
-                        var widthSide = Utils.measure(radius,lat1, lon1, lat2, lon1);
+                        var widthUp = Utils.measure(radius, lat1, lon1, lat1, lon2);
+                        var widthDown = Utils.measure(radius, lat2, lon1, lat2, lon2);
+                        var widthSide = Utils.measure(radius, lat1, lon1, lat2, lon1);
 
                         var id = 'z_' + zoom_ + '_' + atile + "_" + btile;
                         for (var zzz = 1; zzz <= 2; zzz++) {
@@ -502,27 +502,27 @@ module ECS {
                             var tileEarth = new THREE.Object3D(); //create an empty container
                             tileEarth.rotation.set(0, (lon1 + 180) * Math.PI / 180, 0);
                             tileGroup[zShift].add(tileEarth);
-                            var tileMesh = Utils.getTileMesh(radius, zoom_, btile,MAX_TILEMESH);
+                            var tileMesh = Utils.getTileMesh(radius, zoom_, btile, MAX_TILEMESH);
                             tileEarth.add(tileMesh);
 
 
-                            (function(yourTileMesh, yourZoom, yourXtile, yourYtile) {
+                            (function (yourTileMesh, yourZoom, yourXtile, yourYtile) {
 
 
-                                var onLoaded = function(texture) {
+                                var onLoaded = function (texture) {
                                     // MeshFaceMaterial
                                     yourTileMesh.material = new THREE.MeshBasicMaterial({
                                         map: texture
                                     });
                                 };
-                                Utils.textureFactory(TILE_PROVIDER,MAX_TILEMESH,yourZoom, yourXtile, yourYtile, onLoaded);
+                                Utils.textureFactory(TILE_PROVIDER, MAX_TILEMESH, yourZoom, yourXtile, yourYtile, onLoaded);
                             })(tileMesh, zoom_, atile % modulus, btile % modulus);
                         }
                     }
                 }
             }
 
-            
+
             this.GlobalParams.set("xtile", xtile);
             this.GlobalParams.set("ytile", ytile);
             this.GlobalParams.set("rotating", rotating);
@@ -542,7 +542,7 @@ module ECS {
             var ZOOM_SHIFT_SIZE = 10;
             var ZOOM_MIN = 5;
             var MAX_TILEMESH = 500;
-            var tileGroup=[];
+            var tileGroup = [];
             var tileGroups;
 
             //Global Data
@@ -586,13 +586,16 @@ module ECS {
                 bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
                 bumpScale: 0.005,
                 specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
-                specular: new THREE.Color('grey')
+                specular: new THREE.Color('grey'),
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1
             })
 
             var radius = 100;
-            var segments = 64;
+            var segments = 40;
 
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius-1, segments, segments), mapMaterial);
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius-0.1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;
@@ -680,7 +683,7 @@ module ECS {
             var selectionData = new Utils.Selection(selectedYear, selectedTestName, missileLookup, outcomeLookup);
             this.GlobalParams.set("selectionData", selectionData);
             this.GlobalParams.set("rotating", rotating);
-            
+
             this.selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup), missileColors);
 
 
@@ -696,29 +699,29 @@ module ECS {
             renderer.sortObjects = false;
             renderer.generateMipmaps = false;
 
-            
+
 
 
             //event listener
             //(<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).InitEventListener();
-            
+
 
             //	-----------------------------------------------------------------------------
             //	Setup camera
             var aspect = window.innerWidth / window.innerHeight;
-            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 10000);
-        
+            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 20000);
+
             camera.up.set(0, 0, 1);
             camera.position.z = 800;
-            //camera.position.y = 0;
-            //camera.lookAt(scene.position);
-            //camera.zoom = 0.5;
+            camera.position.y = 0;
+            camera.lookAt(scene.position);
+            camera.zoom = 0.5;
             scene.add(camera);
 
 
             var controls = new THREE.EarthControls(camera, renderer.domElement);
             glContainer.appendChild(renderer.domElement);
-            
+
             this.GlobalParams.set("scene", scene);
             this.GlobalParams.set("zoom", 0);
             this.GlobalParams.set("controls", controls);
@@ -740,13 +743,13 @@ module ECS {
             this.GlobalParams.get("renderer").clear();
             this.GlobalParams.get("renderer").render(this.GlobalParams.get("scene"), this.GlobalParams.get("camera"));
         }
-        GetDistance(lat1:any,lat2:any,lon1:any,lon2:any){
+        GetDistance(lat1: any, lat2: any, lon1: any, lon2: any) {
 
         }
         AnimeUpdate() {
             var camera = this.GlobalParams.get("camera");
-            var renderer =  this.GlobalParams.get("renderer");
-            var scene =  this.GlobalParams.get("scene");
+            var renderer = this.GlobalParams.get("renderer");
+            var scene = this.GlobalParams.get("scene");
             var cloudMesh = this.GlobalParams.get("cloudsMesh");
             var EventListenerGlobalParams = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
             var rotateVX = EventListenerGlobalParams.get("rotateVX");
@@ -781,15 +784,15 @@ module ECS {
 
                 rotateX += rotateVX;
                 rotateY += rotateVY;
-    
+
                 rotateVX *= 0.98;
                 rotateVY *= 0.98;
-    
+
                 if (dragging || rotateTargetX !== undefined) {
                     rotateVX *= 0.6;
                     rotateVY *= 0.6;
                 }
-    
+
                 if (rotateX < -rotateXMax) {
                     rotateX = -rotateXMax;
                     rotateVX *= -0.95;
@@ -798,8 +801,8 @@ module ECS {
                     rotateX = rotateXMax;
                     rotateVX *= -0.95;
                 }
-    
-    
+
+
                 //rotating.rotation.x = rotateX;
                 //rotating.rotation.y = rotateY;
                 // controls.rotateLeft(rotateVY*180/Math.PI);
@@ -821,17 +824,17 @@ module ECS {
 
             var dist = new THREE.Vector3().copy(controls.object.position).sub(controls.target).length();
 
-            var zoom = Math.floor(Math.max(Math.min(Math.floor(15 - Math.log2(dist)), ZOOM_MIN+ZOOM_SHIFT_SIZE), ZOOM_MIN));
+            var zoom = Math.floor(Math.max(Math.min(Math.floor(15 - Math.log2(dist)), ZOOM_MIN + ZOOM_SHIFT_SIZE), ZOOM_MIN));
 
             var latStamp = this.GlobalParams.get("latStamp");
             var lonStamp = this.GlobalParams.get("lonStamp");
-            var xtile= this.GlobalParams.get("xtile");
-            var ytile= this.GlobalParams.get("ytile");
-            
+            var xtile = this.GlobalParams.get("xtile");
+            var ytile = this.GlobalParams.get("ytile");
+
             if (lonStamp != controls.getLongitude() || latStamp != controls.getLatitude()) {
                 lonStamp = controls.getLongitude();
                 latStamp = controls.getLatitude();
-                
+
                 rotating.rotation.set(
                     latStamp * Math.PI / 180,
                     (-lonStamp) * Math.PI / 180,
@@ -842,11 +845,11 @@ module ECS {
                 ytile = Utils.lat2tile(latStamp, zoom);
                 if (Math.abs(oldXtile - xtile) >= 1 ||
                     Math.abs(oldYtile - ytile) >= 1) {
-                        this.UpdateOSMTile(lonStamp,latStamp,zoom);
+                    this.UpdateOSMTile(lonStamp, latStamp, zoom);
                 }
-            }  else if (Math.abs(zoom - oldZoom) >= 1) {
+            } else if (Math.abs(zoom - oldZoom) >= 1) {
 
-                this.UpdateOSMTile(lonStamp,latStamp,zoom);
+                this.UpdateOSMTile(lonStamp, latStamp, zoom);
             }
 
             this.GlobalParams.set("zoom", zoom);
@@ -934,7 +937,7 @@ module ECS {
             this.GlobalParams.set("tilt", tilt);
             this.GlobalParams.set("tiltTarget", tiltTarget);
             this.GlobalParams.set("scaleTarget", scaleTarget);
-        
+
             // var keyboard = new THREEx.KeyboardState();
             // this.GlobalParams.set("keyboard", keyboard);
 
@@ -1028,7 +1031,7 @@ module ECS {
 
 
             //     //pan event: mouse left drag
-                
+
 
             //     if (this.GlobalParams.get("dragging") && 'ontouchmove' in document && event instanceof TouchEvent) {
             //         event.preventDefault();

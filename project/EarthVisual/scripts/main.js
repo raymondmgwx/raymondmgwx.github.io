@@ -142,7 +142,6 @@ var Utils;
     }
     Utils.getYearIndexlookUp = getYearIndexlookUp;
     function loadGeoData(latlonData) {
-        var sphereRad = 1;
         var rad = 100;
         var facilityData = new Object();
         for (var i in latlonData.facilities) {
@@ -151,7 +150,7 @@ var Utils;
             var lon = facility.lon - 90;
             var lat = facility.lat;
             var phi = Math.PI / 2 - lat * Math.PI / 180;
-            var theta = 2 * Math.PI - lon * Math.PI / 180 + Math.PI * 0.055;
+            var theta = 2 * Math.PI - (lon - 0) * Math.PI / 180;
             var center = new THREE.Vector3();
             center.x = Math.sin(phi) * Math.cos(theta) * rad;
             center.y = Math.cos(phi) * rad;
@@ -246,7 +245,6 @@ var Utils;
         return { 'lat': phi2 * 180 / Math.PI, 'lon': L2 * 180 / Math.PI };
     }
     function buildDataVizGeometries(linearData, missileLookup, facilityData) {
-        var sphereRad = 1;
         var rad = 100;
         var loadLayer = document.getElementById('loading');
         var testData = new Object();
@@ -281,7 +279,7 @@ var Utils;
                 var lon = landing.lon - 90;
                 var lat = landing.lat;
                 var phi = Math.PI / 2 - lat * Math.PI / 180;
-                var theta = 2 * Math.PI - (lon - 9.9) * Math.PI / 180;
+                var theta = 2 * Math.PI - (lon - 0) * Math.PI / 180;
                 var lcenter = new THREE.Vector3();
                 lcenter.x = Math.sin(phi) * Math.cos(theta) * rad;
                 lcenter.y = Math.cos(phi) * rad;
@@ -810,33 +808,32 @@ var ECS;
             //	add it to scene graph
             visualizationMesh.add(mesh);
             this.GlobalParams.set("visualizationMesh", visualizationMesh);
-            var EventListenerGlobeParam = this.MainSystem.OtherSystems.get("eventlistener").GlobalParams;
-            if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
-                if (this.GlobalParams.get("selectedTest")) {
-                    var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
-                    var landing = this.GlobalParams.get("selectedTest").landingLocation;
-                    EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
-                    var targetY0 = -((facility.lon + landing.lon) / 2 - 9.9) * Math.PI / 180;
-                    var piCounter = 0;
-                    while (true) {
-                        var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
-                        var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
-                        if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-                            EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
-                            break;
-                        }
-                        else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-                            EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
-                            break;
-                        }
-                        piCounter++;
-                        EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
-                    }
-                    EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
-                    EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
-                    EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
-                }
-            }
+            // var EventListenerGlobeParam = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
+            // if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
+            //     if (this.GlobalParams.get("selectedTest")) {
+            //         var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
+            //         var landing = this.GlobalParams.get("selectedTest").landingLocation;
+            //         EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
+            //         var targetY0 = -((facility.lon + landing.lon) / 2 - 9.9) * Math.PI / 180;
+            //         var piCounter = 0;
+            //         while (true) {
+            //             var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
+            //             var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
+            //             if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
+            //                 break;
+            //             } else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
+            //                 break;
+            //             }
+            //             piCounter++;
+            //             EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
+            //         }
+            //         EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
+            //         EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
+            //         EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
+            //     }
+            // }
             //d3Graphs.initGraphs();
         };
         ThreeJsSystem.prototype.UpdateOSMTile = function (p_lon, p_lat, zoom) {
@@ -982,11 +979,14 @@ var ECS;
                 bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
                 bumpScale: 0.005,
                 specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
-                specular: new THREE.Color('grey')
+                specular: new THREE.Color('grey'),
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1
             });
             var radius = 100;
-            var segments = 64;
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 1, segments, segments), mapMaterial);
+            var segments = 40;
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 0.1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;
@@ -1065,12 +1065,12 @@ var ECS;
             //	-----------------------------------------------------------------------------
             //	Setup camera
             var aspect = window.innerWidth / window.innerHeight;
-            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 10000);
+            var camera = new THREE.PerspectiveCamera(12 / Math.min(aspect, 1), aspect, 1, 20000);
             camera.up.set(0, 0, 1);
             camera.position.z = 800;
-            //camera.position.y = 0;
-            //camera.lookAt(scene.position);
-            //camera.zoom = 0.5;
+            camera.position.y = 0;
+            camera.lookAt(scene.position);
+            camera.zoom = 0.5;
             scene.add(camera);
             var controls = new THREE.EarthControls(camera, renderer.domElement);
             glContainer.appendChild(renderer.domElement);
