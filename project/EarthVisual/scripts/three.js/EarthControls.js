@@ -727,10 +727,11 @@ THREE.EarthControls = function(object, domElement) {
     function onTouchStart(event) {
         if (scope.enabled === false) return;
         switch (event.touches.length) {
-            case 1: // one-fingered touch: rotate
-                if (scope.enableRotate === false) return;
-                handleTouchStartRotate(event);
-                state = STATE.TOUCH_ROTATE;
+            case 1: // one-fingered touch: pan
+                if (scope.enablePan === false) return;
+                handleTouchStartPan(event);
+                state = STATE.TOUCH_PAN;
+
                 break;
             case 2: // two-fingered touch: dolly
                 if (scope.enableZoom === false) return;
@@ -738,9 +739,9 @@ THREE.EarthControls = function(object, domElement) {
                 state = STATE.TOUCH_DOLLY;
                 break;
             case 3: // three-fingered touch: pan
-                if (scope.enablePan === false) return;
-                handleTouchStartPan(event);
-                state = STATE.TOUCH_PAN;
+                if (scope.enableRotate === false) return;
+                handleTouchStartRotate(event);
+                state = STATE.TOUCH_ROTATE;
                 break;
             default:
                 state = STATE.NONE;
@@ -775,6 +776,17 @@ THREE.EarthControls = function(object, domElement) {
         }
     }
 
+
+    function onPanMove(event) {
+        handleTouchMovePan(event);
+    }
+
+    function onWheelMove(event) {
+        if (event.type === 'pinchmove') {
+            handleMouseDownDolly(event)
+        }
+    }
+
     function onTouchEnd(event) {
         if (scope.enabled === false) return;
         handleTouchEnd(event);
@@ -792,9 +804,14 @@ THREE.EarthControls = function(object, domElement) {
     document.addEventListener('mousewheel', onMouseWheel, false);
     document.addEventListener('MozMousePixelScroll', onMouseWheel, false); // firefox
 
-    document.addEventListener('touchstart', onTouchStart, false);
-    document.addEventListener('touchend', onTouchEnd, false);
-    document.addEventListener('touchmove', onTouchMove, false);
+    // document.addEventListener('touchstart', onTouchStart, false);
+    // document.addEventListener('touchend', onTouchEnd, false);
+    // document.addEventListener('touchmove', onTouchMove, false);
+
+    var mc = new Hammer(document);
+    mc.get('pinch').set({ enable: true });
+    mc.get('pan').set(onWheelMove);
+    mc.on('panmove', onPanMove);
 
     window.addEventListener('keydown', onKeyDown, false);
 
