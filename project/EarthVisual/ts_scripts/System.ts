@@ -538,7 +538,7 @@ module ECS {
 
             var selectableTests = [];
             //osm tile groups
-            var TILE_PROVIDER = 'http://a.tile.openstreetmap.org';
+            var TILE_PROVIDER = 'https://a.tile.openstreetmap.org';
             var ZOOM_SHIFT_SIZE = 10;
             var ZOOM_MIN = 5;
             var MAX_TILEMESH = 500;
