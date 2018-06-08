@@ -562,22 +562,12 @@ THREE.EarthControls = function(object, domElement) {
 
     function handleTouchMoveDolly(event) {
 
-        //console.log( 'handleTouchMoveDolly' );
 
-        var dx = event.touches[0].pageX - event.touches[1].pageX;
-        var dy = event.touches[0].pageY - event.touches[1].pageY;
-
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        dollyEnd.set(0, distance);
-
-        dollyDelta.subVectors(dollyEnd, dollyStart);
-
-        if (dollyDelta.y > 0) {
+        if (event.scale > 0) {
 
             dollyOut(getZoomScale());
 
-        } else if (dollyDelta.y < 0) {
+        } else if (event.scale < 0) {
 
             dollyIn(getZoomScale());
 
@@ -593,13 +583,13 @@ THREE.EarthControls = function(object, domElement) {
 
         //console.log( 'handleTouchMovePan' );
 
-        panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
+        //panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
 
-        panDelta.subVectors(panEnd, panStart);
+        //panDelta.subVectors(panEnd, panStart);
 
-        pan(panDelta.x, panDelta.y);
+        pan(event.deltaX, event.deltaY);
 
-        panStart.copy(panEnd);
+        //panStart.copy(panEnd);
 
         scope.update();
 
@@ -783,7 +773,7 @@ THREE.EarthControls = function(object, domElement) {
 
     function onWheelMove(event) {
         if (event.type === 'pinchmove') {
-            handleMouseDownDolly(event)
+            handleTouchMoveDolly(event);
         }
     }
 
