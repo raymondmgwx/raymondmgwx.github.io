@@ -452,13 +452,21 @@ module ECS {
 
             var rotating = new THREE.Object3D();
             scene.add(rotating);
-            var mapMaterial = new THREE.MeshPhongMaterial({
-                map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
-                bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
-                bumpScale: 0.005,
-                specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
-                specular: new THREE.Color('grey')
-            })
+
+            var mapMaterial = new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('./images/map_outline.png'),
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1
+            });
+
+            // var mapMaterial = new THREE.MeshPhongMaterial({
+            //     map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
+            //     bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
+            //     bumpScale: 0.005,
+            //     specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
+            //     specular: new THREE.Color('grey')
+            // })
 
             var radius = 100;
             var segments = 40;
