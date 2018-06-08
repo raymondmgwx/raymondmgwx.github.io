@@ -562,12 +562,22 @@ THREE.EarthControls = function(object, domElement) {
 
     function handleTouchMoveDolly(event) {
 
+        //console.log( 'handleTouchMoveDolly' );
 
-        if (event.scale > 0) {
+        var dx = event.touches[0].pageX - event.touches[1].pageX;
+        var dy = event.touches[0].pageY - event.touches[1].pageY;
+
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        dollyEnd.set(0, distance);
+
+        dollyDelta.subVectors(dollyEnd, dollyStart);
+
+        if (dollyDelta.y > 0) {
 
             dollyOut(getZoomScale());
 
-        } else if (event.scale < 0) {
+        } else if (dollyDelta.y < 0) {
 
             dollyIn(getZoomScale());
 
@@ -583,13 +593,13 @@ THREE.EarthControls = function(object, domElement) {
 
         //console.log( 'handleTouchMovePan' );
 
-        //panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
+        panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
 
-        //panDelta.subVectors(panEnd, panStart);
+        panDelta.subVectors(panEnd, panStart);
 
-        pan(event.deltaX, event.deltaY);
+        pan(panDelta.x, panDelta.y);
 
-        //panStart.copy(panEnd);
+        panStart.copy(panEnd);
 
         scope.update();
 
@@ -728,7 +738,7 @@ THREE.EarthControls = function(object, domElement) {
                 handleTouchStartDolly(event);
                 state = STATE.TOUCH_DOLLY;
                 break;
-            case 3: // three-fingered touch: pan
+            case 3: // three-fingered touch: rotate
                 if (scope.enableRotate === false) return;
                 handleTouchStartRotate(event);
                 state = STATE.TOUCH_ROTATE;
@@ -747,9 +757,10 @@ THREE.EarthControls = function(object, domElement) {
         event.stopPropagation();
         switch (event.touches.length) {
             case 1: // one-fingered touch: rotate
-                if (scope.enableRotate === false) return;
-                if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
-                handleTouchMoveRotate(event);
+                if (scope.enablePan === false) return;
+                if (state !== STATE.TOUCH_PAN) return; // is this needed?...
+                handleTouchMovePan(event);
+
                 break;
             case 2: // two-fingered touch: dolly
                 if (scope.enableZoom === false) return;
@@ -757,9 +768,9 @@ THREE.EarthControls = function(object, domElement) {
                 handleTouchMoveDolly(event);
                 break;
             case 3: // three-fingered touch: pan
-                if (scope.enablePan === false) return;
-                if (state !== STATE.TOUCH_PAN) return; // is this needed?...
-                handleTouchMovePan(event);
+                if (scope.enableRotate === false) return;
+                if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
+                handleTouchMoveRotate(event);
                 break;
             default:
                 state = STATE.NONE;
@@ -773,7 +784,7 @@ THREE.EarthControls = function(object, domElement) {
 
     function onWheelMove(event) {
         if (event.type === 'pinchmove') {
-            handleTouchMoveDolly(event);
+            handleMouseDownDolly(event)
         }
     }
 
@@ -794,14 +805,14 @@ THREE.EarthControls = function(object, domElement) {
     document.addEventListener('mousewheel', onMouseWheel, false);
     document.addEventListener('MozMousePixelScroll', onMouseWheel, false); // firefox
 
-    // document.addEventListener('touchstart', onTouchStart, false);
-    // document.addEventListener('touchend', onTouchEnd, false);
-    // document.addEventListener('touchmove', onTouchMove, false);
+    document.addEventListener('touchstart', onTouchStart, false);
+    document.addEventListener('touchend', onTouchEnd, false);
+    document.addEventListener('touchmove', onTouchMove, false);
 
-    var mc = new Hammer(document);
-    mc.get('pinch').set({ enable: true });
-    mc.get('pan').set(onWheelMove);
-    mc.on('panmove', onPanMove);
+    // var mc = new Hammer(document);
+    // mc.get('pinch').set({ enable: true });
+    // mc.get('pan').set(onWheelMove);
+    // mc.on('panmove', onPanMove);
 
     window.addEventListener('keydown', onKeyDown, false);
 
