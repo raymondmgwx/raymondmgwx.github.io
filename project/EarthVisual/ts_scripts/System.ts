@@ -595,7 +595,7 @@ module ECS {
             var radius = 100;
             var segments = 40;
 
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius-0.1, segments, segments), mapMaterial);
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius-1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;

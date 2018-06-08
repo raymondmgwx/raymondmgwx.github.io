@@ -150,7 +150,7 @@ var Utils;
             var lon = facility.lon - 90;
             var lat = facility.lat;
             var phi = Math.PI / 2 - lat * Math.PI / 180;
-            var theta = 2 * Math.PI - (lon - 0) * Math.PI / 180;
+            var theta = 2 * Math.PI - lon * Math.PI / 180;
             var center = new THREE.Vector3();
             center.x = Math.sin(phi) * Math.cos(theta) * rad;
             center.y = Math.cos(phi) * rad;
@@ -279,7 +279,7 @@ var Utils;
                 var lon = landing.lon - 90;
                 var lat = landing.lat;
                 var phi = Math.PI / 2 - lat * Math.PI / 180;
-                var theta = 2 * Math.PI - (lon - 0) * Math.PI / 180;
+                var theta = 2 * Math.PI - lon * Math.PI / 180;
                 var lcenter = new THREE.Vector3();
                 lcenter.x = Math.sin(phi) * Math.cos(theta) * rad;
                 lcenter.y = Math.cos(phi) * rad;
@@ -986,7 +986,7 @@ var ECS;
             });
             var radius = 100;
             var segments = 40;
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 0.1, segments, segments), mapMaterial);
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;
@@ -1269,10 +1269,10 @@ var ECS;
         };
         EventListenerSystem.prototype.onMouseWheel = function (event) {
             var delta = 0;
-            if (event.wheelDelta) {
+            if (event.wheelDelta) { /* IE/Opera. */
                 delta = event.wheelDelta / 120;
             }
-            else if (event.detail) {
+            else if (event.detail) { // firefox
                 delta = -event.detail / 3;
             }
             if (delta) {
