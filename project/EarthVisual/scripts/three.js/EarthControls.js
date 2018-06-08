@@ -22,6 +22,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 * @author Clement Igonet
+* edited by Raymond Wang 2018.6.8
 */
 
 // This set of controls performs orbiting, dollying (zooming), and panning.

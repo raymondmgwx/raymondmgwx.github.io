@@ -385,35 +385,37 @@ module ECS {
             visualizationMesh.add(mesh);
             this.GlobalParams.set("visualizationMesh", visualizationMesh);
 
-            // var EventListenerGlobeParam = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
-            // if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
-            //     if (this.GlobalParams.get("selectedTest")) {
-            //         var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
-            //         var landing = this.GlobalParams.get("selectedTest").landingLocation;
+            var EventListenerGlobeParam = (<EventListenerSystem>(<MainSystem>this.MainSystem).OtherSystems.get("eventlistener")).GlobalParams;
+            if (previouslySelectedTest !== this.GlobalParams.get("selectedTest")) {
+                if (this.GlobalParams.get("selectedTest")) {
+                    var facility = facilityData[this.GlobalParams.get("selectedTest").facility];
+                    var landing = this.GlobalParams.get("selectedTest").landingLocation;
 
-            //         EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
-            //         var targetY0 = -((facility.lon + landing.lon) / 2 - 9.9) * Math.PI / 180;
-            //         var piCounter = 0;
-            //         while (true) {
-            //             var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
-            //             var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
-            //             if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
-            //                 break;
-            //             } else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
-            //                 EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
-            //                 break;
-            //             }
-            //             piCounter++;
-            //             EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
-            //         }
+                    EventListenerGlobeParam.set("rotateTargetX", (facility.lat + landing.lat) / 2 * Math.PI / 180);
+                    //var targetY0 = -((facility.lon + landing.lon) / 2 ) * Math.PI / 180;
+                    // var piCounter = 0;
+                    // while (true) {
+                    //     var targetY0Neg = targetY0 - Math.PI * 2 * piCounter;
+                    //     var targetY0Pos = targetY0 + Math.PI * 2 * piCounter;
+                    //     if (Math.abs(targetY0Neg - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+                    //         EventListenerGlobeParam.set("rotateTargetY", targetY0Neg);
+                    //         break;
+                    //     } else if (Math.abs(targetY0Pos - this.GlobalParams.get("rotating").rotation.y) < Math.PI) {
+                    //         EventListenerGlobeParam.set("rotateTargetY", targetY0Pos);
+                    //         break;
+                    //     }
+                    //     piCounter++;
+                    //     EventListenerGlobeParam.set("rotateTargetY", this.wrap(targetY0, -Math.PI, Math.PI));
+                    // }
 
-            //         EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
-            //         EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
+                    this.GlobalParams.set("targetPos", [(facility.lat + landing.lat) / 2, (facility.lon + landing.lon) / 2]);
 
-            //         EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
-            //     }
-            // }
+                    // EventListenerGlobeParam.set("rotateVX", EventListenerGlobeParam.get("rotateVX") * 0.6);
+                    // EventListenerGlobeParam.set("rotateVY", EventListenerGlobeParam.get("rotateVY") * 0.6);
+
+                    // EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
+                }
+            }
 
             //d3Graphs.initGraphs();
         }
@@ -595,7 +597,7 @@ module ECS {
             var radius = 100;
             var segments = 40;
 
-            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius-1, segments, segments), mapMaterial);
+            var sphere = new THREE.Mesh(new THREE.SphereGeometry(radius - 1, segments, segments), mapMaterial);
             sphere.doubleSided = false;
             sphere.rotation.x = Math.PI;
             sphere.rotation.y = -Math.PI / 2;
@@ -722,6 +724,7 @@ module ECS {
             var controls = new THREE.EarthControls(camera, renderer.domElement);
             glContainer.appendChild(renderer.domElement);
 
+
             this.GlobalParams.set("scene", scene);
             this.GlobalParams.set("zoom", 0);
             this.GlobalParams.set("controls", controls);
@@ -770,45 +773,62 @@ module ECS {
             var oldZoom = this.GlobalParams.get("zoom");
             var zoom = this.GlobalParams.get("zoom");
             var controls = this.GlobalParams.get("controls");
+            var targetPos = this.GlobalParams.get("targetPos");
 
             this.GlobalParams.set("timeNow", Date.now());
             cloudMesh.rotation.y += (1 / 16 * (this.GlobalParams.get("timeNow") - this.GlobalParams.get("timeLast"))) / 1000;
 
-            if (rotateTargetX !== undefined && rotateTargetY !== undefined) {
-                rotateVX += (rotateTargetX - rotateX) * 0.012;
-                rotateVY += (rotateTargetY - rotateY) * 0.012;
-                if (Math.abs(rotateTargetX - rotateX) < 0.02 && Math.abs(rotateTargetY - rotateY) < 0.02) {
-                    rotateTargetX = undefined;
-                    rotateTargetY = undefined;
-                }
+            // if (rotateTargetX !== undefined && rotateTargetY !== undefined) {
+            //     rotateVX += (rotateTargetX - rotateX) * 0.012;
+            //     rotateVY += (rotateTargetY - rotateY) * 0.012;
+            //     if (Math.abs(rotateTargetX - rotateX) < 0.02 && Math.abs(rotateTargetY - rotateY) < 0.02) {
+            //         rotateTargetX = undefined;
+            //         rotateTargetY = undefined;
+            //     }
 
-                rotateX += rotateVX;
-                rotateY += rotateVY;
+            //     rotateX += rotateVX;
+            //     rotateY += rotateVY;
 
-                rotateVX *= 0.98;
-                rotateVY *= 0.98;
+            //     rotateVX *= 0.98;
+            //     rotateVY *= 0.98;
 
-                if (dragging || rotateTargetX !== undefined) {
-                    rotateVX *= 0.6;
-                    rotateVY *= 0.6;
-                }
+            //     if (dragging || rotateTargetX !== undefined) {
+            //         rotateVX *= 0.6;
+            //         rotateVY *= 0.6;
+            //     }
 
-                if (rotateX < -rotateXMax) {
-                    rotateX = -rotateXMax;
-                    rotateVX *= -0.95;
-                }
-                if (rotateX > rotateXMax) {
-                    rotateX = rotateXMax;
-                    rotateVX *= -0.95;
-                }
+            //     if (rotateX < -rotateXMax) {
+            //         rotateX = -rotateXMax;
+            //         rotateVX *= -0.95;
+            //     }
+            //     if (rotateX > rotateXMax) {
+            //         rotateX = rotateXMax;
+            //         rotateVX *= -0.95;
+            //     }
 
 
-                //rotating.rotation.x = rotateX;
-                //rotating.rotation.y = rotateY;
-                // controls.rotateLeft(rotateVY*180/Math.PI);
-                // controls.rotateUp(rotateVX*180/Math.PI);
-                // controls.update();
-            }
+            //     //rotating.rotation.x = rotateX;
+            //     //rotating.rotation.y = rotateY;
+            //     // controls.rotateLeft(rotateVY*180/Math.PI);
+            //     // controls.rotateUp(rotateVX*180/Math.PI);
+            //     // controls.update();
+            // }
+
+
+
+            // if (rotateTargetX !== undefined) {
+
+            //     var dLat = (controls.getLatitude() - targetPos[0]) * Math.PI / 180;
+            //     var dLon = (controls.getLongitude() - targetPos[1]) * Math.PI / 180;
+
+            //     // if (dLat > 0.02)
+            //     //     controls.panUp(dLat);
+            //     // else
+            //     controls.panLeft(-dLat*1.5);
+            //     controls.panUp(-dLon*1.5);
+
+            //     if (Math.abs(dLat) < 0.02 && Math.abs(dLon) < 0.02) rotateTargetX = undefined;
+            // }
 
 
 
