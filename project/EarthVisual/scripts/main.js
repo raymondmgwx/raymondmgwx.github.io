@@ -872,7 +872,7 @@ var ECS;
                     var xtile_ = Math.floor(xtile / factor);
                     var ytile_ = Math.floor(ytile / factor);
                     if (zoom < 8) {
-                        var size = 3;
+                        var size = 2;
                     }
                     else if (zoom < 10) {
                         var size = 2;
@@ -884,6 +884,21 @@ var ECS;
                     var maxXtile = Math.floor((xtile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
                     var minYtile = Math.floor((ytile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
                     var maxYtile = Math.floor((ytile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
+                    if (minXtile < 0 && maxXtile >= 0) {
+                        var minXOffset = Math.abs(minXtile) % 32;
+                        var realMinX = 32 - minXOffset;
+                        var realMaxX = 32 + maxXtile;
+                        minXtile = realMinX;
+                        maxXtile = realMaxX;
+                    }
+                    else if (minXtile < 0 && maxXtile < 0) {
+                        var minXOffset = Math.abs(minXtile) % 32;
+                        var realMinX = 32 - minXOffset;
+                        var maxXOffset = Math.abs(maxXtile) % 32;
+                        var realMaxX = 32 - maxXOffset;
+                        minXtile = realMinX;
+                        maxXtile = realMaxX;
+                    }
                     // console.log({
                     //     'zoom_': zoom_,
                     //     'xtile_': xtile_,
