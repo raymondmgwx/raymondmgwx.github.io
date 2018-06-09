@@ -68,7 +68,7 @@ THREE.EarthControls = function(object, domElement) {
     this.enableZoom = true;
     this.zoomSpeed = 1.0;
     // Set to false to disable rotating
-    this.enableRotate = false;
+    this.enableRotate = true;
     this.rotateSpeed = 1.0;
     // Set to false to disable panning
     this.enablePan = true;

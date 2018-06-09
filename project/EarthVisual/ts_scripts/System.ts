@@ -543,8 +543,8 @@ module ECS {
             var GlobalParams = this.GlobalParams;
             var osmSwitch = GlobalParams.get("osmSwitch");
             var earthParam = {
-                nighttexture: false,
-                osmSwitch: osmSwitch
+                NightView: false,
+                LoadOSM: osmSwitch
             };
             GlobalParams.set("earthParam", earthParam);
             var gui = new dat.GUI();
@@ -554,8 +554,8 @@ module ECS {
                 var camera = GlobalParams.get("camera");
                 var renderer = GlobalParams.get("renderer");
                 var scene = GlobalParams.get("scene");
-                var nighttexture = GlobalParams.get("earthParam").nighttexture;
-                var osmSwitchNow = GlobalParams.get("earthParam").osmSwitch;
+                var nighttexture = GlobalParams.get("earthParam").NightView;
+                var osmSwitchNow = GlobalParams.get("earthParam").LoadOSM;
                 var earthSphere = GlobalParams.get("earthSphere");
 
                 if (nighttexture) {
@@ -574,8 +574,8 @@ module ECS {
 
             }
 
-            gui.add(earthParam, "nighttexture", false).onChange(guiChanged);
-            gui.add(earthParam, "osmSwitch", true).onChange(guiChanged);
+            gui.add(earthParam, "NightView", false).onChange(guiChanged);
+            gui.add(earthParam, "LoadOSM", true).onChange(guiChanged);
             guiChanged();
         }
         InitThreeJs() {
@@ -790,15 +790,14 @@ module ECS {
             this.GlobalParams.set("radius", radius);
             this.GlobalParams.set("earthSphere", sphere);
             this.GlobalParams.set("osmSwitch", true);
+            this.GlobalParams.set("stats", stats);
             this.GlobalParams.set("timeLast", Date.now());
         }
         render() {
             this.GlobalParams.get("renderer").clear();
             this.GlobalParams.get("renderer").render(this.GlobalParams.get("scene"), this.GlobalParams.get("camera"));
         }
-        GetDistance(lat1: any, lat2: any, lon1: any, lon2: any) {
 
-        }
         AnimeUpdate() {
             var camera = this.GlobalParams.get("camera");
             var renderer = this.GlobalParams.get("renderer");
@@ -955,6 +954,9 @@ module ECS {
             this.render();
 
             requestAnimationFrame(this.animate);
+
+            var stats = this.GlobalParams.get("stats");
+            stats.update();
 
             this.GlobalParams.get("rotating").traverse(function (mesh) {
                 if (mesh.update !== undefined) {

@@ -593,6 +593,8 @@ var ECS;
                 _this.AnimeUpdate();
                 _this.render();
                 requestAnimationFrame(_this.animate);
+                var stats = _this.GlobalParams.get("stats");
+                stats.update();
                 _this.GlobalParams.get("rotating").traverse(function (mesh) {
                     if (mesh.update !== undefined) {
                         mesh.update();
@@ -940,8 +942,8 @@ var ECS;
             var GlobalParams = this.GlobalParams;
             var osmSwitch = GlobalParams.get("osmSwitch");
             var earthParam = {
-                nighttexture: false,
-                osmSwitch: osmSwitch
+                NightView: false,
+                LoadOSM: osmSwitch
             };
             GlobalParams.set("earthParam", earthParam);
             var gui = new dat.GUI();
@@ -949,8 +951,8 @@ var ECS;
                 var camera = GlobalParams.get("camera");
                 var renderer = GlobalParams.get("renderer");
                 var scene = GlobalParams.get("scene");
-                var nighttexture = GlobalParams.get("earthParam").nighttexture;
-                var osmSwitchNow = GlobalParams.get("earthParam").osmSwitch;
+                var nighttexture = GlobalParams.get("earthParam").NightView;
+                var osmSwitchNow = GlobalParams.get("earthParam").LoadOSM;
                 var earthSphere = GlobalParams.get("earthSphere");
                 if (nighttexture) {
                     earthSphere.material.map = new THREE.TextureLoader().load('./images/nightearth2016.jpg');
@@ -967,8 +969,8 @@ var ECS;
                 GlobalParams.set("earthSphere", earthSphere);
                 renderer.render(scene, camera);
             }
-            gui.add(earthParam, "nighttexture", false).onChange(guiChanged);
-            gui.add(earthParam, "osmSwitch", true).onChange(guiChanged);
+            gui.add(earthParam, "NightView", false).onChange(guiChanged);
+            gui.add(earthParam, "LoadOSM", true).onChange(guiChanged);
             guiChanged();
         };
         ThreeJsSystem.prototype.InitThreeJs = function () {
@@ -1132,13 +1134,12 @@ var ECS;
             this.GlobalParams.set("radius", radius);
             this.GlobalParams.set("earthSphere", sphere);
             this.GlobalParams.set("osmSwitch", true);
+            this.GlobalParams.set("stats", stats);
             this.GlobalParams.set("timeLast", Date.now());
         };
         ThreeJsSystem.prototype.render = function () {
             this.GlobalParams.get("renderer").clear();
             this.GlobalParams.get("renderer").render(this.GlobalParams.get("scene"), this.GlobalParams.get("camera"));
-        };
-        ThreeJsSystem.prototype.GetDistance = function (lat1, lat2, lon1, lon2) {
         };
         ThreeJsSystem.prototype.AnimeUpdate = function () {
             var camera = this.GlobalParams.get("camera");
