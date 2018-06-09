@@ -31,7 +31,6 @@ module ECS {
         }
         Execute() {
             super.Execute();
-
             // var mapImage = new Image();
             // mapImage.src = './images/2_no_clouds_4k.jpg';
             //console.log("load image data finished!");
@@ -121,6 +120,8 @@ module ECS {
     declare var THREEx: any;
     declare var $: any;
     declare var Math: any;
+    declare var Stats: any;
+    declare var dat: any;
 
     export class ThreeJsSystem extends System {
         GlobalParams: Utils.HashSet<any>;
@@ -423,6 +424,7 @@ module ECS {
 
             var xtile = Utils.long2tile(p_lon, zoom);
             var ytile = Utils.lat2tile(p_lat, zoom);
+            var osmSwitch = this.GlobalParams.get("osmSwitch");
 
             var tiles = {};
             var nextMinXtile, nextMaxXtile;
@@ -441,84 +443,86 @@ module ECS {
             //console.log('zoom_ start:', Math.max(zoom, ZOOM_MIN));
             //console.log('zoom_ end:', Math.max(zoom - ZOOM_SHIFT_SIZE, ZOOM_MIN) + 1);
 
-            for (var zoom_ = Math.max(zoom, ZOOM_MIN); zoom_ > Math.max(zoom - ZOOM_SHIFT_SIZE, ZOOM_MIN); zoom_--) {
-                var zShift = zoom - zoom_;
-                tileGroup[zShift] = new THREE.Object3D();
-                tileGroups.add(tileGroup[zShift]);
-                // var zoom_ = zoom - zShift;
-                if (zoom_ < 0 && zShift > 0) {
-                    continue;
-                }
+            if (osmSwitch) {
+                for (var zoom_ = Math.max(zoom, ZOOM_MIN); zoom_ > Math.max(zoom - ZOOM_SHIFT_SIZE, ZOOM_MIN); zoom_--) {
+                    var zShift = zoom - zoom_;
+                    tileGroup[zShift] = new THREE.Object3D();
+                    tileGroups.add(tileGroup[zShift]);
+                    // var zoom_ = zoom - zShift;
+                    if (zoom_ < 0 && zShift > 0) {
+                        continue;
+                    }
 
-                var size = 2;
-                var factor = Math.pow(2, zShift);
-                var xtile_ = Math.floor(xtile / factor);
-                var ytile_ = Math.floor(ytile / factor);
-
-                if (zoom < 8) {
-                    var size = 3;
-                } else if (zoom < 10) {
                     var size = 2;
-                } else {
-                    size = 1;
-                }
-                var minXtile = Math.floor((xtile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
-                var maxXtile = Math.floor((xtile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
-                var minYtile = Math.floor((ytile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
-                var maxYtile = Math.floor((ytile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
-                // console.log({
-                //     'zoom_': zoom_,
-                //     'xtile_': xtile_,
-                //     'ytile_': ytile_,
-                //     'minXtile': minXtile,
-                //     'maxXtile': maxXtile,
-                //     'minYtile': minYtile,
-                //     'maxYtile': maxYtile,
-                //     'lon':p_lon,
-                //     'p_lat':p_lat
-                // })
+                    var factor = Math.pow(2, zShift);
+                    var xtile_ = Math.floor(xtile / factor);
+                    var ytile_ = Math.floor(ytile / factor);
+
+                    if (zoom < 8) {
+                        var size = 3;
+                    } else if (zoom < 10) {
+                        var size = 2;
+                    } else {
+                        size = 1;
+                    }
+                    var minXtile = Math.floor((xtile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
+                    var maxXtile = Math.floor((xtile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
+                    var minYtile = Math.floor((ytile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
+                    var maxYtile = Math.floor((ytile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
+                    // console.log({
+                    //     'zoom_': zoom_,
+                    //     'xtile_': xtile_,
+                    //     'ytile_': ytile_,
+                    //     'minXtile': minXtile,
+                    //     'maxXtile': maxXtile,
+                    //     'minYtile': minYtile,
+                    //     'maxYtile': maxYtile,
+                    //     'lon':p_lon,
+                    //     'p_lat':p_lat
+                    // })
 
 
-                var modulus = (zoom_ > 0) ? Math.pow(2, zoom_) : 0;
+                    var modulus = (zoom_ > 0) ? Math.pow(2, zoom_) : 0;
 
-                for (var atile = minXtile; atile <= maxXtile; atile++) {
-                    for (var btile = minYtile; btile <= maxYtile; btile++) {
-                        var lon1 = Utils.tile2long(atile, zoom_);
-                        var lat1 = Utils.tile2lat(btile, zoom_);
-                        var lon2 = Utils.tile2long(atile + 1, zoom_);
-                        var lat2 = Utils.tile2lat(btile + 1, zoom_);
-                        var lat = (lat1 + lat2) / 2;
-                        var lon = (lon1 + lon2) / 2;
+                    for (var atile = minXtile; atile <= maxXtile; atile++) {
+                        for (var btile = minYtile; btile <= maxYtile; btile++) {
+                            var lon1 = Utils.tile2long(atile, zoom_);
+                            var lat1 = Utils.tile2lat(btile, zoom_);
+                            var lon2 = Utils.tile2long(atile + 1, zoom_);
+                            var lat2 = Utils.tile2lat(btile + 1, zoom_);
+                            var lat = (lat1 + lat2) / 2;
+                            var lon = (lon1 + lon2) / 2;
 
-                        var widthUp = Utils.measure(radius, lat1, lon1, lat1, lon2);
-                        var widthDown = Utils.measure(radius, lat2, lon1, lat2, lon2);
-                        var widthSide = Utils.measure(radius, lat1, lon1, lat2, lon1);
+                            var widthUp = Utils.measure(radius, lat1, lon1, lat1, lon2);
+                            var widthDown = Utils.measure(radius, lat2, lon1, lat2, lon2);
+                            var widthSide = Utils.measure(radius, lat1, lon1, lat2, lon1);
 
-                        var id = 'z_' + zoom_ + '_' + atile + "_" + btile;
-                        for (var zzz = 1; zzz <= 2; zzz++) {
-                            var idNext = 'z_' + (zoom_ - zzz) + '_' + Math.floor(atile / Math.pow(2, zzz)) + "_" + Math.floor(btile / Math.pow(2, zzz));
-                            tiles[idNext] = {};
-                        }
-                        if (!tiles.hasOwnProperty(id)) {
+                            var id = 'z_' + zoom_ + '_' + atile + "_" + btile;
+                            for (var zzz = 1; zzz <= 2; zzz++) {
+                                var idNext = 'z_' + (zoom_ - zzz) + '_' + Math.floor(atile / Math.pow(2, zzz)) + "_" + Math.floor(btile / Math.pow(2, zzz));
+                                tiles[idNext] = {};
+                            }
+                            if (!tiles.hasOwnProperty(id)) {
 
-                            var tileEarth = new THREE.Object3D(); //create an empty container
-                            tileEarth.rotation.set(0, (lon1 + 180) * Math.PI / 180, 0);
-                            tileGroup[zShift].add(tileEarth);
-                            var tileMesh = Utils.getTileMesh(radius, zoom_, btile, MAX_TILEMESH);
-                            tileEarth.add(tileMesh);
-
-
-                            (function (yourTileMesh, yourZoom, yourXtile, yourYtile) {
+                                var tileEarth = new THREE.Object3D(); //create an empty container
+                                tileEarth.rotation.set(0, (lon1 + 180) * Math.PI / 180, 0);
+                                tileGroup[zShift].add(tileEarth);
+                                var tileMesh = Utils.getTileMesh(radius, zoom_, btile, MAX_TILEMESH);
+                                tileEarth.add(tileMesh);
 
 
-                                var onLoaded = function (texture) {
-                                    // MeshFaceMaterial
-                                    yourTileMesh.material = new THREE.MeshBasicMaterial({
-                                        map: texture
-                                    });
-                                };
-                                Utils.textureFactory(TILE_PROVIDER, MAX_TILEMESH, yourZoom, yourXtile, yourYtile, onLoaded);
-                            })(tileMesh, zoom_, atile % modulus, btile % modulus);
+                                (function (yourTileMesh, yourZoom, yourXtile, yourYtile) {
+
+
+                                    var onLoaded = function (texture) {
+                                        // MeshFaceMaterial
+                                        yourTileMesh.material = new THREE.MeshBasicMaterial({
+                                            map: texture
+                                        });
+                                    };
+                                    Utils.textureFactory(TILE_PROVIDER, MAX_TILEMESH, yourZoom, yourXtile, yourYtile, onLoaded);
+                                })(tileMesh, zoom_, atile % modulus, btile % modulus);
+                            }
                         }
                     }
                 }
@@ -530,6 +534,49 @@ module ECS {
             this.GlobalParams.set("rotating", rotating);
             this.GlobalParams.set("tileGroups", tileGroups);
             this.GlobalParams.set("tileGroup", tileGroup);
+        }
+
+        initUi() {
+
+
+
+            var GlobalParams = this.GlobalParams;
+            var osmSwitch = GlobalParams.get("osmSwitch");
+            var earthParam = {
+                nighttexture: false,
+                osmSwitch: osmSwitch
+            };
+            GlobalParams.set("earthParam", earthParam);
+            var gui = new dat.GUI();
+
+            function guiChanged() {
+
+                var camera = GlobalParams.get("camera");
+                var renderer = GlobalParams.get("renderer");
+                var scene = GlobalParams.get("scene");
+                var nighttexture = GlobalParams.get("earthParam").nighttexture;
+                var osmSwitchNow = GlobalParams.get("earthParam").osmSwitch;
+                var earthSphere = GlobalParams.get("earthSphere");
+
+                if (nighttexture) {
+                    earthSphere.material.map = new THREE.TextureLoader().load('./images/nightearth2016.jpg');
+                    earthSphere.material.needsUpdate = true;
+                } else {
+                    earthSphere.material.map = new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg');
+                    earthSphere.material.needsUpdate = true;
+                }
+
+                if (osmSwitchNow) GlobalParams.set("osmSwitch", true);
+                else GlobalParams.set("osmSwitch", false);
+
+                GlobalParams.set("earthSphere", earthSphere);
+                renderer.render(scene, camera);
+
+            }
+
+            gui.add(earthParam, "nighttexture", false).onChange(guiChanged);
+            gui.add(earthParam, "osmSwitch", true).onChange(guiChanged);
+            guiChanged();
         }
         InitThreeJs() {
 
@@ -576,23 +623,23 @@ module ECS {
             var rotating = new THREE.Object3D();
             scene.add(rotating);
 
-            // var mapMaterial = new THREE.MeshBasicMaterial({
-            //     map: new THREE.TextureLoader().load('./images/map_outline.png'),
-            //     polygonOffset: true,
-            //     polygonOffsetFactor: 1,
-            //     polygonOffsetUnits: 1
-            // });
-
-            var mapMaterial = new THREE.MeshPhongMaterial({
+            var mapMaterial = new THREE.MeshBasicMaterial({
                 map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
-                bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
-                bumpScale: 0.005,
-                specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
-                specular: new THREE.Color('grey'),
                 polygonOffset: true,
                 polygonOffsetFactor: 1,
                 polygonOffsetUnits: 1
-            })
+            });
+
+            // var mapMaterial = new THREE.MeshPhongMaterial({
+            //     map: new THREE.TextureLoader().load('./images/2_no_clouds_4k.jpg'),
+            //     bumpMap: new THREE.TextureLoader().load('./images/elev_bump_4k.jpg'),
+            //     bumpScale: 0.005,
+            //     specularMap: new THREE.TextureLoader().load('./images/water_4k.png'),
+            //     specular: new THREE.Color('grey'),
+            //     polygonOffset: true,
+            //     polygonOffsetFactor: 1,
+            //     polygonOffsetUnits: 1
+            // })
 
             var radius = 100;
             var segments = 40;
@@ -652,7 +699,7 @@ module ECS {
                 linewidth: 0.5
             });
             var wireframe = new THREE.LineSegments(wireframeGeo, wireframeMaterial);
-            sphere.add(wireframe);
+            //sphere.add(wireframe);
 
             var atmosphereMaterial = new THREE.ShaderMaterial({
                 vertexShader: document.getElementById('vertexShaderAtmosphere').textContent,
@@ -723,7 +770,8 @@ module ECS {
 
             var controls = new THREE.EarthControls(camera, renderer.domElement);
             glContainer.appendChild(renderer.domElement);
-
+            var stats = new Stats();
+            glContainer.appendChild(stats.dom);
 
             this.GlobalParams.set("scene", scene);
             this.GlobalParams.set("zoom", 0);
@@ -740,6 +788,8 @@ module ECS {
             this.GlobalParams.set("MAX_TILEMESH", MAX_TILEMESH);
             this.GlobalParams.set("TILE_PROVIDER", TILE_PROVIDER);
             this.GlobalParams.set("radius", radius);
+            this.GlobalParams.set("earthSphere", sphere);
+            this.GlobalParams.set("osmSwitch", true);
             this.GlobalParams.set("timeLast", Date.now());
         }
         render() {
@@ -774,6 +824,7 @@ module ECS {
             var zoom = this.GlobalParams.get("zoom");
             var controls = this.GlobalParams.get("controls");
             var targetPos = this.GlobalParams.get("targetPos");
+
 
             this.GlobalParams.set("timeNow", Date.now());
             cloudMesh.rotation.y += (1 / 16 * (this.GlobalParams.get("timeNow") - this.GlobalParams.get("timeLast"))) / 1000;
@@ -842,6 +893,7 @@ module ECS {
 
             // }
 
+
             var dist = new THREE.Vector3().copy(controls.object.position).sub(controls.target).length();
 
             var zoom = Math.floor(Math.max(Math.min(Math.floor(15 - Math.log2(dist)), ZOOM_MIN + ZOOM_SHIFT_SIZE), ZOOM_MIN));
@@ -879,6 +931,8 @@ module ECS {
             this.GlobalParams.set("ytile", ytile);
 
 
+
+
             this.GlobalParams.set("timeLast", Date.now());
             EventListenerGlobalParams.set("rotateTargetX", rotateTargetX);
             EventListenerGlobalParams.set("rotateTargetY", rotateTargetY);
@@ -912,6 +966,7 @@ module ECS {
             super.Execute();
             //console.log("three.js main system:"+this.MainSystem.name);
             this.InitThreeJs();
+            this.initUi();
             this.animate();
         }
     }
