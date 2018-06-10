@@ -21,6 +21,36 @@ module ECS {
         }
     }
 
+    export class JapanCityDataComponent extends Component {
+        id: string
+        lon: number
+        lat: number
+        constructor(id: string ,lon: number,lat: number ) {
+            super("japancity");
+            this.id = id;
+            this.lon = lon;
+            this.lat = lat;
+        }
+    }
+
+    export class HumanMovementDataComponent extends Component {
+        b_id: string
+        b_lon: number
+        b_lat: number
+        a_id: string
+        a_lon: number
+        a_lat: number
+        constructor(b_id: string ,b_lon: number,b_lat: number,a_id: string ,a_lon: number,a_lat: number ) {
+            super("humanmove");
+            this.b_id = b_id;
+            this.b_lon = b_lon;
+            this.b_lat = b_lat;
+            this.a_id = a_id;
+            this.a_lon = a_lon;
+            this.a_lat = a_lat;
+        }
+    }
+
     export class GlobalComponent extends Component {
         data: Utils.HashSet<any>;
         constructor(data: Utils.HashSet<any>) {

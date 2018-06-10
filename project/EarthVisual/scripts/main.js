@@ -66,6 +66,33 @@ var ECS;
         return JsonDataComponent;
     }(Component));
     ECS.JsonDataComponent = JsonDataComponent;
+    var JapanCityDataComponent = /** @class */ (function (_super) {
+        __extends(JapanCityDataComponent, _super);
+        function JapanCityDataComponent(id, lon, lat) {
+            var _this = _super.call(this, "japancity") || this;
+            _this.id = id;
+            _this.lon = lon;
+            _this.lat = lat;
+            return _this;
+        }
+        return JapanCityDataComponent;
+    }(Component));
+    ECS.JapanCityDataComponent = JapanCityDataComponent;
+    var HumanMovementDataComponent = /** @class */ (function (_super) {
+        __extends(HumanMovementDataComponent, _super);
+        function HumanMovementDataComponent(b_id, b_lon, b_lat, a_id, a_lon, a_lat) {
+            var _this = _super.call(this, "humanmove") || this;
+            _this.b_id = b_id;
+            _this.b_lon = b_lon;
+            _this.b_lat = b_lat;
+            _this.a_id = a_id;
+            _this.a_lon = a_lon;
+            _this.a_lat = a_lat;
+            return _this;
+        }
+        return HumanMovementDataComponent;
+    }(Component));
+    ECS.HumanMovementDataComponent = HumanMovementDataComponent;
     var GlobalComponent = /** @class */ (function (_super) {
         __extends(GlobalComponent, _super);
         function GlobalComponent(data) {
@@ -98,7 +125,7 @@ var ECS;
         }
         Entity.prototype.addComponent = function (component) {
             this.components.set(component.name, component);
-            console.log("add [" + component.name + "] component");
+            //console.log("add ["+component.name+"] component");
         };
         Entity.prototype.removeComponent = function (component) {
             var name = component.name;
@@ -113,6 +140,14 @@ var ECS;
         return Entity;
     }());
     ECS.Entity = Entity;
+    var ThreeJsMoveEntity = /** @class */ (function () {
+        function ThreeJsMoveEntity(startPos, endPos) {
+            this.startPos = startPos;
+            this.endPos = endPos;
+        }
+        return ThreeJsMoveEntity;
+    }());
+    ECS.ThreeJsMoveEntity = ThreeJsMoveEntity;
 })(ECS || (ECS = {}));
 /* =========================================================================
  *
@@ -345,6 +380,93 @@ var Utils;
         return Selection;
     }());
     Utils.Selection = Selection;
+    function ConvertGISDataTo3DSphere(GisData_lon, GisData_lat) {
+        var rad = 100;
+        var lon = GisData_lon - 90;
+        var lat = GisData_lat;
+        var phi = Math.PI / 2 - lat * Math.PI / 180;
+        var theta = 2 * Math.PI - lon * Math.PI / 180;
+        var center = new THREE.Vector3();
+        center.x = Math.sin(phi) * Math.cos(theta) * rad;
+        center.y = Math.cos(phi) * rad;
+        center.z = Math.sin(phi) * Math.sin(theta) * rad;
+        return center;
+    }
+    Utils.ConvertGISDataTo3DSphere = ConvertGISDataTo3DSphere;
+    function CreateLineGeometry(points) {
+        var geometry = new THREE.Geometry();
+        for (var i = 0; i < points.length; i++) {
+            geometry.vertices.push(points[i]);
+        }
+        return geometry;
+    }
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    Utils.randomInt = randomInt;
+    var origin = new THREE.Vector3(0, 0, 0);
+    function ConnectionLineGeometry(startPos, endPos, apogee) {
+        var globeRadius = 100;
+        var distance = endPos.clone().sub(startPos).length();
+        var midHeight = globeRadius * apogee / 6378.137;
+        var midLength = globeRadius + midHeight;
+        var mid = startPos.clone().lerp(endPos, 0.5);
+        mid.normalize();
+        mid.multiplyScalar(midLength);
+        var normal = (new THREE.Vector3()).subVectors(startPos, endPos);
+        normal.normalize();
+        /*
+                    The curve looks like this:
+    
+                    midStartAnchor---- mid ----- midEndAnchor
+                  /											  \
+                 /											   \
+                /												\
+        start/anchor 										 end/anchor
+    
+            splineCurveA							splineCurveB
+        */
+        var distanceOneThird = distance * 0.33;
+        //	var distanceOneSixth = distance * 0.1666;
+        var startAnchor = startPos;
+        var midStartAnchor = mid.clone().add(normal.clone().multiplyScalar(distanceOneThird));
+        var midEndAnchor = mid.clone().add(normal.clone().multiplyScalar(-distanceOneThird));
+        var endAnchor = endPos;
+        var splineCurveA = new THREE.CubicBezierCurve3(startPos, startAnchor, midStartAnchor, mid);
+        // splineCurveA.updateArcLengths();
+        var splineCurveB = new THREE.CubicBezierCurve3(mid, midEndAnchor, endAnchor, endPos);
+        // splineCurveB.updateArcLengths();
+        //	how many vertices do we want on this guy? this is for *each* side
+        var vertexCountDesired = Math.floor((distance + midHeight) * 0.3 + 3);
+        //	collect the vertices
+        var points = splineCurveA.getPoints(vertexCountDesired);
+        //	remove the very last point since it will be duplicated on the next half of the curve
+        points = points.splice(0, points.length - 1);
+        points = points.concat(splineCurveB.getPoints(vertexCountDesired));
+        //	add one final point to the center of the earth
+        //	we need this for drawing multiple arcs, but piled into one geometry buffer
+        points.push(origin);
+        //	create a line geometry out of these
+        var curveGeometry = CreateLineGeometry(points);
+        curveGeometry.size = 15;
+        return curveGeometry;
+    }
+    function BuildSphereDataVizGeometries(MoveDataList) {
+        var rad = 100;
+        var loadLayer = document.getElementById('loading');
+        var lineArray = [];
+        for (var _i = 0, MoveDataList_1 = MoveDataList; _i < MoveDataList_1.length; _i++) {
+            var m = MoveDataList_1[_i];
+            var startPos = new THREE.Vector3(m.startPos[0], m.startPos[1], m.startPos[2]);
+            var endPos = new THREE.Vector3(m.endPos[0], m.endPos[1], m.endPos[2]);
+            var randomHeight = randomInt(500, 1000);
+            var line = ConnectionLineGeometry(startPos, endPos, randomHeight);
+            lineArray.push(line);
+        }
+        loadLayer.style.display = 'none';
+        return lineArray;
+    }
+    Utils.BuildSphereDataVizGeometries = BuildSphereDataVizGeometries;
     function long2tile(lon, zoom) {
         return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom)));
     }
@@ -500,63 +622,153 @@ var ECS;
             _this.entities = entities;
             return _this;
         }
+        LoadingSystem.prototype.InitDataStructure = function (data, cityCode) {
+            var data_2008_value = data.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE;
+            var MovementBeforeNode = cityCode.MovementBeforeNode.Value;
+            var MoveAfterNode = cityCode.MoveAfterNode.Value;
+            var MovementBeforeNodeList = new Utils.HashSet();
+            for (var _i = 0, MovementBeforeNode_1 = MovementBeforeNode; _i < MovementBeforeNode_1.length; _i++) {
+                var mb = MovementBeforeNode_1[_i];
+                MovementBeforeNodeList.set(mb.id, new ECS.JapanCityDataComponent(mb.id, +mb.lon, +mb.lat));
+            }
+            var MoveAfterNodeList = new Utils.HashSet();
+            for (var _a = 0, MoveAfterNode_1 = MoveAfterNode; _a < MoveAfterNode_1.length; _a++) {
+                var ma = MoveAfterNode_1[_a];
+                MoveAfterNodeList.set(ma.id, new ECS.JapanCityDataComponent(ma.id, +ma.lon, +ma.lat));
+            }
+            var BeforeNotAllowedList = new Utils.HashSet();
+            BeforeNotAllowedList.set("001", "001");
+            BeforeNotAllowedList.set("049", "049");
+            BeforeNotAllowedList.set("050", "050");
+            BeforeNotAllowedList.set("051", "051");
+            BeforeNotAllowedList.set("052", "052");
+            var AfterNotAllowedList = new Utils.HashSet();
+            AfterNotAllowedList.set("00999", "00999");
+            AfterNotAllowedList.set("48000", "48000");
+            AfterNotAllowedList.set("49000", "49000");
+            AfterNotAllowedList.set("50000", "50000");
+            AfterNotAllowedList.set("00413", "00413");
+            AfterNotAllowedList.set("99000", "99000");
+            AfterNotAllowedList.set("99100", "99100");
+            var ConflictList = new Utils.HashSet();
+            var MovementArray = new Array();
+            for (var _b = 0, data_2008_value_1 = data_2008_value; _b < data_2008_value_1.length; _b++) {
+                var d = data_2008_value_1[_b];
+                var b = d["@cat01"];
+                var a = d["@area"];
+                var n = d["$"];
+                //select data load
+                if (b != "014")
+                    continue;
+                //not need data
+                if (BeforeNotAllowedList.get(b) != undefined)
+                    continue;
+                if (AfterNotAllowedList.get(a) != undefined)
+                    continue;
+                if (n == "-")
+                    continue;
+                var before_data = MovementBeforeNodeList.get(b);
+                var after_data = MoveAfterNodeList.get(a);
+                if (before_data == undefined) {
+                    if (ConflictList.get(b) == undefined) {
+                        ConflictList.set(b, b);
+                    }
+                }
+                if (after_data == undefined) {
+                    if (ConflictList.get(a) == undefined) {
+                        ConflictList.set(a, a);
+                    }
+                }
+                var entity_move = new ECS.Entity("move_entity");
+                entity_move.addComponent(new ECS.HumanMovementDataComponent(before_data.id, before_data.lon, before_data.lat, after_data.id, after_data.lon, after_data.lat));
+                MovementArray.push(entity_move);
+                //console.log("before cood:"+before_data.lon+","+before_data.lat);
+                //console.log("after cood:"+after_data.lon+","+after_data.lat);
+            }
+            // for(let m of MovementArray){
+            //     console.log("b:"+(<HumanMovementDataComponent>m.components.get("humanmove")).b_id+",a:"+(<HumanMovementDataComponent>m.components.get("humanmove")).a_id);
+            // }
+            ConflictList.forEach(function (f) {
+                console.log("please check city code!need code:" + f);
+            });
+            return MovementArray;
+        };
         LoadingSystem.prototype.Execute = function () {
+            var _this = this;
             _super.prototype.Execute.call(this);
             // var mapImage = new Image();
             // mapImage.src = './images/2_no_clouds_4k.jpg';
             //console.log("load image data finished!");
-            Utils.loadData('./data/tip.json', this.entities.get("tip_entity").components.get("jsondata"), function () {
-                console.log("load tip data finished!");
-                Utils.loadData('./data/country.json', this.entities.get("country_entity").components.get("jsondata"), function () {
-                    console.log("load country data finished!");
-                    Utils.loadData('./data/missile.json', this.entities.get("missile_entity").components.get("jsondata"), function () {
-                        console.log("load missile data finished!");
-                        Utils.loadData('./data/history.json', this.entities.get("history_entity").components.get("jsondata"), function () {
-                            console.log("load history data finished!");
-                            var timeBins = JSON.parse(this.entities.get("history_entity").components.get("jsondata").data).timeBins;
-                            var missileLookup = JSON.parse(this.entities.get("missile_entity").components.get("jsondata").data);
-                            var latlonData = JSON.parse(this.entities.get("country_entity").components.get("jsondata").data);
-                            var entity_GlobalData = new ECS.Entity("global_entity");
-                            var global_data = new Utils.HashSet();
-                            var outcomeLookup = {
-                                'success': 'Success',
-                                'failure': 'Failure',
-                                'unknown': 'Unknown'
-                            };
-                            var missileColors = {
-                                'er-scud': 0x1A62A5,
-                                'hwasong-12': 0x6C6C6C,
-                                'hwasong-14': 0xAEB21A,
-                                'hwasong-15': 0x1DB2C4,
-                                'kn-02': 0xB68982,
-                                'musudan': 0x9FBAE3,
-                                'nodong': 0xFD690F,
-                                'polaris-1': 0xFEAE65,
-                                'polaris-2': 0xDA5CB6,
-                                'scud-b': 0x279221,
-                                'scud-b-marv': 0xD2D479,
-                                'scud-c': 0x89DC78,
-                                'scud-c-marv': 0xBBBBBB,
-                                'taepodong-1': 0xCA0F1E,
-                                'unha': 0x814EAF,
-                                'unha-3': 0xB89FCB,
-                                'unknown': 0x78433B
-                            };
-                            global_data.set("timeBins", timeBins);
-                            global_data.set("missileLookup", missileLookup);
-                            global_data.set("latlonData", latlonData);
-                            global_data.set("outcomeLookup", outcomeLookup);
-                            global_data.set("missileColors", missileColors);
-                            entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
-                            var threejs_system = new ECS.ThreeJsSystem();
-                            var eventlistener_system = new ECS.EventListenerSystem();
-                            var other_systems = new Utils.HashSet();
-                            other_systems.set(threejs_system.name, threejs_system);
-                            other_systems.set(eventlistener_system.name, eventlistener_system);
-                            var main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
-                            main_system.Execute();
-                        });
-                    });
+            // Utils.loadData('./data/tip.json', <JsonDataComponent>this.entities.get("tip_entity").components.get("jsondata"), function () {
+            //     console.log("load tip data finished!");
+            //     Utils.loadData('./data/country.json', <JsonDataComponent>this.entities.get("country_entity").components.get("jsondata"), function () {
+            //         console.log("load country data finished!");
+            //         Utils.loadData('./data/missile.json', <JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata"), function () {
+            //             console.log("load missile data finished!");
+            //             Utils.loadData('./data/history.json', <JsonDataComponent>this.entities.get("history_entity").components.get("jsondata"), function () {
+            //                 console.log("load history data finished!");
+            //                 var timeBins = JSON.parse((<JsonDataComponent>this.entities.get("history_entity").components.get("jsondata")).data).timeBins;
+            //                 var missileLookup = JSON.parse((<JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata")).data);
+            //                 var latlonData = JSON.parse((<JsonDataComponent>this.entities.get("country_entity").components.get("jsondata")).data);
+            //                 let entity_GlobalData = new ECS.Entity("global_entity");
+            //                 let global_data = new Utils.HashSet<any>();
+            //                 var outcomeLookup = {
+            //                     'success': 'Success',
+            //                     'failure': 'Failure',
+            //                     'unknown': 'Unknown'
+            //                 };
+            //                 var missileColors = {
+            //                     'er-scud': 0x1A62A5,
+            //                     'hwasong-12': 0x6C6C6C,
+            //                     'hwasong-14': 0xAEB21A,
+            //                     'hwasong-15': 0x1DB2C4,
+            //                     'kn-02': 0xB68982,
+            //                     'musudan': 0x9FBAE3,
+            //                     'nodong': 0xFD690F,
+            //                     'polaris-1': 0xFEAE65,
+            //                     'polaris-2': 0xDA5CB6,
+            //                     'scud-b': 0x279221,
+            //                     'scud-b-marv': 0xD2D479,
+            //                     'scud-c': 0x89DC78,
+            //                     'scud-c-marv': 0xBBBBBB,
+            //                     'taepodong-1': 0xCA0F1E,
+            //                     'unha': 0x814EAF,
+            //                     'unha-3': 0xB89FCB,
+            //                     'unknown': 0x78433B
+            //                 };
+            //                 global_data.set("timeBins", timeBins);
+            //                 global_data.set("missileLookup", missileLookup);
+            //                 global_data.set("latlonData", latlonData);
+            //                 global_data.set("outcomeLookup", outcomeLookup);
+            //                 global_data.set("missileColors", missileColors);
+            //                 entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+            //                 let threejs_system = new ECS.ThreeJsSystem();
+            //                 let eventlistener_system = new ECS.EventListenerSystem();
+            //                 let other_systems = new Utils.HashSet<System>();
+            //                 other_systems.set(threejs_system.name, threejs_system);
+            //                 other_systems.set(eventlistener_system.name, eventlistener_system);
+            //                 let main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
+            //                 main_system.Execute();
+            //             });
+            //         });
+            //     });
+            // });
+            Utils.loadData('./data/citycode.json', this.entities.get("citycode_entity").components.get("jsondata"), function () {
+                Utils.loadData('./data/0003008383.json', _this.entities.get("2008data_entity").components.get("jsondata"), function () {
+                    var cityCode = JSON.parse(_this.entities.get("citycode_entity").components.get("jsondata").data);
+                    var data_2008 = JSON.parse(_this.entities.get("2008data_entity").components.get("jsondata").data);
+                    var moveData = _this.InitDataStructure(data_2008, cityCode);
+                    var entity_GlobalData = new ECS.Entity("global_entity");
+                    var global_data = new Utils.HashSet();
+                    global_data.set("moveData", moveData);
+                    entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+                    var threejs_system = new ECS.ThreeJsSystem();
+                    var eventlistener_system = new ECS.EventListenerSystem();
+                    var other_systems = new Utils.HashSet();
+                    other_systems.set(threejs_system.name, threejs_system);
+                    other_systems.set(eventlistener_system.name, eventlistener_system);
+                    var main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
+                    main_system.Execute();
                 });
             });
         };
@@ -746,6 +958,110 @@ var ECS;
             splineOutline.affectedTests = affectedTest;
             return splineOutline;
         };
+        ThreeJsSystem.prototype.GetVisualizedMesh = function (lineArray) {
+            var linesGeo = new THREE.Geometry();
+            var lineColors = [];
+            var particlesGeo = new THREE.BufferGeometry();
+            var particlePositions = [];
+            var particleSizes = [];
+            var particleColors = [];
+            var randomColor = [0x1A62A5, 0x6C6C6C, 0xAEB21A, 0x1DB2C4, 0xB68982, 0x9FBAE3, 0xFD690F, 0xFEAE65, 0xDA5CB6, 0x279221, 0xD2D479, 0x89DC78, 0xBBBBBB, 0xCA0F1E, 0x814EAF, 0xB89FCB, 0x78433B];
+            particlesGeo.vertices = [];
+            //	go through the data from year, and find all relevant geometries
+            for (var _i = 0, lineArray_1 = lineArray; _i < lineArray_1.length; _i++) {
+                var l = lineArray_1[_i];
+                var randomIndex = Utils.randomInt(0, 15);
+                var lineColor = new THREE.Color(randomColor[randomIndex]);
+                var lastColor;
+                //	grab the colors from the vertices
+                for (var _a = 0, _b = l.vertices; _a < _b.length; _a++) {
+                    var s_2 = _b[_a];
+                    var v = l.vertices[s_2];
+                    lineColors.push(lineColor);
+                    lastColor = lineColor;
+                }
+                //	merge it all together
+                linesGeo.merge(l);
+                var particleColor = lastColor.clone();
+                var points = l.vertices;
+                var particleCount = 1;
+                var particleSize = l.size * this.GlobalParams.get("dpr");
+                for (var rIndex = 0; rIndex < points.length - 1; rIndex++) {
+                    for (var s = 0; s < particleCount; s++) {
+                        var point = points[rIndex];
+                        var particle = point.clone();
+                        particle.moveIndex = rIndex;
+                        particle.nextIndex = rIndex + 1;
+                        if (particle.nextIndex >= points.length)
+                            particle.nextIndex = 0;
+                        particle.lerpN = 0;
+                        particle.path = points;
+                        particlesGeo.vertices.push(particle);
+                        particle.size = particleSize;
+                        particlePositions.push(particle.x, particle.y, particle.z);
+                        particleSizes.push(particleSize);
+                        particleColors.push(particleColor.r, particleColor.g, particleColor.b);
+                    }
+                }
+            }
+            // console.log(selectedTest);
+            linesGeo.colors = lineColors;
+            //	make a final mesh out of this composite
+            var splineOutline = new THREE.Line(linesGeo, new THREE.LineBasicMaterial({
+                color: 0xffffff, opacity: 1.0, blending: THREE.AdditiveBlending, transparent: true,
+                depthWrite: false, vertexColors: true,
+                linewidth: 1
+            }));
+            particlesGeo.addAttribute('position', new THREE.BufferAttribute(new Float32Array(particlePositions), 3));
+            particlesGeo.addAttribute('size', new THREE.BufferAttribute(new Float32Array(particleSizes), 1));
+            particlesGeo.addAttribute('customColor', new THREE.BufferAttribute(new Float32Array(particleColors), 3));
+            var uniforms = {
+                amplitude: { type: "f", value: 1.0 },
+                color: { type: "c", value: new THREE.Color(0xffffff) },
+                texture: { type: "t", value: new THREE.TextureLoader().load("./images/particleA.png") }
+            };
+            var shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: uniforms,
+                vertexShader: document.getElementById('vertexshader').textContent,
+                fragmentShader: document.getElementById('fragmentshader').textContent,
+                blending: THREE.AdditiveBlending,
+                depthTest: true,
+                depthWrite: false,
+                transparent: true
+            });
+            var pSystem = new THREE.Points(particlesGeo, shaderMaterial);
+            pSystem.dynamic = true;
+            splineOutline.add(pSystem);
+            pSystem.update = function () {
+                // var time = Date.now();
+                var positionArray = this.geometry.attributes.position.array;
+                var index = 0;
+                for (var i in this.geometry.vertices) {
+                    var particle = this.geometry.vertices[i];
+                    var path = particle.path;
+                    var moveLength = path.length;
+                    particle.lerpN += 0.05;
+                    if (particle.lerpN > 1) {
+                        particle.lerpN = 0;
+                        particle.moveIndex = particle.nextIndex;
+                        particle.nextIndex++;
+                        if (particle.nextIndex >= path.length) {
+                            particle.moveIndex = 0;
+                            particle.nextIndex = 1;
+                        }
+                    }
+                    var currentPoint = path[particle.moveIndex];
+                    var nextPoint = path[particle.nextIndex];
+                    particle.copy(currentPoint);
+                    particle.lerp(nextPoint, particle.lerpN);
+                    positionArray[index++] = particle.x;
+                    positionArray[index++] = particle.y;
+                    positionArray[index++] = particle.z;
+                }
+                this.geometry.attributes.position.needsUpdate = true;
+            };
+            return splineOutline;
+        };
         ThreeJsSystem.prototype.getHistoricalData = function (timeBins) {
             var history = [];
             var selectionData = this.GlobalParams.get("selectionData");
@@ -837,6 +1153,20 @@ var ECS;
                     // EventListenerGlobeParam.set("scaleTarget", 90 / (landing.center.clone().sub(facility.center).length() + 30));
                 }
             }
+            //d3Graphs.initGraphs();
+        };
+        ThreeJsSystem.prototype.VisualizationLine = function (lineArray) {
+            var visualizationMesh = this.GlobalParams.get("visualizationMesh");
+            //	clear children
+            while (visualizationMesh.children.length > 0) {
+                var c = visualizationMesh.children[0];
+                visualizationMesh.remove(c);
+            }
+            //	build the mesh
+            var mesh = this.GetVisualizedMesh(lineArray);
+            //	add it to scene graph
+            visualizationMesh.add(mesh);
+            this.GlobalParams.set("visualizationMesh", visualizationMesh);
             //d3Graphs.initGraphs();
         };
         ThreeJsSystem.prototype.UpdateOSMTile = function (p_lon, p_lat, zoom) {
@@ -957,7 +1287,7 @@ var ECS;
             var GlobalParams = this.GlobalParams;
             var osmSwitch = GlobalParams.get("osmSwitch");
             var earthParam = {
-                NightView: false,
+                NightView: true,
                 LoadOSM: osmSwitch
             };
             GlobalParams.set("earthParam", earthParam);
@@ -1003,11 +1333,12 @@ var ECS;
             var tileGroups;
             //Global Data
             var global_data = this.GlobalDatas.components.get("global").data;
-            var latlonData = global_data.get("latlonData");
-            var missileLookup = global_data.get("missileLookup");
-            var timeBins = global_data.get("timeBins");
-            var outcomeLookup = global_data.get("outcomeLookup");
-            var missileColors = global_data.get("missileColors");
+            // var latlonData = global_data.get("latlonData");
+            // var missileLookup = global_data.get("missileLookup");
+            // var timeBins = global_data.get("timeBins");
+            // var outcomeLookup = global_data.get("outcomeLookup");
+            // var missileColors = global_data.get("missileColors");
+            var moveData = global_data.get("moveData");
             var scene = new THREE.Scene();
             scene.matrixAutoUpdate = false;
             scene.add(new THREE.AmbientLight(0x505050));
@@ -1068,15 +1399,15 @@ var ECS;
             }));
             rotating.add(cloudsMesh);
             //load history data
-            for (var i in timeBins) {
-                var bin = timeBins[i].data;
-                for (var s in bin) {
-                    var set = bin[s];
-                    var seriesPostfix = set.series ? ' [' + set.series + ']' : '';
-                    var testName = (set.date + ' ' + missileLookup[set.missile].name + seriesPostfix).toUpperCase();
-                    selectableTests.push(testName);
-                }
-            }
+            // for (var i in timeBins) {
+            //     var bin = timeBins[i].data;
+            //     for (var s in bin) {
+            //         var set = bin[s];
+            //         var seriesPostfix = set.series ? ' [' + set.series + ']' : '';
+            //         var testName = (set.date + ' ' + missileLookup[set.missile].name + seriesPostfix).toUpperCase();
+            //         selectableTests.push(testName);
+            //     }
+            // }
             var wireframeGeo = new THREE.EdgesGeometry(sphere.geometry, 0.3);
             var wireframeMaterial = new THREE.LineBasicMaterial({
                 color: Math.random() * 0xffffff,
@@ -1087,27 +1418,44 @@ var ECS;
             var atmosphereMaterial = new THREE.ShaderMaterial({
                 vertexShader: document.getElementById('vertexShaderAtmosphere').textContent,
                 fragmentShader: document.getElementById('fragmentShaderAtmosphere').textContent,
-                // atmosphere should provide light from behind the sphere, so only render the back side
                 side: THREE.BackSide
             });
             var atmosphere = new THREE.Mesh(sphere.geometry.clone(), atmosphereMaterial);
             atmosphere.scale.x = atmosphere.scale.y = atmosphere.scale.z = 1.8;
             rotating.add(atmosphere);
             //country coordinates
-            var facilityData = Utils.loadGeoData(latlonData);
+            //var facilityData = Utils.loadGeoData(latlonData);
+            //convert gis data to 3d sphere data
+            var moveDataForSphere = new Array();
+            for (var _i = 0, moveData_1 = moveData; _i < moveData_1.length; _i++) {
+                var m = moveData_1[_i];
+                var current_humanmove = m.components.get("humanmove");
+                //console.log("b:" + (<HumanMovementDataComponent>m.components.get("humanmove")).b_id + ",a:" + (<HumanMovementDataComponent>m.components.get("humanmove")).a_id);
+                var start_lon = current_humanmove.b_lon;
+                var start_lat = current_humanmove.b_lat;
+                var end_lon = current_humanmove.a_lon;
+                var end_lat = current_humanmove.a_lat;
+                //console.log(start_lon,start_lat);
+                //console.log(end_lon,end_lat);
+                var start_pos = Utils.ConvertGISDataTo3DSphere(start_lon, start_lat);
+                var end_pos = Utils.ConvertGISDataTo3DSphere(end_lon, end_lat);
+                moveDataForSphere.push(new ECS.ThreeJsMoveEntity([start_pos.x, start_pos.y, start_pos.z], [end_pos.x, end_pos.y, end_pos.z]));
+            }
             //data visual
-            var vizilines = Utils.buildDataVizGeometries(timeBins, missileLookup, facilityData);
+            //var vizilines = Utils.buildDataVizGeometries(timeBins, missileLookup, facilityData);
+            var lineArray = Utils.BuildSphereDataVizGeometries(moveDataForSphere);
             var visualizationMesh = new THREE.Object3D();
             this.GlobalParams.set("visualizationMesh", visualizationMesh);
             rotating.add(visualizationMesh);
-            var latestBin = timeBins[timeBins.length - 1];
-            var selectedYear = latestBin.year;
-            var latestTest = latestBin.data[latestBin.data.length - 1];
-            var selectedTestName = latestTest.testName;
-            var selectionData = new Utils.Selection(selectedYear, selectedTestName, missileLookup, outcomeLookup);
-            this.GlobalParams.set("selectionData", selectionData);
+            // var latestBin = timeBins[timeBins.length - 1];
+            // var selectedYear = latestBin.year;
+            // var latestTest = latestBin.data[latestBin.data.length - 1];
+            // var selectedTestName = latestTest.testName;
+            // var selectionData = new Utils.Selection(selectedYear, selectedTestName, missileLookup, outcomeLookup);
+            // this.GlobalParams.set("selectionData", selectionData);
             this.GlobalParams.set("rotating", rotating);
-            this.selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup), missileColors);
+            //this.selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup), missileColors);
+            this.VisualizationLine(lineArray);
             //	-----------------------------------------------------------------------------
             //	Setup renderer
             var renderer = new THREE.WebGLRenderer({ antialias: false });
@@ -1148,7 +1496,7 @@ var ECS;
             this.GlobalParams.set("TILE_PROVIDER", TILE_PROVIDER);
             this.GlobalParams.set("radius", radius);
             this.GlobalParams.set("earthSphere", sphere);
-            this.GlobalParams.set("osmSwitch", true);
+            this.GlobalParams.set("osmSwitch", false);
             this.GlobalParams.set("stats", stats);
             this.GlobalParams.set("timeLast", Date.now());
         };
@@ -1554,6 +1902,7 @@ var ECS;
 /// <reference path="./Component.ts" />
 /// <reference path="./System.ts" />
 /// <reference path="./Entity.ts" />
+/// <reference path="./LoadData.ts" />
 /// <reference path="./HashSet.ts" />
 var entity_tip = new ECS.Entity("tip_entity");
 entity_tip.addComponent(new ECS.JsonDataComponent());
@@ -1563,11 +1912,17 @@ var entity_missile = new ECS.Entity("missile_entity");
 entity_missile.addComponent(new ECS.JsonDataComponent());
 var entity_history = new ECS.Entity("history_entity");
 entity_history.addComponent(new ECS.JsonDataComponent());
+var entity_citycode = new ECS.Entity("citycode_entity");
+entity_citycode.addComponent(new ECS.JsonDataComponent());
+var entity_2008data = new ECS.Entity("2008data_entity");
+entity_2008data.addComponent(new ECS.JsonDataComponent());
 var entities = new Utils.HashSet();
 entities.set(entity_tip.name, entity_tip);
 entities.set(entity_country.name, entity_country);
 entities.set(entity_missile.name, entity_missile);
 entities.set(entity_history.name, entity_history);
+entities.set(entity_citycode.name, entity_citycode);
+entities.set(entity_2008data.name, entity_2008data);
 var load_system = new ECS.LoadingSystem(entities);
 var load = function () {
     if (!Detector.webgl) {

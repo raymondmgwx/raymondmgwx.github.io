@@ -29,66 +29,169 @@ module ECS {
             super("loading");
             this.entities = entities;
         }
+        InitDataStructure(data: any, cityCode: any) {
+            var data_2008_value = data.GET_STATS_DATA.STATISTICAL_DATA.DATA_INF.VALUE;
+            var MovementBeforeNode = cityCode.MovementBeforeNode.Value;
+            var MoveAfterNode = cityCode.MoveAfterNode.Value;
+            let MovementBeforeNodeList = new Utils.HashSet<JapanCityDataComponent>();
+            for (let mb of MovementBeforeNode) {
+                MovementBeforeNodeList.set(mb.id, new JapanCityDataComponent(mb.id, +mb.lon, +mb.lat));
+            }
+            let MoveAfterNodeList = new Utils.HashSet<JapanCityDataComponent>();
+            for (let ma of MoveAfterNode) {
+                MoveAfterNodeList.set(ma.id, new JapanCityDataComponent(ma.id, +ma.lon, +ma.lat));
+            }
+
+            let BeforeNotAllowedList = new Utils.HashSet<string>();
+            BeforeNotAllowedList.set("001", "001");
+            BeforeNotAllowedList.set("049", "049");
+            BeforeNotAllowedList.set("050", "050");
+            BeforeNotAllowedList.set("051", "051");
+            BeforeNotAllowedList.set("052", "052");
+            let AfterNotAllowedList = new Utils.HashSet<string>();
+            AfterNotAllowedList.set("00999", "00999");
+            AfterNotAllowedList.set("48000", "48000");
+            AfterNotAllowedList.set("49000", "49000");
+            AfterNotAllowedList.set("50000", "50000");
+            AfterNotAllowedList.set("00413", "00413");
+            AfterNotAllowedList.set("99000", "99000");
+            AfterNotAllowedList.set("99100", "99100");
+
+
+            let ConflictList = new Utils.HashSet<string>();
+            let MovementArray = new Array<Entity>();
+            for (let d of data_2008_value) {
+                var b = d["@cat01"];
+                var a = d["@area"];
+                var n = d["$"];
+
+                //select data load
+                if (b != "014") continue;
+
+                //not need data
+                if (BeforeNotAllowedList.get(b) != undefined) continue;
+                if (AfterNotAllowedList.get(a) != undefined) continue;
+                if (n == "-") continue;
+
+                let before_data = MovementBeforeNodeList.get(b);
+                let after_data = MoveAfterNodeList.get(a);
+                if (before_data == undefined) {
+                    if (ConflictList.get(b) == undefined) {
+                        ConflictList.set(b, b);
+                    }
+                }
+
+                if (after_data == undefined) {
+                    if (ConflictList.get(a) == undefined) {
+                        ConflictList.set(a, a);
+                    }
+                }
+
+
+
+
+
+                let entity_move = new Entity("move_entity");
+                entity_move.addComponent(new HumanMovementDataComponent(before_data.id, before_data.lon, before_data.lat, after_data.id, after_data.lon, after_data.lat));
+                MovementArray.push(entity_move);
+                //console.log("before cood:"+before_data.lon+","+before_data.lat);
+                //console.log("after cood:"+after_data.lon+","+after_data.lat);
+            }
+
+            // for(let m of MovementArray){
+            //     console.log("b:"+(<HumanMovementDataComponent>m.components.get("humanmove")).b_id+",a:"+(<HumanMovementDataComponent>m.components.get("humanmove")).a_id);
+            // }
+
+            ConflictList.forEach(function (f: string) {
+                console.log("please check city code!need code:" + f);
+            });
+
+            return MovementArray;
+        }
         Execute() {
             super.Execute();
             // var mapImage = new Image();
             // mapImage.src = './images/2_no_clouds_4k.jpg';
             //console.log("load image data finished!");
-            Utils.loadData('./data/tip.json', <JsonDataComponent>this.entities.get("tip_entity").components.get("jsondata"), function () {
-                console.log("load tip data finished!");
-                Utils.loadData('./data/country.json', <JsonDataComponent>this.entities.get("country_entity").components.get("jsondata"), function () {
-                    console.log("load country data finished!");
-                    Utils.loadData('./data/missile.json', <JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata"), function () {
-                        console.log("load missile data finished!");
-                        Utils.loadData('./data/history.json', <JsonDataComponent>this.entities.get("history_entity").components.get("jsondata"), function () {
-                            console.log("load history data finished!");
-                            var timeBins = JSON.parse((<JsonDataComponent>this.entities.get("history_entity").components.get("jsondata")).data).timeBins;
-                            var missileLookup = JSON.parse((<JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata")).data);
-                            var latlonData = JSON.parse((<JsonDataComponent>this.entities.get("country_entity").components.get("jsondata")).data);
+            // Utils.loadData('./data/tip.json', <JsonDataComponent>this.entities.get("tip_entity").components.get("jsondata"), function () {
+            //     console.log("load tip data finished!");
+            //     Utils.loadData('./data/country.json', <JsonDataComponent>this.entities.get("country_entity").components.get("jsondata"), function () {
+            //         console.log("load country data finished!");
+            //         Utils.loadData('./data/missile.json', <JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata"), function () {
+            //             console.log("load missile data finished!");
+            //             Utils.loadData('./data/history.json', <JsonDataComponent>this.entities.get("history_entity").components.get("jsondata"), function () {
+            //                 console.log("load history data finished!");
+            //                 var timeBins = JSON.parse((<JsonDataComponent>this.entities.get("history_entity").components.get("jsondata")).data).timeBins;
+            //                 var missileLookup = JSON.parse((<JsonDataComponent>this.entities.get("missile_entity").components.get("jsondata")).data);
+            //                 var latlonData = JSON.parse((<JsonDataComponent>this.entities.get("country_entity").components.get("jsondata")).data);
 
-                            let entity_GlobalData = new ECS.Entity("global_entity");
-                            let global_data = new Utils.HashSet<any>();
-                            var outcomeLookup = {
-                                'success': 'Success',
-                                'failure': 'Failure',
-                                'unknown': 'Unknown'
-                            };
-                            var missileColors = {
-                                'er-scud': 0x1A62A5,
-                                'hwasong-12': 0x6C6C6C,
-                                'hwasong-14': 0xAEB21A,
-                                'hwasong-15': 0x1DB2C4,
-                                'kn-02': 0xB68982,
-                                'musudan': 0x9FBAE3,
-                                'nodong': 0xFD690F,
-                                'polaris-1': 0xFEAE65,
-                                'polaris-2': 0xDA5CB6,
-                                'scud-b': 0x279221,
-                                'scud-b-marv': 0xD2D479,
-                                'scud-c': 0x89DC78,
-                                'scud-c-marv': 0xBBBBBB,
-                                'taepodong-1': 0xCA0F1E,
-                                'unha': 0x814EAF,
-                                'unha-3': 0xB89FCB,
-                                'unknown': 0x78433B
-                            };
-                            global_data.set("timeBins", timeBins);
-                            global_data.set("missileLookup", missileLookup);
-                            global_data.set("latlonData", latlonData);
-                            global_data.set("outcomeLookup", outcomeLookup);
-                            global_data.set("missileColors", missileColors);
-                            entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+            //                 let entity_GlobalData = new ECS.Entity("global_entity");
+            //                 let global_data = new Utils.HashSet<any>();
+            //                 var outcomeLookup = {
+            //                     'success': 'Success',
+            //                     'failure': 'Failure',
+            //                     'unknown': 'Unknown'
+            //                 };
+            //                 var missileColors = {
+            //                     'er-scud': 0x1A62A5,
+            //                     'hwasong-12': 0x6C6C6C,
+            //                     'hwasong-14': 0xAEB21A,
+            //                     'hwasong-15': 0x1DB2C4,
+            //                     'kn-02': 0xB68982,
+            //                     'musudan': 0x9FBAE3,
+            //                     'nodong': 0xFD690F,
+            //                     'polaris-1': 0xFEAE65,
+            //                     'polaris-2': 0xDA5CB6,
+            //                     'scud-b': 0x279221,
+            //                     'scud-b-marv': 0xD2D479,
+            //                     'scud-c': 0x89DC78,
+            //                     'scud-c-marv': 0xBBBBBB,
+            //                     'taepodong-1': 0xCA0F1E,
+            //                     'unha': 0x814EAF,
+            //                     'unha-3': 0xB89FCB,
+            //                     'unknown': 0x78433B
+            //                 };
+            //                 global_data.set("timeBins", timeBins);
+            //                 global_data.set("missileLookup", missileLookup);
+            //                 global_data.set("latlonData", latlonData);
+            //                 global_data.set("outcomeLookup", outcomeLookup);
+            //                 global_data.set("missileColors", missileColors);
+            //                 entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
 
-                            let threejs_system = new ECS.ThreeJsSystem();
-                            let eventlistener_system = new ECS.EventListenerSystem();
-                            let other_systems = new Utils.HashSet<System>();
-                            other_systems.set(threejs_system.name, threejs_system);
-                            other_systems.set(eventlistener_system.name, eventlistener_system);
-                            let main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
-                            main_system.Execute();
+            //                 let threejs_system = new ECS.ThreeJsSystem();
+            //                 let eventlistener_system = new ECS.EventListenerSystem();
+            //                 let other_systems = new Utils.HashSet<System>();
+            //                 other_systems.set(threejs_system.name, threejs_system);
+            //                 other_systems.set(eventlistener_system.name, eventlistener_system);
+            //                 let main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
+            //                 main_system.Execute();
 
-                        });
-                    });
+            //             });
+            //         });
+            //     });
+            // });
+
+
+            Utils.loadData('./data/citycode.json', <ECS.JsonDataComponent>this.entities.get("citycode_entity").components.get("jsondata"), () => {
+                Utils.loadData('./data/0003008383.json', <ECS.JsonDataComponent>this.entities.get("2008data_entity").components.get("jsondata"), () => {
+                    var cityCode = JSON.parse((<ECS.JsonDataComponent>this.entities.get("citycode_entity").components.get("jsondata")).data);
+                    var data_2008 = JSON.parse((<ECS.JsonDataComponent>this.entities.get("2008data_entity").components.get("jsondata")).data);
+                    var moveData = this.InitDataStructure(data_2008, cityCode);
+
+                    let entity_GlobalData = new ECS.Entity("global_entity");
+                    let global_data = new Utils.HashSet<any>();
+
+                    global_data.set("moveData", moveData);
+                    entity_GlobalData.addComponent(new ECS.GlobalComponent(global_data));
+
+                    let threejs_system = new ECS.ThreeJsSystem();
+                    let eventlistener_system = new ECS.EventListenerSystem();
+                    let other_systems = new Utils.HashSet<System>();
+                    other_systems.set(threejs_system.name, threejs_system);
+                    other_systems.set(eventlistener_system.name, eventlistener_system);
+                    let main_system = new ECS.MainSystem(entity_GlobalData, other_systems);
+                    main_system.Execute();
+
                 });
             });
         }
@@ -311,6 +414,142 @@ module ECS {
 
             return splineOutline;
         }
+        GetVisualizedMesh(lineArray: any) {
+
+            var linesGeo = new THREE.Geometry();
+            var lineColors = [];
+
+            var particlesGeo = new THREE.BufferGeometry();
+            var particlePositions = [];
+            var particleSizes = [];
+            var particleColors = [];
+            var randomColor = [0x1A62A5, 0x6C6C6C, 0xAEB21A, 0x1DB2C4, 0xB68982, 0x9FBAE3, 0xFD690F, 0xFEAE65, 0xDA5CB6, 0x279221, 0xD2D479, 0x89DC78, 0xBBBBBB, 0xCA0F1E, 0x814EAF, 0xB89FCB, 0x78433B];
+            particlesGeo.vertices = [];
+
+            //	go through the data from year, and find all relevant geometries
+            for (let l of lineArray) {
+
+                var randomIndex = Utils.randomInt(0, 15);
+                var lineColor = new THREE.Color(randomColor[randomIndex]);
+
+                var lastColor;
+                //	grab the colors from the vertices
+                for (let s of l.vertices) {
+                    var v = l.vertices[s];
+                    lineColors.push(lineColor);
+                    lastColor = lineColor;
+                }
+
+                //	merge it all together
+                linesGeo.merge(l);
+
+                var particleColor = lastColor.clone();
+                var points = l.vertices;
+                var particleCount = 1;
+                var particleSize = l.size * this.GlobalParams.get("dpr");
+
+                for (var rIndex = 0; rIndex < points.length - 1; rIndex++) {
+                    for (var s = 0; s < particleCount; s++) {
+                        var point = points[rIndex];
+                        var particle = point.clone();
+                        particle.moveIndex = rIndex;
+                        particle.nextIndex = rIndex + 1;
+                        if (particle.nextIndex >= points.length)
+                            particle.nextIndex = 0;
+                        particle.lerpN = 0;
+                        particle.path = points;
+                        particlesGeo.vertices.push(particle);
+                        particle.size = particleSize;
+
+                        particlePositions.push(particle.x, particle.y, particle.z);
+                        particleSizes.push(particleSize);
+                        particleColors.push(particleColor.r, particleColor.g, particleColor.b);
+                    }
+                }
+
+            }
+
+
+            // console.log(selectedTest);
+
+            linesGeo.colors = lineColors;
+
+            //	make a final mesh out of this composite
+            var splineOutline = new THREE.Line(linesGeo, new THREE.LineBasicMaterial(
+                {
+                    color: 0xffffff, opacity: 1.0, blending:
+                        THREE.AdditiveBlending, transparent: true,
+                    depthWrite: false, vertexColors: true,
+                    linewidth: 1
+                })
+            );
+
+
+            particlesGeo.addAttribute('position', new THREE.BufferAttribute(new Float32Array(particlePositions), 3));
+            particlesGeo.addAttribute('size', new THREE.BufferAttribute(new Float32Array(particleSizes), 1));
+            particlesGeo.addAttribute('customColor', new THREE.BufferAttribute(new Float32Array(particleColors), 3));
+
+            var uniforms = {
+                amplitude: { type: "f", value: 1.0 },
+                color: { type: "c", value: new THREE.Color(0xffffff) },
+                texture: { type: "t", value: new THREE.TextureLoader().load("./images/particleA.png") },
+            };
+
+            var shaderMaterial = new THREE.ShaderMaterial({
+
+                uniforms: uniforms,
+                vertexShader: document.getElementById('vertexshader').textContent,
+                fragmentShader: document.getElementById('fragmentshader').textContent,
+
+                blending: THREE.AdditiveBlending,
+                depthTest: true,
+                depthWrite: false,
+                transparent: true,
+                // sizeAttenuation: true,
+            });
+
+
+
+            var pSystem = new THREE.Points(particlesGeo, shaderMaterial);
+            pSystem.dynamic = true;
+            splineOutline.add(pSystem);
+
+            pSystem.update = function () {
+                // var time = Date.now();
+                var positionArray = this.geometry.attributes.position.array;
+                var index = 0;
+                for (var i in this.geometry.vertices) {
+                    var particle = this.geometry.vertices[i];
+                    var path = particle.path;
+                    var moveLength = path.length;
+
+                    particle.lerpN += 0.05;
+                    if (particle.lerpN > 1) {
+                        particle.lerpN = 0;
+                        particle.moveIndex = particle.nextIndex;
+                        particle.nextIndex++;
+                        if (particle.nextIndex >= path.length) {
+                            particle.moveIndex = 0;
+                            particle.nextIndex = 1;
+                        }
+                    }
+
+                    var currentPoint = path[particle.moveIndex];
+                    var nextPoint = path[particle.nextIndex];
+
+
+                    particle.copy(currentPoint);
+                    particle.lerp(nextPoint, particle.lerpN);
+
+                    positionArray[index++] = particle.x;
+                    positionArray[index++] = particle.y;
+                    positionArray[index++] = particle.z;
+                }
+                this.geometry.attributes.position.needsUpdate = true;
+            };
+
+            return splineOutline;
+        }
         getHistoricalData(timeBins: any) {
             var history = [];
             var selectionData = <Utils.Selection>this.GlobalParams.get("selectionData");
@@ -420,6 +659,23 @@ module ECS {
 
             //d3Graphs.initGraphs();
         }
+        VisualizationLine(lineArray: any) {
+            var visualizationMesh = this.GlobalParams.get("visualizationMesh");
+            //	clear children
+            while (visualizationMesh.children.length > 0) {
+                var c = visualizationMesh.children[0];
+                visualizationMesh.remove(c);
+            }
+
+
+            //	build the mesh
+            var mesh = this.GetVisualizedMesh(lineArray);
+
+            //	add it to scene graph
+            visualizationMesh.add(mesh);
+            this.GlobalParams.set("visualizationMesh", visualizationMesh);
+            //d3Graphs.initGraphs();
+        }
         UpdateOSMTile(p_lon: any, p_lat: any, zoom: any) {
 
             var xtile = Utils.long2tile(p_lon, zoom);
@@ -470,16 +726,16 @@ module ECS {
                     var minYtile = Math.floor((ytile_ - (Math.pow(2, (size - 1)) - 1)) / 2) * 2;
                     var maxYtile = Math.floor((ytile_ + (Math.pow(2, (size - 1)) - 1)) / 2) * 2 + 1;
 
-                    if(minXtile<0 && maxXtile>=0){
-                        var minXOffset = Math.abs(minXtile)%32;
+                    if (minXtile < 0 && maxXtile >= 0) {
+                        var minXOffset = Math.abs(minXtile) % 32;
                         var realMinX = 32 - minXOffset;
                         var realMaxX = 32 + maxXtile;
                         minXtile = realMinX;
                         maxXtile = realMaxX;
-                    }else if(minXtile<0 && maxXtile<0){
-                        var minXOffset = Math.abs(minXtile)%32;
+                    } else if (minXtile < 0 && maxXtile < 0) {
+                        var minXOffset = Math.abs(minXtile) % 32;
                         var realMinX = 32 - minXOffset;
-                        var maxXOffset = Math.abs(maxXtile)%32;
+                        var maxXOffset = Math.abs(maxXtile) % 32;
                         var realMaxX = 32 - maxXOffset;
                         minXtile = realMinX;
                         maxXtile = realMaxX;
@@ -559,7 +815,7 @@ module ECS {
             var GlobalParams = this.GlobalParams;
             var osmSwitch = GlobalParams.get("osmSwitch");
             var earthParam = {
-                NightView: false,
+                NightView: true,
                 LoadOSM: osmSwitch
             };
             GlobalParams.set("earthParam", earthParam);
@@ -612,11 +868,12 @@ module ECS {
 
             //Global Data
             var global_data = (<GlobalComponent>this.GlobalDatas.components.get("global")).data;
-            var latlonData = global_data.get("latlonData");
-            var missileLookup = global_data.get("missileLookup");
-            var timeBins = global_data.get("timeBins");
-            var outcomeLookup = global_data.get("outcomeLookup");
-            var missileColors = global_data.get("missileColors");
+            // var latlonData = global_data.get("latlonData");
+            // var missileLookup = global_data.get("missileLookup");
+            // var timeBins = global_data.get("timeBins");
+            // var outcomeLookup = global_data.get("outcomeLookup");
+            // var missileColors = global_data.get("missileColors");
+            var moveData = global_data.get("moveData");
 
             var scene = new THREE.Scene();
             scene.matrixAutoUpdate = false;
@@ -696,17 +953,17 @@ module ECS {
             rotating.add(cloudsMesh)
 
             //load history data
-            for (var i in timeBins) {
-                var bin = timeBins[i].data;
-                for (var s in bin) {
-                    var set = bin[s];
+            // for (var i in timeBins) {
+            //     var bin = timeBins[i].data;
+            //     for (var s in bin) {
+            //         var set = bin[s];
 
-                    var seriesPostfix = set.series ? ' [' + set.series + ']' : '';
-                    var testName = (set.date + ' ' + missileLookup[set.missile].name + seriesPostfix).toUpperCase();
+            //         var seriesPostfix = set.series ? ' [' + set.series + ']' : '';
+            //         var testName = (set.date + ' ' + missileLookup[set.missile].name + seriesPostfix).toUpperCase();
 
-                    selectableTests.push(testName);
-                }
-            }
+            //         selectableTests.push(testName);
+            //     }
+            // }
 
 
             var wireframeGeo = new THREE.EdgesGeometry(sphere.geometry, 0.3);
@@ -720,7 +977,6 @@ module ECS {
             var atmosphereMaterial = new THREE.ShaderMaterial({
                 vertexShader: document.getElementById('vertexShaderAtmosphere').textContent,
                 fragmentShader: document.getElementById('fragmentShaderAtmosphere').textContent,
-                // atmosphere should provide light from behind the sphere, so only render the back side
                 side: THREE.BackSide
             });
 
@@ -730,27 +986,45 @@ module ECS {
 
 
             //country coordinates
-            var facilityData = Utils.loadGeoData(latlonData);
+            //var facilityData = Utils.loadGeoData(latlonData);
+
+            //convert gis data to 3d sphere data
+            var moveDataForSphere = new Array<ThreeJsMoveEntity>();
+            for (let m of moveData) {
+                var current_humanmove = <HumanMovementDataComponent>m.components.get("humanmove");
+                //console.log("b:" + (<HumanMovementDataComponent>m.components.get("humanmove")).b_id + ",a:" + (<HumanMovementDataComponent>m.components.get("humanmove")).a_id);
+                var start_lon = current_humanmove.b_lon;
+                var start_lat = current_humanmove.b_lat;
+                var end_lon = current_humanmove.a_lon;
+                var end_lat = current_humanmove.a_lat;
+                //console.log(start_lon,start_lat);
+                //console.log(end_lon,end_lat);
+                var start_pos = Utils.ConvertGISDataTo3DSphere(start_lon, start_lat);
+                var end_pos = Utils.ConvertGISDataTo3DSphere(end_lon, end_lat);
+                moveDataForSphere.push(new ThreeJsMoveEntity([start_pos.x, start_pos.y, start_pos.z], [end_pos.x, end_pos.y, end_pos.z]));
+            }
 
             //data visual
-            var vizilines = Utils.buildDataVizGeometries(timeBins, missileLookup, facilityData);
+            //var vizilines = Utils.buildDataVizGeometries(timeBins, missileLookup, facilityData);
+            var lineArray = Utils.BuildSphereDataVizGeometries(moveDataForSphere);
 
             var visualizationMesh = new THREE.Object3D();
             this.GlobalParams.set("visualizationMesh", visualizationMesh);
             rotating.add(visualizationMesh);
 
-            var latestBin = timeBins[timeBins.length - 1];
-            var selectedYear = latestBin.year;
+            // var latestBin = timeBins[timeBins.length - 1];
+            // var selectedYear = latestBin.year;
 
-            var latestTest = latestBin.data[latestBin.data.length - 1];
-            var selectedTestName = latestTest.testName;
+            // var latestTest = latestBin.data[latestBin.data.length - 1];
+            // var selectedTestName = latestTest.testName;
 
-            var selectionData = new Utils.Selection(selectedYear, selectedTestName, missileLookup, outcomeLookup);
-            this.GlobalParams.set("selectionData", selectionData);
+            // var selectionData = new Utils.Selection(selectedYear, selectedTestName, missileLookup, outcomeLookup);
+            // this.GlobalParams.set("selectionData", selectionData);
+
             this.GlobalParams.set("rotating", rotating);
 
-            this.selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup), missileColors);
-
+            //this.selectVisualization(missileLookup, facilityData, vizilines, timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup), missileColors);
+            this.VisualizationLine(lineArray);
 
 
 
@@ -805,7 +1079,7 @@ module ECS {
             this.GlobalParams.set("TILE_PROVIDER", TILE_PROVIDER);
             this.GlobalParams.set("radius", radius);
             this.GlobalParams.set("earthSphere", sphere);
-            this.GlobalParams.set("osmSwitch", true);
+            this.GlobalParams.set("osmSwitch", false);
             this.GlobalParams.set("stats", stats);
             this.GlobalParams.set("timeLast", Date.now());
         }

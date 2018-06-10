@@ -43,6 +43,118 @@ module Utils {
         }
     }
 
+    export function ConvertGISDataTo3DSphere(GisData_lon: any, GisData_lat: any) {
+        var rad = 100;
+
+        var lon = GisData_lon - 90;
+        var lat = GisData_lat;
+
+        var phi = Math.PI / 2 - lat * Math.PI / 180;
+        var theta = 2 * Math.PI - lon * Math.PI / 180;
+
+        var center = new THREE.Vector3();
+        center.x = Math.sin(phi) * Math.cos(theta) * rad;
+        center.y = Math.cos(phi) * rad;
+        center.z = Math.sin(phi) * Math.sin(theta) * rad;
+
+        return center;
+    }
+
+    function CreateLineGeometry(points: any) {
+        var geometry = new THREE.Geometry();
+        for (var i = 0; i < points.length; i++) {
+            geometry.vertices.push(points[i]);
+        }
+        return geometry;
+    }
+
+    export function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    var origin = new THREE.Vector3(0, 0, 0);
+    function ConnectionLineGeometry(startPos: any, endPos: any, apogee: any) {
+        var globeRadius = 100;
+        var distance = endPos.clone().sub(startPos).length();
+
+        var midHeight = globeRadius * apogee / 6378.137;
+        var midLength = globeRadius + midHeight;
+
+        var mid = startPos.clone().lerp(endPos, 0.5);
+        mid.normalize();
+        mid.multiplyScalar(midLength);
+
+        var normal = (new THREE.Vector3()).subVectors(startPos, endPos);
+        normal.normalize();
+
+        /*
+                    The curve looks like this:
+    
+                    midStartAnchor---- mid ----- midEndAnchor
+                  /											  \
+                 /											   \
+                /												\
+        start/anchor 										 end/anchor
+    
+            splineCurveA							splineCurveB
+        */
+
+        var distanceOneThird = distance * 0.33;
+        //	var distanceOneSixth = distance * 0.1666;
+
+        var startAnchor = startPos;
+        var midStartAnchor = mid.clone().add(normal.clone().multiplyScalar(distanceOneThird));
+        var midEndAnchor = mid.clone().add(normal.clone().multiplyScalar(-distanceOneThird));
+        var endAnchor = endPos;
+
+        var splineCurveA = new THREE.CubicBezierCurve3(startPos, startAnchor, midStartAnchor, mid);
+        // splineCurveA.updateArcLengths();
+
+        var splineCurveB = new THREE.CubicBezierCurve3(mid, midEndAnchor, endAnchor, endPos);
+        // splineCurveB.updateArcLengths();
+
+        //	how many vertices do we want on this guy? this is for *each* side
+        var vertexCountDesired = Math.floor((distance + midHeight) * 0.3 + 3);
+
+        //	collect the vertices
+        var points = splineCurveA.getPoints(vertexCountDesired);
+
+        //	remove the very last point since it will be duplicated on the next half of the curve
+        points = points.splice(0, points.length - 1);
+
+        points = points.concat(splineCurveB.getPoints(vertexCountDesired));
+
+        //	add one final point to the center of the earth
+        //	we need this for drawing multiple arcs, but piled into one geometry buffer
+        points.push(origin);
+
+        //	create a line geometry out of these
+        var curveGeometry = CreateLineGeometry(points);
+
+        curveGeometry.size = 15;
+
+        return curveGeometry;
+    }
+
+    export function BuildSphereDataVizGeometries(MoveDataList: any) {
+
+        var rad = 100;
+        var loadLayer = document.getElementById('loading');
+        var lineArray = [];
+        for (let m of MoveDataList) {
+
+            var startPos = new THREE.Vector3(m.startPos[0], m.startPos[1], m.startPos[2]);
+            var endPos = new THREE.Vector3(m.endPos[0], m.endPos[1], m.endPos[2]);
+
+            var randomHeight = randomInt(500,1000);
+            var line = ConnectionLineGeometry(startPos, endPos, randomHeight);
+            lineArray.push(line);
+        }
+
+        loadLayer.style.display = 'none';
+        return lineArray;
+    }
+
     export function long2tile(lon: any, zoom: any) {
         return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom)));
     }
@@ -60,7 +172,7 @@ module Utils {
         return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
     }
 
-    export function measure(R: any,lat1: any, lon1: any, lat2: any, lon2: any) {
+    export function measure(R: any, lat1: any, lon1: any, lat2: any, lon2: any) {
         var dLat = (lat2 - lat1) * Math.PI / 180;
         var dLon = (lon2 - lon1) * Math.PI / 180;
         var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -71,11 +183,11 @@ module Utils {
         return d * 1000;
     }
 
-    export function lonOffsetMeter2lon(R: any,lon: any, lat: any, x: any) {
+    export function lonOffsetMeter2lon(R: any, lon: any, lat: any, x: any) {
         return x / (R * Math.cos(lat)) + lon;
     }
 
-    export function latOffsetMeter2lat(R: any,lat: any, y: any) {
+    export function latOffsetMeter2lat(R: any, lat: any, y: any) {
         return (y / R) + lat;
     }
 
@@ -115,24 +227,24 @@ module Utils {
              *      A          D        *
              ***************************/
 
-            
-            var rUp = r  * Math.cos(lat1 * Math.PI / 180);
-            var rDown = r  * Math.cos(lat2 * Math.PI / 180);
+
+            var rUp = r * Math.cos(lat1 * Math.PI / 180);
+            var rDown = r * Math.cos(lat2 * Math.PI / 180);
 
             var Ax = rDown * Math.sin(lon1 * Math.PI / 180);
-            var Ay = r  * Math.sin(lat2 * Math.PI / 180);
+            var Ay = r * Math.sin(lat2 * Math.PI / 180);
             var Az = rDown * Math.cos(lon1 * Math.PI / 180);
 
             var Bx = rUp * Math.sin(lon1 * Math.PI / 180);
-            var By = r  * Math.sin(lat1 * Math.PI / 180);
+            var By = r * Math.sin(lat1 * Math.PI / 180);
             var Bz = rUp * Math.cos(lon1 * Math.PI / 180);
 
             var Cx = rUp * Math.sin(lon2 * Math.PI / 180);
-            var Cy = r  * Math.sin(lat1 * Math.PI / 180);
+            var Cy = r * Math.sin(lat1 * Math.PI / 180);
             var Cz = rUp * Math.cos(lon2 * Math.PI / 180);
 
             var Dx = rDown * Math.sin(lon2 * Math.PI / 180);
-            var Dy = r  * Math.sin(lat2 * Math.PI / 180);
+            var Dy = r * Math.sin(lat2 * Math.PI / 180);
             var Dz = rDown * Math.cos(lon2 * Math.PI / 180);
 
 
@@ -163,7 +275,7 @@ module Utils {
     var textures = {};
     var textureQueue = [];
 
-    export function textureFactory(TILE_PROVIDER: any,MAX_TILEMESH: any, zoom_: any, xtile_: any, ytile_: any, onLoaded: any) {
+    export function textureFactory(TILE_PROVIDER: any, MAX_TILEMESH: any, zoom_: any, xtile_: any, ytile_: any, onLoaded: any) {
         var id = 'tile_' + zoom_ + '_' + xtile_ + '_' + ytile_;
         var textureLoader = new THREE.TextureLoader();
         // textures[id] = {};
