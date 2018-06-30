@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <title>Draw Spring Line</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            font-family: Monospace;
+            background-color: #f0f0f0;
+            margin: 0px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container"></div>
+    <script src="./js/three.min.js"></script>
+    <script src="./js/libs/stats.min.js"></script>
+
+
+    <script>
+        var container, stats;
+
+        var camera, scene, renderer;
+
+        var group;
+
+        var targetRotation = 0;
+        var targetRotationOnMouseDown = 0;
+
+        var mouseX = 0;
+        var mouseXOnMouseDown = 0;
+
+        var windowHalfX = window.innerWidth / 2;
+
+        init();
+        animate();
+
+        function init() {
+
+            container = document.getElementById('container');
+
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.set(0, 0, 100);
+            camera.lookAt(new THREE.Vector3(0, 0, 0));
+            scene.add(camera);
+
+            var light = new THREE.PointLight(0xffffff, 0.8);
+            camera.add(light);
+
+            group = new THREE.Group();
+            scene.add(group);
+
+
+            var geometry = new THREE.Geometry();
+
+            var step = Math.PI / 50;
+            var R = 10;
+            var centerZ = -Math.PI * 10;
+            for (var i = 0; i < Math.PI * 20; i += step) {
+                geometry.vertices.push(new THREE.Vector3(R * Math.sin(i), R * Math.cos(i), centerZ + i));
+            }
+
+            var material = new THREE.LineBasicMaterial({
+                color: 0x0000ff
+            });
+
+            var obj = new THREE.Line(geometry, material);
+            group.add(obj);
+
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            stats = new Stats();
+            container.appendChild(stats.dom);
+
+            document.addEventListener('mousedown', onDocumentMouseDown, false);
+            document.addEventListener('touchstart', onDocumentTouchStart, false);
+            document.addEventListener('touchmove', onDocumentTouchMove, false);
+
+            //
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+        }
+
+        //
+
+        function onDocumentMouseDown(event) {
+
+            event.preventDefault();
+
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('mouseup', onDocumentMouseUp, false);
+            document.addEventListener('mouseout', onDocumentMouseOut, false);
+
+            mouseXOnMouseDown = event.clientX - windowHalfX;
+            targetRotationOnMouseDown = targetRotation;
+
+        }
+
+        function onDocumentMouseMove(event) {
+
+            mouseX = event.clientX - windowHalfX;
+
+            targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
+
+        }
+
+        function onDocumentMouseUp(event) {
+
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.removeEventListener('mouseup', onDocumentMouseUp, false);
+            document.removeEventListener('mouseout', onDocumentMouseOut, false);
+
+        }
+
+        function onDocumentMouseOut(event) {
+
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.removeEventListener('mouseup', onDocumentMouseUp, false);
+            document.removeEventListener('mouseout', onDocumentMouseOut, false);
+
+        }
+
+        function onDocumentTouchStart(event) {
+
+            if (event.touches.length == 1) {
+
+                event.preventDefault();
+
+                mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
+                targetRotationOnMouseDown = targetRotation;
+
+            }
+
+        }
+
+        function onDocumentTouchMove(event) {
+
+            if (event.touches.length == 1) {
+
+                event.preventDefault();
+
+                mouseX = event.touches[0].pageX - windowHalfX;
+                targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.05;
+
+            }
+
+        }
+
+        //
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            render();
+            stats.update();
+
+        }
+
+        function render() {
+
+            group.rotation.y += (targetRotation - group.rotation.y) * 0.05;
+            renderer.render(scene, camera);
+
+        }
+    </script>
+
+</body>
+
+</html>
