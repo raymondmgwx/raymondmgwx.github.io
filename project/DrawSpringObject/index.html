@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 
 <head>
-    <title>Draw Spring Line</title>
+    <title>Draw Spring Object</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -18,11 +18,13 @@
 <body>
 
     <div id="container"></div>
+    <script src="./js/Detector.js"></script>
     <script src="./js/three.min.js"></script>
     <script src="./js/libs/stats.min.js"></script>
 
 
     <script>
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
         var container, stats;
 
         var camera, scene, renderer;
@@ -59,22 +61,80 @@
             group = new THREE.Group();
             scene.add(group);
 
-
+            //spring line
             var geometry = new THREE.Geometry();
 
             var step = Math.PI / 50;
             var R = 10;
+            var centerY = Math.PI * 10
             var centerZ = -Math.PI * 10;
             for (var i = 0; i < Math.PI * 20; i += step) {
-                geometry.vertices.push(new THREE.Vector3(R * Math.sin(i), R * Math.cos(i), centerZ + i));
+                geometry.vertices.push(new THREE.Vector3(R * Math.cos(i), centerY + R * Math.sin(i), centerZ + i));
             }
 
             var material = new THREE.LineBasicMaterial({
                 color: 0x0000ff
             });
 
-            var obj = new THREE.Line(geometry, material);
-            group.add(obj);
+            var spring_line = new THREE.Line(geometry, material);
+            group.add(spring_line);
+
+            //spring plane
+            var ourR = 10;
+            R = 8;
+            centerY = 0;
+            geometry = new THREE.Geometry();
+            for (var i = 0; i < Math.PI * 20; i += step) {
+                geometry.vertices.push(new THREE.Vector3(R * Math.cos(i), centerY + R * Math.sin(i), centerZ + i));
+                geometry.vertices.push(new THREE.Vector3(ourR * Math.cos(i), centerY + ourR * Math.sin(i), centerZ + i));
+            }
+            var length = geometry.vertices.length;
+            for (var i = 0; i < length　 - 　3; i = i + 2) {
+                geometry.faces.push(new THREE.Face3(i + 2, i + 1, i));
+                geometry.faces.push(new THREE.Face3(i + 3, i + 1, i + 2));
+            }
+            geometry.computeFaceNormals();
+            material = new THREE.MeshPhongMaterial({
+                color: 0xFCB64F,
+                side: THREE.DoubleSide
+            });
+            var spring_plane = new THREE.Mesh(geometry, material);
+            group.add(spring_plane);
+
+            //spring object
+            R = 10;
+            centerY = -Math.PI * 10
+            var vertexSplit = 20;
+            var surfaceSplit = 360 / vertexSplit;
+            var vertexTickness = 2;
+            geometry = new THREE.Geometry();
+            for (var i = 0; i < Math.PI * 20; i += step) {
+                for (var j = 0; j < vertexSplit; j++) {
+                    var increase = vertexTickness / 2 * Math.sin(Math.PI / 180 * (surfaceSplit * j));
+                    var increaseZ = vertexTickness / 2 * Math.cos(Math.PI / 180 * (surfaceSplit * j));
+                    var x = (R + increase) * Math.cos(i);
+                    var y = (R + increase) * Math.sin(i) + centerY;
+                    var z = centerZ + i + increaseZ;
+                    geometry.vertices.push(new THREE.Vector3(x, y, z));
+                }
+            }
+            length = geometry.vertices.length;
+            for (var i = 0; i < (length / vertexSplit) - 1; i++) {
+                for (var j = 0; j < vertexSplit; j++) {
+                    geometry.faces.push(new THREE.Face3((i + 1) * vertexSplit + j, i * vertexSplit + j + 1, i * vertexSplit + j))
+                    if (i != (length / vertexSplit) - 2 || j != vertexSplit - 1) geometry.faces.push(new THREE.Face3((i + 1) * vertexSplit + j + 1, i * vertexSplit + j + 1, (i + 1) * vertexSplit + j));
+                }
+            }
+            geometry.computeFaceNormals();
+            geometry.computeVertexNormals();
+            material = new THREE.MeshPhongMaterial({
+                color: 0x4682B4,
+                specular: 0xFCCC8C,
+                shininess: 15,
+                side: THREE.DoubleSide
+            });
+            var spring_object = new THREE.Mesh(geometry, material);
+            group.add(spring_object);
 
             renderer = new THREE.WebGLRenderer({
                 antialias: true
