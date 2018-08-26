@@ -1,0 +1,88 @@
+<div class="main showcase-page">
+    <section class="module">
+        <div class="container">
+
+            <!--  
+            Original Map
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Height Map</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_heightmap" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--  
+            Generated Normal Map
+            =============================================
+            -->
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Paramaters for Generating Normal Map</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <center>
+                        <div class="row multi-columns-row">
+
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>strength</label>
+                                    <input id="p_s" class="form-control input-sm" type="text" placeholder="strength" value="2.5" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>level</label>
+                                    <input id="p_l" class="form-control input-sm" type="text" placeholder="level" value="7.0" />
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <button id='generate_normalmap' class="btn btn-border-d btn-round" type="button">Generate</button>
+                    </center>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Normal Map</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center> <canvas id="canvas_normalmap" class="canvas-2d"></canvas></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4 class="font-alt mb-0">Reference</h4>
+                    <hr class="divider-w mt-10 mb-20">
+                    <div class="row multi-columns-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <center>
+                                <a href="https://stackoverflow.com/questions/2368728/can-normal-maps-be-generated-from-a-texture/2368794#2368794">https://stackoverflow.com/questions/2368728/can-normal-maps-be-generated-from-a-texture/2368794#2368794</a>
+                            </center>
+
+                            <br>
+
+                            <center>
+                                <a href="https://github.com/cpetry/NormalMap-Online/blob/gh-pages/javascripts/normalMap.js">https://github.com/cpetry/NormalMap-Online/blob/gh-pages/javascripts/normalMap.js</a>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
