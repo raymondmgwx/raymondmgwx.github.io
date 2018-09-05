@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>R&W Team Demo</title>
+    <meta charset="utf-8">
+    <meta name="description" content="rw">
+    <meta property="og:title" content="rw" />
+    <meta property="og:type" content="game" />
+    <meta property="og:url" content="http://rmg/" />
+    <meta property="og:image" content="http://rmg/" />
+    <meta property="og:site_name" content="rw" />
+    <link rel="icon" href="#" type="image/png">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="./css/multi.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="./css/fonts.css" type="text/css" charset="utf-8">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        
+        canvas {
+            pointer-events: none;
+            width: 100%;
+        }
+        
+        #overlay {
+            position: absolute;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="step-1">
+        <div id="global"></div>
+        <div id="title">
+        </div>
+        <div id="menucontainer">
+            <div id="menu">
+                <div id="start">Start</div>
+                <div id="s-controlType">Controls: Keyboard</div>
+                <div id="s-quality">Quality: High</div>
+                <div id="s-hud">HUD: On</div>
+                <div id="s-godmode" style="display: none">Godmode: Off</div>
+                <div id="s-credits">Credits</div>
+            </div>
+        </div>
+    </div>
+    <div id="step-2" style="display: none">
+        <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
+    <div id="step-3" style="display: none">
+        <div id="progressbar"></div>
+    </div>
+    <div id="step-4" style="display: none">
+        <div id="overlay"></div>
+        <div id="main"></div>
+    </div>
+    <div id="step-5" style="display: none">
+        <div id="time"></div>
+        <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
+    <div id="credits" style="display: none">
+        <h3>Code</h3>
+        <p><b>Concept and Development</b><br>Thibaut Despoulain (BKcore)</p>
+        <p><b>Contributors</b><br>townxelliot<br>mahesh.kk</p>
+        <p><b>Technologies</b><br>WebGL<br>JavaScript<br>CoffeeScript<br>Three.js<br>LeapMotion</p>
+        <h3>Graphics</h3>
+        <p><b>HexMKI base model</b><br>Charnel</p>
+        <p><b>Track texture</b><br>Nobiax</p>
+        <h4>Click anywhere to continue.</h4>
+    </div>
+
+    <div id="leapinfo" style="display: none"></div>
+
+    <!-- library -->
+    <script src="./scripts/three.js/Detector.js"></script>
+
+    <script src="./scripts/launch.js"></script>
+
+</body>
+
+</html>
