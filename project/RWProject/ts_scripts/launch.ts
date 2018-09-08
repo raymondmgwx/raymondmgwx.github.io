@@ -2,16 +2,17 @@
 /// <reference path="./core/System.ts" />
 /// <reference path="./core/Entity.ts" />
 /// <reference path="./core/HashSet.ts" />
-
-declare var Detector: any;
+declare var PIXI;
 
 var load = function () {
-    if (!Detector.webgl) {
-        Detector.addGetWebGLMessage();
-    } else {
         let load_system = new ECS.LoadingSystem();
         load_system.Execute();
-    };
 }
 
-load();
+document.getElementById("start").onclick= function(){
+        document.getElementById("step-1").style.display = "none";
+        load();
+}
+
+//load();
+
