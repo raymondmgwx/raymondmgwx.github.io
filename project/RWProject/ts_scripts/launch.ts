@@ -9,7 +9,8 @@ var load = function () {
         load_system.Execute();
 }
 
-document.getElementById("start").onclick= function(){
+
+document.getElementById("btn_play").onclick= function(){
         document.getElementById("step-1").style.display = "none";
         load();
 }

@@ -12,10 +12,9 @@ PIXI.StressTest = function(callback) {
     this.frameCount = 0;
     this.tick = 0;
     this.loadingFrames = [
-        "img/loading_01.png",
-        "img/loading_02.png",
-        "img/loading_03.png",
-        "img/loading_04.png"
+        "img/Loading1.png",
+        "img/Loading2.png",
+        "img/Loading3.png"
     ];
     this.currentLoadSprite = false;
 
@@ -26,17 +25,19 @@ PIXI.StressTest = function(callback) {
     this.renderer = new PIXI.CanvasRenderer(this.width, this.height, false, false);
     this.stage = new PIXI.Stage(0x25284A);
 
-    this.graphics = new PIXI.Graphics();
-    this.graphics.beginFill(0x25284A);
-    this.graphics.drawRect(0, 0, this.width, this.height);
-    this.stage.addChild(this.graphics);
+    var load_bk = new PIXI.Sprite(PIXI.Texture.fromImage('img/load_background.png'));
+    load_bk.anchor.x = 0;
+    load_bk.anchor.y = 0;
+    load_bk.height = this.height;
+    load_bk.width = this.width;
+
+    this.stage.addChild(load_bk);
 
     document.body.appendChild(this.renderer.view);
 
     this.stage.touchstart = this.stage.mousedown = function(event) {
         event.originalEvent.preventDefault();
     }
-
 
     this.duration = 3;
 
@@ -54,37 +55,38 @@ PIXI.StressTest.constructor = PIXI.StressTest;
 
 PIXI.StressTest.prototype.begin = function() {
     this.testSprites = [];
-    for (var i = 0; i < 1; i++) {
-        var bunny = new PIXI.Sprite(this.texture);
 
-        bunny.anchor.x = 0.5;
-        bunny.anchor.y = 0.5;
-        bunny.position.x = 50 + Math.random() * 400;
-        bunny.position.y = 10;
-        //bunny.scale.set(100.0, 100.0);
-        //this.stage.addChild(bunny);
-        //this.testSprites.push(bunny);
-    };
+    // this.graphics2 = new PIXI.Graphics();
+    // this.graphics2.beginFill(0x25284A);
+    // this.graphics2.drawRect(0, 0, this.width, this.height);
+    // this.stage.addChild(this.graphics2);
 
-    this.graphics2 = new PIXI.Graphics();
-    this.graphics2.beginFill(0x25284A);
-    this.graphics2.drawRect(0, 0, this.width, this.height);
-    this.stage.addChild(this.graphics2);
+    //logo
+    var logo = new PIXI.Sprite(PIXI.Texture.fromImage('img/Logo Replacement.png'));
+    logo.anchor.x = 0.5;
+    logo.anchor.y = 1.0;
+    logo.position.x = this.width * 0.5;
+    logo.position.y = this.height * 0.48;
+    logo.scale.set(1);
 
-    // var logo = new PIXI.Sprite(PIXI.Texture.fromImage('img/cat.jpg'));
-    // logo.anchor.x = 0.5;
-    // logo.anchor.y = 0.5;
-    // logo.position.x = this.width * 0.5;
-    // logo.position.y = this.height * 0.48;
+    //loading progress bar
+    var lb_i = new PIXI.Sprite(PIXI.Texture.fromImage('img/lb_i.png'));
+    lb_i.anchor.x = 0.5;
+    lb_i.anchor.y = -1.0;
+    lb_i.position.x = this.width * 0.5;
+    lb_i.position.y = this.height * 0.48;
+    lb_i.scale.set(1);
 
-    // if (this.Device.cocoonJS) {
-    //     logo.scale.set(1);
-    //     logo.position.y = this.height * 0.47;
-    // } else {
-    //     logo.scale.set(1);
-    // }
-    // this.stage.addChild(logo);
+    var lb_o = new PIXI.Sprite(PIXI.Texture.fromImage('img/lb_o.png'));
+    lb_o.anchor.x = 0.5;
+    lb_o.anchor.y = -1.0;
+    lb_o.position.x = this.width * 0.5;
+    lb_o.position.y = this.height * 0.48;
+    lb_o.scale.set(1);
 
+    this.stage.addChild(lb_o);
+    this.stage.addChild(lb_i);
+    this.stage.addChild(logo);
     this.renderer.render(this.stage);
 
     this.startTime = Date.now();
@@ -114,12 +116,7 @@ PIXI.StressTest.prototype.update = function() {
         sprite.anchor.y = 0.5;
         sprite.position.x = this.width * 0.5;
         sprite.position.y = this.height * 0.5 + 40;
-        sprite.scale.set(2, 2);
-
-        if (this.Device.cocoonJS) {
-            sprite.position.y = this.height * 0.5 + 40;
-        }
-
+        sprite.scale.set(1, 1);
         this.stage.addChild(sprite);
         if (this.currentLoadSprite !== false) this.stage.removeChild(this.currentLoadSprite);
 

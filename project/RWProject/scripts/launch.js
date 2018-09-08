@@ -168,7 +168,6 @@ var ECS;
                     console.log("data assets loaded!");
                     _this.stressTest.remove();
                     _this.init();
-                    //clearInterval(loadInterval);
                 });
                 loader.load();
                 ECS.GameConfig.resize();
@@ -225,11 +224,6 @@ var ECS;
             //for pc version
             window.addEventListener("keydown", this.onKeyDown, true);
             window.addEventListener("touchstart", this.onTouchStart, true);
-            //window.addEventListener("keyup", this.onKeyUp, true);
-            //touch start
-            // GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
-            //     this.onTouchStart(event);
-            // }
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
             if (event.keyCode == 32) {
@@ -257,7 +251,7 @@ var load = function () {
     var load_system = new ECS.LoadingSystem();
     load_system.Execute();
 };
-document.getElementById("start").onclick = function () {
+document.getElementById("btn_play").onclick = function () {
     document.getElementById("step-1").style.display = "none";
     load();
 };

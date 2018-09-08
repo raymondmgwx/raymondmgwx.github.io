@@ -34,6 +34,8 @@
             width: 100%;
         }
     </style>
+
+
 </head>
 
 <body>
@@ -43,41 +45,23 @@
         </div>
         <div id="menucontainer">
             <div id="menu">
-                <div id="start">Start</div>
-                <div id="s-controlType">Func:A</div>
-                <div id="s-quality">Func:B</div>
-                <div id="s-hud">Func:C</div>
-                <div id="s-godmode" style="display: none">Func:D</div>
-                <div id="s-credits">Func:E</div>
+                <div id="btn_play"><img src="./css/Play.png"></div>
+                <div id="btn_score"><img src="./css/Score.png"></div>
+            </div>
+        </div>
+
+        <div id="settingcontainer">
+            <div id="setting">
+                <div id="btn_setting"><img src="./css/setting.png"></div>
+                <div id="btn_howtop"><img src="./css/howtp.png"></div>
             </div>
         </div>
     </div>
-    <div id="step-2" style="display: none">
-        <div id="ctrl-help">Click/Touch to continue.</div>
-    </div>
-    <div id="step-3" style="display: none">
-        <div id="progressbar"></div>
-    </div>
-    <div id="step-4" style="display: none">
-        <div id="overlay"></div>
-        <div id="main"></div>
-    </div>
-    <div id="step-5" style="display: none">
-        <div id="time"></div>
-        <div id="ctrl-help">Click/Touch to continue.</div>
-    </div>
-    <div id="credits" style="display: none">
-        <h3>Code</h3>
-        <p><b>Concept and Development</b><br>Thibaut Despoulain (BKcore)</p>
-        <p><b>Contributors</b><br>townxelliot<br>mahesh.kk</p>
-        <p><b>Technologies</b><br>WebGL<br>JavaScript<br>CoffeeScript<br>Three.js<br>LeapMotion</p>
-        <h3>Graphics</h3>
-        <p><b>HexMKI base model</b><br>Charnel</p>
-        <p><b>Track texture</b><br>Nobiax</p>
-        <h4>Click anywhere to continue.</h4>
-    </div>
 
     <div id="leapinfo" style="display: none"></div>
+    <script type="text/javascript">
+        document.body.scroll = "no";
+    </script>
 
     <!-- scripts/library -->
     <script type="text/javascript" src="./scripts/lib/SegmentData.js"></script>

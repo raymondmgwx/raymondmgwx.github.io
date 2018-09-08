@@ -53,7 +53,7 @@ module ECS {
                     this.stressTest.end();
                 
                     GameConfig.interactive = false;
-                    //<any>document.body.scroll = "no";
+                    
                 
                     var loader = new PIXI.AssetLoader([
                         "img/stretched_hyper_tile.jpg",
@@ -77,7 +77,7 @@ module ECS {
                         console.log("data assets loaded!");
                         this.stressTest.remove();
                         this.init();
-                        //clearInterval(loadInterval);
+                        
                     });
                 
                     loader.load();
@@ -142,15 +142,10 @@ module ECS {
 
         bindEvent(){
 
-            //for pc version
-            window.addEventListener("keydown", this.onKeyDown, true);
-            window.addEventListener("touchstart", this.onTouchStart, true);
-            //window.addEventListener("keyup", this.onKeyUp, true);
+        //for pc version
+        window.addEventListener("keydown", this.onKeyDown, true);
+        window.addEventListener("touchstart", this.onTouchStart, true);
 
-            //touch start
-            // GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
-            //     this.onTouchStart(event);
-            // }
         
         }
         onKeyDown(event:any) {
