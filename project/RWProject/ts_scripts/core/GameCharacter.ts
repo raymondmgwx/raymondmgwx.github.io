@@ -40,6 +40,7 @@ module ECS {
         mass:number;
         angle:number;
         startJump:boolean;
+        b_jumpTwo:boolean;
         smooth:number;
         cnt:number;
         
@@ -105,6 +106,7 @@ module ECS {
             this.mass = 65;
             this.angle =Math.PI * 45/360;
             this.startJump =false;
+            this.b_jumpTwo = false;
             this.smooth = 0.05;
             this.cnt =0;
         }
@@ -156,11 +158,11 @@ module ECS {
             
             var oldSpeed = this.speed.y;
             
-            if(this.isJumped)
+            if(this.b_jumpTwo)
             {
-                //this.accel = 0.6;
-                //this.speed.y -= this.accel  * GameConfig.time.DELTA_TIME;
-                //if(this.speed.y > 0) this.speed.y -= 0.3 * GameConfig.time.DELTA_TIME;
+                this.speed.y = -this.vStart * Math.sin(this.angle) ;
+                this.b_jumpTwo = false;
+                this.isJumped = false;
             }
 
             
@@ -182,11 +184,6 @@ module ECS {
             }
             
             
-            
-            //if(this.speed.y > 8) this.speed.y = 8;
-            //if(this.speed.y < -9) this.speed.y = -9;
-
-            //var accel = this.speed.y - oldSpeed;
             this.position.x += this.speed.x * GameConfig.time.DELTA_TIME * this.level;
             this.position.y += this.speed.y * GameConfig.time.DELTA_TIME;
             
@@ -197,21 +194,9 @@ module ECS {
                 if(this.onGround)
                 {
                     this.view.textures = this.runningFrames;
-                    if(this.joyRiding === true) 
-                    {
-                        //FidoAudio.setVolume('runFast', this.volume);
-                        //FidoAudio.setVolume('runRegular', 0);
-                    }
-                    else
-                    {
-                        //FidoAudio.setVolume('runRegular', this.volume);  
-                        //FidoAudio.setVolume('runFast', 0);
-                    }
                 }
                 else
                 {
-                    //FidoAudio.setVolume('runFast', 0);
-                    //FidoAudio.setVolume('runRegular', 0);   
                     this.view.textures = this.flyingFrames;
                 }
             }
@@ -252,9 +237,24 @@ module ECS {
                 this.view.rotation += this.rotationSpeed * GameConfig.time.DELTA_TIME;
             }
         }
+        jumpTwo()
+        {
+            //console.log("jump two");
+            if(this.isDead)
+            {
+                if(this.speed.x < 5)
+                {
+                    this.isDead = false
+                    this.speed.x = 10;
+                }
+            }
+
+            this.b_jumpTwo = true;
+        }
 
         jump()
         {
+            //console.log("click jump");
             if(this.isDead)
             {
                 if(this.speed.x < 5)
@@ -280,10 +280,6 @@ module ECS {
         die()
         {
             if(this.isDead) return;
-            
-            //FidoAudio.setVolume('runFast', 0);
-            //FidoAudio.setVolume('runRegular', 0);
-            //FidoAudio.fadeOut('gameMusic');
 
             TweenLite.to(GameConfig.time, 0.5, {
                 speed : 0.1, 
@@ -310,12 +306,7 @@ module ECS {
         boil()
         {
             if(this.isDead) return;
-            
-            //FidoAudio.setVolume('runFast', 0);
-            //FidoAudio.setVolume('runRegular', 0);
-            //FidoAudio.fadeOut('gameMusic');
-            //FidoAudio.play('lavaSplosh');
-            //FidoAudio.play('deathJingle');
+        
             
             this.isDead = true;
         }
@@ -331,13 +322,11 @@ module ECS {
         stop()
         {
             this.view.stop();
-            //FidoAudio.setVolume('runRegular', 0);
         }
 
         resume()
         {
             this.view.play();
-            //if(this.onGround) //FidoAudio.setVolume('runRegular', this.volume);
         }
     }
 
@@ -375,10 +364,6 @@ module ECS {
         hit()
         {   
             if(this.isHit) return;
-
-            //FidoAudio.stop('blockHit');
-            //FidoAudio.play('blockHit');
-            
             this.isHit = true;
             
             if(!this.explosion) this.explosion = new Explosion();

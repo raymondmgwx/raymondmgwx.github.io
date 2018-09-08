@@ -149,6 +149,11 @@ body {
     animation: animbg 3s ease-in-out infinite;
 }
 
+.uiimage {
+    width: 50%;
+    height: 50%;
+}
+
 #menucontainer {
     position: absolute;
     top: auto;
@@ -161,8 +166,7 @@ body {
 #menu {
     position: relative;
     display: block;
-    width: 100%;
-    max-width: 600px;
+    width: 50%;
     margin: auto;
     text-align: center;
     font-size: 2em;

@@ -146,14 +146,12 @@ var ECS;
             this.stressTest = new PIXI.StressTest(function () {
                 _this.stressTest.end();
                 ECS.GameConfig.interactive = false;
-                //<any>document.body.scroll = "no";
                 var loader = new PIXI.AssetLoader([
                     "img/stretched_hyper_tile.jpg",
                     "img/SplashAssets.json",
                     "img/WorldAssets-hd.json",
                     "img/HudAssets-hd.json",
                     "img/PixiAssets-hd.json",
-                    "img/iP4_BGtile.png",
                     "img/blackSquare.jpg",
                     "assets/hud/pausedPanel.png",
                     "assets/hud/pixieRevised_controls.png",
@@ -181,6 +179,14 @@ var ECS;
             document.body.appendChild(game.view.renderer.view);
             game.view.renderer.view.style.position = "absolute";
             game.view.renderer.view.webkitImageSmoothingEnabled = false;
+            var personalBestTitle = PIXI.Sprite.fromImage("assets/hud/PersonalBest.png");
+            personalBestTitle.anchor.x = 0.5;
+            personalBestTitle.anchor.y = 0.5;
+            personalBestTitle.alpha = 0;
+            personalBestTitle.scale.x = 1.5;
+            personalBestTitle.scale.y = 1.5;
+            game.view.hud.addChild(personalBestTitle);
+            game.view.showHud();
             //bind event 
             var evtSys = new EventListenerSystem();
             evtSys.bindEvent();
@@ -227,16 +233,18 @@ var ECS;
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
             if (event.keyCode == 32) {
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped)
+                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.startJump)
                     ECS.GameConfig.game.player.jump();
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped)
+                    ECS.GameConfig.game.player.jumpTwo();
             }
         };
         EventListenerSystem.prototype.onTouchStart = function (event) {
-            console.log("enter");
             if (event.target.type !== 'button') {
-                console.log("touch");
                 if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped)
                     ECS.GameConfig.game.player.jump();
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped)
+                    ECS.GameConfig.game.player.jumpTwo();
             }
         };
         return EventListenerSystem;
@@ -314,6 +322,7 @@ var ECS;
             this.mass = 65;
             this.angle = Math.PI * 45 / 360;
             this.startJump = false;
+            this.b_jumpTwo = false;
             this.smooth = 0.05;
             this.cnt = 0;
         }
@@ -352,10 +361,10 @@ var ECS;
             //     this.isJumped = true;
             // }
             var oldSpeed = this.speed.y;
-            if (this.isJumped) {
-                //this.accel = 0.6;
-                //this.speed.y -= this.accel  * GameConfig.time.DELTA_TIME;
-                //if(this.speed.y > 0) this.speed.y -= 0.3 * GameConfig.time.DELTA_TIME;
+            if (this.b_jumpTwo) {
+                this.speed.y = -this.vStart * Math.sin(this.angle);
+                this.b_jumpTwo = false;
+                this.isJumped = false;
             }
             if (this.startJump) {
                 this.speed.y += this.gravity * ECS.GameConfig.time.DELTA_TIME * this.smooth;
@@ -370,27 +379,14 @@ var ECS;
                     this.cnt = 0;
                 }
             }
-            //if(this.speed.y > 8) this.speed.y = 8;
-            //if(this.speed.y < -9) this.speed.y = -9;
-            //var accel = this.speed.y - oldSpeed;
             this.position.x += this.speed.x * ECS.GameConfig.time.DELTA_TIME * this.level;
             this.position.y += this.speed.y * ECS.GameConfig.time.DELTA_TIME;
             if (this.onGround !== this.onGroundCache) {
                 this.onGroundCache = this.onGround;
                 if (this.onGround) {
                     this.view.textures = this.runningFrames;
-                    if (this.joyRiding === true) {
-                        //FidoAudio.setVolume('runFast', this.volume);
-                        //FidoAudio.setVolume('runRegular', 0);
-                    }
-                    else {
-                        //FidoAudio.setVolume('runRegular', this.volume);  
-                        //FidoAudio.setVolume('runFast', 0);
-                    }
                 }
                 else {
-                    //FidoAudio.setVolume('runFast', 0);
-                    //FidoAudio.setVolume('runRegular', 0);   
                     this.view.textures = this.flyingFrames;
                 }
             }
@@ -421,7 +417,18 @@ var ECS;
                 this.view.rotation += this.rotationSpeed * ECS.GameConfig.time.DELTA_TIME;
             }
         };
+        GameCharacter.prototype.jumpTwo = function () {
+            //console.log("jump two");
+            if (this.isDead) {
+                if (this.speed.x < 5) {
+                    this.isDead = false;
+                    this.speed.x = 10;
+                }
+            }
+            this.b_jumpTwo = true;
+        };
         GameCharacter.prototype.jump = function () {
+            //console.log("click jump");
             if (this.isDead) {
                 if (this.speed.x < 5) {
                     this.isDead = false;
@@ -441,9 +448,6 @@ var ECS;
         GameCharacter.prototype.die = function () {
             if (this.isDead)
                 return;
-            //FidoAudio.setVolume('runFast', 0);
-            //FidoAudio.setVolume('runRegular', 0);
-            //FidoAudio.fadeOut('gameMusic');
             TweenLite.to(ECS.GameConfig.time, 0.5, {
                 speed: 0.1,
                 ease: Cubic.easeOut,
@@ -465,11 +469,6 @@ var ECS;
         GameCharacter.prototype.boil = function () {
             if (this.isDead)
                 return;
-            //FidoAudio.setVolume('runFast', 0);
-            //FidoAudio.setVolume('runRegular', 0);
-            //FidoAudio.fadeOut('gameMusic');
-            //FidoAudio.play('lavaSplosh');
-            //FidoAudio.play('deathJingle');
             this.isDead = true;
         };
         GameCharacter.prototype.fall = function () {
@@ -479,11 +478,9 @@ var ECS;
         GameCharacter.prototype.isAirbourne = function () { };
         GameCharacter.prototype.stop = function () {
             this.view.stop();
-            //FidoAudio.setVolume('runRegular', 0);
         };
         GameCharacter.prototype.resume = function () {
             this.view.play();
-            //if(this.onGround) //FidoAudio.setVolume('runRegular', this.volume);
         };
         return GameCharacter;
     }());
@@ -509,8 +506,6 @@ var ECS;
         GameEnemy.prototype.hit = function () {
             if (this.isHit)
                 return;
-            //FidoAudio.stop('blockHit');
-            //FidoAudio.play('blockHit');
             this.isHit = true;
             if (!this.explosion)
                 this.explosion = new ECS.Explosion();

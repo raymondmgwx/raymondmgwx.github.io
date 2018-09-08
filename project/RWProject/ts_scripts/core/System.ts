@@ -61,7 +61,6 @@ module ECS {
                         "img/WorldAssets-hd.json",
                         "img/HudAssets-hd.json",
                         "img/PixiAssets-hd.json",
-                        "img/iP4_BGtile.png",
                         "img/blackSquare.jpg",
                         "assets/hud/pausedPanel.png",
                         "assets/hud/pixieRevised_controls.png",
@@ -95,6 +94,19 @@ module ECS {
             document.body.appendChild(game.view.renderer.view);
             game.view.renderer.view.style.position = "absolute";
             game.view.renderer.view.webkitImageSmoothingEnabled = false
+
+ 
+
+            var personalBestTitle = PIXI.Sprite.fromImage("assets/hud/PersonalBest.png");
+            personalBestTitle.anchor.x = 0.5;
+            personalBestTitle.anchor.y = 0.5;
+            personalBestTitle.alpha = 0;
+            personalBestTitle.scale.x = 1.5;
+            personalBestTitle.scale.y = 1.5;
+        
+            game.view.hud.addChild(personalBestTitle);
+
+            game.view.showHud();
 
             //bind event 
             let evtSys = new EventListenerSystem();
@@ -150,14 +162,18 @@ module ECS {
         }
         onKeyDown(event:any) {
             if (event.keyCode == 32) {
-                if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped) GameConfig.game.player.jump();
+                if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump) 
+                    GameConfig.game.player.jump();
+                if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped) 
+                    GameConfig.game.player.jumpTwo(); 
             }
         }
         onTouchStart(event:any){
-            console.log("enter");
                 if (event.target.type !== 'button') {
-                    console.log("touch");
-                    if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped) GameConfig.game.player.jump();
+                    if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped)
+                        GameConfig.game.player.jump();
+                    if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped) 
+                        GameConfig.game.player.jumpTwo(); 
                 }
         }
         

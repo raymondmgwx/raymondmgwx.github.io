@@ -8,6 +8,10 @@ module ECS {
     declare var PIXI: any;
     declare var Math2:any;
     declare var Fido:any;
+    declare var TweenLite:any;
+    declare var Elastic:any;
+    declare var Cubic:any;
+    declare var Sine:any;
 
     function formatScore(n:any){
         var nArray = n.toString().split("");
