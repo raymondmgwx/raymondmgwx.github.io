@@ -224,11 +224,12 @@ var ECS;
         EventListenerSystem.prototype.bindEvent = function () {
             //for pc version
             window.addEventListener("keydown", this.onKeyDown, true);
+            window.addEventListener("touchstart", this.onTouchStart, true);
             //window.addEventListener("keyup", this.onKeyUp, true);
             //touch start
-            ECS.GameConfig.game.view.container.mousedown = ECS.GameConfig.game.view.container.touchstart = function (event) {
-                this.onTouchStart(event);
-            };
+            // GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
+            //     this.onTouchStart(event);
+            // }
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
             if (event.keyCode == 32) {
@@ -237,8 +238,9 @@ var ECS;
             }
         };
         EventListenerSystem.prototype.onTouchStart = function (event) {
-            event.originalEvent.preventDefault();
+            console.log("enter");
             if (event.target.type !== 'button') {
+                console.log("touch");
                 if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped)
                     ECS.GameConfig.game.player.jump();
             }

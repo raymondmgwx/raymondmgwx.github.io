@@ -144,12 +144,13 @@ module ECS {
 
             //for pc version
             window.addEventListener("keydown", this.onKeyDown, true);
+            window.addEventListener("touchstart", this.onTouchStart, true);
             //window.addEventListener("keyup", this.onKeyUp, true);
 
             //touch start
-            GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
-                this.onTouchStart(event);
-            }
+            // GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
+            //     this.onTouchStart(event);
+            // }
         
         }
         onKeyDown(event:any) {
@@ -158,8 +159,9 @@ module ECS {
             }
         }
         onTouchStart(event:any){
-                event.originalEvent.preventDefault();
+            console.log("enter");
                 if (event.target.type !== 'button') {
+                    console.log("touch");
                     if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped) GameConfig.game.player.jump();
                 }
         }
