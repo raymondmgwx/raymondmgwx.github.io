@@ -148,7 +148,7 @@ module ECS {
 
             //touch start
             GameConfig.game.view.container.mousedown = GameConfig.game.view.container.touchstart = function(event) {
-                this.onKeyDown(event);
+                this.onTouchStart(event);
             }
         
         }

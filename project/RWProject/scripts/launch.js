@@ -227,7 +227,7 @@ var ECS;
             //window.addEventListener("keyup", this.onKeyUp, true);
             //touch start
             ECS.GameConfig.game.view.container.mousedown = ECS.GameConfig.game.view.container.touchstart = function (event) {
-                this.onKeyDown(event);
+                this.onTouchStart(event);
             };
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
