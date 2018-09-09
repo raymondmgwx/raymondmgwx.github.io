@@ -37,7 +37,7 @@ module ECS {
             this.player = new GameCharacter();
             this.view = new GameView(this);
             this.segmentManager = new SegmentManager(this);
-            this.enemyManager = new EnemyManager(this);
+            //this.enemyManager = new EnemyManager(this);
             this.pickupManager      = new PickupManager(this);
             this.floorManager       = new FloorManager(this);
             this.collisionManager   = new CollisionManager(this);
@@ -59,7 +59,7 @@ module ECS {
 
         start(){
             this.segmentManager.reset();
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
             this.pickupManager.destroyAll();
             this.isPlaying = true;
             this.gameReallyOver = false;
@@ -94,7 +94,7 @@ module ECS {
                 this.collisionManager.update();
                 this.segmentManager.update();
                 this.floorManager.update();
-                this.enemyManager.update();
+                //this.enemyManager.update();
                 this.pickupManager.update();
 
                 if(this.joyrideMode)
@@ -128,7 +128,7 @@ module ECS {
         }
 
         reset(){
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
             this.floorManager.destroyAll();
             
             this.segmentManager.reset();
@@ -147,7 +147,7 @@ module ECS {
             this.bulletMult += 0.3;
             this.view.normalMode();
             this.player.normalMode();
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
         }
 
         gameover()
@@ -200,7 +200,7 @@ module ECS {
                 this.player.joyrideMode();
                 this.player.position.x = 0;
                 GameConfig.camera.x = GameConfig.game.player.position.x - 100;
-                this.enemyManager.destroyAll();
+                //this.enemyManager.destroyAll();
                 this.pickupManager.destroyAll();
                 this.floorManager.destroyAll();	
                 this.segmentManager.reset();

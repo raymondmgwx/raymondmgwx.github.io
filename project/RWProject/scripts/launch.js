@@ -989,7 +989,7 @@ var ECS;
             this.player = new ECS.GameCharacter();
             this.view = new GameView(this);
             this.segmentManager = new ECS.SegmentManager(this);
-            this.enemyManager = new ECS.EnemyManager(this);
+            //this.enemyManager = new EnemyManager(this);
             this.pickupManager = new ECS.PickupManager(this);
             this.floorManager = new ECS.FloorManager(this);
             this.collisionManager = new ECS.CollisionManager(this);
@@ -1008,7 +1008,7 @@ var ECS;
         }
         GameKernel.prototype.start = function () {
             this.segmentManager.reset();
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
             this.pickupManager.destroyAll();
             this.isPlaying = true;
             this.gameReallyOver = false;
@@ -1039,7 +1039,7 @@ var ECS;
                 this.collisionManager.update();
                 this.segmentManager.update();
                 this.floorManager.update();
-                this.enemyManager.update();
+                //this.enemyManager.update();
                 this.pickupManager.update();
                 if (this.joyrideMode) {
                     this.joyrideCountdown -= ECS.GameConfig.time.DELTA_TIME;
@@ -1062,7 +1062,7 @@ var ECS;
             this.view.update();
         };
         GameKernel.prototype.reset = function () {
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
             this.floorManager.destroyAll();
             this.segmentManager.reset();
             this.view.zoom = 1;
@@ -1077,7 +1077,7 @@ var ECS;
             this.bulletMult += 0.3;
             this.view.normalMode();
             this.player.normalMode();
-            this.enemyManager.destroyAll();
+            //this.enemyManager.destroyAll();
         };
         GameKernel.prototype.gameover = function () {
             this.isPlaying = false;
@@ -1114,7 +1114,7 @@ var ECS;
                 this.player.joyrideMode();
                 this.player.position.x = 0;
                 ECS.GameConfig.camera.x = ECS.GameConfig.game.player.position.x - 100;
-                this.enemyManager.destroyAll();
+                //this.enemyManager.destroyAll();
                 this.pickupManager.destroyAll();
                 this.floorManager.destroyAll();
                 this.segmentManager.reset();
@@ -1470,7 +1470,7 @@ var ECS;
                 var blocks = this.currentSegment.blocks;
                 var length = blocks.length / 2;
                 for (var i = 0; i < length; i++) {
-                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i * 2], blocks[(i * 2) + 1]);
+                    //this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
                 }
                 var pickups = this.currentSegment.coins;
                 var length = pickups.length / 2;
@@ -1663,7 +1663,7 @@ var ECS;
             this.engine = engine;
         }
         CollisionManager.prototype.update = function () {
-            this.playerVsBlock();
+            //this.playerVsBlock();
             this.playerVsPickup();
             this.playerVsFloor();
         };

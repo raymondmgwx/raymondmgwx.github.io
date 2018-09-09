@@ -110,7 +110,7 @@ module ECS {
                 
                 for ( var i = 0; i < length; i++) 
                 {
-                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
+                    //this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
                 }
                 
                 var pickups = this.currentSegment.coins;
@@ -390,7 +390,7 @@ module ECS {
         }
 
         update(){
-            this.playerVsBlock();
+            //this.playerVsBlock();
             this.playerVsPickup();
             this.playerVsFloor();
         }
