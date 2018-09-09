@@ -63,6 +63,7 @@ module ECS {
                         "img/PixiAssets-hd.json",
                         "img/background.png",
                         "assets/background/BackgroundAssets.json",
+                        "assets/character/chara1.json",
                         "img/blackSquare.jpg",
                         "assets/hud/pausedPanel.png",
                         "assets/hud/pixieRevised_controls.png",

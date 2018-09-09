@@ -154,6 +154,7 @@ var ECS;
                     "img/PixiAssets-hd.json",
                     "img/background.png",
                     "assets/background/BackgroundAssets.json",
+                    "assets/character/chara1.json",
                     "img/blackSquare.jpg",
                     "assets/hud/pausedPanel.png",
                     "assets/hud/pixieRevised_controls.png",
@@ -279,25 +280,22 @@ var ECS;
             console.log("init character!");
             this.position = new PIXI.Point();
             this.runningFrames = [
-                PIXI.Texture.fromFrame("characterRUNscaled_01.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_02.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_03.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_04.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_05.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_06.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_07.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_08.png"),
-                PIXI.Texture.fromFrame("characterRUNscaled_09.png")
+                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
             this.flyingFrames = [
-                PIXI.Texture.fromFrame("characterFLATflying_01.png"),
-                PIXI.Texture.fromFrame("characterFLATflying_02.png"),
-                PIXI.Texture.fromFrame("characterFLATflying_03.png")
+                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
             this.crashFrames = [
-                PIXI.Texture.fromFrame("characterFALLscaled3.png"),
-                PIXI.Texture.fromFrame("characterFALLscaled1.png"),
-                PIXI.Texture.fromFrame("characterFALLscaled3.png")
+                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
+                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
             this.view = new PIXI.MovieClip(this.flyingFrames);
             this.view.animationSpeed = 0.23;
