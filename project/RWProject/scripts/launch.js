@@ -281,34 +281,40 @@ var ECS;
             console.log("init character!");
             this.position = new PIXI.Point();
             this.runningFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             this.jumpFrames = [
-                PIXI.Texture.fromFrame("JUMP/moheji-jump.jpg"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             this.slideFrame = [
-                PIXI.Texture.fromFrame("SLIDE/moheji-slide.jpg"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             this.flyingFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             this.crashFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
-            this.view.anchor.x = 0.5;
+            //this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.6;
-            this.view.scale.set(0.3, 0.3);
+            //this.view.scale.set(0.3,0.3);
             this.position.y = 477;
             this.ground = 477;
             this.gravity = 9.8;
@@ -1132,10 +1138,11 @@ var ECS;
     }());
     ECS.GameKernel = GameKernel;
     var BackGroundElement = /** @class */ (function () {
-        function BackGroundElement(texture, y, owner) {
+        function BackGroundElement(texture, y, owner, width) {
+            if (width === void 0) { width = 940; }
             this.sprites = [];
             this.spriteWidth = texture.width - 1;
-            var amount = Math.ceil(940 / this.spriteWidth);
+            var amount = Math.ceil(width / this.spriteWidth);
             if (amount < 3)
                 amount = 3;
             for (var i = 0; i < amount; i++) {
@@ -1197,25 +1204,32 @@ var ECS;
             this.width = 1000;
             this.scrollPosition = 1500;
             //console.log(PIXI.Texture);
-            var fogTex = PIXI.Texture.fromImage("img/background.png");
-            fogTex.width = 960;
-            fogTex.height = 500;
-            this.foggyTrees = new BackGroundElement(fogTex, -80, this);
-            //this.rearSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_silhouette.png"), 358, this);
+            var bgTex = PIXI.Texture.fromImage("img/background.png");
+            bgTex.width = 1281;
+            bgTex.height = 500;
+            this.bgTex = new BackGroundElement(bgTex, -80, this);
             //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
             this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
-            this.tree1.anchor.x = 0.5;
-            this.tree1.anchor.y = -100;
+            this.tree1.width = 150;
+            this.tree1.height = 150;
+            this.tree1.position.y = 380;
             this.addChild(this.tree1);
             this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
-            this.tree2.anchor.x = 0.5;
-            this.tree2.position.y = -100;
+            this.tree2.width = 150;
+            this.tree2.height = 150;
+            this.tree2.position.y = 380;
             this.addChild(this.tree2);
+            this.cloud1 = PIXI.Sprite.fromFrame("cloud1.png");
+            this.cloud1.position.y = 100;
+            this.addChild(this.cloud1);
+            this.cloud2 = PIXI.Sprite.fromFrame("cloud2.png");
+            this.cloud2.position.y = 50;
+            this.addChild(this.cloud2);
             //this.farCanopy = new BackGroundElement(PIXI.Texture.fromFrame("02_front_canopy.png"), 0, this);
             //this.vines = new GameVines(this);
             //this.roofLeaves = new BackGroundElement(PIXI.Texture.fromFrame("00_roof_leaves.png"), 0, this);
             //this.frontSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("01_front_silhouette.png"), 424, this);
-            this.foggyTrees.speed = 1 / 2;
+            this.bgTex.speed = 1 / 2;
             //this.rearSilhouette.speed = 1.2/2;
             //this.rearCanopy.speed = 1.2/2;
             //this.farCanopy.speed = 1.5/2;
@@ -1227,7 +1241,7 @@ var ECS;
     ECS.GameBackground = GameBackground;
     GameBackground.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     GameBackground.prototype.updateTransform = function () {
-        this.scrollPosition = ECS.GameConfig.camera.x + 4000;
+        this.scrollPosition = ECS.GameConfig.camera.x + 5500;
         var treePos = -this.scrollPosition * 1.5 / 2;
         treePos %= this.width + 556;
         treePos += this.width + 556;
@@ -1238,7 +1252,17 @@ var ECS;
         treePos2 += this.width + 556;
         treePos2 -= this.tree2.width / 2;
         this.tree2.position.x = treePos2 - ECS.GameConfig.xOffset;
-        this.foggyTrees.setPosition(this.scrollPosition);
+        var cloud1Pos = -this.scrollPosition * 1.5 / 2;
+        cloud1Pos %= this.width + 556;
+        cloud1Pos += this.width + 556;
+        cloud1Pos -= this.cloud1.width / 2;
+        this.cloud1.position.x = cloud1Pos - ECS.GameConfig.xOffset;
+        var cloud2Pos = -(this.scrollPosition + this.width / 2) * 1.5 / 2;
+        cloud2Pos %= this.width + 556;
+        cloud2Pos += this.width + 556;
+        cloud2Pos -= this.cloud2.width / 2;
+        this.cloud2.position.x = cloud2Pos - ECS.GameConfig.xOffset;
+        this.bgTex.setPosition(this.scrollPosition);
         //this.rearSilhouette.setPosition(this.scrollPosition);
         //this.rearCanopy.setPosition(this.scrollPosition);
         // this.farCanopy.setPosition(this.scrollPosition);

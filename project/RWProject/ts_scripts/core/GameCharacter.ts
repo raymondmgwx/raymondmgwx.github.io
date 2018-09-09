@@ -53,40 +53,46 @@ module ECS {
             this.position = new PIXI.Point();
 	
             this.runningFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
 
             this.jumpFrames =[
-                PIXI.Texture.fromFrame("JUMP/moheji-jump.jpg"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
 
             this.slideFrame =[
-                PIXI.Texture.fromFrame("SLIDE/moheji-slide.jpg"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             
             this.flyingFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             
             this.crashFrames = [
-                PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
-                PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
             ];
             
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
             
-            this.view.anchor.x = 0.5;
+            //this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.6;
-            this.view.scale.set(0.3,0.3);
+            //this.view.scale.set(0.3,0.3);
             
             this.position.y = 477;
             this.ground = 477;
