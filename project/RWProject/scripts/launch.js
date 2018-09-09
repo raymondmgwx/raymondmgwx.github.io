@@ -148,10 +148,12 @@ var ECS;
                 ECS.GameConfig.interactive = false;
                 var loader = new PIXI.AssetLoader([
                     "img/stretched_hyper_tile.jpg",
+                    "img/doroCat.png",
                     "img/SplashAssets.json",
                     "img/WorldAssets-hd.json",
                     "img/HudAssets-hd.json",
                     "img/PixiAssets-hd.json",
+                    "img/platform.png",
                     "img/bg_up.png",
                     "img/bg_down.png",
                     "assets/background/BackgroundAssets.json",
@@ -190,7 +192,7 @@ var ECS;
             personalBestTitle.scale.x = 1.5;
             personalBestTitle.scale.y = 1.5;
             game.view.hud.addChild(personalBestTitle);
-            //game.view.showHud();
+            game.view.showHud();
             //bind event 
             var evtSys = new EventListenerSystem();
             evtSys.bindEvent();
@@ -259,9 +261,9 @@ var ECS;
         };
         EventListenerSystem.prototype.onTouchStart = function (event) {
             if (event.target.type !== 'button') {
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped)
+                if (ECS.GameConfig.game.isPlaying && !(ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING1))
                     ECS.GameConfig.game.player.jump();
-                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped)
+                if (ECS.GameConfig.game.isPlaying && (ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING1))
                     ECS.GameConfig.game.player.jumpTwo();
             }
         };
@@ -324,8 +326,9 @@ var ECS;
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
             this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.63;
-            this.view.scale.set(0.5, 0.5);
+            this.view.anchor.y = 0.65;
+            this.view.height = 135;
+            this.view.width = 75;
             this.position.y = 477;
             this.ground = 477;
             this.gravity = 9.8;
@@ -343,7 +346,7 @@ var ECS;
             this.realAnimationSpeed = 0.23;
             this.volume = 0.3;
             //start speed
-            this.vStart = 35;
+            this.vStart = 30;
             this.mass = 65;
             this.angle = Math.PI * 45 / 360;
             this.startJump = false;
@@ -380,29 +383,56 @@ var ECS;
             });
             this.realAnimationSpeed = 0.23;
         };
+        GameCharacter.prototype.chkOnGround = function () {
+            if (Math.abs(this.position.y - this.ground) <= 1) {
+                return true;
+            }
+            return false;
+        };
         GameCharacter.prototype.updateRunning = function () {
             this.view.animationSpeed = this.realAnimationSpeed * ECS.GameConfig.time.DELTA_TIME * this.level;
-            var oldSpeed = this.speed.y;
-            if (this.b_jumpTwo) {
-                this.speed.y = -this.vStart * Math.sin(this.angle);
-                this.b_jumpTwo = false;
-                this.isJumped = false;
-            }
-            if (this.startJump) {
-                this.speed.y += this.gravity * ECS.GameConfig.time.DELTA_TIME * this.smooth;
-                if (Math.abs(this.position.y - this.ground) <= 1 && this.cnt == 0) {
-                    this.isJumped = true;
-                    this.cnt += 1;
+            switch (ECS.GameConfig.playerMode) {
+                case ECS.PLAYMODE.JUMPING1:
+                    // if(this.startJump)
+                    // { 
+                    //console.log("start jump");
+                    // if(Math.abs(this.position.y-this.ground)<=1 && this.cnt ==0){
+                    //     this.isJumped = true;
+                    //     this.cnt +=1;
+                    //     this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+                    // }else if (Math.abs(this.position.y-this.ground)<=1 && this.cnt ==1){
+                    //     this.startJump = false;
+                    //     this.isJumped = false;
+                    //     this.cnt =0;
+                    // }
+                    //}
                     this.speed.y = -this.vStart * Math.sin(this.angle);
-                }
-                else if (Math.abs(this.position.y - this.ground) <= 1 && this.cnt == 1) {
-                    this.startJump = false;
-                    this.isJumped = false;
-                    this.cnt = 0;
-                }
+                    break;
+                case ECS.PLAYMODE.JUMPING2:
+                    // if(this.b_jumpTwo)
+                    // {
+                    //     this.speed.y = -this.vStart * Math.sin(this.angle) ;
+                    //     this.b_jumpTwo = false;
+                    //     this.isJumped = false;
+                    // }
+                    this.speed.y = -this.vStart * Math.sin(this.angle);
+                    break;
+                case ECS.PLAYMODE.FALL:
+                    //should have gravity
+                    this.speed.y += this.gravity * ECS.GameConfig.time.DELTA_TIME * this.smooth;
+                    break;
+                case ECS.PLAYMODE.RUNNING:
+                    this.speed.y = 0;
+                    break;
             }
+            if (!this.chkOnGround() && (ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING1 || ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING2))
+                ECS.GameConfig.playerMode = ECS.PLAYMODE.FALL;
+            else if (ECS.GameConfig.playerMode == ECS.PLAYMODE.FALL && this.chkOnGround())
+                ECS.GameConfig.playerMode = ECS.PLAYMODE.RUNNING;
+            //console.log(GameConfig.playerMode);            
             this.position.x += this.speed.x * ECS.GameConfig.time.DELTA_TIME * this.level;
             this.position.y += this.speed.y * ECS.GameConfig.time.DELTA_TIME;
+            //console.log(this.speed.y);
             if (this.onGround !== this.onGroundCache) {
                 this.onGroundCache = this.onGround;
                 if (this.onGround && !this.isSlide) {
@@ -457,11 +487,13 @@ var ECS;
                 }
             }
             if (Math.abs(this.position.y - this.ground) > 1) {
-                this.b_jumpTwo = true;
+                ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING2;
+                //this.b_jumpTwo = true;
             }
-            else {
-                this.b_jumpTwo = false;
-            }
+            // else
+            // {
+            //     this.b_jumpTwo = false;
+            // }
         };
         GameCharacter.prototype.slide = function (isSlide) {
             if (this.isDead) {
@@ -472,6 +504,8 @@ var ECS;
             }
             if (Math.abs(this.position.y - this.ground) <= 1) {
                 this.isSlide = isSlide;
+                if (isSlide)
+                    ECS.GameConfig.playerMode = ECS.PLAYMODE.SLIDE;
             }
         };
         GameCharacter.prototype.jump = function () {
@@ -482,14 +516,17 @@ var ECS;
                     this.speed.x = 10;
                 }
             }
-            if (Math.abs(this.position.y - this.ground) > 1) {
-                this.isJumped = true;
-                this.startJump = false;
-            }
-            else {
-                this.isJumped = false;
-                this.startJump = true;
-            }
+            // if(Math.abs(this.position.y-this.ground)>1)
+            // {
+            //     this.isJumped = true;
+            //     this.startJump = false;
+            // }
+            // else
+            // {
+            //     this.isJumped = false;
+            //     this.startJump = true;
+            // }
+            ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING1;
         };
         GameCharacter.prototype.die = function () {
             if (this.isDead)
@@ -535,9 +572,11 @@ var ECS;
     var GameEnemy = /** @class */ (function () {
         function GameEnemy() {
             this.position = new PIXI.Point();
-            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("spike_box.png"));
+            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/doroCat.png"));
             this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.5;
+            this.view.width = 150;
+            this.view.height = 150;
             this.isHit = false;
             this.width = 150;
             this.height = 150;
@@ -731,6 +770,14 @@ var ECS;
         GAMEMODE[GAMEMODE["INTRO"] = 4] = "INTRO";
         GAMEMODE[GAMEMODE["PAUSED"] = 5] = "PAUSED";
     })(GAMEMODE = ECS.GAMEMODE || (ECS.GAMEMODE = {}));
+    var PLAYMODE;
+    (function (PLAYMODE) {
+        PLAYMODE[PLAYMODE["RUNNING"] = 0] = "RUNNING";
+        PLAYMODE[PLAYMODE["JUMPING1"] = 1] = "JUMPING1";
+        PLAYMODE[PLAYMODE["JUMPING2"] = 2] = "JUMPING2";
+        PLAYMODE[PLAYMODE["FALL"] = 3] = "FALL";
+        PLAYMODE[PLAYMODE["SLIDE"] = 4] = "SLIDE";
+    })(PLAYMODE = ECS.PLAYMODE || (ECS.PLAYMODE = {}));
     var GameConfig = /** @class */ (function () {
         function GameConfig() {
         }
@@ -779,6 +826,7 @@ var ECS;
         GameConfig.width = 800;
         GameConfig.height = 600;
         GameConfig.interactive = true;
+        GameConfig.isOnPlat = false;
         return GameConfig;
     }());
     ECS.GameConfig = GameConfig;
@@ -861,6 +909,31 @@ var ECS;
     }());
     ECS.PowerBar = PowerBar;
     PowerBar.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+    var Specialfood = /** @class */ (function () {
+        function Specialfood() {
+            PIXI.DisplayObjectContainer.call(this);
+            this.foods = ["number_01.png",
+                "number_02.png",
+                "number_03.png",
+                "number_04.png"];
+            for (var i = 0; i < 4; i++) {
+                this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
+            }
+            this.startX = 10;
+            this.digits = [];
+            for (var i = 0; i < 4; i++) {
+                this.digits[i] = new PIXI.Sprite(this.foods[i]);
+                this.addChild(this.digits[i]);
+                this.setFoodPic(this.digits[i], i * this.digits[i].width);
+            }
+        }
+        return Specialfood;
+    }());
+    ECS.Specialfood = Specialfood;
+    Specialfood.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+    Specialfood.prototype.setFoodPic = function (food, posx) {
+        food.position.x = this.startX + posx;
+    };
     var Score = /** @class */ (function () {
         function Score() {
             PIXI.DisplayObjectContainer.call(this);
@@ -893,7 +966,7 @@ var ECS;
     Score.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     Score.prototype.setScore = function (score) {
         var split = formatScore(score).split("");
-        var position = 0;
+        var position = 100;
         var gap = -10;
         for (var i = 0; i < split.length; i++) {
             var digit = this.digits[i];
@@ -952,8 +1025,8 @@ var ECS;
         var split = formatScore(score).split("");
         var position = 0;
         var gap = 3;
-        this.title.position.x = 0;
-        position += 70 + gap;
+        this.title.position.x = 100;
+        position += this.title.position.x + 70 + gap;
         for (var i = 0; i < split.length; i++) {
             var digit = this.digits[i];
             digit.visible = true;
@@ -1034,7 +1107,8 @@ var ECS;
             this.player = new ECS.GameCharacter();
             this.view = new GameView(this);
             this.segmentManager = new ECS.SegmentManager(this);
-            //this.enemyManager = new EnemyManager(this);
+            this.enemyManager = new ECS.EnemyManager(this);
+            this.platManager = new ECS.PlatformManager(this);
             this.pickupManager = new ECS.PickupManager(this);
             this.floorManager = new ECS.FloorManager(this);
             this.collisionManager = new ECS.CollisionManager(this);
@@ -1053,8 +1127,9 @@ var ECS;
         }
         GameKernel.prototype.start = function () {
             this.segmentManager.reset();
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
             this.pickupManager.destroyAll();
+            this.platManager.destroyAll();
             this.isPlaying = true;
             this.gameReallyOver = false;
             this.score = 0;
@@ -1082,9 +1157,10 @@ var ECS;
             if (ECS.GameConfig.gameMode !== ECS.GAMEMODE.PAUSED) {
                 this.player.update();
                 this.collisionManager.update();
+                this.platManager.update();
                 this.segmentManager.update();
                 this.floorManager.update();
-                //this.enemyManager.update();
+                this.enemyManager.update();
                 this.pickupManager.update();
                 if (this.joyrideMode) {
                     this.joyrideCountdown -= ECS.GameConfig.time.DELTA_TIME;
@@ -1107,7 +1183,8 @@ var ECS;
             this.view.update();
         };
         GameKernel.prototype.reset = function () {
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
+            this.platManager.destroyAll();
             this.floorManager.destroyAll();
             this.segmentManager.reset();
             this.view.zoom = 1;
@@ -1122,7 +1199,7 @@ var ECS;
             this.bulletMult += 0.3;
             this.view.normalMode();
             this.player.normalMode();
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
         };
         GameKernel.prototype.gameover = function () {
             this.isPlaying = false;
@@ -1148,22 +1225,23 @@ var ECS;
         GameKernel.prototype.pickup = function () {
             if (this.player.isDead)
                 return;
-            this.score += 10;
-            this.view.score.jump();
+            //this.score += 10;
+            //this.view.score.jump();
             this.pickupCount++;
-            if (this.pickupCount >= 50 * this.bulletMult && !this.player.isDead) {
-                this.pickupCount = 0;
-                this.joyrideMode = true;
-                this.joyrideCountdown = 60 * 10;
-                this.view.joyrideMode();
-                this.player.joyrideMode();
-                this.player.position.x = 0;
-                ECS.GameConfig.camera.x = ECS.GameConfig.game.player.position.x - 100;
-                //this.enemyManager.destroyAll();
-                this.pickupManager.destroyAll();
-                this.floorManager.destroyAll();
-                this.segmentManager.reset();
-            }
+            // if(this.pickupCount >= 50 * this.bulletMult && !this.player.isDead)
+            // {
+            //     this.pickupCount = 0;
+            //     this.joyrideMode = true;
+            //     this.joyrideCountdown = 60 * 10;
+            //     this.view.joyrideMode();
+            //     this.player.joyrideMode();
+            //     this.player.position.x = 0;
+            //     GameConfig.camera.x = GameConfig.game.player.position.x - 100;
+            //     this.enemyManager.destroyAll();
+            //     this.pickupManager.destroyAll();
+            //     this.floorManager.destroyAll();	
+            //     this.segmentManager.reset();
+            // }
         };
         return GameKernel;
     }());
@@ -1337,18 +1415,20 @@ var ECS;
             this.stage.addChild(this.container);
             this.stage.addChild(this.hud);
             this.normalBackground = new GameBackground(this.gameFront);
-            this.powerBar = new ECS.PowerBar();
+            //this.powerBar = new PowerBar();
+            this.specialFood = new ECS.Specialfood();
             this.score = new ECS.Score();
             this.bestScore = new ECS.BestScore();
             this.background = this.normalBackground;
-            this.score.position.x = 300;
+            //this.score.position.x = GameConfig.width/2;
             this.game.addChild(this.background);
-            this.hud.addChild(this.powerBar);
+            //this.hud.addChild(this.powerBar);
             this.hud.addChild(this.score);
             this.hud.addChild(this.bestScore);
+            this.hud.addChild(this.specialFood);
             this.trail = new ECS.GameCharacterTrail(this.game);
             this.trail2 = new ECS.GameCharacterTrailFire(this.game);
-            this.powerBar.alpha = 0;
+            //this.powerBar.alpha = 0;
             this.score.alpha = 0;
             this.bestScore.alpha = 0;
             this.count = 0;
@@ -1364,29 +1444,29 @@ var ECS;
         }
         GameView.prototype.showHud = function () {
             var start = {
-                x: ECS.GameConfig.width + 300,
+                x: ECS.GameConfig.width + 100,
                 y: 0
             };
             this.score.alpha = 1;
-            this.score.position.x = start.x;
-            TweenLite.to(this.score.position, 1, {
-                x: ECS.GameConfig.width - 295 - 20,
-                ease: Elastic.easeOut
-            });
+            // this.score.position.x = start.x;
+            // TweenLite.to(this.score.position, 1, {
+            //     x: GameConfig.width - 295 - 20,
+            //     ease: Elastic.easeOut
+            // });
             this.bestScore.alpha = 1;
-            this.bestScore.position.x = start.x;
-            this.bestScore.position.y -= 14;
-            TweenLite.to(this.bestScore.position, 1, {
-                x: ECS.GameConfig.width - 20,
-                ease: Elastic.easeOut
-            });
-            this.powerBar.alpha = 1;
-            this.powerBar.position.x = ECS.GameConfig.width;
-            TweenLite.to(this.powerBar.position, 1, {
-                x: ECS.GameConfig.width - 295,
-                ease: Elastic.easeOut,
-                delay: 0.3
-            });
+            //this.bestScore.position.x = 500;
+            // this.bestScore.position.y -= 100;
+            // TweenLite.to(this.bestScore.position, 1, {
+            //     x: GameConfig.width - 20,
+            //     ease: Elastic.easeOut
+            // });
+            // this.powerBar.alpha = 1;
+            // this.powerBar.position.x = GameConfig.width;
+            // TweenLite.to(this.powerBar.position, 1, {
+            //     x: GameConfig.width - 295,
+            //     ease: Elastic.easeOut,
+            //     delay: 0.3
+            // });
         };
         GameView.prototype.hideHud = function () {
         };
@@ -1417,7 +1497,7 @@ var ECS;
             //this.lava.setPosition(GameConfig.camera.x + 4000);
             this.bestScore.update();
             this.score.setScore(Math.round(this.kernel.score));
-            this.powerBar.bar.scale.x = ((this.kernel.pickupCount / (50 * this.kernel.bulletMult)) * (248 / 252));
+            //this.powerBar.bar.scale.x = ((this.kernel.pickupCount / (50 * this.kernel.bulletMult)) * (248 / 252))
             this.renderer.render(this.stage);
         };
         GameView.prototype.joyrideMode = function () {
@@ -1452,14 +1532,16 @@ var ECS;
             ECS.GameConfig.height = h;
             this.renderer.resize(w, h);
             this.background.width = w;
-            this.bestScore.position.x = w - 20;
-            this.bestScore.position.y = 100;
-            this.score.position.x = w - 295 - 20;
+            this.bestScore.position.x = w;
+            this.bestScore.position.y = 24;
+            this.score.position.x = w / 2;
             this.score.position.y = 12;
+            this.specialFood.position.x = 0;
+            this.specialFood.position.y = 12;
             this.white.scale.x = w / 16;
             this.white.scale.y = h / 16;
-            this.powerBar.position.x = w - 295;
-            this.powerBar.position.y = 12;
+            // this.powerBar.position.x = w - 295;
+            // this.powerBar.position.y = 12;
         };
         return GameView;
     }());
@@ -1497,7 +1579,7 @@ var ECS;
             this.count = 0;
             this.currentSegment = data[0];
             //console.log(this.currentSegment);
-            this.startSegment = { length: 1135 * 2, floor: [0, 1135], blocks: [], coins: [] },
+            this.startSegment = { length: 1135 * 2, floor: [0, 1135], blocks: [], coins: [], platform: [] },
                 this.chillMode = true;
             this.last = 0;
             this.position = 0;
@@ -1525,7 +1607,8 @@ var ECS;
                     }
                     return;
                 }
-                var nextSegment = this.startSegment; //this.sections[this.count % this.sections.length];
+                //var nextSegment = this.startSegment;//this.sections[this.count % this.sections.length];
+                var nextSegment = this.sections[this.count % this.sections.length];
                 // section finished!
                 nextSegment.start = this.currentSegment.start + this.currentSegment.length;
                 this.currentSegment = nextSegment;
@@ -1536,12 +1619,17 @@ var ECS;
                 var blocks = this.currentSegment.blocks;
                 var length = blocks.length / 2;
                 for (var i = 0; i < length; i++) {
-                    //this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
+                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i * 2], blocks[(i * 2) + 1]);
                 }
                 var pickups = this.currentSegment.coins;
                 var length = pickups.length / 2;
                 for (var i = 0; i < length; i++) {
                     this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i * 2], pickups[(i * 2) + 1]);
+                }
+                var platforms = this.currentSegment.platform;
+                var length = platforms.length / 2;
+                for (var i = 0; i < length; i++) {
+                    this.engine.platManager.addPlatform(this.currentSegment.start + platforms[i * 2], platforms[(i * 2) + 1]);
                 }
                 this.count++;
             }
@@ -1549,6 +1637,63 @@ var ECS;
         return SegmentManager;
     }());
     ECS.SegmentManager = SegmentManager;
+    var Platform = /** @class */ (function () {
+        function Platform() {
+            this.position = new PIXI.Point();
+            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/platform.png"));
+            this.view.anchor.x = 0.5;
+            this.view.anchor.y = 0.5;
+            this.view.width = 400;
+            this.view.height = 150;
+            this.width = 400;
+            this.height = 150;
+        }
+        Platform.prototype.update = function () {
+            this.view.position.x = this.position.x - ECS.GameConfig.camera.x;
+            ;
+            this.view.position.y = this.position.y;
+        };
+        return Platform;
+    }());
+    ECS.Platform = Platform;
+    var PlatformManager = /** @class */ (function () {
+        function PlatformManager(engine) {
+            console.log("init platform manager!");
+            this.engine = engine;
+            this.platforms = [];
+            this.platformPool = new GameObjectPool(Platform);
+        }
+        PlatformManager.prototype.update = function () {
+            for (var i = 0; i < this.platforms.length; i++) {
+                var platform = this.platforms[i];
+                platform.update();
+                if (platform.view.position.x < -100 - ECS.GameConfig.xOffset && !this.engine.player.isDead) {
+                    this.platforms.splice(i, 1);
+                    this.engine.view.gameFront.removeChild(platform.view);
+                    i--;
+                }
+            }
+        };
+        PlatformManager.prototype.destroyAll = function () {
+            for (var i = 0; i < this.platforms.length; i++) {
+                var platform = this.platforms[i];
+                this.engine.view.gameFront.removeChild(platform.view);
+            }
+            this.platforms = [];
+        };
+        PlatformManager.prototype.addPlatform = function (x, y) {
+            var platform = this.platformPool.getObject();
+            platform.position.x = x;
+            platform.position.y = y;
+            platform.view.position.x = platform.position.x - ECS.GameConfig.camera.x;
+            ;
+            platform.view.position.y = platform.position.y;
+            this.platforms.push(platform);
+            this.engine.view.gameFront.addChild(platform.view);
+        };
+        return PlatformManager;
+    }());
+    ECS.PlatformManager = PlatformManager;
     var EnemyManager = /** @class */ (function () {
         function EnemyManager(engine) {
             console.log("init enemy manager!");
@@ -1562,7 +1707,7 @@ var ECS;
                 var enemy = this.enemies[i];
                 enemy.update();
                 if (enemy.view.position.x < -100 - ECS.GameConfig.xOffset && !this.engine.player.isDead) {
-                    //this.enemyPool.returnObject(enemy);
+                    ////this.enemyPool.returnObject(enemy);
                     this.enemies.splice(i, 1);
                     this.engine.view.gameFront.removeChild(enemy.view);
                     i--;
@@ -1589,7 +1734,6 @@ var ECS;
             for (var i = 0; i < this.enemies.length; i++) {
                 var enemy = this.enemies[i];
                 if (enemy.x > ECS.GameConfig.camera.x + ECS.GameConfig.width) {
-                    //this.enemyPool.returnObject(enemy);
                     this.engine.view.game.removeChild(enemy.view);
                     this.enemies.splice(i, 1);
                     i--;
@@ -1633,7 +1777,6 @@ var ECS;
                     if (pickup.view.position.x < -100 - ECS.GameConfig.xOffset) {
                         // remove!
                         this.engine.view.game.removeChild(pickup.view);
-                        //this.pickupPool.returnObject(pickup);
                         this.pickups.splice(i, 1);
                         i--;
                     }
@@ -1725,23 +1868,32 @@ var ECS;
     ECS.FloorManager = FloorManager;
     var CollisionManager = /** @class */ (function () {
         function CollisionManager(engine) {
+            this.isOnPlat = false;
             console.log("init collision manager!");
             this.engine = engine;
         }
         CollisionManager.prototype.update = function () {
-            //this.playerVsBlock();
+            this.playerVsBlock();
             this.playerVsPickup();
             this.playerVsFloor();
+            this.playerVsPlat();
         };
         CollisionManager.prototype.playerVsBlock = function () {
             var enemies = this.engine.enemyManager.enemies;
             var player = this.engine.player;
+            var floatRange = 0;
             for (var i = 0; i < enemies.length; i++) {
                 var enemy = enemies[i];
+                if (player.isSlide) {
+                    floatRange = 10;
+                }
+                else {
+                    floatRange = 0;
+                }
                 var xdist = enemy.position.x - player.position.x;
-                if (xdist > -enemy.width / 2 && xdist < enemy.width / 2) {
+                if (xdist > -enemy.width / 2 + floatRange && xdist < enemy.width / 2 - floatRange) {
                     var ydist = enemy.position.y - player.position.y;
-                    if (ydist > -enemy.height / 2 - 20 && ydist < enemy.height / 2) {
+                    if (ydist > -enemy.height / 2 - 20 + floatRange && ydist < enemy.height / 2 - floatRange) {
                         if (!player.joyRiding) {
                             player.die();
                             this.engine.gameover();
@@ -1761,10 +1913,55 @@ var ECS;
                 var xdist = pickup.position.x - player.position.x;
                 if (xdist > -pickup.width / 2 && xdist < pickup.width / 2) {
                     var ydist = pickup.position.y - player.position.y;
-                    if (ydist > -pickup.height / 2 && ydist < pickup.height / 2) {
+                    if (ydist > -pickup.height / 2 - 20 && ydist < pickup.height / 2) {
                         this.engine.pickupManager.removePickup(i);
                         this.engine.pickup();
                     }
+                }
+            }
+        };
+        CollisionManager.prototype.playerVsPlat = function () {
+            var player = this.engine.player;
+            var platforms = this.engine.platManager.platforms;
+            for (var i = 0; i < platforms.length; i++) {
+                var plat = platforms[i];
+                var xdist = plat.position.x - player.position.x;
+                //check jump to the plat or not
+                if (xdist > -plat.width / 2 && xdist < plat.width / 2) {
+                    var ydist = plat.position.y - player.position.y;
+                    if (ydist > -plat.height / 2 - 20 && ydist < plat.height / 2) {
+                        if (player.position.y < plat.position.y - 10) {
+                            player.position.y = plat.position.y - plat.height / 2 - player.height / 2;
+                            //console.log("plat!");
+                            player.ground = player.position.y;
+                            // player.startJump = false;
+                            // player.isJumped = false;
+                            // player.cnt =0;
+                            ECS.GameConfig.isOnPlat = true;
+                            player.onGround = true;
+                        }
+                    }
+                }
+            }
+            //check leave the plat
+            if (ECS.GameConfig.isOnPlat) {
+                var flag = true;
+                for (var i = 0; i < platforms.length; i++) {
+                    var plat = platforms[i];
+                    var xdist = plat.position.x - player.position.x;
+                    if (xdist > -plat.width / 2 && xdist < plat.width / 2) {
+                        var ydist = plat.position.y - plat.height / 2 - player.height / 2 - player.position.y;
+                        if (ydist <= 0) {
+                            //console.log("noy");
+                            flag = false;
+                        }
+                    }
+                }
+                if (flag) {
+                    ECS.GameConfig.isOnPlat = false;
+                    ;
+                    player.ground = 477;
+                    ECS.GameConfig.playerMode = ECS.PLAYMODE.FALL;
                 }
             }
         };
@@ -1829,8 +2026,8 @@ var ECS;
                 }
             }
             if (player.position.y < 0) {
-                player.position.y = 0;
-                player.speed.y *= 0;
+                //player.position.y = 0;
+                //player.speed.y *= 0;
             }
         };
         return CollisionManager;

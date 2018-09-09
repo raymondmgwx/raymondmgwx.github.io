@@ -88,8 +88,9 @@ module ECS {
             this.view.animationSpeed = 0.23;
             
             this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.63;
-            this.view.scale.set(0.5,0.5);
+            this.view.anchor.y = 0.65;
+            this.view.height=135;
+            this.view.width=75;
             
             this.position.y = 477;
             this.ground = 477;
@@ -114,7 +115,7 @@ module ECS {
             this.volume = 0.3;
 
             //start speed
-            this.vStart = 35;
+            this.vStart = 30;
             this.mass = 65;
             this.angle =Math.PI * 45/360;
             this.startJump =false;
@@ -160,40 +161,65 @@ module ECS {
             this.realAnimationSpeed = 0.23;
         }
 
+        chkOnGround(){
+            if(Math.abs(this.position.y-this.ground)<=1){
+                return true;
+            }
+
+            return false;
+        }
+
         updateRunning()
         {
             this.view.animationSpeed = this.realAnimationSpeed * GameConfig.time.DELTA_TIME * this.level;
-
-            var oldSpeed = this.speed.y;
-            
-            if(this.b_jumpTwo)
-            {
-                this.speed.y = -this.vStart * Math.sin(this.angle) ;
-                this.b_jumpTwo = false;
-                this.isJumped = false;
-            }
-
-            
-            if(this.startJump)
-            {
-                this.speed.y += this.gravity  * GameConfig.time.DELTA_TIME *this.smooth;
+            switch( GameConfig.playerMode){
+                case PLAYMODE.JUMPING1:
+                // if(this.startJump)
+                // { 
+                    //console.log("start jump");
+                    // if(Math.abs(this.position.y-this.ground)<=1 && this.cnt ==0){
+                    //     this.isJumped = true;
+                    //     this.cnt +=1;
+                    //     this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+    
+                    // }else if (Math.abs(this.position.y-this.ground)<=1 && this.cnt ==1){
+                    //     this.startJump = false;
+                    //     this.isJumped = false;
+                    //     this.cnt =0;
+                    // }
+                //}
+                this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+                break;
+                case PLAYMODE.JUMPING2:
+                // if(this.b_jumpTwo)
+                // {
+                //     this.speed.y = -this.vStart * Math.sin(this.angle) ;
+                //     this.b_jumpTwo = false;
+                //     this.isJumped = false;
+                // }
+                this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+                break;
+                case PLAYMODE.FALL:
+                    //should have gravity
+                     this.speed.y += this.gravity  * GameConfig.time.DELTA_TIME *this.smooth;
+                break;
+                case PLAYMODE.RUNNING:
+                this.speed.y=0;
+                break;
                 
-                if(Math.abs(this.position.y-this.ground)<=1 && this.cnt ==0){
-                    this.isJumped = true;
-                    this.cnt +=1;
-                    this.speed.y = -this.vStart * Math.sin(this.angle) ;
-
-                }else if (Math.abs(this.position.y-this.ground)<=1 && this.cnt ==1){
-   
-                    this.startJump = false;
-                    this.isJumped = false;
-                    this.cnt =0;
-                }
             }
-            
+
+
+
+            if(!this.chkOnGround() && (GameConfig.playerMode == PLAYMODE.JUMPING1 || GameConfig.playerMode == PLAYMODE.JUMPING2))GameConfig.playerMode = PLAYMODE.FALL;
+            else if(GameConfig.playerMode == PLAYMODE.FALL &&  this.chkOnGround()) GameConfig.playerMode = PLAYMODE.RUNNING; 
+
+
+            //console.log(GameConfig.playerMode);            
             
             this.position.x += this.speed.x * GameConfig.time.DELTA_TIME * this.level;
             this.position.y += this.speed.y * GameConfig.time.DELTA_TIME;
+            //console.log(this.speed.y);
             
             if(this.onGround !== this.onGroundCache)
             {
@@ -257,6 +283,8 @@ module ECS {
         }
         jumpTwo()
         {
+
+            
             //console.log("jump two");
             if(this.isDead)
             {
@@ -269,12 +297,13 @@ module ECS {
 
             if(Math.abs(this.position.y-this.ground)>1)
             {
-                this.b_jumpTwo = true;
+                GameConfig.playerMode = PLAYMODE.JUMPING2;
+                //this.b_jumpTwo = true;
             }
-            else
-            {
-                this.b_jumpTwo = false;
-            }
+            // else
+            // {
+            //     this.b_jumpTwo = false;
+            // }
         }
 
         slide(isSlide:boolean){
@@ -290,11 +319,13 @@ module ECS {
                  if(Math.abs(this.position.y-this.ground)<=1)
                  {
                      this.isSlide = isSlide;
+                     if(isSlide) GameConfig.playerMode = PLAYMODE.SLIDE;
                  }
         }
 
         jump()
         {
+      
             //console.log("click jump");
             if(this.isDead)
             {
@@ -305,16 +336,17 @@ module ECS {
                 }
             }
 
-            if(Math.abs(this.position.y-this.ground)>1)
-            {
-                this.isJumped = true;
-                this.startJump = false;
-            }
-            else
-            {
-                this.isJumped = false;
-                this.startJump = true;
-            }
+            // if(Math.abs(this.position.y-this.ground)>1)
+            // {
+            //     this.isJumped = true;
+            //     this.startJump = false;
+            // }
+            // else
+            // {
+            //     this.isJumped = false;
+            //     this.startJump = true;
+            // }
+            GameConfig.playerMode = PLAYMODE.JUMPING1;
         }
 
         die()
@@ -383,9 +415,11 @@ module ECS {
         explosion:any;
         constructor(){
             this.position = new PIXI.Point();
-            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("spike_box.png"));
+            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/doroCat.png"));
             this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.5;
+            this.view.width = 150;
+            this.view.height=150;
             this.isHit = false;
             this.width = 150;
             this.height = 150;

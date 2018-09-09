@@ -38,6 +38,14 @@ module ECS {
         PAUSED
     }
 
+    export enum PLAYMODE{
+        RUNNING,
+        JUMPING1,
+        JUMPING2,
+        FALL,
+        SLIDE
+    }
+
 
     export class GameConfig{
         static xOffset:number=0;
@@ -53,8 +61,11 @@ module ECS {
         static interactive:boolean = true;
         static newHighscore:boolean;
         static gameMode:any;
+        static playerMode:any;
         static game:any;
         static black:any;
+
+        static isOnPlat:boolean = false;
 
         static resize() {
             window.scrollTo(0, 0);

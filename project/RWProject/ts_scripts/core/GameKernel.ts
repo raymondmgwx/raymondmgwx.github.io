@@ -20,6 +20,7 @@ module ECS {
         enemyManager:any;
         pickupManager:any;
         floorManager:any;
+        platManager:any;
         collisionManager:any;
         LocalStorage:any;
         bulletMult :number;
@@ -37,7 +38,8 @@ module ECS {
             this.player = new GameCharacter();
             this.view = new GameView(this);
             this.segmentManager = new SegmentManager(this);
-            //this.enemyManager = new EnemyManager(this);
+            this.enemyManager = new EnemyManager(this);
+            this.platManager = new PlatformManager(this);
             this.pickupManager      = new PickupManager(this);
             this.floorManager       = new FloorManager(this);
             this.collisionManager   = new CollisionManager(this);
@@ -59,8 +61,9 @@ module ECS {
 
         start(){
             this.segmentManager.reset();
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
             this.pickupManager.destroyAll();
+            this.platManager.destroyAll();
             this.isPlaying = true;
             this.gameReallyOver = false;
             this.score = 0;
@@ -92,9 +95,10 @@ module ECS {
             {
                 this.player.update();
                 this.collisionManager.update();
+                this.platManager.update();
                 this.segmentManager.update();
                 this.floorManager.update();
-                //this.enemyManager.update();
+                this.enemyManager.update();
                 this.pickupManager.update();
 
                 if(this.joyrideMode)
@@ -128,7 +132,8 @@ module ECS {
         }
 
         reset(){
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
+            this.platManager.destroyAll();
             this.floorManager.destroyAll();
             
             this.segmentManager.reset();
@@ -147,7 +152,7 @@ module ECS {
             this.bulletMult += 0.3;
             this.view.normalMode();
             this.player.normalMode();
-            //this.enemyManager.destroyAll();
+            this.enemyManager.destroyAll();
         }
 
         gameover()
@@ -184,27 +189,27 @@ module ECS {
         {
             if(this.player.isDead) return; 
                 
-            this.score += 10;
+            //this.score += 10;
             
  
             
-            this.view.score.jump();
+            //this.view.score.jump();
             this.pickupCount++;
 
-            if(this.pickupCount >= 50 * this.bulletMult && !this.player.isDead)
-            {
-                this.pickupCount = 0;
-                this.joyrideMode = true;
-                this.joyrideCountdown = 60 * 10;
-                this.view.joyrideMode();
-                this.player.joyrideMode();
-                this.player.position.x = 0;
-                GameConfig.camera.x = GameConfig.game.player.position.x - 100;
-                //this.enemyManager.destroyAll();
-                this.pickupManager.destroyAll();
-                this.floorManager.destroyAll();	
-                this.segmentManager.reset();
-            }
+            // if(this.pickupCount >= 50 * this.bulletMult && !this.player.isDead)
+            // {
+            //     this.pickupCount = 0;
+            //     this.joyrideMode = true;
+            //     this.joyrideCountdown = 60 * 10;
+            //     this.view.joyrideMode();
+            //     this.player.joyrideMode();
+            //     this.player.position.x = 0;
+            //     GameConfig.camera.x = GameConfig.game.player.position.x - 100;
+            //     this.enemyManager.destroyAll();
+            //     this.pickupManager.destroyAll();
+            //     this.floorManager.destroyAll();	
+            //     this.segmentManager.reset();
+            // }
         }
     }
 
@@ -431,6 +436,8 @@ module ECS {
         white:any;
         splash:any;
         dust:any;
+
+        specialFood:any;
         constructor(kernel:GameKernel) {
             console.log("init game view!");
             
@@ -455,22 +462,24 @@ module ECS {
 
             this.normalBackground = new GameBackground(this.gameFront);
 
-            this.powerBar = new PowerBar();
+            //this.powerBar = new PowerBar();
+            this.specialFood = new Specialfood();
             this.score = new Score();
             this.bestScore = new BestScore();
             this.background = this.normalBackground;
 
-            this.score.position.x = 300;
+            //this.score.position.x = GameConfig.width/2;
 
             this.game.addChild(this.background);
-            this.hud.addChild(this.powerBar);
+            //this.hud.addChild(this.powerBar);
             this.hud.addChild(this.score);
             this.hud.addChild(this.bestScore);
+            this.hud.addChild(this.specialFood);
 
             this.trail = new GameCharacterTrail(this.game);
             this.trail2 = new GameCharacterTrailFire(this.game);
 
-            this.powerBar.alpha = 0;
+            //this.powerBar.alpha = 0;
             this.score.alpha = 0;
             this.bestScore.alpha = 0;
 
@@ -492,32 +501,32 @@ module ECS {
 
         showHud() {
             var start = {
-                x: GameConfig.width + 300,
+                x: GameConfig.width + 100,
                 y: 0
             };
         
             this.score.alpha = 1;
-            this.score.position.x = start.x;
-            TweenLite.to(this.score.position, 1, {
-                x: GameConfig.width - 295 - 20,
-                ease: Elastic.easeOut
-            });
+            // this.score.position.x = start.x;
+            // TweenLite.to(this.score.position, 1, {
+            //     x: GameConfig.width - 295 - 20,
+            //     ease: Elastic.easeOut
+            // });
         
             this.bestScore.alpha = 1;
-            this.bestScore.position.x = start.x;
-            this.bestScore.position.y -= 14;
-            TweenLite.to(this.bestScore.position, 1, {
-                x: GameConfig.width - 20,
-                ease: Elastic.easeOut
-            });
+            //this.bestScore.position.x = 500;
+            // this.bestScore.position.y -= 100;
+            // TweenLite.to(this.bestScore.position, 1, {
+            //     x: GameConfig.width - 20,
+            //     ease: Elastic.easeOut
+            // });
         
-            this.powerBar.alpha = 1;
-            this.powerBar.position.x = GameConfig.width;
-            TweenLite.to(this.powerBar.position, 1, {
-                x: GameConfig.width - 295,
-                ease: Elastic.easeOut,
-                delay: 0.3
-            });
+            // this.powerBar.alpha = 1;
+            // this.powerBar.position.x = GameConfig.width;
+            // TweenLite.to(this.powerBar.position, 1, {
+            //     x: GameConfig.width - 295,
+            //     ease: Elastic.easeOut,
+            //     delay: 0.3
+            // });
         }
         
         hideHud() {
@@ -561,7 +570,7 @@ module ECS {
             //this.lava.setPosition(GameConfig.camera.x + 4000);
             this.bestScore.update();
             this.score.setScore(Math.round(this.kernel.score));
-            this.powerBar.bar.scale.x = ((this.kernel.pickupCount / (50 * this.kernel.bulletMult)) * (248 / 252))
+            //this.powerBar.bar.scale.x = ((this.kernel.pickupCount / (50 * this.kernel.bulletMult)) * (248 / 252))
             this.renderer.render(this.stage);
         }
         
@@ -605,17 +614,20 @@ module ECS {
             this.renderer.resize(w, h);
             this.background.width = w;
         
-            this.bestScore.position.x = w - 20;
-            this.bestScore.position.y = 100;
+            this.bestScore.position.x = w ;
+            this.bestScore.position.y =24;
         
-            this.score.position.x = w - 295 - 20;
+            this.score.position.x = w/2;
             this.score.position.y = 12;
+
+            this.specialFood.position.x = 0;
+            this.specialFood.position.y = 12;
         
             this.white.scale.x = w / 16;
             this.white.scale.y = h / 16;
         
-            this.powerBar.position.x = w - 295;
-            this.powerBar.position.y = 12;
+            // this.powerBar.position.x = w - 295;
+            // this.powerBar.position.y = 12;
         }
 
     }

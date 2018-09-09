@@ -119,6 +119,53 @@ module ECS {
     PowerBar.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
 
 
+    export class Specialfood{
+        foods:any;
+        digits:any;
+        startX:number;
+        addChild:any;
+        setFoodPic:any;
+        constructor(){
+
+            PIXI.DisplayObjectContainer.call( this );
+        
+            
+            this.foods = [  "number_01.png",
+                            "number_02.png",
+                            "number_03.png",
+                            "number_04.png"];
+            
+            for(var i=0;i<4;i++){
+                this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
+            }
+            this.startX = 10;
+            
+            this.digits = [];
+            
+            for ( var i = 0; i < 4; i++) 
+            {
+                this.digits[i] = new PIXI.Sprite(this.foods[i]);
+                this.addChild(this.digits[i]);
+                this.setFoodPic(this.digits[i],i*this.digits[i].width);
+            }
+
+            
+            
+        }
+
+    }
+
+    Specialfood.prototype = Object.create( PIXI.DisplayObjectContainer.prototype );
+    Specialfood.prototype.setFoodPic = function(food:any,posx:number)
+    {
+
+        food.position.x = this.startX+posx; 
+
+    }
+ 
+
+
+
     export class Score{
         ratio:number;
         glyphs:any;
@@ -165,7 +212,7 @@ module ECS {
     Score.prototype.setScore = function(score:any)
     {
         var split = formatScore(score).split("");
-        var position = 0;
+        var position = 100;
         var gap = -10;
         for ( var i = 0; i < split.length; i++) 
         {
@@ -249,8 +296,8 @@ module ECS {
         var position = 0;
         var gap = 3;
 
-        this.title.position.x = 0;
-        position+=70+gap; 
+        this.title.position.x = 100;
+        position+=this.title.position.x+70+gap; 
 
         for ( var i = 0; i < split.length; i++) 
         {

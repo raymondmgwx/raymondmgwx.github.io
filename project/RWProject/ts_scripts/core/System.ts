@@ -54,10 +54,12 @@ module ECS {
                 
                     var loader = new PIXI.AssetLoader([
                         "img/stretched_hyper_tile.jpg",
+                        "img/doroCat.png",
                         "img/SplashAssets.json",
                         "img/WorldAssets-hd.json",
                         "img/HudAssets-hd.json",
                         "img/PixiAssets-hd.json",
+                        "img/platform.png",
                         "img/bg_up.png",
                         "img/bg_down.png",
                         "assets/background/BackgroundAssets.json",
@@ -107,7 +109,7 @@ module ECS {
         
             game.view.hud.addChild(personalBestTitle);
 
-            //game.view.showHud();
+            game.view.showHud();
 
             //bind event 
             let evtSys = new EventListenerSystem();
@@ -190,9 +192,9 @@ module ECS {
 
         onTouchStart(event:any){
                 if (event.target.type !== 'button') {
-                    if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped)
+                    if (GameConfig.game.isPlaying && !(GameConfig.playerMode == PLAYMODE.JUMPING1))
                         GameConfig.game.player.jump();
-                    if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped) 
+                    if (GameConfig.game.isPlaying && (GameConfig.playerMode == PLAYMODE.JUMPING1))
                         GameConfig.game.player.jumpTwo(); 
                 }
         }

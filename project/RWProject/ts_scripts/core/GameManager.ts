@@ -50,7 +50,7 @@ module ECS {
           this.count = 0;
           this.currentSegment = data[0];
           //console.log(this.currentSegment);
-          this.startSegment = {length:1135 * 2, floor:[0,1135], blocks:[], coins:[]},
+          this.startSegment = {length:1135 * 2, floor:[0,1135], blocks:[], coins:[], platform:[]},
           this.chillMode = true;
           this.last = 0; 
           this.position = 0;
@@ -93,7 +93,8 @@ module ECS {
                 }
                 
                 
-                var nextSegment = this.startSegment;//this.sections[this.count % this.sections.length];
+                //var nextSegment = this.startSegment;//this.sections[this.count % this.sections.length];
+                var nextSegment = this.sections[this.count % this.sections.length];
 
                 // section finished!
                 nextSegment.start = this.currentSegment.start + this.currentSegment.length;
@@ -111,7 +112,7 @@ module ECS {
                 
                 for ( var i = 0; i < length; i++) 
                 {
-                    //this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
+                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
                 }
                 
                 var pickups = this.currentSegment.coins;
@@ -121,6 +122,14 @@ module ECS {
                 {
                     this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2], pickups[(i*2)+1]);
                 }
+
+                var platforms = this.currentSegment.platform;
+                var length = platforms.length/2;
+                
+                for ( var i = 0; i < length; i++) 
+                {
+                    this.engine.platManager.addPlatform(this.currentSegment.start + platforms[i*2], platforms[(i*2)+1]);
+                }
                 
                 this.count ++;
                 
@@ -128,6 +137,78 @@ module ECS {
             
         }
     
+    }
+
+    export class Platform{
+
+        position:any;
+        view:any;
+        width:number;
+        height:number;
+        constructor(){
+            this.position = new PIXI.Point();
+            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/platform.png"));
+            this.view.anchor.x = 0.5;
+            this.view.anchor.y = 0.5;
+            this.view.width = 400;
+            this.view.height=150;
+            this.width = 400;
+            this.height = 150;
+        }
+        update()
+        {       
+            this.view.position.x = this.position.x - GameConfig.camera.x;;
+            this.view.position.y = this.position.y;
+        }
+    }
+
+    export class PlatformManager{
+        engine:any;
+        platforms:any;
+        platformPool:any;
+        position:any;
+        constructor(engine:any){
+            console.log("init platform manager!");
+            this.engine = engine;
+            this.platforms = [];
+            this.platformPool = new GameObjectPool(Platform);
+        }
+        update(){
+            for (var i = 0; i < this.platforms.length; i++) 
+            {
+                var platform = this.platforms[i]
+                platform.update();
+                
+                if(platform.view.position.x < -100 -GameConfig.xOffset && !this.engine.player.isDead)
+                {
+                    this.platforms.splice(i, 1);
+                    
+                    this.engine.view.gameFront.removeChild(platform.view);
+                    i--;
+                }
+            }
+        }
+        destroyAll()
+        {
+            for (var i = 0; i < this.platforms.length; i++) 
+            {
+                var platform = this.platforms[i];
+                this.engine.view.gameFront.removeChild(platform.view);
+            }
+            
+            this.platforms = [];
+        }
+
+        addPlatform(x, y)
+        {
+            var platform = this.platformPool.getObject();
+            platform.position.x = x;
+            platform.position.y = y;
+            platform.view.position.x = platform.position.x - GameConfig.camera.x;;
+            platform.view.position.y = platform.position.y;
+            this.platforms.push(platform);
+            this.engine.view.gameFront.addChild(platform.view);
+        }
     }
 
 
@@ -157,7 +238,7 @@ module ECS {
                 
                 if(enemy.view.position.x < -100 -GameConfig.xOffset && !this.engine.player.isDead)
                 {
-                    //this.enemyPool.returnObject(enemy);
+                    ////this.enemyPool.returnObject(enemy);
                     this.enemies.splice(i, 1);
                     
                     this.engine.view.gameFront.removeChild(enemy.view);
@@ -169,8 +250,8 @@ module ECS {
         addEnemy(x, y)
         {
             var enemy = this.enemyPool.getObject();
-            enemy.position.x = x
-            enemy.position.y = y
+            enemy.position.x = x;
+            enemy.position.y = y;
             this.enemies.push(enemy);
             this.engine.view.gameFront.addChild(enemy.view);
         }
@@ -196,7 +277,6 @@ module ECS {
                 
                 if(enemy.x > GameConfig.camera.x + GameConfig.width)
                 {
-                    //this.enemyPool.returnObject(enemy);
                     this.engine.view.game.removeChild(enemy.view);
                     this.enemies.splice(i, 1);
                     i--;
@@ -258,13 +338,10 @@ module ECS {
                 }
                 else
                 {
-                    
-                    
                     if(pickup.view.position.x < -100-GameConfig.xOffset)
                     {
                         // remove!
                         this.engine.view.game.removeChild(pickup.view);
-                        //this.pickupPool.returnObject(pickup);
                         this.pickups.splice(i, 1);
                         i--;
                     }
@@ -385,31 +462,38 @@ module ECS {
 
     export class CollisionManager{
         engine:any;
+        isOnPlat:boolean=false;
         constructor(engine){    
             console.log("init collision manager!");
             this.engine = engine;
         }
 
         update(){
-            //this.playerVsBlock();
+            this.playerVsBlock();
             this.playerVsPickup();
             this.playerVsFloor();
+            this.playerVsPlat();
         }
 
         playerVsBlock(){
             var enemies = this.engine.enemyManager.enemies;
             var player = this.engine.player;
+            var floatRange = 0;
             
             for (var i = 0; i < enemies.length; i++) 
             {
                 var enemy = enemies[i]
-                
+                if(player.isSlide){
+                    floatRange = 10;
+                }else{
+                    floatRange = 0;
+                }
                 var xdist = enemy.position.x - player.position.x;
-                if(xdist > -enemy.width/2 && xdist < enemy.width/2)
+                if(xdist > -enemy.width/2+floatRange && xdist < enemy.width/2-floatRange)
                 {
                     var ydist = enemy.position.y - player.position.y;
                 
-                    if(ydist > -enemy.height/2 - 20 && ydist < enemy.height/2 )
+                    if(ydist > -enemy.height/2-20 +floatRange&& ydist < enemy.height/2 -floatRange)
                     {
                         if(!player.joyRiding)
                         {
@@ -437,7 +521,7 @@ module ECS {
                 {
                     var ydist = pickup.position.y - player.position.y;
                 
-                    if(ydist > -pickup.height/2 && ydist < pickup.height/2)
+                    if(ydist > -pickup.height/2-20 && ydist < pickup.height/2)
                     {
                         this.engine.pickupManager.removePickup(i);
                         this.engine.pickup();
@@ -445,6 +529,71 @@ module ECS {
                     }
                 }
             }
+        }
+
+        playerVsPlat(){
+            var player = this.engine.player;
+            var platforms = this.engine.platManager.platforms;
+
+            for (var i = 0; i < platforms.length; i++) 
+            {
+                var plat = platforms[i];
+
+                var xdist = plat.position.x - player.position.x;
+
+                //check jump to the plat or not
+                if(xdist > -plat.width/2 && xdist < plat.width/2)
+                {
+                    var ydist = plat.position.y - player.position.y;
+                
+                    if(ydist > -plat.height/2 -20&& ydist < plat.height/2)
+                    {
+
+                        if(player.position.y < plat.position.y-10){
+                            player.position.y = plat.position.y-plat.height/2-player.height/2;
+
+
+                            //console.log("plat!");
+                            player.ground = player.position.y;
+                            // player.startJump = false;
+                            // player.isJumped = false;
+                            // player.cnt =0;
+
+                            GameConfig.isOnPlat = true;
+                            player.onGround = true;
+                        }
+
+                    }
+                }
+            }
+
+            //check leave the plat
+            if(GameConfig.isOnPlat){
+                var flag = true;
+                for (var i = 0; i < platforms.length; i++) 
+                {
+                    var plat = platforms[i];
+    
+                    var xdist = plat.position.x - player.position.x;
+                    if(xdist > -plat.width/2 && xdist < plat.width/2)
+                    {
+                        var ydist = plat.position.y-plat.height/2-player.height/2 - player.position.y;
+    
+                        if(ydist <=0)
+                        {
+                            //console.log("noy");
+                            flag = false;
+                        }
+                    }
+                }
+                
+                if(flag){
+                    GameConfig.isOnPlat = false;;
+                    player.ground = 477;
+                    GameConfig.playerMode = PLAYMODE.FALL;
+                }
+            }
+
         }
 
         playerVsFloor(){
@@ -538,8 +687,8 @@ module ECS {
 
             if(player.position.y < 0)
             {
-                player.position.y = 0;
-                player.speed.y *= 0;
+                //player.position.y = 0;
+                //player.speed.y *= 0;
             }
         }
     }
