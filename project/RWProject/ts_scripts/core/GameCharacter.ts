@@ -13,8 +13,11 @@ module ECS {
     export class GameCharacter{
         position:any;
         runningFrames:any;
+        jumpFrames:any;
+        slideFrame:any;
         flyingFrames:any;
         crashFrames:any;
+
         view:any;
         ground:number;
         gravity:number;
@@ -33,7 +36,7 @@ module ECS {
         volume :number;
         isDead:boolean;
         isActive:boolean;
-        onGroundCache:any;
+        onGroundCache:boolean;
         bounce:number;
 
         vStart:number;
@@ -55,6 +58,14 @@ module ECS {
                 PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
                 PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
+
+            this.jumpFrames =[
+                PIXI.Texture.fromFrame("JUMP/moheji-jump.jpg"),
+            ];
+
+            this.slideFrame =[
+                PIXI.Texture.fromFrame("SLIDE/moheji-slide.jpg"),
+            ];
             
             this.flyingFrames = [
                 PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
@@ -70,11 +81,12 @@ module ECS {
                 PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
             
-            this.view = new PIXI.MovieClip(this.flyingFrames);
+            this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
             
             this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
+            this.view.anchor.y = 0.6;
+            this.view.scale.set(0.3,0.3);
             
             this.position.y = 477;
             this.ground = 477;
@@ -90,7 +102,7 @@ module ECS {
             this.width = 26
             this.height = 37;
             
-            this.onGround = false;
+            this.onGround = true;
             this.rotationSpeed = 0;
             this.joyRiding = false;
             this.level = 1;
@@ -112,6 +124,7 @@ module ECS {
         {
             if(this.isDead)
             {
+                //console.log("died"); continue update
                 this.updateDieing();
             }
             else
@@ -136,7 +149,7 @@ module ECS {
         {
             this.joyRiding = false;
             //FidoAudio.setVolume('runFast', 0);
-            if(this.onGround === true) //FidoAudio.setVolume('runRegular', this.volume);
+            //if(this.onGround === true) FidoAudio.setVolume('runRegular', this.volume);
             TweenLite.to(this.speed, 0.6, {
                 x : this.baseSpeed, 
                 ease : Cubic.easeOut
@@ -148,11 +161,6 @@ module ECS {
         {
             this.view.animationSpeed = this.realAnimationSpeed * GameConfig.time.DELTA_TIME * this.level;
 
-            // if(this.isActive)
-            // {
-            //     this.isJumped = true;
-            // }
-            
             var oldSpeed = this.speed.y;
             
             if(this.b_jumpTwo)
@@ -194,7 +202,7 @@ module ECS {
                 }
                 else
                 {
-                    this.view.textures = this.flyingFrames;
+                    this.view.textures = this.jumpFrames;
                 }
             }
             
@@ -246,7 +254,14 @@ module ECS {
                 }
             }
 
-            this.b_jumpTwo = true;
+            if(Math.abs(this.position.y-this.ground)>1)
+            {
+                this.b_jumpTwo = true;
+            }
+            else
+            {
+                this.b_jumpTwo = false;
+            }
         }
 
         jump()
@@ -270,7 +285,6 @@ module ECS {
             {
                 this.isJumped = false;
                 this.startJump = true;
-                this.activeCount = 0;
             }
         }
 
@@ -310,8 +324,9 @@ module ECS {
 
         fall()
         {
-            this.isActive = false;
-            this.isJumped = false;
+            this.startJump = false;
+            //this.b_jumpTwo = false;
+            this.isJumped = true;
         }
 
         isAirbourne(){}

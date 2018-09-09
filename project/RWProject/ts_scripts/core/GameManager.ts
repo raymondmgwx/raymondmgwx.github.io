@@ -48,7 +48,8 @@ module ECS {
           this.engine = engine;  
           this.sections = data;
           this.count = 0;
-          this.currentSegment = data[0]
+          this.currentSegment = data[0];
+          //console.log(this.currentSegment);
           this.startSegment = {length:1135 * 2, floor:[0,1135], blocks:[], coins:[]},
           this.chillMode = true;
           this.last = 0; 
@@ -92,7 +93,7 @@ module ECS {
                 }
                 
                 
-                var nextSegment = this.sections[this.count % this.sections.length];
+                var nextSegment = this.startSegment;//this.sections[this.count % this.sections.length];
 
                 // section finished!
                 nextSegment.start = this.currentSegment.start + this.currentSegment.length;
@@ -102,7 +103,7 @@ module ECS {
                 // add the elements!
                 for ( var i = 0; i < this.currentSegment.floor.length; i++) 
                 {
-                    this.engine.floorManager.addFloor(this.currentSegment.start + this.currentSegment.floor[i]);
+                   this.engine.floorManager.addFloor(this.currentSegment.start + this.currentSegment.floor[i]);
                 }
                 
                 var blocks = this.currentSegment.blocks;
@@ -451,6 +452,7 @@ module ECS {
             var player = this.engine.player;
             
             var max = floors.length;
+  
             player.onGround = false;
             
             if(player.position.y > 610)
@@ -522,6 +524,7 @@ module ECS {
                         {
                             player.speed.y = -0.3;
                         }
+                        
                         
                         if(!player.isFlying)
                         {

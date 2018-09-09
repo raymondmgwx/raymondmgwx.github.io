@@ -197,6 +197,7 @@ var ECS;
             ECS.GameConfig.resize();
             ECS.GameConfig.interactive = false;
             game.start();
+            game.player.jump();
             ECS.GameConfig.gameMode = ECS.GAMEMODE.PLAYING;
         };
         return LoadingSystem;
@@ -285,6 +286,12 @@ var ECS;
                 PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
                 PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
+            this.jumpFrames = [
+                PIXI.Texture.fromFrame("JUMP/moheji-jump.jpg"),
+            ];
+            this.slideFrame = [
+                PIXI.Texture.fromFrame("SLIDE/moheji-slide.jpg"),
+            ];
             this.flyingFrames = [
                 PIXI.Texture.fromFrame("RUN/Timeline 100001.png"),
                 PIXI.Texture.fromFrame("RUN/Timeline 100002.png"),
@@ -297,10 +304,11 @@ var ECS;
                 PIXI.Texture.fromFrame("RUN/Timeline 100003.png"),
                 PIXI.Texture.fromFrame("RUN/Timeline 100004.png")
             ];
-            this.view = new PIXI.MovieClip(this.flyingFrames);
+            this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
             this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
+            this.view.anchor.y = 0.6;
+            this.view.scale.set(0.3, 0.3);
             this.position.y = 477;
             this.ground = 477;
             this.gravity = 9.8;
@@ -311,7 +319,7 @@ var ECS;
             this.accel = 0;
             this.width = 26;
             this.height = 37;
-            this.onGround = false;
+            this.onGround = true;
             this.rotationSpeed = 0;
             this.joyRiding = false;
             this.level = 1;
@@ -328,6 +336,7 @@ var ECS;
         }
         GameCharacter.prototype.update = function () {
             if (this.isDead) {
+                //console.log("died"); continue update
                 this.updateDieing();
             }
             else {
@@ -347,19 +356,15 @@ var ECS;
         GameCharacter.prototype.normalMode = function () {
             this.joyRiding = false;
             //FidoAudio.setVolume('runFast', 0);
-            if (this.onGround === true) //FidoAudio.setVolume('runRegular', this.volume);
-                TweenLite.to(this.speed, 0.6, {
-                    x: this.baseSpeed,
-                    ease: Cubic.easeOut
-                });
+            //if(this.onGround === true) FidoAudio.setVolume('runRegular', this.volume);
+            TweenLite.to(this.speed, 0.6, {
+                x: this.baseSpeed,
+                ease: Cubic.easeOut
+            });
             this.realAnimationSpeed = 0.23;
         };
         GameCharacter.prototype.updateRunning = function () {
             this.view.animationSpeed = this.realAnimationSpeed * ECS.GameConfig.time.DELTA_TIME * this.level;
-            // if(this.isActive)
-            // {
-            //     this.isJumped = true;
-            // }
             var oldSpeed = this.speed.y;
             if (this.b_jumpTwo) {
                 this.speed.y = -this.vStart * Math.sin(this.angle);
@@ -387,7 +392,7 @@ var ECS;
                     this.view.textures = this.runningFrames;
                 }
                 else {
-                    this.view.textures = this.flyingFrames;
+                    this.view.textures = this.jumpFrames;
                 }
             }
             ECS.GameConfig.camera.x = this.position.x - 100;
@@ -425,7 +430,12 @@ var ECS;
                     this.speed.x = 10;
                 }
             }
-            this.b_jumpTwo = true;
+            if (Math.abs(this.position.y - this.ground) > 1) {
+                this.b_jumpTwo = true;
+            }
+            else {
+                this.b_jumpTwo = false;
+            }
         };
         GameCharacter.prototype.jump = function () {
             //console.log("click jump");
@@ -442,7 +452,6 @@ var ECS;
             else {
                 this.isJumped = false;
                 this.startJump = true;
-                this.activeCount = 0;
             }
         };
         GameCharacter.prototype.die = function () {
@@ -472,8 +481,9 @@ var ECS;
             this.isDead = true;
         };
         GameCharacter.prototype.fall = function () {
-            this.isActive = false;
-            this.isJumped = false;
+            this.startJump = false;
+            //this.b_jumpTwo = false;
+            this.isJumped = true;
         };
         GameCharacter.prototype.isAirbourne = function () { };
         GameCharacter.prototype.stop = function () {
@@ -1190,15 +1200,16 @@ var ECS;
             var fogTex = PIXI.Texture.fromImage("img/background.png");
             fogTex.width = 960;
             fogTex.height = 500;
-            this.foggyTrees = new BackGroundElement(fogTex, 120, this);
+            this.foggyTrees = new BackGroundElement(fogTex, -80, this);
             //this.rearSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_silhouette.png"), 358, this);
             //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
             this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
             this.tree1.anchor.x = 0.5;
+            this.tree1.anchor.y = -100;
             this.addChild(this.tree1);
             this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
             this.tree2.anchor.x = 0.5;
-            this.tree2.position.y = 50;
+            this.tree2.position.y = -100;
             this.addChild(this.tree2);
             //this.farCanopy = new BackGroundElement(PIXI.Texture.fromFrame("02_front_canopy.png"), 0, this);
             //this.vines = new GameVines(this);
@@ -1429,6 +1440,7 @@ var ECS;
             this.sections = data;
             this.count = 0;
             this.currentSegment = data[0];
+            //console.log(this.currentSegment);
             this.startSegment = { length: 1135 * 2, floor: [0, 1135], blocks: [], coins: [] },
                 this.chillMode = true;
             this.last = 0;
@@ -1457,7 +1469,7 @@ var ECS;
                     }
                     return;
                 }
-                var nextSegment = this.sections[this.count % this.sections.length];
+                var nextSegment = this.startSegment; //this.sections[this.count % this.sections.length];
                 // section finished!
                 nextSegment.start = this.currentSegment.start + this.currentSegment.length;
                 this.currentSegment = nextSegment;

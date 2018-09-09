@@ -1,16 +1,16 @@
 {"frames": {
 
-"RUN/moheji-run.gif":
+"JUMP/moheji-jump.jpg":
 {
-	"frame": {"x":1,"y":1,"w":560,"h":560},
+	"frame": {"x":1,"y":1,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":560,"h":560},
-	"sourceSize": {"w":560,"h":560}
+	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
+	"sourceSize": {"w":600,"h":600}
 },
 "RUN/Timeline 100001.png":
 {
-	"frame": {"x":563,"y":1,"w":600,"h":600},
+	"frame": {"x":1,"y":603,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -18,7 +18,7 @@
 },
 "RUN/Timeline 100002.png":
 {
-	"frame": {"x":1165,"y":1,"w":600,"h":600},
+	"frame": {"x":1,"y":1205,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -26,7 +26,7 @@
 },
 "RUN/Timeline 100003.png":
 {
-	"frame": {"x":1,"y":603,"w":600,"h":600},
+	"frame": {"x":603,"y":1,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -35,6 +35,14 @@
 "RUN/Timeline 100004.png":
 {
 	"frame": {"x":603,"y":603,"w":600,"h":600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
+	"sourceSize": {"w":600,"h":600}
+},
+"SLIDE/moheji-slide.jpg":
+{
+	"frame": {"x":603,"y":1205,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -48,8 +56,8 @@
 	"version": "1.0",
 	"image": "chara1.png",
 	"format": "RGBA8888",
-	"size": {"w":1766,"h":1204},
+	"size": {"w":1204,"h":1806},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:8ad6d77a733058c2c31b11cf879a2c50:23d3d9f7a7e655227146149e84d39b63:09514296705306de6d2cd410c45096a9$"
+	"smartupdate": "$TexturePacker:SmartUpdate:c87eaf0422e736ae6a0dc5529c88f3aa:07e4cfe698cc221acaa59b690e6ec266:09514296705306de6d2cd410c45096a9$"
 }
 }

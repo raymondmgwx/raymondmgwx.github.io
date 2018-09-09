@@ -13,10 +13,7 @@ module ECS {
 
     export function update() {
         GameConfig.game.update();
-    
-    
         requestAnimationFrame(update);
-
     }
 
     export class System {
@@ -121,6 +118,7 @@ module ECS {
             GameConfig.interactive = false;
 
             game.start();
+            game.player.jump();
             GameConfig.gameMode = GAMEMODE.PLAYING;
         
         }

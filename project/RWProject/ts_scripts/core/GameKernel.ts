@@ -309,7 +309,7 @@ module ECS {
                 fogTex.width = 960;
                 fogTex.height = 500;
         
-                this.foggyTrees = new BackGroundElement(fogTex, 120, this);
+                this.foggyTrees = new BackGroundElement(fogTex, -80, this);
                 //this.rearSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_silhouette.png"), 358, this);
                 //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
                 
@@ -318,11 +318,12 @@ module ECS {
 
                 this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
                 this.tree1.anchor.x = 0.5;
+                this.tree1.anchor.y = -100;
                 this.addChild(this.tree1);
                 
                 this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
                 this.tree2.anchor.x = 0.5;
-                this.tree2.position.y = 50;
+                this.tree2.position.y = -100;
                 this.addChild(this.tree2);
 
                 //this.farCanopy = new BackGroundElement(PIXI.Texture.fromFrame("02_front_canopy.png"), 0, this);
