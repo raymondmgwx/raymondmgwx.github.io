@@ -61,6 +61,8 @@ module ECS {
                         "img/WorldAssets-hd.json",
                         "img/HudAssets-hd.json",
                         "img/PixiAssets-hd.json",
+                        "img/background.png",
+                        "assets/background/BackgroundAssets.json",
                         "img/blackSquare.jpg",
                         "assets/hud/pausedPanel.png",
                         "assets/hud/pixieRevised_controls.png",

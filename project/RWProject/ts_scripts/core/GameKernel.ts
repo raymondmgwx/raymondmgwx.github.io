@@ -305,36 +305,39 @@ module ECS {
                 this.scrollPosition = 1500;
 
                 //console.log(PIXI.Texture);
-                var fogTex = PIXI.Texture.fromFrame("05_far_BG.jpg");
-                this.foggyTrees = new BackGroundElement(fogTex, 40, this);
-                this.rearSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_silhouette.png"), 358, this);
-                this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
+                var fogTex = PIXI.Texture.fromImage("img/background.png");
+                fogTex.width = 960;
+                fogTex.height = 500;
+        
+                this.foggyTrees = new BackGroundElement(fogTex, 120, this);
+                //this.rearSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_silhouette.png"), 358, this);
+                //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
                 
                 
 
 
-                this.tree1 = PIXI.Sprite.fromFrame("02_tree_1.png");
+                this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
                 this.tree1.anchor.x = 0.5;
                 this.addChild(this.tree1);
                 
-                this.tree2 = PIXI.Sprite.fromFrame("02_tree_2.png");
+                this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
                 this.tree2.anchor.x = 0.5;
                 this.tree2.position.y = 50;
                 this.addChild(this.tree2);
 
-                this.farCanopy = new BackGroundElement(PIXI.Texture.fromFrame("02_front_canopy.png"), 0, this);
-                this.vines = new GameVines(this);
-                this.roofLeaves = new BackGroundElement(PIXI.Texture.fromFrame("00_roof_leaves.png"), 0, this);
+                //this.farCanopy = new BackGroundElement(PIXI.Texture.fromFrame("02_front_canopy.png"), 0, this);
+                //this.vines = new GameVines(this);
+                //this.roofLeaves = new BackGroundElement(PIXI.Texture.fromFrame("00_roof_leaves.png"), 0, this);
                 
-                this.frontSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("01_front_silhouette.png"), 424, this);
+                //this.frontSilhouette = new BackGroundElement(PIXI.Texture.fromFrame("01_front_silhouette.png"), 424, this);
                 
                 this.foggyTrees.speed = 1/2;
-                this.rearSilhouette.speed = 1.2/2;
+                //this.rearSilhouette.speed = 1.2/2;
                 
-                this.rearCanopy.speed = 1.2/2;
-                this.farCanopy.speed = 1.5/2;
-                this.frontSilhouette.speed = 1.6/2;
-                this.roofLeaves.speed = 2/2;
+                //this.rearCanopy.speed = 1.2/2;
+                //this.farCanopy.speed = 1.5/2;
+                //this.frontSilhouette.speed = 1.6/2;
+                //this.roofLeaves.speed = 2/2;
         }
     }
     GameBackground.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -356,14 +359,14 @@ module ECS {
         this.tree2.position.x = treePos2 -GameConfig.xOffset;
         
         this.foggyTrees.setPosition(this.scrollPosition);
-        this.rearSilhouette.setPosition(this.scrollPosition);
-        this.rearCanopy.setPosition(this.scrollPosition);
-        this.farCanopy.setPosition(this.scrollPosition);
-        this.frontSilhouette.setPosition(this.scrollPosition);
+        //this.rearSilhouette.setPosition(this.scrollPosition);
+        //this.rearCanopy.setPosition(this.scrollPosition);
+       // this.farCanopy.setPosition(this.scrollPosition);
+        //this.frontSilhouette.setPosition(this.scrollPosition);
         
-        this.roofLeaves.setPosition(this.scrollPosition);
+        //this.roofLeaves.setPosition(this.scrollPosition);
         
-        this.vines.setPosition(this.scrollPosition);
+        //this.vines.setPosition(this.scrollPosition);
         
         
         PIXI.DisplayObjectContainer.prototype.updateTransform.call( this );
