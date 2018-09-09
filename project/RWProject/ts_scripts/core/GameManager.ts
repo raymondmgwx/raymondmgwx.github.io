@@ -327,7 +327,7 @@ module ECS {
 
     export class Floor{
         constructor(){
-            PIXI.Sprite.call(this,PIXI.Texture.fromFrame("00_forest_floor.png"));
+            PIXI.Sprite.call(this,PIXI.Texture.fromImage("img/bg_down.png"));
         }
     }
     Floor.prototype = Object.create( PIXI.Sprite.prototype );
@@ -365,7 +365,7 @@ module ECS {
         {
             var floor = this.floorPool.getObject();
             floor.x = floorData;
-            floor.position.y = 640 - 158;
+            floor.position.y = 520;
             this.engine.view.gameFront.addChild(floor);
             this.floors.push(floor);
         }

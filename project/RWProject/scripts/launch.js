@@ -152,7 +152,8 @@ var ECS;
                     "img/WorldAssets-hd.json",
                     "img/HudAssets-hd.json",
                     "img/PixiAssets-hd.json",
-                    "img/background.png",
+                    "img/bg_up.png",
+                    "img/bg_down.png",
                     "assets/background/BackgroundAssets.json",
                     "assets/character/chara1.json",
                     "img/blackSquare.jpg",
@@ -313,7 +314,7 @@ var ECS;
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
             //this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.6;
+            this.view.anchor.y = 0.5;
             //this.view.scale.set(0.3,0.3);
             this.position.y = 477;
             this.ground = 477;
@@ -1141,7 +1142,7 @@ var ECS;
         function BackGroundElement(texture, y, owner, width) {
             if (width === void 0) { width = 940; }
             this.sprites = [];
-            this.spriteWidth = texture.width - 1;
+            this.spriteWidth = texture.width - 5;
             var amount = Math.ceil(width / this.spriteWidth);
             if (amount < 3)
                 amount = 3;
@@ -1160,8 +1161,9 @@ var ECS;
                 var pos = -position * this.speed;
                 pos += i * h;
                 pos %= h * this.sprites.length;
-                pos += h * 2;
-                this.sprites[i].position.x = Math.floor(pos) - ECS.GameConfig.xOffset;
+                pos += h / 2;
+                //console.log(Math.floor(pos) - GameConfig.xOffset);
+                this.sprites[i].position.x = pos; //Math.floor(pos) - GameConfig.xOffset
             }
             ;
         };
@@ -1204,10 +1206,10 @@ var ECS;
             this.width = 1000;
             this.scrollPosition = 1500;
             //console.log(PIXI.Texture);
-            var bgTex = PIXI.Texture.fromImage("img/background.png");
-            bgTex.width = 1281;
+            var bgTex = PIXI.Texture.fromImage("img/bg_up.png");
+            //bgTex.width = 1281;
             bgTex.height = 500;
-            this.bgTex = new BackGroundElement(bgTex, -80, this);
+            this.bgTex = new BackGroundElement(bgTex, -195, this);
             //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
             this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
             this.tree1.width = 150;
@@ -1241,7 +1243,7 @@ var ECS;
     ECS.GameBackground = GameBackground;
     GameBackground.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     GameBackground.prototype.updateTransform = function () {
-        this.scrollPosition = ECS.GameConfig.camera.x + 5500;
+        this.scrollPosition = ECS.GameConfig.camera.x + 8000;
         var treePos = -this.scrollPosition * 1.5 / 2;
         treePos %= this.width + 556;
         treePos += this.width + 556;
@@ -1647,7 +1649,7 @@ var ECS;
     ECS.PickupManager = PickupManager;
     var Floor = /** @class */ (function () {
         function Floor() {
-            PIXI.Sprite.call(this, PIXI.Texture.fromFrame("00_forest_floor.png"));
+            PIXI.Sprite.call(this, PIXI.Texture.fromImage("img/bg_down.png"));
         }
         return Floor;
     }());
@@ -1676,7 +1678,7 @@ var ECS;
         FloorManager.prototype.addFloor = function (floorData) {
             var floor = this.floorPool.getObject();
             floor.x = floorData;
-            floor.position.y = 640 - 158;
+            floor.position.y = 520;
             this.engine.view.gameFront.addChild(floor);
             this.floors.push(floor);
         };

@@ -214,7 +214,7 @@ module ECS {
         speed;number;
         constructor(texture:any,y:number,owner:any,width:number=940){
             this.sprites = [];
-            this.spriteWidth = texture.width-1;
+            this.spriteWidth = texture.width-5;
             var amount = Math.ceil(width / this.spriteWidth);
             if(amount < 3)amount = 3;
             
@@ -237,9 +237,9 @@ module ECS {
                 var pos = -position * this.speed;
                 pos += i *  h ;
                 pos %=  h * this.sprites.length ;
-                pos +=  h * 2;
-                
-                this.sprites[i].position.x = Math.floor(pos) - GameConfig.xOffset
+                pos +=  h/2;
+                //console.log(Math.floor(pos) - GameConfig.xOffset);
+                this.sprites[i].position.x = pos;//Math.floor(pos) - GameConfig.xOffset
             };	
         }
     }
@@ -307,10 +307,10 @@ module ECS {
                 this.scrollPosition = 1500;
 
                 //console.log(PIXI.Texture);
-                var bgTex = PIXI.Texture.fromImage("img/background.png");
-                bgTex.width = 1281;
+                var bgTex = PIXI.Texture.fromImage("img/bg_up.png");
+                //bgTex.width = 1281;
                 bgTex.height = 500;
-                this.bgTex = new BackGroundElement(bgTex, -80, this);
+                this.bgTex = new BackGroundElement(bgTex, -195, this);
 
                 //this.rearCanopy = new BackGroundElement(PIXI.Texture.fromFrame("03_rear_canopy.png"), 0, this);
 
@@ -353,7 +353,7 @@ module ECS {
                         
     GameBackground.prototype.updateTransform = function()
     {
-        this.scrollPosition = GameConfig.camera.x + 5500;
+        this.scrollPosition = GameConfig.camera.x + 8000;
 
         var treePos = -this.scrollPosition * 1.5/2;
         treePos %= this.width + 556;

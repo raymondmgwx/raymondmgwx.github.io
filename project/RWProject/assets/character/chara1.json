@@ -2,7 +2,7 @@
 
 "CHARACTER/JUMP/moheji-jump.jpg":
 {
-	"frame": {"x":1,"y":275,"w":600,"h":600},
+	"frame": {"x":1,"y":1,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -10,39 +10,39 @@
 },
 "CHARACTER/RUN/Character-01.png":
 {
-	"frame": {"x":470,"y":1,"w":159,"h":272},
+	"frame": {"x":1205,"y":1,"w":49,"h":82},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":159,"h":272},
-	"sourceSize": {"w":159,"h":272}
+	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":82},
+	"sourceSize": {"w":49,"h":82}
 },
 "CHARACTER/RUN/Character-02.png":
 {
-	"frame": {"x":161,"y":1,"w":154,"h":271},
+	"frame": {"x":1205,"y":167,"w":47,"h":83},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":271},
-	"sourceSize": {"w":154,"h":271}
+	"spriteSourceSize": {"x":0,"y":0,"w":47,"h":83},
+	"sourceSize": {"w":47,"h":83}
 },
 "CHARACTER/RUN/Character-03.png":
 {
-	"frame": {"x":1,"y":1,"w":158,"h":267},
+	"frame": {"x":1205,"y":85,"w":48,"h":80},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":267},
-	"sourceSize": {"w":158,"h":267}
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":80},
+	"sourceSize": {"w":48,"h":80}
 },
 "CHARACTER/RUN/Character-04.png":
 {
-	"frame": {"x":317,"y":1,"w":151,"h":271},
+	"frame": {"x":1205,"y":252,"w":46,"h":81},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":151,"h":271},
-	"sourceSize": {"w":151,"h":271}
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":81},
+	"sourceSize": {"w":46,"h":81}
 },
 "CHARACTER/SLIDE/moheji-slide.jpg":
 {
-	"frame": {"x":1,"y":877,"w":600,"h":600},
+	"frame": {"x":603,"y":1,"w":600,"h":600},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":600,"h":600},
@@ -56,8 +56,8 @@
 	"version": "1.0",
 	"image": "chara1.png",
 	"format": "RGBA8888",
-	"size": {"w":630,"h":1478},
+	"size": {"w":1255,"h":602},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:8f614e5fbd967edad52ddc8fd9af62fd:62552be54afc4f2202c459c0bfd86293:09514296705306de6d2cd410c45096a9$"
+	"smartupdate": "$TexturePacker:SmartUpdate:75ead06bcf1458beaf1e77b50b753600:aff39d2ba303b898e22c11564d34f32b:09514296705306de6d2cd410c45096a9$"
 }
 }

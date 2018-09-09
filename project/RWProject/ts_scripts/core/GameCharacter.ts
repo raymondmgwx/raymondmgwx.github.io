@@ -91,7 +91,7 @@ module ECS {
             this.view.animationSpeed = 0.23;
             
             //this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.6;
+            this.view.anchor.y = 0.5;
             //this.view.scale.set(0.3,0.3);
             
             this.position.y = 477;
