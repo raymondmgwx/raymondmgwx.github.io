@@ -107,7 +107,7 @@ module ECS {
         
             game.view.hud.addChild(personalBestTitle);
 
-            game.view.showHud();
+            //game.view.showHud();
 
             //bind event 
             let evtSys = new EventListenerSystem();
@@ -158,6 +158,7 @@ module ECS {
 
         //for pc version
         window.addEventListener("keydown", this.onKeyDown, true);
+        window.addEventListener("keyup", this.onKeyUp, true);
         window.addEventListener("touchstart", this.onTouchStart, true);
 
         
@@ -168,8 +169,25 @@ module ECS {
                     GameConfig.game.player.jump();
                 if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped) 
                     GameConfig.game.player.jumpTwo(); 
+            }else if(event.keyCode == 40) {
+               
+                if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped && GameConfig.game.player.onGround){
+                    GameConfig.game.player.slide(true);
+                }
+                    
             }
         }
+
+        onKeyUp(event:any) {
+             if(event.keyCode == 40) {
+                
+                if (GameConfig.game.isPlaying && GameConfig.game.player.isSlide){
+                    GameConfig.game.player.slide(false);
+                }
+                    
+            }
+        }
+
         onTouchStart(event:any){
                 if (event.target.type !== 'button') {
                     if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped)

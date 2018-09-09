@@ -190,7 +190,7 @@ var ECS;
             personalBestTitle.scale.x = 1.5;
             personalBestTitle.scale.y = 1.5;
             game.view.hud.addChild(personalBestTitle);
-            game.view.showHud();
+            //game.view.showHud();
             //bind event 
             var evtSys = new EventListenerSystem();
             evtSys.bindEvent();
@@ -234,6 +234,7 @@ var ECS;
         EventListenerSystem.prototype.bindEvent = function () {
             //for pc version
             window.addEventListener("keydown", this.onKeyDown, true);
+            window.addEventListener("keyup", this.onKeyUp, true);
             window.addEventListener("touchstart", this.onTouchStart, true);
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
@@ -242,6 +243,18 @@ var ECS;
                     ECS.GameConfig.game.player.jump();
                 if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped)
                     ECS.GameConfig.game.player.jumpTwo();
+            }
+            else if (event.keyCode == 40) {
+                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped && ECS.GameConfig.game.player.onGround) {
+                    ECS.GameConfig.game.player.slide(true);
+                }
+            }
+        };
+        EventListenerSystem.prototype.onKeyUp = function (event) {
+            if (event.keyCode == 40) {
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isSlide) {
+                    ECS.GameConfig.game.player.slide(false);
+                }
             }
         };
         EventListenerSystem.prototype.onTouchStart = function (event) {
@@ -279,6 +292,7 @@ var ECS;
 (function (ECS) {
     var GameCharacter = /** @class */ (function () {
         function GameCharacter() {
+            this.isSlide = false;
             console.log("init character!");
             this.position = new PIXI.Point();
             this.runningFrames = [
@@ -286,18 +300,14 @@ var ECS;
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-05.png"),
+                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-06.png"),
             ];
             this.jumpFrames = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+                PIXI.Texture.fromFrame("CHARACTER/JUMP/Jump.png"),
             ];
             this.slideFrame = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+                PIXI.Texture.fromFrame("CHARACTER/SLIDE/Slide.png"),
             ];
             this.flyingFrames = [
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
@@ -313,9 +323,9 @@ var ECS;
             ];
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
-            //this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
-            //this.view.scale.set(0.3,0.3);
+            this.view.anchor.x = 0.5;
+            this.view.anchor.y = 0.63;
+            this.view.scale.set(0.5, 0.5);
             this.position.y = 477;
             this.ground = 477;
             this.gravity = 9.8;
@@ -395,12 +405,21 @@ var ECS;
             this.position.y += this.speed.y * ECS.GameConfig.time.DELTA_TIME;
             if (this.onGround !== this.onGroundCache) {
                 this.onGroundCache = this.onGround;
-                if (this.onGround) {
+                if (this.onGround && !this.isSlide) {
                     this.view.textures = this.runningFrames;
                 }
-                else {
+                else if (this.startJump || this.isJumped || this.b_jumpTwo) {
                     this.view.textures = this.jumpFrames;
                 }
+            }
+            if (this.isSlide) {
+                this.view.textures = this.slideFrame;
+            }
+            else if (this.onGround && !this.isSlide) {
+                this.view.textures = this.runningFrames;
+            }
+            else if (this.startJump || this.isJumped || this.b_jumpTwo) {
+                this.view.textures = this.jumpFrames;
             }
             ECS.GameConfig.camera.x = this.position.x - 100;
             this.view.position.x = this.position.x - ECS.GameConfig.camera.x;
@@ -442,6 +461,17 @@ var ECS;
             }
             else {
                 this.b_jumpTwo = false;
+            }
+        };
+        GameCharacter.prototype.slide = function (isSlide) {
+            if (this.isDead) {
+                if (this.speed.x < 5) {
+                    this.isDead = false;
+                    this.speed.x = 10;
+                }
+            }
+            if (Math.abs(this.position.y - this.ground) <= 1) {
+                this.isSlide = isSlide;
             }
         };
         GameCharacter.prototype.jump = function () {
