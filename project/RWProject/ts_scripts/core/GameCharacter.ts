@@ -169,6 +169,19 @@ module ECS {
             return false;
         }
 
+        ninjaMode(){
+            GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+            var DuringTime = GameConfig.timeClock();
+            console.log(DuringTime);
+            if(DuringTime > 3000){
+                console.log("ninja finished!");
+                GameConfig.specialMode = SPECIALMODE.NONE;
+                GameConfig.game.pickupManager.pickedUpPool = [];
+                GameConfig.game.pickupManager.canPickOrNot = true;
+
+            }
+        }
+
         updateRunning()
         {
             this.view.animationSpeed = this.realAnimationSpeed * GameConfig.time.DELTA_TIME * this.level;
@@ -211,7 +224,7 @@ module ECS {
 
 
 
-            if(!this.chkOnGround() && (GameConfig.playerMode == PLAYMODE.JUMPING1 || GameConfig.playerMode == PLAYMODE.JUMPING2))GameConfig.playerMode = PLAYMODE.FALL;
+            if(!this.chkOnGround() && (GameConfig.playerMode == PLAYMODE.JUMPING1 || GameConfig.playerMode == PLAYMODE.JUMPING2 ))GameConfig.playerMode = PLAYMODE.FALL;
             else if(GameConfig.playerMode == PLAYMODE.FALL &&  this.chkOnGround()) GameConfig.playerMode = PLAYMODE.RUNNING; 
 
 
@@ -224,26 +237,86 @@ module ECS {
             if(this.onGround !== this.onGroundCache)
             {
                 this.onGroundCache = this.onGround;
-                if(this.onGround && !this.isSlide)
+                if(this.onGround && GameConfig.playerMode == PLAYMODE.RUNNING )
                 {
                     this.view.textures = this.runningFrames;
                 }
-                else if(this.startJump || this.isJumped || this.b_jumpTwo)
+                else if(GameConfig.playerMode == PLAYMODE.JUMPING1  || GameConfig.playerMode == PLAYMODE.JUMPING2)
                 {
                     this.view.textures = this.jumpFrames;
                 }
             }
 
-            if(this.isSlide){
+            if(GameConfig.playerMode == PLAYMODE.SLIDE ){
                 this.view.textures = this.slideFrame;
-            }else if(this.onGround && !this.isSlide)
-                {
+            }else if(this.onGround &&GameConfig.playerMode != PLAYMODE.SLIDE )
+            {
+
+                //console.log(GameConfig.specialMode);
+                switch(GameConfig.specialMode){
+                    case SPECIALMODE.NONE:
+                      this.view.textures = this.runningFrames;
+                    break;
+                    case SPECIALMODE.NINJAMODE:
+                    
                     this.view.textures = this.runningFrames;
+  
+                    break;
+                    case SPECIALMODE.JAPANMODE:
+                    
+                    this.view.textures = this.runningFrames;
+
+                    break;
+                    case SPECIALMODE.INDONMODE:
+                    
+                    this.view.textures = this.runningFrames;
+     
+                    break;
                 }
-                else if(this.startJump || this.isJumped || this.b_jumpTwo)
-                {
-                    this.view.textures = this.jumpFrames;
-                }
+
+            }
+            else if(GameConfig.playerMode == PLAYMODE.JUMPING1  || GameConfig.playerMode == PLAYMODE.JUMPING2)
+            {
+                this.view.textures = this.jumpFrames;
+            }
+            // }else if(GameConfig.playerMode == PLAYMODE.SPECIAL_JAN || GameConfig.playerMode == PLAYMODE.SPECIAL_INDO ||GameConfig.playerMode == PLAYMODE.SPECIAL_EQU){
+            //     //special mode
+            //     this.view.textures = this.runningFrames;
+
+            //     GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+
+            //     var DuringTime = GameConfig.timeClock();
+            //     //console.log(DuringTime);
+            //     if(DuringTime > 3000){
+            //         console.log("special mode finished!");
+            //         GameConfig.playerMode = PLAYMODE.RUNNING;
+
+            //     }
+            // }
+
+            //console.log("run!");
+
+
+            switch(GameConfig.specialMode){
+                case SPECIALMODE.NONE:
+                
+                break;
+                case SPECIALMODE.NINJAMODE:
+                this.ninjaMode();
+        
+
+                break;
+                case SPECIALMODE.JAPANMODE:
+                this.ninjaMode();
+
+                break;
+                case SPECIALMODE.INDONMODE:
+                
+                this.ninjaMode();
+ 
+                break;
+            }
+
             
             GameConfig.camera.x = this.position.x - 100;
             

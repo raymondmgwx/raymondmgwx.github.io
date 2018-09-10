@@ -10,6 +10,8 @@ module ECS {
         DELTA_TIME:number;
         lastTime:number;
         speed:number;
+
+        currentTime:any;
         constructor(){
             this.DELTA_TIME = 1;	
             this.lastTime = Date.now();
@@ -18,6 +20,9 @@ module ECS {
         update(){
             var time = Date.now();
             var currentTime =  time;
+            this.currentTime = currentTime;
+
+            //console.log("current time:"+currentTime);
             var passedTime = currentTime - this.lastTime;
 
             this.DELTA_TIME = ((passedTime) * 0.06);
@@ -27,6 +32,19 @@ module ECS {
 
             this.lastTime = currentTime;
         }
+    }
+
+
+    export enum FOODMODE{
+        JAPAN,
+        INDON
+    }
+
+    export enum SPECIALMODE{
+        NONE,
+        JAPANMODE,
+        INDONMODE,
+        NINJAMODE
     }
 
     export enum GAMEMODE{
@@ -60,12 +78,22 @@ module ECS {
         static height:number = 600;
         static interactive:boolean = true;
         static newHighscore:boolean;
+
+
         static gameMode:any;
         static playerMode:any;
+        static specialMode:any= SPECIALMODE.NONE;
+
         static game:any;
         static black:any;
 
         static isOnPlat:boolean = false;
+
+        static tmpTimeClockStart:any;
+        static tmpTimeClockEnd:any;
+        static timeClock(){
+            return this.tmpTimeClockEnd-this.tmpTimeClockStart;
+        }
 
         static resize() {
             window.scrollTo(0, 0);

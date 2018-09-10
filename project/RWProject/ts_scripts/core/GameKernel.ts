@@ -185,7 +185,7 @@ module ECS {
             //this.onGameoverReal();
         }
 
-        pickup()
+        pickup(idx:number)
         {
             if(this.player.isDead) return; 
                 

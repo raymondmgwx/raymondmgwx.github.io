@@ -63,6 +63,7 @@ module ECS {
                         "img/bg_up.png",
                         "img/bg_down.png",
                         "assets/background/BackgroundAssets.json",
+                        "assets/food/food.json",
                         "assets/character/chara1.json",
                         "img/blackSquare.jpg",
                         "assets/hud/pausedPanel.png",

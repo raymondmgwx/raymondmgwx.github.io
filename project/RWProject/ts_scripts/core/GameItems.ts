@@ -4,6 +4,7 @@
  *  item
  *
  * ========================================================================= */
+/// <reference path="./GameConfig.ts" />
 module ECS {
     declare var PIXI: any;
     declare var Math2:any;
@@ -29,6 +30,7 @@ module ECS {
     }
 
 
+
     export class PickUp{
         pickupTextures:any;
         position:any;
@@ -42,6 +44,8 @@ module ECS {
         ratio:number;
         pickupPosition:any;
         player:any;
+
+        foodType:FOODMODE;
         constructor(){
             if(!this.pickupTextures) this.pickupTextures = ["pickup_01.png", "pickup_02.png", "pickup_03.png", "pickup_04.png", "pickup_05.png", "pickup_06.png", "pickup_07.png", "pickup_08.png"];
 
@@ -64,14 +68,15 @@ module ECS {
             this.width = 100;
             this.height = 100;
             this.count = Math.random() * 300;
+
         }
 
         update(){
             if(!this.isPickedUp)
             {
                 this.count += 0.1 * GameConfig.time.DELTA_TIME;
-                this.clip.scale.x = 0.75 + Math.sin(this.count) * 0.1;
-                this.clip.scale.y = 0.75 - Math.cos(this.count) * 0.1;
+                this.clip.scale.x = 0.55 + Math.sin(this.count) * 0.1;
+                this.clip.scale.y = 0.55 - Math.cos(this.count) * 0.1;
                 this.clip.rotation = Math.sin(this.count * 1.5) * 0.2;
                 
                 this.shine.rotation = this.count * 0.2;

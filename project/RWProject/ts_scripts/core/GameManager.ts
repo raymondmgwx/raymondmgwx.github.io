@@ -120,7 +120,14 @@ module ECS {
                 
                 for ( var i = 0; i < length; i++) 
                 {
-                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2], pickups[(i*2)+1]);
+                    //random distribute
+                    var seed = Math.random()*10;
+                    var curType = FOODMODE.INDON;
+                    if(seed > 5){
+                        curType = FOODMODE.JAPAN;
+                    }
+
+                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2], pickups[(i*2)+1],curType);
                 }
 
                 var platforms = this.currentSegment.platform;
@@ -291,6 +298,10 @@ module ECS {
         pickupPool:any;
         spawnCount:number;
         pos:any;
+
+        pickedUpPool:any;
+        canPickOrNot:boolean=true;
+        MAX_PICKUP_NUM:number = 4;
         constructor(engine:any){
             console.log("init pick up manager!");
             this.engine=engine;
@@ -298,21 +309,22 @@ module ECS {
             this.pickupPool = new GameObjectPool(PickUp);        
             this.spawnCount = 0;
             this.pos = 0
+            this.pickedUpPool = [];
 
         }
 
         update(){
-            if(this.engine.joyrideMode)
-            {
-                this.spawnCount += GameConfig.time.DELTA_TIME;
+            // if(this.engine.joyrideMode)
+            // {
+            //     this.spawnCount += GameConfig.time.DELTA_TIME;
                 
-                if(this.spawnCount > 5)
-                {
-                    this.pos += 0.15;
-                    this.spawnCount = 0;
-                    this.addPickup(GameConfig.camera.x + GameConfig.width, 280 + Math.sin(this.pos) * 180)
-                }
-            }
+            //     if(this.spawnCount > 5)
+            //     {
+            //         this.pos += 0.15;
+            //         this.spawnCount = 0;
+            //         this.addPickup(GameConfig.camera.x + GameConfig.width, 280 + Math.sin(this.pos) * 180)
+            //     }
+            // }
             
             for (var i = 0; i < this.pickups.length; i++) 
             {
@@ -350,11 +362,12 @@ module ECS {
             }
         }
 
-        addPickup(x, y)
+        addPickup(x:number, y:number,type:FOODMODE)
         {
             var pickup = this.pickupPool.getObject();
             pickup.position.x = x
             pickup.position.y = y
+            pickup.foodType = type;
             
             this.pickups.push(pickup);
             this.engine.view.game.addChild(pickup.view);
@@ -362,11 +375,53 @@ module ECS {
 
         removePickup(index)
         {
+            //collect food
             var pickup = this.pickups[index];
             pickup.isPickedUp = true;
             pickup.player = this.engine.player;
             pickup.pickupPosition = {x:pickup.position.x, y:pickup.position.y}//.clone();
             pickup.ratio = 0;
+
+
+            //judge food pool, 0 jap 1 indo
+            if(this.pickedUpPool.length <this.MAX_PICKUP_NUM-1){
+                console.log("collect food, type:"+pickup.foodType);
+                this.pickedUpPool.push(pickup.foodType);
+            }else if(this.pickedUpPool.length == this.MAX_PICKUP_NUM-1 && this.canPickOrNot){
+                console.log("collect food, type:"+pickup.foodType);
+                this.pickedUpPool.push(pickup.foodType);
+                //count for jan food
+                var cnt = 0;
+                for(var i = 0; i<this.pickedUpPool.length;i++){
+                    if(this.pickedUpPool[i] == 0){
+                        cnt++;
+                    }
+                }
+
+                var otherCnt = 4-cnt;
+                var specialMode = SPECIALMODE.NINJAMODE;
+                if(cnt > otherCnt){
+                    specialMode = SPECIALMODE.JAPANMODE;
+                    GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    console.log("change special mode:japan");
+                }else if (cnt < otherCnt){
+                    specialMode = SPECIALMODE.INDONMODE
+                    GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    console.log("change special mode:indo");
+                }else{
+                    GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    console.log("change special mode:ninja");
+                }
+
+                GameConfig.specialMode = specialMode;
+
+                
+
+                this.canPickOrNot = false;
+
+                
+            }
+            
         }
 
 
@@ -524,7 +579,7 @@ module ECS {
                     if(ydist > -pickup.height/2-20 && ydist < pickup.height/2)
                     {
                         this.engine.pickupManager.removePickup(i);
-                        this.engine.pickup();
+                        this.engine.pickup(i);
 
                     }
                 }

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>R&W Team Demo</title>
+    <meta charset="utf-8">
+    <meta name="description" content="rw">
+    <meta property="og:title" content="rw" />
+    <meta property="og:type" content="game" />
+    <meta property="og:url" content="http://rmg/" />
+    <meta property="og:image" content="http://rmg/" />
+    <meta property="og:site_name" content="rw" />
+    <link rel="icon" href="#" type="image/png">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="./css/multi.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="./css/fonts.css" type="text/css" charset="utf-8">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        
+        canvas {
+            pointer-events: none;
+            width: 100%;
+        }
+        
+        #overlay {
+            position: absolute;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div id="step-1">
+        <div id="global"></div>
+        <div id="title">
+        </div>
+        <div id="menucontainer">
+            <div id="menu">
+                <div id="btn_play"><img class="uiimage" src="./css/Play.png"></div>
+                <div id="btn_score"><img class="uiimage" src="./css/Score.png"></div>
+            </div>
+        </div>
+
+        <div id="settingcontainer">
+            <div id="setting">
+                <div id="btn_setting"><img class="uiimage" src="./css/Setting.png"></div>
+                <div id="btn_howtop"><img class="uiimage" src="./css/howtp.png"></div>
+                <div id="btn_howtop"><img class="uiimage" src="./css/Exit.png"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leapinfo" style="display: none"></div>
+    <script type="text/javascript">
+        document.body.scroll = "no";
+    </script>
+</body>
+
+</html>

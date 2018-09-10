@@ -157,6 +157,7 @@ var ECS;
                     "img/bg_up.png",
                     "img/bg_down.png",
                     "assets/background/BackgroundAssets.json",
+                    "assets/food/food.json",
                     "assets/character/chara1.json",
                     "img/blackSquare.jpg",
                     "assets/hud/pausedPanel.png",
@@ -389,6 +390,17 @@ var ECS;
             }
             return false;
         };
+        GameCharacter.prototype.ninjaMode = function () {
+            ECS.GameConfig.tmpTimeClockEnd = ECS.GameConfig.time.currentTime;
+            var DuringTime = ECS.GameConfig.timeClock();
+            console.log(DuringTime);
+            if (DuringTime > 3000) {
+                console.log("ninja finished!");
+                ECS.GameConfig.specialMode = ECS.SPECIALMODE.NONE;
+                ECS.GameConfig.game.pickupManager.pickedUpPool = [];
+                ECS.GameConfig.game.pickupManager.canPickOrNot = true;
+            }
+        };
         GameCharacter.prototype.updateRunning = function () {
             this.view.animationSpeed = this.realAnimationSpeed * ECS.GameConfig.time.DELTA_TIME * this.level;
             switch (ECS.GameConfig.playerMode) {
@@ -435,21 +447,60 @@ var ECS;
             //console.log(this.speed.y);
             if (this.onGround !== this.onGroundCache) {
                 this.onGroundCache = this.onGround;
-                if (this.onGround && !this.isSlide) {
+                if (this.onGround && ECS.GameConfig.playerMode == ECS.PLAYMODE.RUNNING) {
                     this.view.textures = this.runningFrames;
                 }
-                else if (this.startJump || this.isJumped || this.b_jumpTwo) {
+                else if (ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING1 || ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING2) {
                     this.view.textures = this.jumpFrames;
                 }
             }
-            if (this.isSlide) {
+            if (ECS.GameConfig.playerMode == ECS.PLAYMODE.SLIDE) {
                 this.view.textures = this.slideFrame;
             }
-            else if (this.onGround && !this.isSlide) {
-                this.view.textures = this.runningFrames;
+            else if (this.onGround && ECS.GameConfig.playerMode != ECS.PLAYMODE.SLIDE) {
+                //console.log(GameConfig.specialMode);
+                switch (ECS.GameConfig.specialMode) {
+                    case ECS.SPECIALMODE.NONE:
+                        this.view.textures = this.runningFrames;
+                        break;
+                    case ECS.SPECIALMODE.NINJAMODE:
+                        this.view.textures = this.runningFrames;
+                        break;
+                    case ECS.SPECIALMODE.JAPANMODE:
+                        this.view.textures = this.runningFrames;
+                        break;
+                    case ECS.SPECIALMODE.INDONMODE:
+                        this.view.textures = this.runningFrames;
+                        break;
+                }
             }
-            else if (this.startJump || this.isJumped || this.b_jumpTwo) {
+            else if (ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING1 || ECS.GameConfig.playerMode == ECS.PLAYMODE.JUMPING2) {
                 this.view.textures = this.jumpFrames;
+            }
+            // }else if(GameConfig.playerMode == PLAYMODE.SPECIAL_JAN || GameConfig.playerMode == PLAYMODE.SPECIAL_INDO ||GameConfig.playerMode == PLAYMODE.SPECIAL_EQU){
+            //     //special mode
+            //     this.view.textures = this.runningFrames;
+            //     GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+            //     var DuringTime = GameConfig.timeClock();
+            //     //console.log(DuringTime);
+            //     if(DuringTime > 3000){
+            //         console.log("special mode finished!");
+            //         GameConfig.playerMode = PLAYMODE.RUNNING;
+            //     }
+            // }
+            //console.log("run!");
+            switch (ECS.GameConfig.specialMode) {
+                case ECS.SPECIALMODE.NONE:
+                    break;
+                case ECS.SPECIALMODE.NINJAMODE:
+                    this.ninjaMode();
+                    break;
+                case ECS.SPECIALMODE.JAPANMODE:
+                    this.ninjaMode();
+                    break;
+                case ECS.SPECIALMODE.INDONMODE:
+                    this.ninjaMode();
+                    break;
             }
             ECS.GameConfig.camera.x = this.position.x - 100;
             this.view.position.x = this.position.x - ECS.GameConfig.camera.x;
@@ -751,6 +802,8 @@ var ECS;
         GameRunTime.prototype.update = function () {
             var time = Date.now();
             var currentTime = time;
+            this.currentTime = currentTime;
+            //console.log("current time:"+currentTime);
             var passedTime = currentTime - this.lastTime;
             this.DELTA_TIME = ((passedTime) * 0.06);
             this.DELTA_TIME *= this.speed;
@@ -761,6 +814,18 @@ var ECS;
         return GameRunTime;
     }());
     ECS.GameRunTime = GameRunTime;
+    var FOODMODE;
+    (function (FOODMODE) {
+        FOODMODE[FOODMODE["JAPAN"] = 0] = "JAPAN";
+        FOODMODE[FOODMODE["INDON"] = 1] = "INDON";
+    })(FOODMODE = ECS.FOODMODE || (ECS.FOODMODE = {}));
+    var SPECIALMODE;
+    (function (SPECIALMODE) {
+        SPECIALMODE[SPECIALMODE["NONE"] = 0] = "NONE";
+        SPECIALMODE[SPECIALMODE["JAPANMODE"] = 1] = "JAPANMODE";
+        SPECIALMODE[SPECIALMODE["INDONMODE"] = 2] = "INDONMODE";
+        SPECIALMODE[SPECIALMODE["NINJAMODE"] = 3] = "NINJAMODE";
+    })(SPECIALMODE = ECS.SPECIALMODE || (ECS.SPECIALMODE = {}));
     var GAMEMODE;
     (function (GAMEMODE) {
         GAMEMODE[GAMEMODE["TITLE"] = 0] = "TITLE";
@@ -781,6 +846,9 @@ var ECS;
     var GameConfig = /** @class */ (function () {
         function GameConfig() {
         }
+        GameConfig.timeClock = function () {
+            return this.tmpTimeClockEnd - this.tmpTimeClockStart;
+        };
         GameConfig.resize = function () {
             window.scrollTo(0, 0);
             var h = 640;
@@ -826,6 +894,7 @@ var ECS;
         GameConfig.width = 800;
         GameConfig.height = 600;
         GameConfig.interactive = true;
+        GameConfig.specialMode = SPECIALMODE.NONE;
         GameConfig.isOnPlat = false;
         return GameConfig;
     }());
@@ -837,6 +906,7 @@ var ECS;
  *  item
  *
  * ========================================================================= */
+/// <reference path="./GameConfig.ts" />
 var ECS;
 (function (ECS) {
     function formatScore(n) {
@@ -873,8 +943,8 @@ var ECS;
         PickUp.prototype.update = function () {
             if (!this.isPickedUp) {
                 this.count += 0.1 * ECS.GameConfig.time.DELTA_TIME;
-                this.clip.scale.x = 0.75 + Math.sin(this.count) * 0.1;
-                this.clip.scale.y = 0.75 - Math.cos(this.count) * 0.1;
+                this.clip.scale.x = 0.55 + Math.sin(this.count) * 0.1;
+                this.clip.scale.y = 0.55 - Math.cos(this.count) * 0.1;
                 this.clip.rotation = Math.sin(this.count * 1.5) * 0.2;
                 this.shine.rotation = this.count * 0.2;
             }
@@ -1222,7 +1292,7 @@ var ECS;
             this.isDying = false;
             //this.onGameoverReal();
         };
-        GameKernel.prototype.pickup = function () {
+        GameKernel.prototype.pickup = function (idx) {
             if (this.player.isDead)
                 return;
             //this.score += 10;
@@ -1624,7 +1694,13 @@ var ECS;
                 var pickups = this.currentSegment.coins;
                 var length = pickups.length / 2;
                 for (var i = 0; i < length; i++) {
-                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i * 2], pickups[(i * 2) + 1]);
+                    //random distribute
+                    var seed = Math.random() * 10;
+                    var curType = ECS.FOODMODE.INDON;
+                    if (seed > 5) {
+                        curType = ECS.FOODMODE.JAPAN;
+                    }
+                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i * 2], pickups[(i * 2) + 1], curType);
                 }
                 var platforms = this.currentSegment.platform;
                 var length = platforms.length / 2;
@@ -1745,22 +1821,27 @@ var ECS;
     ECS.EnemyManager = EnemyManager;
     var PickupManager = /** @class */ (function () {
         function PickupManager(engine) {
+            this.canPickOrNot = true;
+            this.MAX_PICKUP_NUM = 4;
             console.log("init pick up manager!");
             this.engine = engine;
             this.pickups = [];
             this.pickupPool = new GameObjectPool(ECS.PickUp);
             this.spawnCount = 0;
             this.pos = 0;
+            this.pickedUpPool = [];
         }
         PickupManager.prototype.update = function () {
-            if (this.engine.joyrideMode) {
-                this.spawnCount += ECS.GameConfig.time.DELTA_TIME;
-                if (this.spawnCount > 5) {
-                    this.pos += 0.15;
-                    this.spawnCount = 0;
-                    this.addPickup(ECS.GameConfig.camera.x + ECS.GameConfig.width, 280 + Math.sin(this.pos) * 180);
-                }
-            }
+            // if(this.engine.joyrideMode)
+            // {
+            //     this.spawnCount += GameConfig.time.DELTA_TIME;
+            //     if(this.spawnCount > 5)
+            //     {
+            //         this.pos += 0.15;
+            //         this.spawnCount = 0;
+            //         this.addPickup(GameConfig.camera.x + GameConfig.width, 280 + Math.sin(this.pos) * 180)
+            //     }
+            // }
             for (var i = 0; i < this.pickups.length; i++) {
                 var pickup = this.pickups[i];
                 pickup.update();
@@ -1783,19 +1864,55 @@ var ECS;
                 }
             }
         };
-        PickupManager.prototype.addPickup = function (x, y) {
+        PickupManager.prototype.addPickup = function (x, y, type) {
             var pickup = this.pickupPool.getObject();
             pickup.position.x = x;
             pickup.position.y = y;
+            pickup.foodType = type;
             this.pickups.push(pickup);
             this.engine.view.game.addChild(pickup.view);
         };
         PickupManager.prototype.removePickup = function (index) {
+            //collect food
             var pickup = this.pickups[index];
             pickup.isPickedUp = true;
             pickup.player = this.engine.player;
             pickup.pickupPosition = { x: pickup.position.x, y: pickup.position.y }; //.clone();
             pickup.ratio = 0;
+            //judge food pool, 0 jap 1 indo
+            if (this.pickedUpPool.length < this.MAX_PICKUP_NUM - 1) {
+                console.log("collect food, type:" + pickup.foodType);
+                this.pickedUpPool.push(pickup.foodType);
+            }
+            else if (this.pickedUpPool.length == this.MAX_PICKUP_NUM - 1 && this.canPickOrNot) {
+                console.log("collect food, type:" + pickup.foodType);
+                this.pickedUpPool.push(pickup.foodType);
+                //count for jan food
+                var cnt = 0;
+                for (var i = 0; i < this.pickedUpPool.length; i++) {
+                    if (this.pickedUpPool[i] == 0) {
+                        cnt++;
+                    }
+                }
+                var otherCnt = 4 - cnt;
+                var specialMode = ECS.SPECIALMODE.NINJAMODE;
+                if (cnt > otherCnt) {
+                    specialMode = ECS.SPECIALMODE.JAPANMODE;
+                    ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    console.log("change special mode:japan");
+                }
+                else if (cnt < otherCnt) {
+                    specialMode = ECS.SPECIALMODE.INDONMODE;
+                    ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    console.log("change special mode:indo");
+                }
+                else {
+                    ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    console.log("change special mode:ninja");
+                }
+                ECS.GameConfig.specialMode = specialMode;
+                this.canPickOrNot = false;
+            }
         };
         PickupManager.prototype.destroyAll = function () {
             for (var i = 0; i < this.pickups.length; i++) {
@@ -1915,7 +2032,7 @@ var ECS;
                     var ydist = pickup.position.y - player.position.y;
                     if (ydist > -pickup.height / 2 - 20 && ydist < pickup.height / 2) {
                         this.engine.pickupManager.removePickup(i);
-                        this.engine.pickup();
+                        this.engine.pickup(i);
                     }
                 }
             }
