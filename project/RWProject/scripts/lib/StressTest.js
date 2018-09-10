@@ -25,7 +25,7 @@ PIXI.StressTest = function(callback) {
     this.renderer = new PIXI.CanvasRenderer(this.width, this.height, false, false);
     this.stage = new PIXI.Stage(0x25284A);
 
-    var load_bk = new PIXI.Sprite(PIXI.Texture.fromImage('img/Background.png'));
+    var load_bk = new PIXI.Sprite(PIXI.Texture.fromImage('img/bg.png'));
     load_bk.anchor.x = 0;
     load_bk.anchor.y = 0;
     load_bk.height = this.height;
