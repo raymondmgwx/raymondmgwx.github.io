@@ -156,8 +156,10 @@ var ECS;
                     "img/platform.png",
                     "img/bg_up.png",
                     "img/bg_down.png",
+                    "img/floatingGround.png",
                     "assets/background/BackgroundAssets.json",
                     "assets/food/food.json",
+                    "assets/playUI/playPanel.json",
                     "assets/character/chara1.json",
                     "img/blackSquare.jpg",
                     "assets/hud/pausedPanel.png",
@@ -312,17 +314,12 @@ var ECS;
             this.slideFrame = [
                 PIXI.Texture.fromFrame("CHARACTER/SLIDE/Slide.png"),
             ];
-            this.flyingFrames = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+            this.dashFrames = [
+                PIXI.Texture.fromFrame("CHARACTER/POWER/DASH/dash0002.png")
             ];
-            this.crashFrames = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+            this.shootFrame = [
+                PIXI.Texture.fromFrame("CHARACTER/POWER/SHOOT/shoot0001.png"),
+                PIXI.Texture.fromFrame("CHARACTER/POWER/SHOOT/shoot0002.png")
             ];
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
@@ -354,6 +351,22 @@ var ECS;
             this.b_jumpTwo = false;
             this.smooth = 0.05;
             this.cnt = 0;
+            this.specialEffectView = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png"));
+            this.specialEffectView.anchor.x = 0.2;
+            this.specialEffectView.anchor.y = 0.5;
+            this.specialEffectView.scale.x = 2;
+            this.specialEffectView.scale.y = 2;
+            this.indoEffect = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/SHOOT/maung shoot-new.png"));
+            this.indoEffect.anchor.x = 0.2;
+            this.indoEffect.anchor.y = 0.5;
+            this.indoEffect.scale.x = 2;
+            this.indoEffect.scale.y = 2;
+            this.marioEffect = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/MARIO/maung ninja.png"));
+            this.marioEffect.anchor.x = 0.1;
+            this.marioEffect.anchor.y = 0.52;
+            this.marioEffect.scale.x = 2;
+            this.marioEffect.scale.y = 2;
+            //this.view.addChild(this.specialEffectView);
         }
         GameCharacter.prototype.update = function () {
             if (this.isDead) {
@@ -393,12 +406,39 @@ var ECS;
         GameCharacter.prototype.ninjaMode = function () {
             ECS.GameConfig.tmpTimeClockEnd = ECS.GameConfig.time.currentTime;
             var DuringTime = ECS.GameConfig.timeClock();
-            console.log(DuringTime);
-            if (DuringTime > 3000) {
+            //console.log(DuringTime);
+            if (DuringTime > 2000) {
                 console.log("ninja finished!");
                 ECS.GameConfig.specialMode = ECS.SPECIALMODE.NONE;
                 ECS.GameConfig.game.pickupManager.pickedUpPool = [];
                 ECS.GameConfig.game.pickupManager.canPickOrNot = true;
+                this.view.textures = this.runningFrames;
+                this.speed.x /= 4;
+                this.view.removeChild(this.specialEffectView);
+            }
+        };
+        GameCharacter.prototype.marioMode = function () {
+            ECS.GameConfig.tmpTimeClockEnd = ECS.GameConfig.time.currentTime;
+            var DuringTime = ECS.GameConfig.timeClock();
+            //console.log(DuringTime);
+            if (DuringTime > 5000) {
+                console.log("mario finished!");
+                ECS.GameConfig.specialMode = ECS.SPECIALMODE.NONE;
+                ECS.GameConfig.game.pickupManager.pickedUpPool = [];
+                ECS.GameConfig.game.pickupManager.canPickOrNot = true;
+                this.speed.x /= 2;
+                this.view.removeChild(this.marioEffect);
+            }
+        };
+        GameCharacter.prototype.indoMode = function () {
+            ECS.GameConfig.tmpTimeClockEnd = ECS.GameConfig.time.currentTime;
+            var DuringTime = ECS.GameConfig.timeClock();
+            if (DuringTime > 5000) {
+                console.log("indo finished!");
+                ECS.GameConfig.specialMode = ECS.SPECIALMODE.NONE;
+                ECS.GameConfig.game.pickupManager.pickedUpPool = [];
+                ECS.GameConfig.game.pickupManager.canPickOrNot = true;
+                this.view.removeChild(this.indoEffect);
             }
         };
         GameCharacter.prototype.updateRunning = function () {
@@ -467,10 +507,10 @@ var ECS;
                         this.view.textures = this.runningFrames;
                         break;
                     case ECS.SPECIALMODE.JAPANMODE:
-                        this.view.textures = this.runningFrames;
+                        this.view.textures = this.dashFrames;
                         break;
                     case ECS.SPECIALMODE.INDONMODE:
-                        this.view.textures = this.runningFrames;
+                        this.view.textures = this.shootFrame;
                         break;
                 }
             }
@@ -493,13 +533,13 @@ var ECS;
                 case ECS.SPECIALMODE.NONE:
                     break;
                 case ECS.SPECIALMODE.NINJAMODE:
-                    this.ninjaMode();
+                    this.marioMode();
                     break;
                 case ECS.SPECIALMODE.JAPANMODE:
                     this.ninjaMode();
                     break;
                 case ECS.SPECIALMODE.INDONMODE:
-                    this.ninjaMode();
+                    this.indoMode();
                     break;
             }
             ECS.GameConfig.camera.x = this.position.x - 100;
@@ -982,10 +1022,10 @@ var ECS;
     var Specialfood = /** @class */ (function () {
         function Specialfood() {
             PIXI.DisplayObjectContainer.call(this);
-            this.foods = ["number_01.png",
-                "number_02.png",
-                "number_03.png",
-                "number_04.png"];
+            this.foods = ["Food Grey.png",
+                "Food Grey.png",
+                "Food Grey.png",
+                "Food Grey.png"];
             for (var i = 0; i < 4; i++) {
                 this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
             }
@@ -1174,8 +1214,8 @@ var ECS;
 (function (ECS) {
     var GameKernel = /** @class */ (function () {
         function GameKernel() {
-            this.player = new ECS.GameCharacter();
             this.view = new GameView(this);
+            this.player = new ECS.GameCharacter();
             this.segmentManager = new ECS.SegmentManager(this);
             this.enemyManager = new ECS.EnemyManager(this);
             this.platManager = new ECS.PlatformManager(this);
@@ -1295,8 +1335,6 @@ var ECS;
         GameKernel.prototype.pickup = function (idx) {
             if (this.player.isDead)
                 return;
-            //this.score += 10;
-            //this.view.score.jump();
             this.pickupCount++;
             // if(this.pickupCount >= 50 * this.bulletMult && !this.player.isDead)
             // {
@@ -1716,18 +1754,25 @@ var ECS;
     var Platform = /** @class */ (function () {
         function Platform() {
             this.position = new PIXI.Point();
-            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/platform.png"));
-            this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
-            this.view.width = 400;
-            this.view.height = 150;
-            this.width = 400;
-            this.height = 150;
+            this.numberOfBlock = -3 + Math.random() * (8 - 5) + 5;
+            this.views = [];
+            for (var i = 0; i < this.numberOfBlock * 2; i++) {
+                var view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/floatingGround.png"));
+                view.anchor.x = 0.5;
+                view.anchor.y = 0.5;
+                view.width = 50;
+                view.height = 50;
+                this.views.push(view);
+            }
+            this.width = 50 * this.numberOfBlock * 2;
+            this.height = 50;
         }
         Platform.prototype.update = function () {
-            this.view.position.x = this.position.x - ECS.GameConfig.camera.x;
-            ;
-            this.view.position.y = this.position.y;
+            for (var i = -this.numberOfBlock; i < this.numberOfBlock; i++) {
+                this.views[i + this.numberOfBlock].position.x = this.position.x + 50 * i - ECS.GameConfig.camera.x;
+                ;
+                this.views[i + this.numberOfBlock].position.y = this.position.y;
+            }
         };
         return Platform;
     }());
@@ -1743,17 +1788,22 @@ var ECS;
             for (var i = 0; i < this.platforms.length; i++) {
                 var platform = this.platforms[i];
                 platform.update();
-                if (platform.view.position.x < -100 - ECS.GameConfig.xOffset && !this.engine.player.isDead) {
-                    this.platforms.splice(i, 1);
-                    this.engine.view.gameFront.removeChild(platform.view);
-                    i--;
-                }
+                // for(var i=0;i<platform.numberOfBlock;i++){
+                //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
+                //     {                        
+                //         this.engine.view.gameFront.removeChild(platform.views[i]);
+                //     }  
+                // }
+                // this.platforms.splice(i, 1);
+                // i--;
             }
         };
         PlatformManager.prototype.destroyAll = function () {
             for (var i = 0; i < this.platforms.length; i++) {
                 var platform = this.platforms[i];
-                this.engine.view.gameFront.removeChild(platform.view);
+                for (var i = 0; i < platform.numberOfBlock * 2; i++) {
+                    this.engine.view.gameFront.removeChild(platform.views[i]);
+                }
             }
             this.platforms = [];
         };
@@ -1761,11 +1811,13 @@ var ECS;
             var platform = this.platformPool.getObject();
             platform.position.x = x;
             platform.position.y = y;
-            platform.view.position.x = platform.position.x - ECS.GameConfig.camera.x;
-            ;
-            platform.view.position.y = platform.position.y;
-            this.platforms.push(platform);
-            this.engine.view.gameFront.addChild(platform.view);
+            for (var i = -platform.numberOfBlock; i < platform.numberOfBlock; i++) {
+                platform.views[i + platform.numberOfBlock].position.x = platform.position.x + 50 * i - ECS.GameConfig.camera.x;
+                ;
+                platform.views[i + platform.numberOfBlock].position.y = platform.position.y;
+                this.platforms.push(platform);
+                this.engine.view.gameFront.addChild(platform.views[i + platform.numberOfBlock]);
+            }
         };
         return PlatformManager;
     }());
@@ -1899,15 +1951,21 @@ var ECS;
                 if (cnt > otherCnt) {
                     specialMode = ECS.SPECIALMODE.JAPANMODE;
                     ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.specialEffectView);
+                    ECS.GameConfig.game.player.speed.x *= 4;
                     console.log("change special mode:japan");
                 }
                 else if (cnt < otherCnt) {
                     specialMode = ECS.SPECIALMODE.INDONMODE;
                     ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.indoEffect);
                     console.log("change special mode:indo");
                 }
                 else {
+                    specialMode = ECS.SPECIALMODE.NINJAMODE;
                     ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
+                    ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.marioEffect);
+                    ECS.GameConfig.game.player.speed.x *= 2;
                     console.log("change special mode:ninja");
                 }
                 ECS.GameConfig.specialMode = specialMode;
@@ -2011,10 +2069,23 @@ var ECS;
                 if (xdist > -enemy.width / 2 + floatRange && xdist < enemy.width / 2 - floatRange) {
                     var ydist = enemy.position.y - player.position.y;
                     if (ydist > -enemy.height / 2 - 20 + floatRange && ydist < enemy.height / 2 - floatRange) {
-                        if (!player.joyRiding) {
-                            player.die();
-                            this.engine.gameover();
-                            enemy.hit();
+                        ECS.GameConfig.game.score += 10;
+                        ECS.GameConfig.game.view.score.jump();
+                        switch (ECS.GameConfig.specialMode) {
+                            case ECS.SPECIALMODE.NONE:
+                                player.die();
+                                this.engine.gameover();
+                                enemy.hit();
+                                break;
+                            case ECS.SPECIALMODE.INDONMODE:
+                                enemy.hit();
+                                break;
+                            case ECS.SPECIALMODE.JAPANMODE:
+                                enemy.hit();
+                                break;
+                            case ECS.SPECIALMODE.NINJAMODE:
+                                enemy.hit();
+                                break;
                         }
                     }
                 }
@@ -2119,7 +2190,6 @@ var ECS;
                                 return;
                             }
                             //FidoAudio.play('thudBounce');
-                            player.view.setTexture(player.crashFrames[player.bounce]);
                             player.speed.y *= -0.7;
                             player.speed.x *= 0.8;
                             if (player.rotationSpeed > 0) {
@@ -2234,7 +2304,7 @@ var ECS;
                 var cloud = this.clouds[i];
                 cloud.rotation += cloud.rotSpeed;
                 if (cloud.state === 0) {
-                    cloud.scale.x += (cloud.scaleTarget - cloud.scale.x) * 0.4;
+                    cloud.scale.x += (cloud.scaleTarget - cloud.scale.x) * 5;
                     cloud.scale.y = cloud.scale.x;
                     if (cloud.scale.x > cloud.scaleTarget - 0.1)
                         cloud.state = 1;

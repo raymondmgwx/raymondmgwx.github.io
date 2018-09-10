@@ -2,15 +2,71 @@
 
 "CHARACTER/JUMP/Jump.png":
 {
-	"frame": {"x":1,"y":431,"w":154,"h":265},
+	"frame": {"x":332,"y":1087,"w":154,"h":265},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":4,"w":154,"h":265},
 	"sourceSize": {"w":154,"h":272}
 },
+"CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png":
+{
+	"frame": {"x":270,"y":163,"w":214,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":27,"y":81,"w":214,"h":105},
+	"sourceSize": {"w":270,"h":270}
+},
+"CHARACTER/POWER EFFECTS/MARIO/maung ninja.png":
+{
+	"frame": {"x":1,"y":1,"w":460,"h":160},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":37,"y":159,"w":460,"h":160},
+	"sourceSize": {"w":500,"h":500}
+},
+"CHARACTER/POWER EFFECTS/SHOOT/maung shoot-new.png":
+{
+	"frame": {"x":1,"y":324,"w":254,"h":139},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":67,"w":254,"h":139},
+	"sourceSize": {"w":270,"h":270}
+},
+"CHARACTER/POWER/DASH/dash0001.png":
+{
+	"frame": {"x":196,"y":542,"w":191,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":191,"h":270},
+	"sourceSize": {"w":191,"h":270}
+},
+"CHARACTER/POWER/DASH/dash0002.png":
+{
+	"frame": {"x":270,"y":270,"w":197,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":197,"h":270},
+	"sourceSize": {"w":197,"h":270}
+},
+"CHARACTER/POWER/SHOOT/shoot0001.png":
+{
+	"frame": {"x":1,"y":465,"w":193,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":193,"h":270},
+	"sourceSize": {"w":193,"h":270}
+},
+"CHARACTER/POWER/SHOOT/shoot0002.png":
+{
+	"frame": {"x":1,"y":737,"w":168,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":168,"h":270},
+	"sourceSize": {"w":168,"h":270}
+},
 "CHARACTER/RUN/Character-01.png":
 {
-	"frame": {"x":270,"y":1,"w":159,"h":272},
+	"frame": {"x":171,"y":814,"w":159,"h":272},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":159,"h":272},
@@ -18,7 +74,7 @@
 },
 "CHARACTER/RUN/Character-02.png":
 {
-	"frame": {"x":161,"y":275,"w":154,"h":271},
+	"frame": {"x":332,"y":814,"w":154,"h":271},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":271},
@@ -26,7 +82,7 @@
 },
 "CHARACTER/RUN/Character-03.png":
 {
-	"frame": {"x":1,"y":162,"w":158,"h":267},
+	"frame": {"x":1,"y":1009,"w":158,"h":267},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":267},
@@ -34,7 +90,7 @@
 },
 "CHARACTER/RUN/Character-04.png":
 {
-	"frame": {"x":317,"y":275,"w":151,"h":271},
+	"frame": {"x":161,"y":1088,"w":151,"h":271},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":151,"h":271},
@@ -42,7 +98,7 @@
 },
 "CHARACTER/RUN/Character-05.png":
 {
-	"frame": {"x":1,"y":162,"w":158,"h":267},
+	"frame": {"x":1,"y":1009,"w":158,"h":267},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":267},
@@ -50,7 +106,7 @@
 },
 "CHARACTER/RUN/Character-06.png":
 {
-	"frame": {"x":161,"y":275,"w":154,"h":271},
+	"frame": {"x":332,"y":814,"w":154,"h":271},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":271},
@@ -58,13 +114,15 @@
 },
 "CHARACTER/SLIDE/Slide.png":
 {
-	"frame": {"x":1,"y":1,"w":267,"h":159},
+	"frame": {"x":1,"y":163,"w":267,"h":159},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":159},
 	"sourceSize": {"w":270,"h":159}
 }},
 "animations": {
+	"CHARACTER/POWER/DASH/dash": ["CHARACTER/POWER/DASH/dash0001.png","CHARACTER/POWER/DASH/dash0002.png"],
+	"CHARACTER/POWER/SHOOT/shoot": ["CHARACTER/POWER/SHOOT/shoot0001.png","CHARACTER/POWER/SHOOT/shoot0002.png"],
 	"CHARACTER/RUN/Character": ["CHARACTER/RUN/Character-01.png","CHARACTER/RUN/Character-02.png","CHARACTER/RUN/Character-03.png","CHARACTER/RUN/Character-04.png","CHARACTER/RUN/Character-05.png","CHARACTER/RUN/Character-06.png"]
 },
 "meta": {
@@ -72,8 +130,8 @@
 	"version": "1.0",
 	"image": "chara1.png",
 	"format": "RGBA8888",
-	"size": {"w":469,"h":697},
+	"size": {"w":487,"h":1360},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:34ea87f811c7d6617a6338f9e2dde911:96bbc8d99efe8aaef63b0d12850d4f5f:09514296705306de6d2cd410c45096a9$"
+	"smartupdate": "$TexturePacker:SmartUpdate:a641cbd22920060836326ed01cfbe82e:66650f84831b96730b0e34209b5836ac:09514296705306de6d2cd410c45096a9$"
 }
 }

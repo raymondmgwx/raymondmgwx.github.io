@@ -35,8 +35,8 @@ module ECS {
         score:number;
         
         constructor() {
-            this.player = new GameCharacter();
             this.view = new GameView(this);
+            this.player = new GameCharacter();
             this.segmentManager = new SegmentManager(this);
             this.enemyManager = new EnemyManager(this);
             this.platManager = new PlatformManager(this);
@@ -189,11 +189,6 @@ module ECS {
         {
             if(this.player.isDead) return; 
                 
-            //this.score += 10;
-            
- 
-            
-            //this.view.score.jump();
             this.pickupCount++;
 
             // if(this.pickupCount >= 50 * this.bulletMult && !this.player.isDead)

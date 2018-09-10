@@ -15,8 +15,9 @@ module ECS {
         runningFrames:any;
         jumpFrames:any;
         slideFrame:any;
-        flyingFrames:any;
-        crashFrames:any;
+        dashFrames:any;
+        shootFrame:any;
+        marioFrame:any;
 
         view:any;
         ground:number;
@@ -47,7 +48,11 @@ module ECS {
         b_jumpTwo:boolean;
         smooth:number;
         cnt:number;
-        
+
+        specialEffectView:any;
+        marioEffect:any;
+        indoEffect:any;
+
         constructor(){
 
             console.log("init character!");
@@ -70,19 +75,15 @@ module ECS {
                 PIXI.Texture.fromFrame("CHARACTER/SLIDE/Slide.png"),
             ];
             
-            this.flyingFrames = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+            this.dashFrames = [
+                PIXI.Texture.fromFrame("CHARACTER/POWER/DASH/dash0002.png")
             ];
             
-            this.crashFrames = [
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-01.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-02.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-03.png"),
-                PIXI.Texture.fromFrame("CHARACTER/RUN/Character-04.png"),
+            this.shootFrame = [
+                PIXI.Texture.fromFrame("CHARACTER/POWER/SHOOT/shoot0001.png"),
+                PIXI.Texture.fromFrame("CHARACTER/POWER/SHOOT/shoot0002.png")
             ];
+
             
             this.view = new PIXI.MovieClip(this.runningFrames);
             this.view.animationSpeed = 0.23;
@@ -122,6 +123,33 @@ module ECS {
             this.b_jumpTwo = false;
             this.smooth = 0.05;
             this.cnt =0;
+
+
+            this.specialEffectView = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png"));
+
+    
+            this.specialEffectView.anchor.x = 0.2;
+            this.specialEffectView.anchor.y = 0.5;
+            this.specialEffectView.scale.x = 2;
+            this.specialEffectView.scale.y = 2;
+
+            this.indoEffect = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/SHOOT/maung shoot-new.png"));
+
+    
+            this.indoEffect.anchor.x = 0.2;
+            this.indoEffect.anchor.y = 0.5;
+            this.indoEffect.scale.x = 2;
+            this.indoEffect.scale.y = 2;
+
+            this.marioEffect = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/MARIO/maung ninja.png"));
+
+    
+            this.marioEffect.anchor.x = 0.1;
+            this.marioEffect.anchor.y = 0.52;
+            this.marioEffect.scale.x = 2;
+            this.marioEffect.scale.y = 2;
+
+            //this.view.addChild(this.specialEffectView);
         }
 
         update()
@@ -172,13 +200,41 @@ module ECS {
         ninjaMode(){
             GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
             var DuringTime = GameConfig.timeClock();
-            console.log(DuringTime);
-            if(DuringTime > 3000){
+            //console.log(DuringTime);
+            if(DuringTime > 2000){
                 console.log("ninja finished!");
                 GameConfig.specialMode = SPECIALMODE.NONE;
                 GameConfig.game.pickupManager.pickedUpPool = [];
                 GameConfig.game.pickupManager.canPickOrNot = true;
+                this.view.textures = this.runningFrames;
+                this.speed.x/=4;
+                this.view.removeChild(this.specialEffectView);
+            }
+        }
 
+        marioMode(){
+            GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+            var DuringTime = GameConfig.timeClock();
+            //console.log(DuringTime);
+            if(DuringTime > 5000){
+                console.log("mario finished!");
+                GameConfig.specialMode = SPECIALMODE.NONE;
+                GameConfig.game.pickupManager.pickedUpPool = [];
+                GameConfig.game.pickupManager.canPickOrNot = true;
+                this.speed.x/=2;
+                this.view.removeChild(this.marioEffect);
+            }
+        }
+
+        indoMode(){
+            GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+            var DuringTime = GameConfig.timeClock();
+            if(DuringTime > 5000){
+                console.log("indo finished!");
+                GameConfig.specialMode = SPECIALMODE.NONE;
+                GameConfig.game.pickupManager.pickedUpPool = [];
+                GameConfig.game.pickupManager.canPickOrNot = true;
+                this.view.removeChild(this.indoEffect);
             }
         }
 
@@ -264,12 +320,12 @@ module ECS {
                     break;
                     case SPECIALMODE.JAPANMODE:
                     
-                    this.view.textures = this.runningFrames;
+                    this.view.textures = this.dashFrames;
 
                     break;
                     case SPECIALMODE.INDONMODE:
                     
-                    this.view.textures = this.runningFrames;
+                    this.view.textures = this.shootFrame;
      
                     break;
                 }
@@ -302,7 +358,7 @@ module ECS {
                 
                 break;
                 case SPECIALMODE.NINJAMODE:
-                this.ninjaMode();
+                this.marioMode();
         
 
                 break;
@@ -312,7 +368,7 @@ module ECS {
                 break;
                 case SPECIALMODE.INDONMODE:
                 
-                this.ninjaMode();
+                this.indoMode();
  
                 break;
             }

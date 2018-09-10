@@ -135,10 +135,10 @@ module ECS {
             PIXI.DisplayObjectContainer.call( this );
         
             
-            this.foods = [  "number_01.png",
-                            "number_02.png",
-                            "number_03.png",
-                            "number_04.png"];
+            this.foods = [  "Food Grey.png",
+                            "Food Grey.png",
+                            "Food Grey.png",
+                            "Food Grey.png"];
             
             for(var i=0;i<4;i++){
                 this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);

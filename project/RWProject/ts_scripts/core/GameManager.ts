@@ -149,23 +149,34 @@ module ECS {
     export class Platform{
 
         position:any;
-        view:any;
+        views:any;
         width:number;
         height:number;
+        numberOfBlock:number;
         constructor(){
             this.position = new PIXI.Point();
-            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/platform.png"));
-            this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
-            this.view.width = 400;
-            this.view.height=150;
-            this.width = 400;
-            this.height = 150;
+
+            this.numberOfBlock = -3+Math.random() * (8 - 5) + 5;
+            this.views =[];
+            for(var i=0;i<this.numberOfBlock*2;i++){
+                var view =  new PIXI.Sprite(PIXI.Texture.fromFrame("img/floatingGround.png"));
+                view.anchor.x = 0.5;
+                view.anchor.y = 0.5;
+                view.width = 50;
+                view.height=50;
+                this.views.push(view);
+            }
+
+            this.width = 50*this.numberOfBlock*2;
+            this.height = 50;
         }
         update()
-        {       
-            this.view.position.x = this.position.x - GameConfig.camera.x;;
-            this.view.position.y = this.position.y;
+        { 
+            for(var i=-this.numberOfBlock;i<this.numberOfBlock;i++){
+                this.views[i+this.numberOfBlock].position.x = this.position.x + 50*i - GameConfig.camera.x;;
+                this.views[i+this.numberOfBlock].position.y = this.position.y;
+            }
+
         }
     }
 
@@ -186,13 +197,15 @@ module ECS {
                 var platform = this.platforms[i]
                 platform.update();
                 
-                if(platform.view.position.x < -100 -GameConfig.xOffset && !this.engine.player.isDead)
-                {
-                    this.platforms.splice(i, 1);
-                    
-                    this.engine.view.gameFront.removeChild(platform.view);
-                    i--;
-                }
+                // for(var i=0;i<platform.numberOfBlock;i++){
+                //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
+                //     {                        
+                //         this.engine.view.gameFront.removeChild(platform.views[i]);
+                //     }  
+                // }
+                // this.platforms.splice(i, 1);
+                // i--;
+
             }
         }
         destroyAll()
@@ -200,7 +213,9 @@ module ECS {
             for (var i = 0; i < this.platforms.length; i++) 
             {
                 var platform = this.platforms[i];
-                this.engine.view.gameFront.removeChild(platform.view);
+                for(var i=0;i<platform.numberOfBlock*2;i++){
+                    this.engine.view.gameFront.removeChild(platform.views[i]);
+                }
             }
             
             this.platforms = [];
@@ -211,10 +226,15 @@ module ECS {
             var platform = this.platformPool.getObject();
             platform.position.x = x;
             platform.position.y = y;
-            platform.view.position.x = platform.position.x - GameConfig.camera.x;;
-            platform.view.position.y = platform.position.y;
-            this.platforms.push(platform);
-            this.engine.view.gameFront.addChild(platform.view);
+
+            for(var i=-platform.numberOfBlock;i<platform.numberOfBlock;i++){
+                platform.views[i+platform.numberOfBlock].position.x = platform.position.x + 50*i- GameConfig.camera.x;;
+                platform.views[i+platform.numberOfBlock].position.y = platform.position.y;
+
+
+                this.platforms.push(platform);
+                this.engine.view.gameFront.addChild(platform.views[i+platform.numberOfBlock]);
+            }
         }
     }
 
@@ -403,19 +423,24 @@ module ECS {
                 if(cnt > otherCnt){
                     specialMode = SPECIALMODE.JAPANMODE;
                     GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    GameConfig.game.player.view.addChild(GameConfig.game.player.specialEffectView);
+                    GameConfig.game.player.speed.x*=4;
                     console.log("change special mode:japan");
                 }else if (cnt < otherCnt){
                     specialMode = SPECIALMODE.INDONMODE
                     GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    GameConfig.game.player.view.addChild(GameConfig.game.player.indoEffect);
                     console.log("change special mode:indo");
                 }else{
+                    specialMode = SPECIALMODE.NINJAMODE;
                     GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                    GameConfig.game.player.view.addChild(GameConfig.game.player.marioEffect);
+                    GameConfig.game.player.speed.x*=2;
                     console.log("change special mode:ninja");
                 }
 
                 GameConfig.specialMode = specialMode;
 
-                
 
                 this.canPickOrNot = false;
 
@@ -550,12 +575,26 @@ module ECS {
                 
                     if(ydist > -enemy.height/2-20 +floatRange&& ydist < enemy.height/2 -floatRange)
                     {
-                        if(!player.joyRiding)
-                        {
-                            player.die();
-                            this.engine.gameover();
+                        GameConfig.game.score += 10;
+                        GameConfig.game.view.score.jump();
+                        switch(GameConfig.specialMode){
+                            case SPECIALMODE.NONE:
+                                player.die();
+                                this.engine.gameover();
+                                enemy.hit();
+                            break;
+                            case SPECIALMODE.INDONMODE:
                             enemy.hit();
+                            break;
+                            case SPECIALMODE.JAPANMODE:
+                            enemy.hit();
+                            break;
+                            case SPECIALMODE.NINJAMODE:
+                            enemy.hit();
+                            break;
                         }
+
+                        
                     }
                 }
             }
@@ -706,7 +745,6 @@ module ECS {
                                 return;
                             }
                             //FidoAudio.play('thudBounce');
-                            player.view.setTexture(player.crashFrames[player.bounce])
                                 
                             player.speed.y *= -0.7;
                             player.speed.x *= 0.8;

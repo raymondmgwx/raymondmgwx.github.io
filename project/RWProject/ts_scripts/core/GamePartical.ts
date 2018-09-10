@@ -116,7 +116,7 @@ module ECS {
                 cloud.rotation += cloud.rotSpeed;
                 if(cloud.state === 0)
                 {
-                    cloud.scale.x += (cloud.scaleTarget - cloud.scale.x) * 0.4;
+                    cloud.scale.x += (cloud.scaleTarget - cloud.scale.x) * 5;
                     cloud.scale.y = cloud.scale.x;
                     
                     if(cloud.scale.x > cloud.scaleTarget-0.1) cloud.state = 1;
