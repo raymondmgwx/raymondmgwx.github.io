@@ -17,6 +17,7 @@ module ECS {
         slideFrame:any;
         dashFrames:any;
         shootFrame:any;
+        indoTightFrame:any;
         marioFrame:any;
 
         view:any;
@@ -50,8 +51,17 @@ module ECS {
         cnt:number;
 
         specialEffectView:any;
+        shinobiEffect1:any;
+        shinobiEffect2:any;
+        shinobiEffect3:any;
+
         marioEffect:any;
         indoEffect:any;
+        indonTight:any;
+
+        ninjiaEffectNumber:number =0;
+        isPlayingNinjiaEffect:boolean = false;
+        isPlayingInoEffect:boolean = false;
 
         constructor(){
 
@@ -66,6 +76,13 @@ module ECS {
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-05.png"),
                 PIXI.Texture.fromFrame("CHARACTER/RUN/Character-06.png"),
             ];
+
+            this.indoTightFrame =[
+                PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/INDONTIGHT/boom0001.png"),
+                PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/INDONTIGHT/boom0002.png"),
+                PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/INDONTIGHT/boom0003.png"),
+                PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/INDONTIGHT/boom0004.png")
+            ]
 
             this.jumpFrames =[
                 PIXI.Texture.fromFrame("CHARACTER/JUMP/Jump.png"),
@@ -124,6 +141,23 @@ module ECS {
             this.smooth = 0.05;
             this.cnt =0;
 
+            this.shinobiEffect1 = new PIXI.Sprite(PIXI.Texture.fromImage("img/dash_stock.png"));
+            this.shinobiEffect1.anchor.x = -1.5;
+            this.shinobiEffect1.anchor.y = 5.5;
+            this.shinobiEffect1.scale.x = 0.2;
+            this.shinobiEffect1.scale.y = 0.2;
+
+            this.shinobiEffect2 = new PIXI.Sprite(PIXI.Texture.fromImage("img/dash_stock.png"));
+            this.shinobiEffect2.anchor.x = 0;
+            this.shinobiEffect2.anchor.y = 5.5;
+            this.shinobiEffect2.scale.x = 0.2;
+            this.shinobiEffect2.scale.y = 0.2;
+
+            this.shinobiEffect3 = new PIXI.Sprite(PIXI.Texture.fromImage("img/dash_stock.png"));
+            this.shinobiEffect3.anchor.x = 1.5;
+            this.shinobiEffect3.anchor.y = 5.5;
+            this.shinobiEffect3.scale.x = 0.2;
+            this.shinobiEffect3.scale.y = 0.2;
 
             this.specialEffectView = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png"));
 
@@ -137,7 +171,7 @@ module ECS {
 
     
             this.indoEffect.anchor.x = 0.2;
-            this.indoEffect.anchor.y = 0.5;
+            this.indoEffect.anchor.y = 0.6;
             this.indoEffect.scale.x = 2;
             this.indoEffect.scale.y = 2;
 
@@ -149,7 +183,19 @@ module ECS {
             this.marioEffect.scale.x = 2;
             this.marioEffect.scale.y = 2;
 
-            //this.view.addChild(this.specialEffectView);
+
+            this.indonTight = new PIXI.MovieClip(this.indoTightFrame);
+            this.indonTight.animationSpeed = 0.1;
+            
+            this.indonTight.anchor.x = 0.5;
+            this.indonTight.anchor.y = 0.5;
+            this.indonTight.height=GameConfig.height/2;
+            this.indonTight.width=GameConfig.width/2;
+
+
+            
+            //this.view.addChild(this.indonTight);
+            //this.indonTight.play();
         }
 
         update()
@@ -197,19 +243,67 @@ module ECS {
             return false;
         }
 
-        ninjaMode(){
-            GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
-            var DuringTime = GameConfig.timeClock();
-            //console.log(DuringTime);
-            if(DuringTime > 2000){
-                console.log("ninja finished!");
-                GameConfig.specialMode = SPECIALMODE.NONE;
-                GameConfig.game.pickupManager.pickedUpPool = [];
-                GameConfig.game.pickupManager.canPickOrNot = true;
-                this.view.textures = this.runningFrames;
-                this.speed.x/=4;
-                this.view.removeChild(this.specialEffectView);
+        ninjiaOperate(){
+            if(this.ninjiaEffectNumber <3 && !this.isPlayingNinjiaEffect){
+                //console.log("dash");
+                this.isPlayingNinjiaEffect=true;
+                GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                this.view.addChild(this.specialEffectView);
+                
+                switch(this.ninjiaEffectNumber){
+                    case 0:
+                    this.view.removeChild(this.shinobiEffect1);
+                    break;
+                    case 1:
+                    this.view.removeChild(this.shinobiEffect2);
+                    break;
+                    case 2:
+                    this.view.removeChild(this.shinobiEffect3);
+                    break;
+                }
+
+                GameConfig.game.player.speed.x*=10;
+                this.ninjiaEffectNumber++;
             }
+        }
+
+        indoOperate(){
+            if(!this.isPlayingInoEffect){
+                            
+                GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
+                GameConfig.game.player.view.addChild(GameConfig.game.player.indoEffect);
+                this.view.addChild(this.indonTight);
+                this.indonTight.play();
+                this.isPlayingInoEffect = true;
+                this.view.textures = this.shootFrame;
+            }
+        }
+
+        ninjaMode(){
+
+
+            if(this.isPlayingNinjiaEffect){
+                GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+                var DuringTime = GameConfig.timeClock();
+                //console.log(DuringTime);
+                if(DuringTime > 200){
+                    this.view.textures = this.runningFrames;
+                    this.speed.x/=10;
+     
+                    this.view.removeChild(this.specialEffectView);
+                    this.isPlayingNinjiaEffect = false;
+                    if(this.ninjiaEffectNumber ==3){
+                      
+                            this.ninjiaEffectNumber =0;
+                            GameConfig.specialMode = SPECIALMODE.NONE;
+                            GameConfig.game.pickupManager.pickedUpPool = [];
+                            GameConfig.game.pickupManager.canPickOrNot = true;
+                            console.log("ninja finished!");
+            
+                    }
+                }
+            }
+       
         }
 
         marioMode(){
@@ -227,53 +321,44 @@ module ECS {
         }
 
         indoMode(){
-            GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
-            var DuringTime = GameConfig.timeClock();
-            if(DuringTime > 5000){
-                console.log("indo finished!");
-                GameConfig.specialMode = SPECIALMODE.NONE;
-                GameConfig.game.pickupManager.pickedUpPool = [];
-                GameConfig.game.pickupManager.canPickOrNot = true;
-                this.view.removeChild(this.indoEffect);
+            if(this.isPlayingInoEffect){
+                this.indonTight.textures = this.indoTightFrame;
+                GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
+                var DuringTime = GameConfig.timeClock();
+                if(DuringTime > 1000){
+                    console.log("indo finished!");
+                    this.isPlayingInoEffect = false;
+                    GameConfig.specialMode = SPECIALMODE.NONE;
+                    GameConfig.game.pickupManager.pickedUpPool = [];
+                    GameConfig.game.pickupManager.canPickOrNot = true;
+                    this.view.removeChild(this.indonTight);
+                    this.view.removeChild(this.indoEffect);
+                }
             }
+
         }
 
         updateRunning()
         {
             this.view.animationSpeed = this.realAnimationSpeed * GameConfig.time.DELTA_TIME * this.level;
+            this.indonTight.animationSpeed = this.realAnimationSpeed * GameConfig.time.DELTA_TIME * this.level;
+
+
             switch( GameConfig.playerMode){
                 case PLAYMODE.JUMPING1:
-                // if(this.startJump)
-                // { 
-                    //console.log("start jump");
-                    // if(Math.abs(this.position.y-this.ground)<=1 && this.cnt ==0){
-                    //     this.isJumped = true;
-                    //     this.cnt +=1;
-                    //     this.speed.y = -this.vStart * Math.sin(this.angle) ;  
-    
-                    // }else if (Math.abs(this.position.y-this.ground)<=1 && this.cnt ==1){
-                    //     this.startJump = false;
-                    //     this.isJumped = false;
-                    //     this.cnt =0;
-                    // }
-                //}
-                this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+  
+                    this.speed.y = -this.vStart * Math.sin(this.angle) ;  
                 break;
                 case PLAYMODE.JUMPING2:
-                // if(this.b_jumpTwo)
-                // {
-                //     this.speed.y = -this.vStart * Math.sin(this.angle) ;
-                //     this.b_jumpTwo = false;
-                //     this.isJumped = false;
-                // }
-                this.speed.y = -this.vStart * Math.sin(this.angle) ;  
+                
+                    this.speed.y = -this.vStart * Math.sin(this.angle) ;  
                 break;
                 case PLAYMODE.FALL:
                     //should have gravity
                      this.speed.y += this.gravity  * GameConfig.time.DELTA_TIME *this.smooth;
                 break;
                 case PLAYMODE.RUNNING:
-                this.speed.y=0;
+                    this.speed.y=0;
                 break;
                 
             }
@@ -320,12 +405,11 @@ module ECS {
                     break;
                     case SPECIALMODE.JAPANMODE:
                     
-                    this.view.textures = this.dashFrames;
+                    this.view.textures = this.runningFrames;
 
                     break;
                     case SPECIALMODE.INDONMODE:
-                    
-                    this.view.textures = this.shootFrame;
+                    this.view.textures = this.runningFrames;
      
                     break;
                 }
@@ -335,22 +419,6 @@ module ECS {
             {
                 this.view.textures = this.jumpFrames;
             }
-            // }else if(GameConfig.playerMode == PLAYMODE.SPECIAL_JAN || GameConfig.playerMode == PLAYMODE.SPECIAL_INDO ||GameConfig.playerMode == PLAYMODE.SPECIAL_EQU){
-            //     //special mode
-            //     this.view.textures = this.runningFrames;
-
-            //     GameConfig.tmpTimeClockEnd = GameConfig.time.currentTime;
-
-            //     var DuringTime = GameConfig.timeClock();
-            //     //console.log(DuringTime);
-            //     if(DuringTime > 3000){
-            //         console.log("special mode finished!");
-            //         GameConfig.playerMode = PLAYMODE.RUNNING;
-
-            //     }
-            // }
-
-            //console.log("run!");
 
 
             switch(GameConfig.specialMode){
@@ -363,7 +431,10 @@ module ECS {
 
                 break;
                 case SPECIALMODE.JAPANMODE:
-                this.ninjaMode();
+                if(this.ninjiaEffectNumber<=3){
+                    this.ninjaMode();
+                }
+
 
                 break;
                 case SPECIALMODE.INDONMODE:
@@ -449,6 +520,7 @@ module ECS {
                  {
                      this.isSlide = isSlide;
                      if(isSlide) GameConfig.playerMode = PLAYMODE.SLIDE;
+                     else GameConfig.playerMode = PLAYMODE.RUNNING;
                  }
         }
 
@@ -538,20 +610,51 @@ module ECS {
 
         position:any;
         view:any;
+        explodeView:any;
         isHit:boolean;
         width:number;
         height:number;
         explosion:any;
+
+        moveingFrames:any;
+        stealFrames:any;
+        
+        speed:number;
+        isEatNow:boolean=false;
         constructor(){
             this.position = new PIXI.Point();
-            this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/doroCat.png"));
-            this.view.anchor.x = 0.5;
-            this.view.anchor.y = 0.5;
-            this.view.width = 150;
-            this.view.height=150;
+            // this.view = new PIXI.Sprite(PIXI.Texture.fromFrame("img/doroCat.png"));
+            // this.view.anchor.x = 0.5;
+            // this.view.anchor.y = 0.5;
+            // this.view.width = 150;
+            // this.view.height=150;
+            
             this.isHit = false;
             this.width = 150;
             this.height = 150;
+            this.speed = -10 + Math.random()*20;;
+
+            this.moveingFrames = [
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/WALK/neko0001.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/WALK/neko0002.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/WALK/neko0003.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/WALK/neko0004.png"),
+            ];
+
+            this.stealFrames =[
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/STEAL/steal0001.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/STEAL/steal0002.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/STEAL/steal0003.png"),
+                PIXI.Texture.fromFrame("CHARACTER/NEKO/STEAL/steal0004.png")
+            ]
+
+            this.view = new PIXI.MovieClip(this.moveingFrames);
+            this.view.animationSpeed = 0.23;
+            
+            this.view.anchor.x = 0.5;
+            this.view.anchor.y = 0.5;
+            this.view.height=150;
+            this.view.width=150;
         }
 
         reset(){
@@ -580,8 +683,20 @@ module ECS {
 
         update()
         {
-            
-            this.view.position.x = this.position.x - GameConfig.camera.x;
+            this.view.animationSpeed = 0.23 * GameConfig.time.DELTA_TIME;
+
+            this.view.position.x = this.position.x - GameConfig.camera.x ;
+
+            if(!this.isEatNow){
+                this.position.x += this.speed  * Math.sin(GameConfig.time.DELTA_TIME);
+                GameConfig.tmpTimeClockStart1 = GameConfig.time.currentTime;
+            }else{
+                GameConfig.tmpTimeClockEnd1 = GameConfig.time.currentTime;
+                if(GameConfig.timeClock1()>2000){
+                    this.isEatNow = false;
+                    this.view.textures = this.moveingFrames;
+                }
+            }
             this.view.position.y = this.position.y;
         }
     }

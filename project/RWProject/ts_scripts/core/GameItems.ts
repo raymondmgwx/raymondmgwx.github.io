@@ -150,6 +150,8 @@ module ECS {
             for ( var i = 0; i < 4; i++) 
             {
                 this.digits[i] = new PIXI.Sprite(this.foods[i]);
+                this.digits[i].scale.x = 0.6;
+                this.digits[i].scale.y = 0.6;
                 this.addChild(this.digits[i]);
                 this.setFoodPic(this.digits[i],i*this.digits[i].width);
             }

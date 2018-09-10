@@ -95,6 +95,12 @@ module ECS {
             return this.tmpTimeClockEnd-this.tmpTimeClockStart;
         }
 
+        static tmpTimeClockStart1:any;
+        static tmpTimeClockEnd1:any;
+        static timeClock1(){
+            return this.tmpTimeClockEnd1-this.tmpTimeClockStart1;
+        }
+
         static resize() {
             window.scrollTo(0, 0);
         

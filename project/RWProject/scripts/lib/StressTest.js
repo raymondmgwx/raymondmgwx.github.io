@@ -25,7 +25,7 @@ PIXI.StressTest = function(callback) {
     this.renderer = new PIXI.CanvasRenderer(this.width, this.height, false, false);
     this.stage = new PIXI.Stage(0x25284A);
 
-    var load_bk = new PIXI.Sprite(PIXI.Texture.fromImage('img/load_background.png'));
+    var load_bk = new PIXI.Sprite(PIXI.Texture.fromImage('img/Background.png'));
     load_bk.anchor.x = 0;
     load_bk.anchor.y = 0;
     load_bk.height = this.height;
@@ -62,26 +62,26 @@ PIXI.StressTest.prototype.begin = function() {
     // this.stage.addChild(this.graphics2);
 
     //logo
-    var logo = new PIXI.Sprite(PIXI.Texture.fromImage('img/Logo Replacement.png'));
+    var logo = new PIXI.Sprite(PIXI.Texture.fromImage('img/logo.png'));
     logo.anchor.x = 0.5;
     logo.anchor.y = 1.0;
     logo.position.x = this.width * 0.5;
-    logo.position.y = this.height * 0.48;
-    logo.scale.set(1);
+    logo.position.y = this.height * 0.6;
+    logo.scale.set(2);
 
     //loading progress bar
     var lb_i = new PIXI.Sprite(PIXI.Texture.fromImage('img/lb_i.png'));
     lb_i.anchor.x = 0.5;
-    lb_i.anchor.y = -1.0;
+    lb_i.anchor.y = -1.75;
     lb_i.position.x = this.width * 0.5;
-    lb_i.position.y = this.height * 0.48;
+    lb_i.position.y = this.height * 0.6;
     lb_i.scale.set(1);
 
     var lb_o = new PIXI.Sprite(PIXI.Texture.fromImage('img/lb_o.png'));
     lb_o.anchor.x = 0.5;
     lb_o.anchor.y = -1.0;
     lb_o.position.x = this.width * 0.5;
-    lb_o.position.y = this.height * 0.48;
+    lb_o.position.y = this.height * 0.6;
     lb_o.scale.set(1);
 
     this.stage.addChild(lb_o);
@@ -115,7 +115,7 @@ PIXI.StressTest.prototype.update = function() {
         sprite.anchor.x = 0.5;
         sprite.anchor.y = 0.5;
         sprite.position.x = this.width * 0.5;
-        sprite.position.y = this.height * 0.5 + 40;
+        sprite.position.y = this.height * 0.6;
         sprite.scale.set(1, 1);
         this.stage.addChild(sprite);
         if (this.currentLoadSprite !== false) this.stage.removeChild(this.currentLoadSprite);

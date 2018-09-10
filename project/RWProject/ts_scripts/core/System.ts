@@ -55,6 +55,7 @@ module ECS {
                     var loader = new PIXI.AssetLoader([
                         "img/stretched_hyper_tile.jpg",
                         "img/doroCat.png",
+                        "img/dash_stock.png",
                         "img/SplashAssets.json",
                         "img/WorldAssets-hd.json",
                         "img/HudAssets-hd.json",
@@ -170,14 +171,24 @@ module ECS {
         }
         onKeyDown(event:any) {
             if (event.keyCode == 32) {
-                if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump) 
+                if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump&& !GameConfig.game.player.isPlayingNinjiaEffect) 
                     GameConfig.game.player.jump();
-                if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped) 
+                if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped &&  !GameConfig.game.player.isPlayingNinjiaEffect) 
                     GameConfig.game.player.jumpTwo(); 
             }else if(event.keyCode == 40) {
                
                 if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped && GameConfig.game.player.onGround){
                     GameConfig.game.player.slide(true);
+                }
+                    
+            }else if(event.keyCode == 39) {
+               
+                if (GameConfig.game.isPlaying && GameConfig.specialMode == SPECIALMODE.JAPANMODE){
+                    GameConfig.game.player.view.textures =  GameConfig.game.player.dashFrames;
+                    GameConfig.game.player.ninjiaOperate();
+                }else if(GameConfig.game.isPlaying && GameConfig.specialMode == SPECIALMODE.INDONMODE){
+                    GameConfig.game.player.view.textures =  GameConfig.game.player.runningFrames;
+                    GameConfig.game.player.indoOperate();
                 }
                     
             }

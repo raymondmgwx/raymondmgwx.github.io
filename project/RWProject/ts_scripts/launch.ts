@@ -11,9 +11,6 @@ var load = function () {
 
 
 document.getElementById("btn_play").onclick= function(){
-        document.getElementById("step-1").style.display = "none";
+        document.getElementById("global").style.display = "none";
         load();
 }
-
-//load();
-
