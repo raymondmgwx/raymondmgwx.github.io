@@ -38,11 +38,39 @@
 
 </head>
 
-<body>
+<body onload="FidoAudio.init()">
 
 
     <div id="global">
-        <div id="menucontainer">
+
+        <div id="menu">
+
+            <div id="groupMainMenu">
+                <div id="btn_play"><img src="./img/MainMenu/btn_play.png"></div>
+                <div id="btn_score"><img src="./img/MainMenu/btn_score.png"></div>
+            </div>
+
+            <div id="leftUpCorner">
+                <div id="btn_story"><img src="./img/MainMenu/btn_story.png"></div>
+            </div>
+
+            <div id="leftDownCorner">
+                <div id="btn_story"><img src="./img/MainMenu/btn_setting.png"></div>
+            </div>
+
+            <div id="rightUpCorner">
+                <div id="btn_story"><img src="./img/MainMenu/btn_htp.png"></div>
+            </div>
+
+            <div id="rightDownCorner">
+                <div id="btn_story"><img src="./img/MainMenu/btn_exit.png"></div>
+            </div>
+
+
+        </div>
+
+
+        <!-- <div id="menucontainer">
             <div id="menu">
                 <div id="btn_play"><img class="uiimage" src="./img/MainMenu/btn_play.png"></div>
                 <div id="btn_score"><img class="uiimage" src="./img/MainMenu/btn_score.png"></div>
@@ -55,16 +83,17 @@
                 <div id="btn_howtop"><img class="uiimage" src="./img/MainMenu/btn_htp.png"></div>
                 <div id="btn_howtop"><img class="uiimage" src="./img/MainMenu/btn_exit.png"></div>
             </div>
-        </div>
+        </div> -->
     </div>
 
-
-    <script type="text/javascript">
-        document.body.scroll = "no";
-    </script>
-
     <!-- scripts/library -->
+    <script type="text/javascript" src="./scripts/lib/CocoonJS.js"></script>
+    <script type="text/javascript" src="./scripts/lib/CocoonJS_App.js"></script>
+    <script type="text/javascript" src="./scripts/lib/CocoonJS_App_ForCocoonJS.js"></script>
     <script type="text/javascript" src="./scripts/lib/SegmentData.js"></script>
+    <script type="text/javascript" src="./scripts/lib/LocalStorage.js"></script>
+    <script type="text/javascript" src="./scripts/lib/Device.js"></script>
+    <script type="text/javascript" src="./scripts/lib/FidoAudio.js"></script>
     <script type="text/javascript" src="./scripts/lib/TimelineLite.min.js"></script>
     <script type="text/javascript" src="./scripts/lib/TweenLite.min.js"></script>
     <script type="text/javascript" src="./scripts/lib/EasePack.min.js"></script>
@@ -72,14 +101,13 @@
     <script type="text/javascript" src="./scripts/lib/pixi.js"></script>
     <script type="text/javascript" src="./scripts/lib/GoodBoySplash.js"></script>
     <script type="text/javascript" src="./scripts/lib/Device.js"></script>
-    <script type="text/javascript" src="./scripts/lib/LocalStorage.js"></script>
-    <script type="text/javascript" src="./scripts/lib/FidoAudio.js"></script>
     <script type="text/javascript" src="./scripts/lib/howler.js"></script>
     <script type="text/javascript" src="./scripts/lib/Math2.js"></script>
 
     <script type="text/javascript" src="./scripts/lib/StressTest.js"></script>
 
     <script src="./scripts/launch.js"></script>
+
 
 </body>
 

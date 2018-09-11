@@ -54,6 +54,7 @@ module ECS {
         shinobiEffect1:any;
         shinobiEffect2:any;
         shinobiEffect3:any;
+        backEffect:any;
 
         marioEffect:any;
         indoEffect:any;
@@ -159,6 +160,14 @@ module ECS {
             this.shinobiEffect3.scale.x = 0.2;
             this.shinobiEffect3.scale.y = 0.2;
 
+            this.backEffect = new PIXI.Sprite(PIXI.Texture.fromImage("img/blade.png"));
+            this.backEffect.anchor.x = 0.8;
+            this.backEffect.anchor.y = 0.5;
+            this.backEffect.scale.x = 1;
+            this.backEffect.scale.y = 1;
+
+            
+
             this.specialEffectView = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png"));
 
     
@@ -243,6 +252,13 @@ module ECS {
             return false;
         }
 
+
+        resetSpecialFoods(){
+            for(var i =0;i<4;i++){
+                GameConfig.game.view.specialFood.digits[i].texture = GameConfig.game.view.specialFood.foods[i];
+            }
+        }
+
         ninjiaOperate(){
             if(this.ninjiaEffectNumber <3 && !this.isPlayingNinjiaEffect){
                 //console.log("dash");
@@ -261,7 +277,7 @@ module ECS {
                     this.view.removeChild(this.shinobiEffect3);
                     break;
                 }
-
+                
                 GameConfig.game.player.speed.x*=10;
                 this.ninjiaEffectNumber++;
             }
@@ -298,6 +314,8 @@ module ECS {
                             GameConfig.specialMode = SPECIALMODE.NONE;
                             GameConfig.game.pickupManager.pickedUpPool = [];
                             GameConfig.game.pickupManager.canPickOrNot = true;
+                            this.resetSpecialFoods();
+                            this.view.removeChild(this.backEffect);
                             console.log("ninja finished!");
             
                     }
@@ -317,6 +335,7 @@ module ECS {
                 GameConfig.game.pickupManager.canPickOrNot = true;
                 this.speed.x/=2;
                 this.view.removeChild(this.marioEffect);
+                this.resetSpecialFoods();
             }
         }
 
@@ -333,6 +352,7 @@ module ECS {
                     GameConfig.game.pickupManager.canPickOrNot = true;
                     this.view.removeChild(this.indonTight);
                     this.view.removeChild(this.indoEffect);
+                    this.resetSpecialFoods();
                 }
             }
 

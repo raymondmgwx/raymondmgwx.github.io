@@ -10,6 +10,7 @@
 module ECS {
     declare var PIXI: any;
     declare var TweenLite:any;
+    declare var FidoAudio:any;
 
     export function update() {
         GameConfig.game.update();
@@ -56,9 +57,9 @@ module ECS {
                         "img/stretched_hyper_tile.jpg",
                         "img/doroCat.png",
                         "img/dash_stock.png",
+                        "img/blade.png",
                         "img/SplashAssets.json",
                         "img/WorldAssets-hd.json",
-                        "img/HudAssets-hd.json",
                         "img/PixiAssets-hd.json",
                         "img/platform.png",
                         "img/bg_up.png",
@@ -67,16 +68,9 @@ module ECS {
                         "assets/background/BackgroundAssets.json",
                         "assets/food/food.json",
                         "assets/playUI/playPanel.json",
+                        "assets/playUI/number.json",
                         "assets/character/chara1.json",
                         "img/blackSquare.jpg",
-                        "assets/hud/pausedPanel.png",
-                        "assets/hud/pixieRevised_controls.png",
-                        "assets/hud/ContinuePlay.png",
-                        "assets/hud/RestartPlay.png",
-                        "assets/hud/soundOff.png",
-                        "assets/hud/soundOn.png",
-                        "assets/hud/pause.png",
-                        "assets/hud/PersonalBest.png"
                     ]);
                 
                     loader.addEventListener('onComplete', (event)=> {
@@ -102,17 +96,6 @@ module ECS {
             game.view.renderer.view.style.position = "absolute";
             game.view.renderer.view.webkitImageSmoothingEnabled = false
 
- 
-
-            var personalBestTitle = PIXI.Sprite.fromImage("assets/hud/PersonalBest.png");
-            personalBestTitle.anchor.x = 0.5;
-            personalBestTitle.anchor.y = 0.5;
-            personalBestTitle.alpha = 0;
-            personalBestTitle.scale.x = 1.5;
-            personalBestTitle.scale.y = 1.5;
-        
-            game.view.hud.addChild(personalBestTitle);
-
             game.view.showHud();
 
             //bind event 
@@ -124,6 +107,7 @@ module ECS {
         
             GameConfig.interactive = false;
 
+            FidoAudio.play('gameMusic');
             game.start();
             game.player.jump();
             GameConfig.gameMode = GAMEMODE.PLAYING;
@@ -170,7 +154,7 @@ module ECS {
         
         }
         onKeyDown(event:any) {
-            if (event.keyCode == 32) {
+            if (event.keyCode == 32 || event.keyCode == 38) {
                 if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump&& !GameConfig.game.player.isPlayingNinjiaEffect) 
                     GameConfig.game.player.jump();
                 if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped &&  !GameConfig.game.player.isPlayingNinjiaEffect) 

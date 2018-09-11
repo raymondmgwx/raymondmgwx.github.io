@@ -176,6 +176,9 @@ module ECS {
                 zoom : 2, 
                 ease : Cubic.easeOut
             });
+
+            //this.reset();
+            //this.start();
         }
 
         gameoverReal()
@@ -433,6 +436,7 @@ module ECS {
         dust:any;
 
         specialFood:any;
+        playUIPanel:any;
         constructor(kernel:GameKernel) {
             console.log("init game view!");
             
@@ -459,6 +463,7 @@ module ECS {
 
             //this.powerBar = new PowerBar();
             this.specialFood = new Specialfood();
+            this.playUIPanel = new PlayUIPanel();
             this.score = new Score();
             this.bestScore = new BestScore();
             this.background = this.normalBackground;
@@ -466,7 +471,7 @@ module ECS {
             //this.score.position.x = GameConfig.width/2;
 
             this.game.addChild(this.background);
-            //this.hud.addChild(this.powerBar);
+            this.hud.addChild(this.playUIPanel);
             this.hud.addChild(this.score);
             this.hud.addChild(this.bestScore);
             this.hud.addChild(this.specialFood);
@@ -609,14 +614,21 @@ module ECS {
             this.renderer.resize(w, h);
             this.background.width = w;
         
-            this.bestScore.position.x = w ;
-            this.bestScore.position.y =24;
+            this.bestScore.position.x = 900 ;
+            this.bestScore.position.y =22;
+            this.bestScore.scale.x = 0.3;
+            this.bestScore.scale.y = 0.3;
         
-            this.score.position.x = w/2;
-            this.score.position.y = 12;
+            this.score.position.x = 740;
+            this.score.position.y = 22;
+            this.score.scale.x = 0.3;
+            this.score.scale.y = 0.3;
 
             this.specialFood.position.x = 0;
             this.specialFood.position.y = 12;
+
+            this.playUIPanel.position.x = 0;
+            this.playUIPanel.position.y = 12;
         
             this.white.scale.x = w / 16;
             this.white.scale.y = h / 16;

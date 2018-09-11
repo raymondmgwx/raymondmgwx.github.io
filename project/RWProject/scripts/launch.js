@@ -150,9 +150,9 @@ var ECS;
                     "img/stretched_hyper_tile.jpg",
                     "img/doroCat.png",
                     "img/dash_stock.png",
+                    "img/blade.png",
                     "img/SplashAssets.json",
                     "img/WorldAssets-hd.json",
-                    "img/HudAssets-hd.json",
                     "img/PixiAssets-hd.json",
                     "img/platform.png",
                     "img/bg_up.png",
@@ -161,16 +161,9 @@ var ECS;
                     "assets/background/BackgroundAssets.json",
                     "assets/food/food.json",
                     "assets/playUI/playPanel.json",
+                    "assets/playUI/number.json",
                     "assets/character/chara1.json",
                     "img/blackSquare.jpg",
-                    "assets/hud/pausedPanel.png",
-                    "assets/hud/pixieRevised_controls.png",
-                    "assets/hud/ContinuePlay.png",
-                    "assets/hud/RestartPlay.png",
-                    "assets/hud/soundOff.png",
-                    "assets/hud/soundOn.png",
-                    "assets/hud/pause.png",
-                    "assets/hud/PersonalBest.png"
                 ]);
                 loader.addEventListener('onComplete', function (event) {
                     console.log("data assets loaded!");
@@ -189,13 +182,6 @@ var ECS;
             document.body.appendChild(game.view.renderer.view);
             game.view.renderer.view.style.position = "absolute";
             game.view.renderer.view.webkitImageSmoothingEnabled = false;
-            var personalBestTitle = PIXI.Sprite.fromImage("assets/hud/PersonalBest.png");
-            personalBestTitle.anchor.x = 0.5;
-            personalBestTitle.anchor.y = 0.5;
-            personalBestTitle.alpha = 0;
-            personalBestTitle.scale.x = 1.5;
-            personalBestTitle.scale.y = 1.5;
-            game.view.hud.addChild(personalBestTitle);
             game.view.showHud();
             //bind event 
             var evtSys = new EventListenerSystem();
@@ -203,6 +189,7 @@ var ECS;
             requestAnimationFrame(update);
             ECS.GameConfig.resize();
             ECS.GameConfig.interactive = false;
+            FidoAudio.play('gameMusic');
             game.start();
             game.player.jump();
             ECS.GameConfig.gameMode = ECS.GAMEMODE.PLAYING;
@@ -244,7 +231,7 @@ var ECS;
             window.addEventListener("touchstart", this.onTouchStart, true);
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
-            if (event.keyCode == 32) {
+            if (event.keyCode == 32 || event.keyCode == 38) {
                 if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.startJump && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
                     ECS.GameConfig.game.player.jump();
                 if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
@@ -385,6 +372,11 @@ var ECS;
             this.shinobiEffect3.anchor.y = 5.5;
             this.shinobiEffect3.scale.x = 0.2;
             this.shinobiEffect3.scale.y = 0.2;
+            this.backEffect = new PIXI.Sprite(PIXI.Texture.fromImage("img/blade.png"));
+            this.backEffect.anchor.x = 0.8;
+            this.backEffect.anchor.y = 0.5;
+            this.backEffect.scale.x = 1;
+            this.backEffect.scale.y = 1;
             this.specialEffectView = new PIXI.Sprite(PIXI.Texture.fromFrame("CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png"));
             this.specialEffectView.anchor.x = 0.2;
             this.specialEffectView.anchor.y = 0.5;
@@ -444,6 +436,11 @@ var ECS;
             }
             return false;
         };
+        GameCharacter.prototype.resetSpecialFoods = function () {
+            for (var i = 0; i < 4; i++) {
+                ECS.GameConfig.game.view.specialFood.digits[i].texture = ECS.GameConfig.game.view.specialFood.foods[i];
+            }
+        };
         GameCharacter.prototype.ninjiaOperate = function () {
             if (this.ninjiaEffectNumber < 3 && !this.isPlayingNinjiaEffect) {
                 //console.log("dash");
@@ -490,6 +487,8 @@ var ECS;
                         ECS.GameConfig.specialMode = ECS.SPECIALMODE.NONE;
                         ECS.GameConfig.game.pickupManager.pickedUpPool = [];
                         ECS.GameConfig.game.pickupManager.canPickOrNot = true;
+                        this.resetSpecialFoods();
+                        this.view.removeChild(this.backEffect);
                         console.log("ninja finished!");
                     }
                 }
@@ -506,6 +505,7 @@ var ECS;
                 ECS.GameConfig.game.pickupManager.canPickOrNot = true;
                 this.speed.x /= 2;
                 this.view.removeChild(this.marioEffect);
+                this.resetSpecialFoods();
             }
         };
         GameCharacter.prototype.indoMode = function () {
@@ -521,6 +521,7 @@ var ECS;
                     ECS.GameConfig.game.pickupManager.canPickOrNot = true;
                     this.view.removeChild(this.indonTight);
                     this.view.removeChild(this.indoEffect);
+                    this.resetSpecialFoods();
                 }
             }
         };
@@ -1049,8 +1050,7 @@ var ECS;
         var offset = (total % 3) - 1;
         for (var i = 0; i < total; i++) {
             text += nArray[i];
-            if ((i - offset) % 3 == 0 && i != total - 1)
-                text += ",";
+            //if((i - offset) % 3 == 0 && i != total-1)text+=",";	
         }
         return text;
     }
@@ -1119,8 +1119,13 @@ var ECS;
                 "Food Grey.png",
                 "Food Grey.png",
                 "Food Grey.png"];
+            this.activeFoods = ["Food.png",
+                "Food.png",
+                "Food.png",
+                "Food.png"];
             for (var i = 0; i < 4; i++) {
                 this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
+                this.activeFoods[i] = PIXI.Texture.fromFrame(this.activeFoods[i]);
             }
             this.startX = 10;
             this.digits = [];
@@ -1136,25 +1141,74 @@ var ECS;
     }());
     ECS.Specialfood = Specialfood;
     Specialfood.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
-    Specialfood.prototype.setFoodPic = function (food, posx) {
-        food.position.x = this.startX + posx;
+    Specialfood.prototype.setFoodPic = function (ui, posx) {
+        ui.position.x = this.startX + posx;
     };
+    var PlayUIPanel = /** @class */ (function () {
+        function PlayUIPanel() {
+            PIXI.DisplayObjectContainer.call(this);
+            this.playUI = ["Score.png",
+                "Best Score.png",
+                "Distance.png",
+                "Pause.png"];
+            for (var i = 0; i < this.playUI.length; i++) {
+                this.playUI[i] = PIXI.Texture.fromFrame(this.playUI[i]);
+            }
+            this.startX = 600;
+            this.digits = [];
+            for (var i = 0; i < this.playUI.length; i++) {
+                this.digits[i] = new PIXI.Sprite(this.playUI[i]);
+                this.digits[i].scale.x = 0.6;
+                this.digits[i].scale.y = 0.6;
+                this.addChild(this.digits[i]);
+                this.digits[i].position.x = this.startX;
+                this.startX += this.digits[i].width;
+            }
+        }
+        return PlayUIPanel;
+    }());
+    ECS.PlayUIPanel = PlayUIPanel;
+    PlayUIPanel.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+    var PlayControlPanel = /** @class */ (function () {
+        function PlayControlPanel() {
+            PIXI.DisplayObjectContainer.call(this);
+            this.playUI = ["Score.png",
+                "Best Score.png",
+                "Distance.png",
+                "Pause.png"];
+            for (var i = 0; i < this.playUI.length; i++) {
+                this.playUI[i] = PIXI.Texture.fromFrame(this.playUI[i]);
+            }
+            this.startX = 600;
+            this.digits = [];
+            for (var i = 0; i < this.playUI.length; i++) {
+                this.digits[i] = new PIXI.Sprite(this.playUI[i]);
+                this.digits[i].scale.x = 0.6;
+                this.digits[i].scale.y = 0.6;
+                this.addChild(this.digits[i]);
+                this.digits[i].position.x = this.startX;
+                this.startX += this.digits[i].width;
+            }
+        }
+        return PlayControlPanel;
+    }());
+    ECS.PlayControlPanel = PlayControlPanel;
+    PlayControlPanel.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     var Score = /** @class */ (function () {
         function Score() {
             PIXI.DisplayObjectContainer.call(this);
             this.ratio = 0;
             this.glyphs = {
-                0: "number_00.png",
-                1: "number_01.png",
-                2: "number_02.png",
-                3: "number_03.png",
-                4: "number_04.png",
-                5: "number_05.png",
-                6: "number_06.png",
-                7: "number_07.png",
-                8: "number_08.png",
-                9: "number_09.png",
-                ",": "number_comma.png"
+                0: "Number-0.png",
+                1: "Number-1.png",
+                2: "Number-2.png",
+                3: "Number-3.png",
+                4: "Number-4.png",
+                5: "Number-5.png",
+                6: "Number-6.png",
+                7: "Number-7.png",
+                8: "Number-8.png",
+                9: "Number-9.png"
             };
             for (var s in this.glyphs)
                 this.glyphs[s] = PIXI.Texture.fromFrame(this.glyphs[s]);
@@ -1171,7 +1225,7 @@ var ECS;
     Score.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     Score.prototype.setScore = function (score) {
         var split = formatScore(score).split("");
-        var position = 100;
+        var position = 0;
         var gap = -10;
         for (var i = 0; i < split.length; i++) {
             var digit = this.digits[i];
@@ -1196,31 +1250,24 @@ var ECS;
             this.LocalStorage = new Fido.LocalStorage(ECS.GameConfig.bundleId);
             this.ratio = 0;
             this.glyphs = {
-                0: "number_00.png",
-                1: "number_01.png",
-                2: "number_02.png",
-                3: "number_03.png",
-                4: "number_04.png",
-                5: "number_05.png",
-                6: "number_06.png",
-                7: "number_07.png",
-                8: "number_08.png",
-                9: "number_09.png",
-                ",": "number_comma.png"
+                0: "Number-0.png",
+                1: "Number-1.png",
+                2: "Number-2.png",
+                3: "Number-3.png",
+                4: "Number-4.png",
+                5: "Number-5.png",
+                6: "Number-6.png",
+                7: "Number-7.png",
+                8: "Number-8.png",
+                9: "Number-9.png"
             };
             for (var s in this.glyphs)
                 this.glyphs[s] = PIXI.Texture.fromFrame(this.glyphs[s]);
             this.digits = [];
             for (var i = 0; i < 8; i++) {
                 this.digits[i] = new PIXI.Sprite(this.glyphs[i]);
-                this.digits[i].scale.set(0.36);
                 this.addChild(this.digits[i]);
             }
-            this.title = PIXI.Sprite.fromFrame("assets/hud/PersonalBest.png");
-            this.title.anchor.x = 0;
-            this.title.anchor.y = 0;
-            this.title.position.y = 1;
-            this.addChild(this.title);
         }
         return BestScore;
     }());
@@ -1229,20 +1276,14 @@ var ECS;
     BestScore.prototype.setScore = function (score) {
         var split = formatScore(score).split("");
         var position = 0;
-        var gap = 3;
-        this.title.position.x = 100;
-        position += this.title.position.x + 70 + gap;
+        var gap = -10;
         for (var i = 0; i < split.length; i++) {
             var digit = this.digits[i];
             digit.visible = true;
             digit.setTexture(this.glyphs[split[i]]);
             digit.position.x = position;
-            digit.anchor.x = 0;
-            digit.anchor.y = 0;
-            position += digit.width - gap;
+            position += digit.width + gap;
         }
-        position = 150 + position / 2;
-        this.title.position.x -= position;
         for (var i = 0; i < this.digits.length; i++) {
             this.digits[i].position.x -= position;
         }
@@ -1421,6 +1462,8 @@ var ECS;
                 zoom: 2,
                 ease: Cubic.easeOut
             });
+            //this.reset();
+            //this.start();
         };
         GameKernel.prototype.gameoverReal = function () {
             this.gameReallyOver = true;
@@ -1620,12 +1663,13 @@ var ECS;
             this.normalBackground = new GameBackground(this.gameFront);
             //this.powerBar = new PowerBar();
             this.specialFood = new ECS.Specialfood();
+            this.playUIPanel = new ECS.PlayUIPanel();
             this.score = new ECS.Score();
             this.bestScore = new ECS.BestScore();
             this.background = this.normalBackground;
             //this.score.position.x = GameConfig.width/2;
             this.game.addChild(this.background);
-            //this.hud.addChild(this.powerBar);
+            this.hud.addChild(this.playUIPanel);
             this.hud.addChild(this.score);
             this.hud.addChild(this.bestScore);
             this.hud.addChild(this.specialFood);
@@ -1735,12 +1779,18 @@ var ECS;
             ECS.GameConfig.height = h;
             this.renderer.resize(w, h);
             this.background.width = w;
-            this.bestScore.position.x = w;
-            this.bestScore.position.y = 24;
-            this.score.position.x = w / 2;
-            this.score.position.y = 12;
+            this.bestScore.position.x = 900;
+            this.bestScore.position.y = 22;
+            this.bestScore.scale.x = 0.3;
+            this.bestScore.scale.y = 0.3;
+            this.score.position.x = 740;
+            this.score.position.y = 22;
+            this.score.scale.x = 0.3;
+            this.score.scale.y = 0.3;
             this.specialFood.position.x = 0;
             this.specialFood.position.y = 12;
+            this.playUIPanel.position.x = 0;
+            this.playUIPanel.position.y = 12;
             this.white.scale.x = w / 16;
             this.white.scale.y = h / 16;
             // this.powerBar.position.x = w - 295;
@@ -1883,22 +1933,27 @@ var ECS;
             for (var i = 0; i < this.platforms.length; i++) {
                 var platform = this.platforms[i];
                 platform.update();
+                // this.platforms.splice(i, 1);
                 // for(var i=0;i<platform.numberOfBlock;i++){
                 //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
                 //     {                        
                 //         this.engine.view.gameFront.removeChild(platform.views[i]);
                 //     }  
                 // }
-                // this.platforms.splice(i, 1);
                 // i--;
             }
         };
         PlatformManager.prototype.destroyAll = function () {
             for (var i = 0; i < this.platforms.length; i++) {
                 var platform = this.platforms[i];
-                for (var i = 0; i < platform.numberOfBlock * 2; i++) {
-                    this.engine.view.gameFront.removeChild(platform.views[i]);
-                }
+                this.platforms.splice(i, 1);
+                // for(var i=0;i<platform.numberOfBlock;i++){
+                //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
+                //     {                        
+                //         this.engine.view.gameFront.removeChild(platform.views[i]);
+                //     }  
+                // }
+                i--;
             }
             this.platforms = [];
         };
@@ -2027,12 +2082,14 @@ var ECS;
                 pickup.ratio = 0;
                 //judge food pool, 0 jap 1 indo
                 if (this.pickedUpPool.length < this.MAX_PICKUP_NUM - 1) {
-                    console.log("collect food, type:" + pickup.foodType);
+                    //console.log("collect food, type:"+pickup.foodType);
                     this.pickedUpPool.push(pickup.foodType);
+                    this.engine.view.specialFood.digits[this.pickedUpPool.length - 1].texture = this.engine.view.specialFood.activeFoods[this.pickedUpPool.length - 1];
                 }
                 else if (this.pickedUpPool.length == this.MAX_PICKUP_NUM - 1 && this.canPickOrNot) {
-                    console.log("collect food, type:" + pickup.foodType);
+                    //console.log("collect food, type:"+pickup.foodType);
                     this.pickedUpPool.push(pickup.foodType);
+                    this.engine.view.specialFood.digits[this.pickedUpPool.length - 1].texture = this.engine.view.specialFood.activeFoods[this.pickedUpPool.length - 1];
                     //count for jan food
                     var cnt = 0;
                     for (var i = 0; i < this.pickedUpPool.length; i++) {
@@ -2047,20 +2104,21 @@ var ECS;
                         ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.shinobiEffect1);
                         ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.shinobiEffect2);
                         ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.shinobiEffect3);
-                        console.log("change special mode:japan");
+                        ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.backEffect);
+                        //console.log("change special mode:japan");
                     }
                     else if (cnt < otherCnt) {
                         specialMode = ECS.SPECIALMODE.INDONMODE;
                         ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
                         ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.indoEffect);
-                        console.log("change special mode:indo");
+                        //console.log("change special mode:indo");
                     }
                     else {
                         specialMode = ECS.SPECIALMODE.NINJAMODE;
                         ECS.GameConfig.tmpTimeClockStart = ECS.GameConfig.time.currentTime;
                         ECS.GameConfig.game.player.view.addChild(ECS.GameConfig.game.player.marioEffect);
                         ECS.GameConfig.game.player.speed.x *= 2;
-                        console.log("change special mode:ninja");
+                        //console.log("change special mode:ninja");
                     }
                     ECS.GameConfig.specialMode = specialMode;
                     this.canPickOrNot = false;
@@ -2185,9 +2243,6 @@ var ECS;
                                 enemy.hit();
                                 break;
                             case ECS.SPECIALMODE.INDONMODE:
-                                //console.log("indo");
-                                //player.die();
-                                //this.engine.gameover();
                                 if (floatRange == -2000) {
                                     enemy.hit();
                                 }

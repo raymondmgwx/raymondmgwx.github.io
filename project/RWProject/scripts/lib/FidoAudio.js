@@ -1,346 +1,318 @@
-var FidoAudio = (function()
-{    
+var FidoAudio = (function() {
     var cSoundPool = {};
     var DEFAULT_FADE_OUT_TIME = 1;
     var DEFAULT_FADE_IN_TIME = 1;
     var MUTE_ALL = false;
-    
+
     var Device = new Fido.Device();
     var LocalStorage = new Fido.LocalStorage();
-    
-    var aSounds = [
-        {
-            src : 'audio/mainLoop',
+
+    var aSounds = [{
+            src: 'audio/mainLoop',
             volume: 0.6,
             maxVolume: 0.6,
             loop: true,
             autoPlay: false,
-            type : 'music',
-            name : 'gameMusic'
+            type: 'music',
+            name: 'gameMusic'
         },
         {
-            src : 'audio/footLoopRegular',
+            src: 'audio/footLoopRegular',
             volume: 0.0,
             maxVolume: 0.6,
             loop: true,
             autoPlay: false,
-            type : 'music',
-            name : 'runRegular'
+            type: 'music',
+            name: 'runRegular'
         },
         {
-            src : 'audio/footLoopFast',
+            src: 'audio/footLoopFast',
             volume: 0.0,
             maxVolume: 0.6,
             loop: true,
             autoPlay: false,
-            type : 'music',
-            name : 'runFast'
+            type: 'music',
+            name: 'runFast'
         },
         {
-            src : 'audio/thrustLoop',
+            src: 'audio/thrustLoop',
             volume: 0.0,
             maxVolume: 0.4,
             loop: true,
             autoPlay: true,
-            type : 'music',
-            name : 'thrusters'
+            type: 'music',
+            name: 'thrusters'
         },
         {
-            src : 'audio/pickupGrab',
+            src: 'audio/pickupGrab',
             volume: 0.5,
             maxVolume: 0.5,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'pickup'
+            type: 'sfx',
+            name: 'pickup'
         },
         {
-            src : 'audio/blockHit',
+            src: 'audio/blockHit',
             volume: 0.2,
             maxVolume: 0.2,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'blockHit'
+            type: 'sfx',
+            name: 'blockHit'
         },
         {
-            src : 'audio/lavaSplosh',
+            src: 'audio/lavaSplosh',
             volume: 0.5,
             maxVolume: 0.5,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'lavaSplosh'
+            type: 'sfx',
+            name: 'lavaSplosh'
         },
         {
-            src : 'audio/fallThud',
+            src: 'audio/fallThud',
             volume: 1.0,
             maxVolume: 1.0,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'thudBounce'
+            type: 'sfx',
+            name: 'thudBounce'
         },
         {
-            src : 'audio/DeathJingle',
+            src: 'audio/DeathJingle',
             volume: 0.7,
             maxVolume: 0.7,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'deathJingle'
+            type: 'sfx',
+            name: 'deathJingle'
         },
         {
-            src : 'audio/hyperMode',
+            src: 'audio/hyperMode',
             volume: 0.2,
             maxVolume: 0.2,
             loop: false,
             autoPlay: false,
-            type : 'sfx',
-            name : 'hyperMode'
+            type: 'sfx',
+            name: 'hyperMode'
         }
     ];
 
-    function init()
-    {   
-        if(Device.cocoonJS === true)
-        {
-            for(var i = 0; i < aSounds.length; i++)
-            {
+    function init() {
+        if (Device.cocoonJS === true) {
+            for (var i = 0; i < aSounds.length; i++) {
                 var cSound = aSounds[i];
-                
-                switch(cSound.type)
-                {
+
+                switch (cSound.type) {
                     case 'music':
-                        
+
                         CocoonJS.App.markAsMusic(cSound.src + ".ogg");
 
                         var music = document.createElement('audio');
                         music.src = cSound.src + ".ogg";
                         music.loop = cSound.loop;
-                        
+
                         cSound.audio = new CocoonJS.Music().setAudio(music);
                         cSound.audio.volume(cSound.volume);
-                        
+
                         cSoundPool[cSound.name] = cSound;
-                  
-                        if(cSound.autoPlay === true) cSoundPool[cSound.name].audio.play();
-                        
-                    break;
-                    
+
+                        if (cSound.autoPlay === true) cSoundPool[cSound.name].audio.play();
+
+                        break;
+
                     case 'sfx':
-                        
+
                         var sfx = new Audio();
                         sfx.src = cSound.src + ".ogg";
                         cSound.audio = new CocoonJS.Audio().setAudio(sfx);
                         cSound.audio.volume(cSound.volume);
-                        
+
                         cSoundPool[cSound.name] = cSound;
-                        
-                    break;
+
+                        break;
                 }
-            } 
-        }
-        else
-        {
-            for(var i = 0; i < aSounds.length; i++)
-            {
+            }
+        } else {
+            for (var i = 0; i < aSounds.length; i++) {
                 var cSound = aSounds[i];
-                 
+
                 cSound.audio = new Howl({
                     urls: [cSound.src + ".mp3"],
                     autoplay: cSound.autoPlay,
                     loop: cSound.loop,
                     volume: cSound.volume,
-                    onload: function()
-                    {
+                    onload: function() {
                         //alert('loaded');
                     },
-                    onend: function()
-                    {
+                    onend: function() {
                         //alert('finished playing sound');
                     },
-                    onloaderror: function()
-                    {
+                    onloaderror: function() {
                         alert('ERROR : Failed to load ' + cSound.src + ".m4a");
                     },
-                    onplay: function()
-                    {
+                    onplay: function() {
                         //alert('playing');
                     }
                 });
-                 
+
                 cSoundPool[cSound.name] = cSound;
             }
         }
 
-        if(LocalStorage.get('gameMuted') === 'true') FidoAudio.muteAll();
+        if (LocalStorage.get('gameMuted') === 'true') FidoAudio.muteAll();
     }
-    
-    function isMuted()
-    {
+
+    function isMuted() {
         return MUTE_ALL;
     }
-    
-    function muteAll()
-    {   
+
+    function muteAll() {
         MUTE_ALL = true;
         LocalStorage.store('gameMuted', true);
-        
-        if(Device.cocoonJS === true)
-        {
+
+        if (Device.cocoonJS === true) {
             var sKey = false;
-            
-            for(sKey in cSoundPool)
-            {   
+
+            for (sKey in cSoundPool) {
                 var cSound = cSoundPool[sKey];
-                
+
                 var holder = {
-                    volume:  cSound.audio.getVolume()
+                    volume: cSound.audio.getVolume()
                 };
-                
-                muteOneSound(cSound, holder);  
+
+                muteOneSound(cSound, holder);
             }
-        }
-        else
-        {
-            var cHolder = { 
+        } else {
+            var cHolder = {
                 volume: 1
             };
 
-            TweenLite.to(cHolder, 1, { volume: 0, onUpdate: function()
-            {  
-                Howler.volume(this.target.volume);
-            }, onComplete : function()
-            {
-                Howler.mute();
-            }});
+            TweenLite.to(cHolder, 1, {
+                volume: 0,
+                onUpdate: function() {
+                    Howler.volume(this.target.volume);
+                },
+                onComplete: function() {
+                    Howler.mute();
+                }
+            });
         }
     }
-    
-    function muteOneSound(cSound, holder)
-    {
-        TweenLite.to(holder, 1, { volume: 0, onUpdate: function()
-        {  
-            cSound.audio.volume(this.target.volume);
-        }});    
+
+    function muteOneSound(cSound, holder) {
+        TweenLite.to(holder, 1, {
+            volume: 0,
+            onUpdate: function() {
+                cSound.audio.volume(this.target.volume);
+            }
+        });
     }
-    
-    function unMuteOneSound(cSound, holder)
-    {
-        TweenLite.to(holder, 1, { volume: cSound.volume, onUpdate: function()
-        {  
-            cSound.audio.volume(this.target.volume);
-        }}); 
+
+    function unMuteOneSound(cSound, holder) {
+        TweenLite.to(holder, 1, {
+            volume: cSound.volume,
+            onUpdate: function() {
+                cSound.audio.volume(this.target.volume);
+            }
+        });
     }
-    
-    function unMuteAll()
-    {
+
+    function unMuteAll() {
         MUTE_ALL = false;
         LocalStorage.store('gameMuted', false)
-        
-        if(Device.cocoonJS === true)
-        {
+
+        if (Device.cocoonJS === true) {
             var sKey = false;
 
-            for(sKey in cSoundPool)
-            {
+            for (sKey in cSoundPool) {
                 var cSound = cSoundPool[sKey];
-                unMuteOneSound(cSound, { 
-                    volume: 0 
+                unMuteOneSound(cSound, {
+                    volume: 0
                 });
             }
-        }
-        else
-        {
-            var cHolder = { 
+        } else {
+            var cHolder = {
                 volume: 0
             };
-            
+
             Howler.unmute();
-            
-            TweenLite.to(cHolder, 1, { volume: 1, onUpdate: function(cObject, sProperty)
-            {  
-                Howler.volume(this.target.volume);
-            }});
+
+            TweenLite.to(cHolder, 1, {
+                volume: 1,
+                onUpdate: function(cObject, sProperty) {
+                    Howler.volume(this.target.volume);
+                }
+            });
         }
     }
-    
-    function play(id)
-    {
-        if(cSoundPool.hasOwnProperty(id))
-        {
+
+    function play(id) {
+        if (cSoundPool.hasOwnProperty(id)) {
             cSoundPool[id].audio.play();
-            
-        }
-        else
-        {
+
+        } else {
             console.log("WARNING :: Couldn't find sound '" + id + "'.");
         }
     }
-    
-    function fadeOut(sKey)
-    {
-        var cSound = cSoundPool[sKey];
-                
-        var holder = {
-            volume:  0
-        };
 
-        muteOneSound(cSound, holder); 
-    }
-    
-    function fadeIn(id, time)
-    {
-        if(!soundExists(id)) return;
-        
-        var cSound = cSoundPool[id];
-        var nFadeInTime = time || DEFAULT_FADE_IN_TIME;
-        
-        var cHolder = { 
+    function fadeOut(sKey) {
+        var cSound = cSoundPool[sKey];
+
+        var holder = {
             volume: 0
         };
-        
-        TweenLite.to(cHolder, nFadeInTime, { volume: cSound.maxVolume, onUpdate: function(cObject, sProperty)
-        {  
-            setVolume(id, this.target.volume);
-        }});
+
+        muteOneSound(cSound, holder);
     }
-    
-    function soundExists(id)
-    {
+
+    function fadeIn(id, time) {
+        if (!soundExists(id)) return;
+
+        var cSound = cSoundPool[id];
+        var nFadeInTime = time || DEFAULT_FADE_IN_TIME;
+
+        var cHolder = {
+            volume: 0
+        };
+
+        TweenLite.to(cHolder, nFadeInTime, {
+            volume: cSound.maxVolume,
+            onUpdate: function(cObject, sProperty) {
+                setVolume(id, this.target.volume);
+            }
+        });
+    }
+
+    function soundExists(id) {
         return cSoundPool.hasOwnProperty(id);
     }
-    
-    function setVolume(id, volume)
-    {
-        if(!soundExists(id)) return;
-        
-        if(MUTE_ALL === true)
-        {
-            cSoundPool[id].volume = volume;    
-        }
-        else
-        {
+
+    function setVolume(id, volume) {
+        if (!soundExists(id)) return;
+
+        if (MUTE_ALL === true) {
+            cSoundPool[id].volume = volume;
+        } else {
             cSoundPool[id].audio.volume(volume);
         }
     }
-    
-    function stop(id)
-    {
+
+    function stop(id) {
         cSoundPool[id].audio.stop();
     }
-    
+
     return {
         init: init,
         play: play,
-        stop : stop,
-        fadeOut : fadeOut,
-        fadeIn : fadeIn,
-        setVolume : setVolume,
-        muteAll : muteAll,
-        unMuteAll : unMuteAll,
-        isMuted : isMuted
+        stop: stop,
+        fadeOut: fadeOut,
+        fadeIn: fadeIn,
+        setVolume: setVolume,
+        muteAll: muteAll,
+        unMuteAll: unMuteAll,
+        isMuted: isMuted
     }
-    
+
 })();

@@ -197,13 +197,13 @@ module ECS {
                 var platform = this.platforms[i]
                 platform.update();
                 
+                // this.platforms.splice(i, 1);
                 // for(var i=0;i<platform.numberOfBlock;i++){
                 //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
                 //     {                        
                 //         this.engine.view.gameFront.removeChild(platform.views[i]);
                 //     }  
                 // }
-                // this.platforms.splice(i, 1);
                 // i--;
 
             }
@@ -213,9 +213,14 @@ module ECS {
             for (var i = 0; i < this.platforms.length; i++) 
             {
                 var platform = this.platforms[i];
-                for(var i=0;i<platform.numberOfBlock*2;i++){
-                    this.engine.view.gameFront.removeChild(platform.views[i]);
-                }
+                this.platforms.splice(i, 1);
+                // for(var i=0;i<platform.numberOfBlock;i++){
+                //     if(platform.views[i].position.x < -500 -GameConfig.xOffset && !this.engine.player.isDead)
+                //     {                        
+                //         this.engine.view.gameFront.removeChild(platform.views[i]);
+                //     }  
+                // }
+                i--;
             }
             
             this.platforms = [];
@@ -398,14 +403,15 @@ module ECS {
                 pickup.pickupPosition = {x:pickup.position.x, y:pickup.position.y}//.clone();
                 pickup.ratio = 0;
     
-    
                 //judge food pool, 0 jap 1 indo
                 if(this.pickedUpPool.length <this.MAX_PICKUP_NUM-1){
-                    console.log("collect food, type:"+pickup.foodType);
+                    //console.log("collect food, type:"+pickup.foodType);
                     this.pickedUpPool.push(pickup.foodType);
+                    this.engine.view.specialFood.digits[this.pickedUpPool.length-1].texture = this.engine.view.specialFood.activeFoods[this.pickedUpPool.length-1];
                 }else if(this.pickedUpPool.length == this.MAX_PICKUP_NUM-1 && this.canPickOrNot){
-                    console.log("collect food, type:"+pickup.foodType);
+                    //console.log("collect food, type:"+pickup.foodType);
                     this.pickedUpPool.push(pickup.foodType);
+                    this.engine.view.specialFood.digits[this.pickedUpPool.length-1].texture = this.engine.view.specialFood.activeFoods[this.pickedUpPool.length-1];
                     //count for jan food
                     var cnt = 0;
                     for(var i = 0; i<this.pickedUpPool.length;i++){
@@ -420,19 +426,20 @@ module ECS {
                         specialMode = SPECIALMODE.JAPANMODE;
                         GameConfig.game.player.view.addChild(GameConfig.game.player.shinobiEffect1);      
                         GameConfig.game.player.view.addChild(GameConfig.game.player.shinobiEffect2);      
-                        GameConfig.game.player.view.addChild(GameConfig.game.player.shinobiEffect3);               
-                        console.log("change special mode:japan");
+                        GameConfig.game.player.view.addChild(GameConfig.game.player.shinobiEffect3);     
+                        GameConfig.game.player.view.addChild(GameConfig.game.player.backEffect);          
+                        //console.log("change special mode:japan");
                     }else if (cnt < otherCnt){
                         specialMode = SPECIALMODE.INDONMODE
                         GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
                         GameConfig.game.player.view.addChild(GameConfig.game.player.indoEffect);
-                        console.log("change special mode:indo");
+                        //console.log("change special mode:indo");
                     }else{
                         specialMode = SPECIALMODE.NINJAMODE;
                         GameConfig.tmpTimeClockStart = GameConfig.time.currentTime;
                         GameConfig.game.player.view.addChild(GameConfig.game.player.marioEffect);
                         GameConfig.game.player.speed.x*=2;
-                        console.log("change special mode:ninja");
+                        //console.log("change special mode:ninja");
                     }
     
                     GameConfig.specialMode = specialMode;
@@ -597,9 +604,6 @@ module ECS {
                                     enemy.hit();
                                 break;
                                 case SPECIALMODE.INDONMODE:
-                                    //console.log("indo");
-                                    //player.die();
-                                    //this.engine.gameover();
                                     if(floatRange == -2000){
                                         enemy.hit();
                                     }else{

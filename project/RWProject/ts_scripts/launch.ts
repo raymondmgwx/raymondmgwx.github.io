@@ -14,3 +14,4 @@ document.getElementById("btn_play").onclick= function(){
         document.getElementById("global").style.display = "none";
         load();
 }
+
