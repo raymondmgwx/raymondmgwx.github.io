@@ -112,7 +112,6 @@
             ];
             this.init();
         }
-        superMario
         init() {
 
             for (var i = 0; i < this.soundList.length; i++) {
@@ -130,6 +129,9 @@
                             this.play("StartMusic");
                         }
  
+                    },
+                    onloaderror:()=>{
+                        alert("load sound error!");
                     }
                 });
 

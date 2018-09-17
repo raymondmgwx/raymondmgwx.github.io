@@ -48,8 +48,6 @@ module ECS {
 
     export class GameBackGroundSystem extends System{
 
-        vines:GameVines;
-
         width:number;
         scrollPosition:number;
         bgTex:BackGroundElement;

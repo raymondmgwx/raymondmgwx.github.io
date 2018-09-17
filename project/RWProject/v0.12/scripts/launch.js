@@ -593,6 +593,9 @@ var ECS;
                             _this.setVolume('StartMusic', 0.1);
                             _this.play("StartMusic");
                         }
+                    },
+                    onloaderror: function () {
+                        alert("load sound error!");
                     }
                 });
                 this.soundPool[cSound.name] = cSound;
@@ -2428,17 +2431,6 @@ var ECS;
             }
             this.view.update();
         };
-        // reset(){
-        //     this.enemyManager.destroyAll();
-        //     this.platManager.destroyAll();
-        //     this.floorManager.destroyAll();
-        //     this.segmentManager.reset();
-        //     this.view.zoom = 1;
-        //     this.pickupCount = 0;
-        //     this.levelCount = 0;
-        //     this.player.level = 1;
-        //     this.view.game.addChild(this.player.view);
-        // }
         GameKernelSystem.prototype.gameover = function () {
             this.isPlaying = false;
             this.isDying = true;
@@ -2454,15 +2446,7 @@ var ECS;
                 zoom: 2,
                 ease: Cubic.easeOut
             });
-            //this.reset();
-            //this.start();
         };
-        // gameoverReal()
-        // {
-        //     this.gameReallyOver = true;
-        //     this.isDying = false;
-        //     //this.onGameoverReal();
-        // }
         GameKernelSystem.prototype.pickup = function (idx) {
             if (this.player.isDead)
                 return;
@@ -2471,35 +2455,6 @@ var ECS;
         return GameKernelSystem;
     }(ECS.System));
     ECS.GameKernelSystem = GameKernelSystem;
-    var GameVines = /** @class */ (function () {
-        function GameVines(owner) {
-            this.vines = [];
-            this.owner = owner;
-            for (var i = 0; i < 10; i++) {
-                var vine = new PIXI.Sprite.fromFrame("01_hanging_flower3.png");
-                vine.offset = i * 100 + Math.random() * 50;
-                vine.speed = (1.5 + Math.random() * 0.25) / 2;
-                vine.position.y = Math.random() * -200;
-                owner.addChild(vine);
-                vine.position.x = 200;
-                this.vines.push(vine);
-            }
-            ;
-            this.speed = 1;
-        }
-        GameVines.prototype.setPosition = function (position) {
-            for (var i = 0; i < this.vines.length; i++) {
-                var vine = this.vines[i];
-                var pos = -(position + vine.offset) * vine.speed;
-                pos %= this.owner.width;
-                pos += this.owner.width;
-                vine.position.x = pos;
-            }
-            ;
-        };
-        return GameVines;
-    }());
-    ECS.GameVines = GameVines;
 })(ECS || (ECS = {}));
 /* =========================================================================
  *
@@ -2543,6 +2498,7 @@ var ECS;
             _this.device = new Utils.DeviceDetect();
             //console.log(this.device.PrintInfo());
             ECS.GameConfig.audio = new ECS.GameAudio();
+            Howler.mobileAutoEnable = true;
             //game resources list
             _this.resourceList =
                 [

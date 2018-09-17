@@ -12,6 +12,7 @@
 module ECS {
 
     declare var PIXI:any;
+    declare var Howler:any;
 
     export function update() {
         GameConfig.game.update();
@@ -51,6 +52,7 @@ module ECS {
             this.device = new Utils.DeviceDetect();
             //console.log(this.device.PrintInfo());
             GameConfig.audio = new GameAudio();
+            Howler.mobileAutoEnable = true;
             //game resources list
             this.resourceList =
             [

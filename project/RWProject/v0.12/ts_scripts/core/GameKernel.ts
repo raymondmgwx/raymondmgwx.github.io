@@ -127,23 +127,7 @@ module ECS {
             this.view.update();
 
         }
-
-        // reset(){
-        //     this.enemyManager.destroyAll();
-        //     this.platManager.destroyAll();
-        //     this.floorManager.destroyAll();
-            
-        //     this.segmentManager.reset();
-        //     this.view.zoom = 1;
-        //     this.pickupCount = 0;
-        //     this.levelCount = 0;
-        //     this.player.level = 1;
-            
-        //     this.view.game.addChild(this.player.view);
-        // }
-
  
-
         gameover()
         {
             this.isPlaying = false;
@@ -165,62 +149,13 @@ module ECS {
                 zoom : 2, 
                 ease : Cubic.easeOut
             });
-
-            //this.reset();
-            //this.start();
         }
-
-        // gameoverReal()
-        // {
-        //     this.gameReallyOver = true;
-        //     this.isDying = false;
-        //     //this.onGameoverReal();
-        // }
-
         pickup(idx:number)
         {
             if(this.player.isDead) return; 
                 
             this.pickupCount++;
 
-        }
-    }
-
-
-
-    export class GameVines{
-        vines:any;
-        owner:any;
-        speed:number;
-        constructor(owner:any){
-            this.vines = [];
-            this.owner = owner;
-            for (var i=0; i < 10; i++) 
-            {
-                var vine = new PIXI.Sprite.fromFrame("01_hanging_flower3.png");
-                vine.offset = i * 100 + Math.random() * 50;
-                vine.speed = (1.5 + Math.random() * 0.25 )/2;
-                vine.position.y = Math.random() * -200;
-                owner.addChild(vine);
-                vine.position.x = 200;
-                this.vines.push(vine);
-            };	
-                          
-            this.speed = 1;
-        }
-
-        setPosition(position:any)
-        {
-            for (var i=0; i < this.vines.length; i++) 
-            {
-                var vine = this.vines[i];
-                
-                var pos = -(position + vine.offset) * vine.speed;
-                pos %=  this.owner.width;
-                pos +=  this.owner.width;
-                
-                vine.position.x = pos
-            };	
         }
     }
 }
