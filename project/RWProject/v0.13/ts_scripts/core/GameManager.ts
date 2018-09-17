@@ -520,7 +520,6 @@ module ECS {
                 
                 if(floor.position.x < -1135 - GameConfig.xOffset -16)
                 {
-                    //console.log("delete floor");
                     this.floors.splice(i, 1);
                     i--;
                     this.engine.view.gameFront.removeChild(floor);
@@ -532,8 +531,8 @@ module ECS {
         {
             var floor = this.floorPool.getObject();
             floor.position.x = floorData;
-            //floor.position.y = 520;
-            floor.position.y = (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteHeight;
+            floor.position.y = (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteHeight -1;
+            floor.view.height = GameConfig.height - floor.position.y + 1;
             floor.view.position.y = floor.position.y;
             this.engine.view.gameFront.addChild(floor.view);
             this.floors.push(floor);

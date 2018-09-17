@@ -14,7 +14,6 @@
     
      export class GameAudio{
         soundPool:any = {};
-        loadedCount:number=0;
     
         device:any = new Utils.DeviceDetect();
         localData:any = new GameLocalData(GameConfig.localID);
@@ -122,13 +121,7 @@
                     html5: true,
                     loop:cSound.loop,
                     onload: ()=> { 
-                        // this.loadedCount++;  
-                        // if(this.loadedCount == this.soundList.length){
-                        //     console.log("all music loaded");
-                        //     this.setVolume('StartMusic', 0.1);
-                        //     this.play("StartMusic");
-                        // }
- 
+       
                     },
                     onloaderror:()=>{
                         alert("load sound error!");

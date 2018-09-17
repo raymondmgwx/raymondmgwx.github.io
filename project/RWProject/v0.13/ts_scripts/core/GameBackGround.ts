@@ -13,17 +13,17 @@ module ECS {
         spriteWidth:number;
         spriteHeight:number;
         speed;number;
-        constructor(texture:any,y:number,owner:any,width:number=940){
+        constructor(texture:any,owner:any,width:number=940){
             this.sprites = [];
             this.spriteWidth = texture.width-5;
-            this.spriteHeight = texture.height-1;
+            this.spriteHeight = GameConfig.height*4/5;
             var amount = Math.ceil(width / this.spriteWidth);
             if(amount < 3)amount = 3;
             
             for (var i=0; i < amount; i++) 
             {
                 var sprite = new PIXI.Sprite(texture);
-                //sprite.position.y = y;
+                sprite.height = GameConfig.height*4/5;
                 owner.addChild(sprite);
                 this.sprites.push(sprite);
             };	
@@ -65,7 +65,6 @@ module ECS {
 
         constructor(){
                 super("view-background")
-                //PIXI.DisplayObjectContainer.call( this );
                 this.BackGroundContainer = new PIXI.Container();
 
                 this.width = GameConfig.width;
@@ -73,13 +72,13 @@ module ECS {
 
                 var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
 
-                this.bgTex = new BackGroundElement(bgTex, -195, this.BackGroundContainer);
+                this.bgTex = new BackGroundElement(bgTex, this.BackGroundContainer);
 
                 this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
                 this.tree1.anchor.x = 0.5;
                 this.tree1.anchor.y = 0.5;
                 this.tree1.width = 200;
-                this.tree1.height = 350;
+                this.tree1.height = GameConfig.height/3;
 
                 this.tree1.position.y = this.bgTex.spriteHeight - this.tree1.height/2;
 
@@ -89,7 +88,7 @@ module ECS {
                 this.tree2.anchor.x = 0.5;
                 this.tree2.anchor.y = 0.5;
                 this.tree2.width = 200;
-                this.tree2.height = 350;
+                this.tree2.height = GameConfig.height/3;
                 this.tree2.position.y = this.bgTex.spriteHeight - this.tree2.height/2;
 
                 this.BackGroundContainer.addChild(this.tree2);

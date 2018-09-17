@@ -474,7 +474,6 @@ var ECS;
     var GameAudio = /** @class */ (function () {
         function GameAudio() {
             this.soundPool = {};
-            this.loadedCount = 0;
             this.device = new Utils.DeviceDetect();
             this.localData = new ECS.GameLocalData(ECS.GameConfig.localID);
             this.soundList = [
@@ -586,12 +585,6 @@ var ECS;
                     html5: true,
                     loop: cSound.loop,
                     onload: function () {
-                        // this.loadedCount++;  
-                        // if(this.loadedCount == this.soundList.length){
-                        //     console.log("all music loaded");
-                        //     this.setVolume('StartMusic', 0.1);
-                        //     this.play("StartMusic");
-                        // }
                     },
                     onloaderror: function () {
                         alert("load sound error!");
@@ -633,17 +626,17 @@ var ECS;
 var ECS;
 (function (ECS) {
     var BackGroundElement = /** @class */ (function () {
-        function BackGroundElement(texture, y, owner, width) {
+        function BackGroundElement(texture, owner, width) {
             if (width === void 0) { width = 940; }
             this.sprites = [];
             this.spriteWidth = texture.width - 5;
-            this.spriteHeight = texture.height - 1;
+            this.spriteHeight = ECS.GameConfig.height * 4 / 5;
             var amount = Math.ceil(width / this.spriteWidth);
             if (amount < 3)
                 amount = 3;
             for (var i = 0; i < amount; i++) {
                 var sprite = new PIXI.Sprite(texture);
-                //sprite.position.y = y;
+                sprite.height = ECS.GameConfig.height * 4 / 5;
                 owner.addChild(sprite);
                 this.sprites.push(sprite);
             }
@@ -668,24 +661,23 @@ var ECS;
         __extends(GameBackGroundSystem, _super);
         function GameBackGroundSystem() {
             var _this = _super.call(this, "view-background") || this;
-            //PIXI.DisplayObjectContainer.call( this );
             _this.BackGroundContainer = new PIXI.Container();
             _this.width = ECS.GameConfig.width;
             _this.scrollPosition = 1500;
             var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
-            _this.bgTex = new BackGroundElement(bgTex, -195, _this.BackGroundContainer);
+            _this.bgTex = new BackGroundElement(bgTex, _this.BackGroundContainer);
             _this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
             _this.tree1.anchor.x = 0.5;
             _this.tree1.anchor.y = 0.5;
             _this.tree1.width = 200;
-            _this.tree1.height = 350;
+            _this.tree1.height = ECS.GameConfig.height / 3;
             _this.tree1.position.y = _this.bgTex.spriteHeight - _this.tree1.height / 2;
             _this.BackGroundContainer.addChild(_this.tree1);
             _this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
             _this.tree2.anchor.x = 0.5;
             _this.tree2.anchor.y = 0.5;
             _this.tree2.width = 200;
-            _this.tree2.height = 350;
+            _this.tree2.height = ECS.GameConfig.height / 3;
             _this.tree2.position.y = _this.bgTex.spriteHeight - _this.tree2.height / 2;
             _this.BackGroundContainer.addChild(_this.tree2);
             _this.cloud1 = PIXI.Sprite.fromFrame("cloud1.png");
@@ -1443,7 +1435,6 @@ var ECS;
                 var floor = this.floors[i];
                 floor.view.position.x = floor.position.x - ECS.GameConfig.camera.x - 16;
                 if (floor.position.x < -1135 - ECS.GameConfig.xOffset - 16) {
-                    //console.log("delete floor");
                     this.floors.splice(i, 1);
                     i--;
                     this.engine.view.gameFront.removeChild(floor);
@@ -1453,8 +1444,8 @@ var ECS;
         FloorManager.prototype.addFloor = function (floorData) {
             var floor = this.floorPool.getObject();
             floor.position.x = floorData;
-            //floor.position.y = 520;
-            floor.position.y = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteHeight;
+            floor.position.y = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteHeight - 1;
+            floor.view.height = ECS.GameConfig.height - floor.position.y + 1;
             floor.view.position.y = floor.position.y;
             this.engine.view.gameFront.addChild(floor.view);
             this.floors.push(floor);
@@ -2663,7 +2654,13 @@ var ECS;
 /// <reference path="./core/HashSet.ts" />
 /// <reference path="./core/GameLoad.ts" />
 var load_system = new ECS.LoadingSystem();
-load_system.playStartScreenMusic();
+if (load_system.device.desktop) {
+    $('#modal_movie').modal('show');
+    load_system.playStartScreenMusic();
+}
+else {
+    $('#modal_setting').modal('show');
+}
 var startGame = function () {
     load_system.Init();
 };
@@ -2671,8 +2668,9 @@ document.getElementById("btn_play").onclick = function () {
     document.getElementById("global").style.display = "none";
     startGame();
 };
-document.getElementById("btn_score").onclick = function () {
+document.getElementById("openMusic").onclick = function () {
     load_system.playStartScreenMusic();
+    $('#modal_setting').modal('hide');
 };
 /* =========================================================================
  *
