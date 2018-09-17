@@ -7,7 +7,6 @@ declare var PIXI;
 
 
 let load_system = new ECS.LoadingSystem();
-//load_system.playStartScreenMusic();
 
 
 var startGame = function () {
@@ -20,3 +19,6 @@ document.getElementById("btn_play").onclick= function(){
         startGame();
 }
 
+document.getElementById("btn_score").onclick= function(){
+        load_system.playStartScreenMusic();
+}

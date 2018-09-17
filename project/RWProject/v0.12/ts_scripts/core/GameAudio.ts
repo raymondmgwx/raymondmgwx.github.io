@@ -122,12 +122,12 @@
                     html5: true,
                     loop:cSound.loop,
                     onload: ()=> { 
-                        this.loadedCount++;  
-                        if(this.loadedCount == this.soundList.length){
-                            console.log("all music loaded");
-                            this.setVolume('StartMusic', 0.1);
-                            this.play("StartMusic");
-                        }
+                        // this.loadedCount++;  
+                        // if(this.loadedCount == this.soundList.length){
+                        //     console.log("all music loaded");
+                        //     this.setVolume('StartMusic', 0.1);
+                        //     this.play("StartMusic");
+                        // }
  
                     },
                     onloaderror:()=>{

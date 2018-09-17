@@ -579,7 +579,6 @@ var ECS;
             this.init();
         }
         GameAudio.prototype.init = function () {
-            var _this = this;
             for (var i = 0; i < this.soundList.length; i++) {
                 var cSound = this.soundList[i];
                 cSound.audio = new Howl({
@@ -587,12 +586,12 @@ var ECS;
                     html5: true,
                     loop: cSound.loop,
                     onload: function () {
-                        _this.loadedCount++;
-                        if (_this.loadedCount == _this.soundList.length) {
-                            console.log("all music loaded");
-                            _this.setVolume('StartMusic', 0.1);
-                            _this.play("StartMusic");
-                        }
+                        // this.loadedCount++;  
+                        // if(this.loadedCount == this.soundList.length){
+                        //     console.log("all music loaded");
+                        //     this.setVolume('StartMusic', 0.1);
+                        //     this.play("StartMusic");
+                        // }
                     },
                     onloaderror: function () {
                         alert("load sound error!");
@@ -728,39 +727,6 @@ var ECS;
         return GameBackGroundSystem;
     }(ECS.System));
     ECS.GameBackGroundSystem = GameBackGroundSystem;
-    //GameBackground.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
-    // GameBackground.prototype.updateTransform = function()
-    // {
-    //     this.scrollPosition = GameConfig.camera.x + 8000;
-    //     var treePos = -this.scrollPosition * 1.5/2;
-    //     treePos %= this.width + 556;
-    //     treePos += this.width + 556;
-    //     treePos -= this.tree1.width/2;
-    //     this.tree1.position.x = treePos -GameConfig.xOffset;
-    //     var treePos2 = -(this.scrollPosition + this.width/2) * 1.5/2;
-    //     treePos2 %= this.width + 556;
-    //     treePos2 += this.width + 556;
-    //     treePos2 -= this.tree2.width/2;
-    //     this.tree2.position.x = treePos2 -GameConfig.xOffset;
-    //     var cloud1Pos = -this.scrollPosition * 1.5/2;
-    //     cloud1Pos %= this.width + 556;
-    //     cloud1Pos += this.width + 556;
-    //     cloud1Pos -= this.cloud1.width/2;
-    //     this.cloud1.position.x = cloud1Pos -GameConfig.xOffset;
-    //     var cloud2Pos = -(this.scrollPosition + this.width/2) * 1.5/2;
-    //     cloud2Pos %= this.width + 556;
-    //     cloud2Pos += this.width + 556;
-    //     cloud2Pos -= this.cloud2.width/2;
-    //     this.cloud2.position.x = cloud2Pos -GameConfig.xOffset;
-    //     this.bgTex.setPosition(this.scrollPosition);
-    //     //this.rearSilhouette.setPosition(this.scrollPosition);
-    //     //this.rearCanopy.setPosition(this.scrollPosition);
-    //    // this.farCanopy.setPosition(this.scrollPosition);
-    //     //this.frontSilhouette.setPosition(this.scrollPosition);
-    //     //this.roofLeaves.setPosition(this.scrollPosition);
-    //     //this.vines.setPosition(this.scrollPosition);
-    //     PIXI.DisplayObjectContainer.prototype.updateTransform.call( this );
-    // }
 })(ECS || (ECS = {}));
 /* =========================================================================
  *
@@ -2697,13 +2663,15 @@ var ECS;
 /// <reference path="./core/HashSet.ts" />
 /// <reference path="./core/GameLoad.ts" />
 var load_system = new ECS.LoadingSystem();
-//load_system.playStartScreenMusic();
 var startGame = function () {
     load_system.Init();
 };
 document.getElementById("btn_play").onclick = function () {
     document.getElementById("global").style.display = "none";
     startGame();
+};
+document.getElementById("btn_score").onclick = function () {
+    load_system.playStartScreenMusic();
 };
 /* =========================================================================
  *
