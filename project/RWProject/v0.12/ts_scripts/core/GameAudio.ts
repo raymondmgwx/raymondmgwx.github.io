@@ -11,13 +11,10 @@
 
     declare var Howl:any;
     declare var Howler:any;
-    declare var TweenLite:any;
     
      export class GameAudio{
         soundPool:any = {};
-        DEFAULT_FADE_OUT_TIME:any = 1;
-        DEFAULT_FADE_IN_TIME:any = 1;
-        MUTE_ALL:any = false;
+        loadedCount:number=0;
     
         device:any = new Utils.DeviceDetect();
         localData:any = new GameLocalData(GameConfig.localID);
@@ -124,7 +121,16 @@
                 cSound.audio = new Howl({
                     src: [cSound.src + ".mp3"],
                     html5: true,
-                    loop:cSound.loop
+                    loop:cSound.loop,
+                    onload: ()=> { 
+                        this.loadedCount++;  
+                        if(this.loadedCount == this.soundList.length){
+                            console.log("all music loaded");
+                            this.setVolume('StartMusic', 0.1);
+                            this.play("StartMusic");
+                        }
+ 
+                    }
                 });
 
                 this.soundPool[cSound.name] = cSound;

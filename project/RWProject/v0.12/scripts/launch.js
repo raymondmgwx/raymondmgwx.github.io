@@ -474,9 +474,7 @@ var ECS;
     var GameAudio = /** @class */ (function () {
         function GameAudio() {
             this.soundPool = {};
-            this.DEFAULT_FADE_OUT_TIME = 1;
-            this.DEFAULT_FADE_IN_TIME = 1;
-            this.MUTE_ALL = false;
+            this.loadedCount = 0;
             this.device = new Utils.DeviceDetect();
             this.localData = new ECS.GameLocalData(ECS.GameConfig.localID);
             this.soundList = [
@@ -581,12 +579,21 @@ var ECS;
             this.init();
         }
         GameAudio.prototype.init = function () {
+            var _this = this;
             for (var i = 0; i < this.soundList.length; i++) {
                 var cSound = this.soundList[i];
                 cSound.audio = new Howl({
                     src: [cSound.src + ".mp3"],
                     html5: true,
-                    loop: cSound.loop
+                    loop: cSound.loop,
+                    onload: function () {
+                        _this.loadedCount++;
+                        if (_this.loadedCount == _this.soundList.length) {
+                            console.log("all music loaded");
+                            _this.setVolume('StartMusic', 0.1);
+                            _this.play("StartMusic");
+                        }
+                    }
                 });
                 this.soundPool[cSound.name] = cSound;
             }
@@ -2734,7 +2741,7 @@ var ECS;
 /// <reference path="./core/HashSet.ts" />
 /// <reference path="./core/GameLoad.ts" />
 var load_system = new ECS.LoadingSystem();
-load_system.playStartScreenMusic();
+//load_system.playStartScreenMusic();
 var startGame = function () {
     load_system.Init();
 };
