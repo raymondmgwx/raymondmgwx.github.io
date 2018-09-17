@@ -7,7 +7,7 @@ declare var PIXI;
 
 
 let load_system = new ECS.LoadingSystem();
-
+load_system.playStartScreenMusic();
 
 var startGame = function () {
         load_system.Init();

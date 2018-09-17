@@ -2663,6 +2663,7 @@ var ECS;
 /// <reference path="./core/HashSet.ts" />
 /// <reference path="./core/GameLoad.ts" />
 var load_system = new ECS.LoadingSystem();
+load_system.playStartScreenMusic();
 var startGame = function () {
     load_system.Init();
 };
