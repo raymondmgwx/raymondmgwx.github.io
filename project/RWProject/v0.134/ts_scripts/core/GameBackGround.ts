@@ -69,7 +69,7 @@ module ECS {
                 this.width = GameConfig.width;
                 this.scrollPosition = GameConfig.camera.x;
 
-                var bgTex = PIXI.loader.resources["img/bg_down.png"].texture;
+                var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
 
                 this.bgTex = new BackGroundElement(bgTex);
                 for(var i=0;i<this.bgTex.sprites.length;i++){
