@@ -115,6 +115,7 @@ module ECS {
             this.view.anchor.y = 0.5;
             this.view.height=135;
             this.view.width=75;
+            this.position.x =  (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
 
             this.floorSpriteHeight = (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteHeight;
 
@@ -377,7 +378,7 @@ module ECS {
 
             //speed up when user reach some points
             var judgeImPoints = Math.floor(GameConfig.game.distanceScore / 2);
-            if(judgeImPoints!=0 && !this.speedUpList.includes(judgeImPoints)){
+            if(judgeImPoints!=0 && !this.speedUpList.includes(judgeImPoints) && GameConfig.game.distanceScore<20){
                 //console.log("speed up!");
                 this.speedUpList.push(judgeImPoints);
                 this.speed.x *=1.1;

@@ -13,18 +13,18 @@ module ECS {
         spriteWidth:number;
         spriteHeight:number;
         speed;number;
-        constructor(texture:any,owner:any,width:number=940){
+        constructor(texture:any,owner:any){
             this.sprites = [];
             this.spriteWidth = texture.width-5;
             this.spriteHeight = GameConfig.height*4/5;
-            var amount = Math.ceil(width / this.spriteWidth);
-            if(amount < 3)amount = 3;
+            var amount =3;
             
             for (var i=0; i < amount; i++) 
             {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = GameConfig.height*4/5;
                 owner.addChild(sprite);
+
                 this.sprites.push(sprite);
             };	
                           
@@ -39,7 +39,7 @@ module ECS {
                 var pos = -position * this.speed;
                 pos += i *  h ;
                 pos %=  h * this.sprites.length ;
-                pos +=  h/2;
+                pos += h/2;
 
                 this.sprites[i].position.x = pos;
             };	
@@ -68,7 +68,7 @@ module ECS {
                 this.BackGroundContainer = new PIXI.Container();
 
                 this.width = GameConfig.width;
-                this.scrollPosition = 1500;
+                this.scrollPosition = GameConfig.camera.x;
 
                 var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
 
@@ -105,7 +105,7 @@ module ECS {
 
                 GameConfig.app.ticker.add((delta)=> {
                    // console.log("background run!");
-                    this.scrollPosition = GameConfig.camera.x + 8000;
+                    this.scrollPosition = GameConfig.camera.x;
 
                     var intervalDistance = GameConfig.width;
                     

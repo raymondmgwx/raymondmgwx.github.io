@@ -626,14 +626,11 @@ var ECS;
 var ECS;
 (function (ECS) {
     var BackGroundElement = /** @class */ (function () {
-        function BackGroundElement(texture, owner, width) {
-            if (width === void 0) { width = 940; }
+        function BackGroundElement(texture, owner) {
             this.sprites = [];
             this.spriteWidth = texture.width - 5;
             this.spriteHeight = ECS.GameConfig.height * 4 / 5;
-            var amount = Math.ceil(width / this.spriteWidth);
-            if (amount < 3)
-                amount = 3;
+            var amount = 3;
             for (var i = 0; i < amount; i++) {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = ECS.GameConfig.height * 4 / 5;
@@ -663,7 +660,7 @@ var ECS;
             var _this = _super.call(this, "view-background") || this;
             _this.BackGroundContainer = new PIXI.Container();
             _this.width = ECS.GameConfig.width;
-            _this.scrollPosition = 1500;
+            _this.scrollPosition = ECS.GameConfig.camera.x;
             var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
             _this.bgTex = new BackGroundElement(bgTex, _this.BackGroundContainer);
             _this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
@@ -690,7 +687,7 @@ var ECS;
             _this.bgTex.speed = 1 / 2;
             ECS.GameConfig.app.ticker.add(function (delta) {
                 // console.log("background run!");
-                _this.scrollPosition = ECS.GameConfig.camera.x + 8000;
+                _this.scrollPosition = ECS.GameConfig.camera.x;
                 var intervalDistance = ECS.GameConfig.width;
                 var treePos = -_this.scrollPosition * 1.5 / 2;
                 treePos %= _this.width + intervalDistance;
@@ -1735,6 +1732,7 @@ var ECS;
             this.view.anchor.y = 0.5;
             this.view.height = 135;
             this.view.width = 75;
+            this.position.x = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
             this.floorSpriteHeight = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteHeight;
             //refresh floor position
             this.refreshFloorHeight();
@@ -1934,7 +1932,7 @@ var ECS;
             this.indonTight.animationSpeed = this.realAnimationSpeed * ECS.GameConfig.time.DELTA_TIME * this.level;
             //speed up when user reach some points
             var judgeImPoints = Math.floor(ECS.GameConfig.game.distanceScore / 2);
-            if (judgeImPoints != 0 && !this.speedUpList.includes(judgeImPoints)) {
+            if (judgeImPoints != 0 && !this.speedUpList.includes(judgeImPoints) && ECS.GameConfig.game.distanceScore < 20) {
                 //console.log("speed up!");
                 this.speedUpList.push(judgeImPoints);
                 this.speed.x *= 1.1;
