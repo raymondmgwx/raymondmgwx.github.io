@@ -634,6 +634,7 @@ var ECS;
             for (var i = 0; i < amount; i++) {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = ECS.GameConfig.height * 4 / 5;
+                sprite.position.y = 0;
                 owner.addChild(sprite);
                 this.sprites.push(sprite);
             }
