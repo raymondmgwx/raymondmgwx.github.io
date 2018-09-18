@@ -116,7 +116,7 @@ module ECS {
             this.view.height=135;
             this.view.width=75;
             this.position.x =  (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
-            if(!GameConfig.device.desktop) this.position.x =  1.5*(<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
+            if(!GameConfig.device.desktop) this.position.x =  2*(<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
 
             this.floorSpriteHeight = (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteHeight;
 

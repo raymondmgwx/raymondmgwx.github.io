@@ -1739,7 +1739,7 @@ var ECS;
             this.view.width = 75;
             this.position.x = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
             if (!ECS.GameConfig.device.desktop)
-                this.position.x = 1.5 * (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
+                this.position.x = 2 * (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
             this.floorSpriteHeight = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteHeight;
             //refresh floor position
             this.refreshFloorHeight();
