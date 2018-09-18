@@ -13,7 +13,7 @@ module ECS {
         spriteWidth:number;
         spriteHeight:number;
         speed;number;
-        constructor(texture:any,owner:any){
+        constructor(texture:any){
             this.sprites = [];
             this.spriteWidth = texture.width-5;
             this.spriteHeight = GameConfig.height*4/5;
@@ -24,8 +24,6 @@ module ECS {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = GameConfig.height*4/5;
                 sprite.position.y = 0;
-                owner.addChild(sprite);
-
                 this.sprites.push(sprite);
             };	
                           
@@ -73,7 +71,10 @@ module ECS {
 
                 var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
 
-                this.bgTex = new BackGroundElement(bgTex, this.BackGroundContainer);
+                this.bgTex = new BackGroundElement(bgTex);
+                for(var i=0;i<bgTex.sprites.length;i++){
+                    this.BackGroundContainer.addChild(bgTex.sprites[i]);
+                }
 
                 this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
                 this.tree1.anchor.x = 0.5;

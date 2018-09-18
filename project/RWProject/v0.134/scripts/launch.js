@@ -626,7 +626,7 @@ var ECS;
 var ECS;
 (function (ECS) {
     var BackGroundElement = /** @class */ (function () {
-        function BackGroundElement(texture, owner) {
+        function BackGroundElement(texture) {
             this.sprites = [];
             this.spriteWidth = texture.width - 5;
             this.spriteHeight = ECS.GameConfig.height * 4 / 5;
@@ -636,7 +636,6 @@ var ECS;
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = ECS.GameConfig.height * 4 / 5;
                 sprite.position.y = 0;
-                owner.addChild(sprite);
                 this.sprites.push(sprite);
             }
             ;
@@ -664,7 +663,10 @@ var ECS;
             _this.width = ECS.GameConfig.width;
             _this.scrollPosition = ECS.GameConfig.camera.x;
             var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
-            _this.bgTex = new BackGroundElement(bgTex, _this.BackGroundContainer);
+            _this.bgTex = new BackGroundElement(bgTex);
+            for (var i = 0; i < bgTex.sprites.length; i++) {
+                _this.BackGroundContainer.addChild(bgTex.sprites[i]);
+            }
             _this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
             _this.tree1.anchor.x = 0.5;
             _this.tree1.anchor.y = 0.5;
