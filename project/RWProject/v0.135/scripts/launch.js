@@ -2680,6 +2680,9 @@ document.getElementById("openMusic").onclick = function () {
     $('#modal_setting').modal('hide');
     $('#modal_movie').modal('show');
 };
+document.getElementById("btn_close").onclick = function () {
+    $('#modal_movie').modal('show');
+};
 /* =========================================================================
  *
  *  GamePartical.ts
