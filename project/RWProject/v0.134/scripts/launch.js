@@ -647,6 +647,8 @@ var ECS;
                 pos += i * h;
                 pos %= h * this.sprites.length;
                 pos += h / 2;
+                if (!ECS.GameConfig.device.desktop)
+                    pos += h / 2;
                 this.sprites[i].position.x = pos;
             }
             ;
@@ -661,7 +663,9 @@ var ECS;
             _this.BackGroundContainer = new PIXI.Container();
             _this.width = ECS.GameConfig.width;
             _this.scrollPosition = ECS.GameConfig.camera.x;
-            var bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
+            var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
+            if (!ECS.GameConfig.device.desktop)
+                bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
             _this.bgTex = new BackGroundElement(bgTex);
             for (var i = 0; i < _this.bgTex.sprites.length; i++) {
                 _this.BackGroundContainer.addChild(_this.bgTex.sprites[i]);
@@ -1106,8 +1110,6 @@ var ECS;
         SegmentManager.prototype.update = function () {
             this.position = ECS.GameConfig.camera.x + ECS.GameConfig.width * 2;
             var relativePosition = this.position - this.currentSegment.start;
-            // console.log("relativePosition:"+relativePosition);
-            // console.log("length:"+this.currentSegment.length);
             if (relativePosition > this.currentSegment.length) {
                 //var nextSegment = this.startSegment;//this.sections[this.count % this.sections.length];
                 var nextSegment = this.sections[this.count % this.sections.length];
@@ -2565,6 +2567,7 @@ var ECS;
                 ECS.GameConfig.app = _this.app;
                 ECS.GameConfig.width = _this.width;
                 ECS.GameConfig.height = _this.height;
+                ECS.GameConfig.device = _this.device;
                 ECS.GameConfig.allSystem = new Utils.HashSet();
                 var allSystem = ECS.GameConfig.allSystem;
                 allSystem.set("background", new ECS.GameBackGroundSystem());
@@ -2673,6 +2676,7 @@ document.getElementById("btn_play").onclick = function () {
 document.getElementById("openMusic").onclick = function () {
     load_system.playStartScreenMusic();
     $('#modal_setting').modal('hide');
+    $('#modal_movie').modal('show');
 };
 /* =========================================================================
  *

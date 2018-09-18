@@ -177,6 +177,7 @@ module ECS {
                 GameConfig.app = this.app;
                 GameConfig.width = this.width;
                 GameConfig.height = this.height;
+                GameConfig.device = this.device;
                 GameConfig.allSystem =new Utils.HashSet<System>();
                 let allSystem = GameConfig.allSystem;
                 

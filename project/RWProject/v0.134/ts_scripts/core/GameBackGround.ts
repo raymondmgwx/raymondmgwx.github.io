@@ -38,7 +38,9 @@ module ECS {
                 var pos = -position * this.speed;
                 pos += i *  h ;
                 pos %=  h * this.sprites.length ;
+                
                 pos += h/2;
+                if(!GameConfig.device.desktop)pos += h/2;
 
                 this.sprites[i].position.x = pos;
             };	
@@ -69,7 +71,8 @@ module ECS {
                 this.width = GameConfig.width;
                 this.scrollPosition = GameConfig.camera.x;
 
-                var bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
+                var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
+                if(!GameConfig.device.desktop)bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
 
                 this.bgTex = new BackGroundElement(bgTex);
                 for(var i=0;i<this.bgTex.sprites.length;i++){

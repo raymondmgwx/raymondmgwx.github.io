@@ -68,6 +68,7 @@ module ECS {
 
     export class GameConfig{
         static app:any;
+        static device:any;
         static allSystem:Utils.HashSet<System>;
         static audio:GameAudio;
         static width:number=800;

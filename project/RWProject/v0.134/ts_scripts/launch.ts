@@ -29,4 +29,5 @@ document.getElementById("btn_play").onclick= function(){
 document.getElementById("openMusic").onclick= function(){
         load_system.playStartScreenMusic();
         $('#modal_setting').modal('hide'); 
+        $('#modal_movie').modal('show');
 }

@@ -73,8 +73,7 @@ module ECS {
             this.position = GameConfig.camera.x + GameConfig.width * 2;
             
             var relativePosition = this.position - this.currentSegment.start;
-            // console.log("relativePosition:"+relativePosition);
-            // console.log("length:"+this.currentSegment.length);
+    
             if(relativePosition > this.currentSegment.length)
             {
                 
