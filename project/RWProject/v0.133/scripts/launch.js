@@ -631,6 +631,7 @@ var ECS;
             this.spriteWidth = texture.width - 5;
             this.spriteHeight = ECS.GameConfig.height * 4 / 5;
             var amount = 3;
+            alert(this.spriteHeight);
             for (var i = 0; i < amount; i++) {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = ECS.GameConfig.height * 4 / 5;
