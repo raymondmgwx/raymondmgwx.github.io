@@ -631,7 +631,6 @@ var ECS;
             this.spriteWidth = texture.width - 5;
             this.spriteHeight = ECS.GameConfig.height * 4 / 5;
             var amount = 3;
-            alert(this.spriteHeight);
             for (var i = 0; i < amount; i++) {
                 var sprite = new PIXI.Sprite(texture);
                 sprite.height = ECS.GameConfig.height * 4 / 5;
@@ -662,7 +661,7 @@ var ECS;
             _this.BackGroundContainer = new PIXI.Container();
             _this.width = ECS.GameConfig.width;
             _this.scrollPosition = ECS.GameConfig.camera.x;
-            var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
+            var bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
             _this.bgTex = new BackGroundElement(bgTex);
             for (var i = 0; i < _this.bgTex.sprites.length; i++) {
                 _this.BackGroundContainer.addChild(_this.bgTex.sprites[i]);
@@ -2466,6 +2465,7 @@ var ECS;
                     "img/blade.png",
                     "img/platform.png",
                     "img/bg_up.png",
+                    "img/bg_up_ios.png",
                     "img/bg_down.png",
                     "img/floatingGround.png",
                     "assets/background/BackgroundAssets.json",

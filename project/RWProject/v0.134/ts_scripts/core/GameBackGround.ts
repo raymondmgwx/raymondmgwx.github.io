@@ -18,7 +18,7 @@ module ECS {
             this.spriteWidth = texture.width-5;
             this.spriteHeight = GameConfig.height*4/5;
             var amount =3;
-            alert(this.spriteHeight);
+
             for (var i=0; i < amount; i++) 
             {
                 var sprite = new PIXI.Sprite(texture);
@@ -69,7 +69,7 @@ module ECS {
                 this.width = GameConfig.width;
                 this.scrollPosition = GameConfig.camera.x;
 
-                var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
+                var bgTex = PIXI.loader.resources["img/bg_up_ios.png"].texture;
 
                 this.bgTex = new BackGroundElement(bgTex);
                 for(var i=0;i<this.bgTex.sprites.length;i++){

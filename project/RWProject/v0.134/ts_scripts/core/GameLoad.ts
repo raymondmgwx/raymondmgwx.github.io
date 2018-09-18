@@ -61,6 +61,7 @@ module ECS {
                 "img/blade.png",
                 "img/platform.png",
                 "img/bg_up.png",
+                "img/bg_up_ios.png",
                 "img/bg_down.png",
                 "img/floatingGround.png",
                 "assets/background/BackgroundAssets.json",
