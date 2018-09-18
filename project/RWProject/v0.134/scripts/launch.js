@@ -664,8 +664,8 @@ var ECS;
             _this.scrollPosition = ECS.GameConfig.camera.x;
             var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
             _this.bgTex = new BackGroundElement(bgTex);
-            for (var i = 0; i < bgTex.sprites.length; i++) {
-                _this.BackGroundContainer.addChild(bgTex.sprites[i]);
+            for (var i = 0; i < _this.bgTex.sprites.length; i++) {
+                _this.BackGroundContainer.addChild(_this.bgTex.sprites[i]);
             }
             _this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
             _this.tree1.anchor.x = 0.5;

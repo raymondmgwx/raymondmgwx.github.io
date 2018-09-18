@@ -72,8 +72,8 @@ module ECS {
                 var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
 
                 this.bgTex = new BackGroundElement(bgTex);
-                for(var i=0;i<bgTex.sprites.length;i++){
-                    this.BackGroundContainer.addChild(bgTex.sprites[i]);
+                for(var i=0;i<this.bgTex.sprites.length;i++){
+                    this.BackGroundContainer.addChild(this.bgTex.sprites[i]);
                 }
 
                 this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
