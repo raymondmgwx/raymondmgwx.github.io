@@ -662,7 +662,7 @@ var ECS;
             _this.BackGroundContainer = new PIXI.Container();
             _this.width = ECS.GameConfig.width;
             _this.scrollPosition = ECS.GameConfig.camera.x;
-            var bgTex = PIXI.loader.resources["img/bg_up.png"].texture;
+            var bgTex = PIXI.loader.resources["img/bg_down.png"].texture;
             _this.bgTex = new BackGroundElement(bgTex);
             for (var i = 0; i < _this.bgTex.sprites.length; i++) {
                 _this.BackGroundContainer.addChild(_this.bgTex.sprites[i]);
