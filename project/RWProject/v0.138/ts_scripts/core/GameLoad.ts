@@ -76,6 +76,12 @@ module ECS {
         }
 
         playStartScreenMusic(){
+            GameConfig.audio.setVolume('superMarioMode', 0.0);
+            GameConfig.audio.play("superMarioMode");
+
+            GameConfig.audio.setVolume('GameMusic', 0.0);
+            GameConfig.audio.play("GameMusic");
+
             GameConfig.audio.setVolume('StartMusic', 0.1);
             GameConfig.audio.play("StartMusic");
         }

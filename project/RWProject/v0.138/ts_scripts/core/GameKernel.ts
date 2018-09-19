@@ -88,9 +88,10 @@ module ECS {
             this.segmentManager.chillMode = false;
             this.bulletMult = 1;
 
-            GameConfig.audio.play("StartMusic");
-            //GameConfig.audio.setVolume('GameMusic', 0.5);
-            //GameConfig.audio.play("GameMusic");
+            GameConfig.audio.stop("StartMusic");
+            GameConfig.audio.setVolume('GameMusic', 0.5);
+            GameConfig.audio.setVolume('superMarioMode', 0.5);
+            GameConfig.audio.play("GameMusic");
         }
 
         update(){
