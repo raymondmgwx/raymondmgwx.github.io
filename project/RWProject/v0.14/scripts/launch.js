@@ -672,20 +672,23 @@ var ECS;
             for (var i = 0; i < _this.bgTex.sprites.length; i++) {
                 _this.BackGroundContainer.addChild(_this.bgTex.sprites[i]);
             }
-            _this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
-            _this.tree1.anchor.x = 0.5;
-            _this.tree1.anchor.y = 0.5;
-            _this.tree1.width = 200;
-            _this.tree1.height = ECS.GameConfig.height / 3;
-            _this.tree1.position.y = _this.bgTex.spriteHeight - _this.tree1.height / 2;
-            _this.BackGroundContainer.addChild(_this.tree1);
-            _this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
-            _this.tree2.anchor.x = 0.5;
-            _this.tree2.anchor.y = 0.5;
-            _this.tree2.width = 200;
-            _this.tree2.height = ECS.GameConfig.height / 3;
-            _this.tree2.position.y = _this.bgTex.spriteHeight - _this.tree2.height / 2;
-            _this.BackGroundContainer.addChild(_this.tree2);
+            _this.groundAssetList = [
+                "obstacle all-11.png",
+                "tree1.png",
+                "obstacle all-13.png",
+                "tree2.png"
+            ];
+            _this.groundSpriteList = [];
+            for (var i = 0; i < _this.groundAssetList.length; i++) {
+                var gSprite = PIXI.Sprite.fromFrame(_this.groundAssetList[i]);
+                gSprite.anchor.x = 0.5;
+                gSprite.anchor.y = 0.5;
+                gSprite.width = 140 * ECS.GameConfig.height / ECS.GameConfig.fixedHeight;
+                gSprite.height = 240 * ECS.GameConfig.height / ECS.GameConfig.fixedHeight;
+                gSprite.position.y = _this.bgTex.spriteHeight - gSprite.height / 2;
+                _this.BackGroundContainer.addChild(gSprite);
+                _this.groundSpriteList.push(gSprite);
+            }
             _this.cloud1 = PIXI.Sprite.fromFrame("cloud1.png");
             _this.cloud1.position.y = ECS.GameConfig.height / 5;
             _this.BackGroundContainer.addChild(_this.cloud1);
@@ -697,17 +700,7 @@ var ECS;
             ECS.GameConfig.app.ticker.add(function (delta) {
                 // console.log("background run!");
                 _this.scrollPosition = ECS.GameConfig.camera.x;
-                var intervalDistance = ECS.GameConfig.width;
-                var treePos = -_this.scrollPosition * 1.5 / 2;
-                treePos %= _this.width + intervalDistance;
-                treePos += _this.width + intervalDistance;
-                treePos -= _this.tree1.width / 2;
-                _this.tree1.position.x = treePos - ECS.GameConfig.xOffset;
-                var treePos2 = -(_this.scrollPosition + _this.width / 2) * 1.5 / 2;
-                treePos2 %= _this.width + intervalDistance;
-                treePos2 += _this.width + intervalDistance;
-                treePos2 -= _this.tree2.width / 2;
-                _this.tree2.position.x = treePos2 - ECS.GameConfig.xOffset;
+                var intervalDistance = _this.bgTex.sprites[0].width / 4;
                 var cloud1Pos = -_this.scrollPosition * 1.5 / 2;
                 cloud1Pos %= _this.width + intervalDistance;
                 cloud1Pos += _this.width + intervalDistance;
@@ -718,6 +711,14 @@ var ECS;
                 cloud2Pos += _this.width + intervalDistance;
                 cloud2Pos -= _this.cloud2.width / 2;
                 _this.cloud2.position.x = cloud2Pos - ECS.GameConfig.xOffset;
+                //
+                for (var i = 0; i < _this.groundAssetList.length; i++) {
+                    var gSpritePos = -(_this.scrollPosition + _this.width * (i + 1)) * 3 / 4;
+                    gSpritePos %= _this.width + intervalDistance;
+                    gSpritePos += _this.width + intervalDistance;
+                    gSpritePos -= _this.groundSpriteList[i].width / 2;
+                    _this.groundSpriteList[i].position.x = gSpritePos - ECS.GameConfig.xOffset;
+                }
                 _this.bgTex.setPosition(_this.scrollPosition);
             });
             return _this;
@@ -1179,9 +1180,7 @@ var ECS;
             this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.5;
             this.view.height = 115 * ECS.GameConfig.height / ECS.GameConfig.fixedHeight;
-            ;
             this.view.width = 65 * ECS.GameConfig.height / ECS.GameConfig.fixedHeight;
-            ;
             this.position.x = (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
             if (!ECS.GameConfig.device.desktop)
                 this.position.x = 2 * (ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100;
@@ -2448,7 +2447,7 @@ var ECS;
             this.segmentManager.chillMode = false;
             this.bulletMult = 1;
             ECS.GameConfig.audio.stop("StartMusic");
-            ECS.GameConfig.audio.setVolume('GameMusic', 0.1);
+            ECS.GameConfig.audio.setVolume('GameMusic', 0.5);
             ECS.GameConfig.audio.play("GameMusic");
         };
         GameKernelSystem.prototype.update = function () {
@@ -2560,6 +2559,7 @@ var ECS;
                     "img/floatingGround.png",
                     "assets/background/BackgroundAssets.json",
                     "assets/food/food.json",
+                    "assets/obstacle/obstacle.json",
                     "assets/playUI/playPanel.json",
                     "assets/playUI/number.json",
                     "assets/character/chara1.json",
@@ -2568,7 +2568,7 @@ var ECS;
             return _this;
         }
         LoadingSystem.prototype.playStartScreenMusic = function () {
-            ECS.GameConfig.audio.setVolume('StartMusic', 0.1);
+            ECS.GameConfig.audio.setVolume('StartMusic', 0.5);
             ECS.GameConfig.audio.play("StartMusic");
         };
         LoadingSystem.prototype.loadingAnime = function () {

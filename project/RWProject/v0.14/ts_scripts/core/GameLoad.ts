@@ -68,6 +68,7 @@ module ECS {
                 "img/floatingGround.png",
                 "assets/background/BackgroundAssets.json",
                 "assets/food/food.json",
+                "assets/obstacle/obstacle.json",
                 "assets/playUI/playPanel.json",
                 "assets/playUI/number.json",
                 "assets/character/chara1.json",

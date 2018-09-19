@@ -113,8 +113,8 @@ module ECS {
             
             this.view.anchor.x = 0.5;
             this.view.anchor.y = 0.5;
-            this.view.height=115 *GameConfig.height /GameConfig.fixedHeight;;
-            this.view.width=65*GameConfig.height /GameConfig.fixedHeight;;
+            this.view.height=115 *GameConfig.height /GameConfig.fixedHeight;
+            this.view.width=65*GameConfig.height /GameConfig.fixedHeight;
             this.position.x =  (<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
             if(!GameConfig.device.desktop) this.position.x =  2*(<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth +100;
 

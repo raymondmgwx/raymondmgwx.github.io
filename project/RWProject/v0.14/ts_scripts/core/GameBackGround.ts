@@ -58,8 +58,9 @@ module ECS {
         roofLeaves:BackGroundElement;
         frontSilhouette:BackGroundElement;
 
-        tree1:any;
-        tree2:any;
+        groundAssetList:any;
+        groundSpriteList:any;
+
         cloud1:any;
         cloud2:any;
         BackGroundContainer:any;
@@ -79,24 +80,24 @@ module ECS {
                     this.BackGroundContainer.addChild(this.bgTex.sprites[i]);
                 }
 
-                this.tree1 = PIXI.Sprite.fromFrame("tree1.png");
-                this.tree1.anchor.x = 0.5;
-                this.tree1.anchor.y = 0.5;
-                this.tree1.width = 200;
-                this.tree1.height = GameConfig.height/3;
+                this.groundAssetList =[
+                    "obstacle all-11.png",
+                    "tree1.png",
+                    "obstacle all-13.png",
+                    "tree2.png"
+                ];
+                this.groundSpriteList = [];
 
-                this.tree1.position.y = this.bgTex.spriteHeight - this.tree1.height/2;
-
-                this.BackGroundContainer.addChild(this.tree1);
-                
-                this.tree2 = PIXI.Sprite.fromFrame("tree2.png");
-                this.tree2.anchor.x = 0.5;
-                this.tree2.anchor.y = 0.5;
-                this.tree2.width = 200;
-                this.tree2.height = GameConfig.height/3;
-                this.tree2.position.y = this.bgTex.spriteHeight - this.tree2.height/2;
-
-                this.BackGroundContainer.addChild(this.tree2);
+                for(var i=0;i<this.groundAssetList.length;i++){
+                    var gSprite =  PIXI.Sprite.fromFrame(this.groundAssetList[i]);
+                    gSprite.anchor.x = 0.5;
+                    gSprite.anchor.y = 0.5;
+                    gSprite.width = 140*GameConfig.height /GameConfig.fixedHeight;
+                    gSprite.height = 240*GameConfig.height /GameConfig.fixedHeight;
+                    gSprite.position.y = this.bgTex.spriteHeight - gSprite.height/2;
+                    this.BackGroundContainer.addChild(gSprite);
+                    this.groundSpriteList.push(gSprite);
+                }
 
                 this.cloud1 = PIXI.Sprite.fromFrame("cloud1.png");
                 this.cloud1.position.y = GameConfig.height/5;
@@ -112,20 +113,8 @@ module ECS {
                    // console.log("background run!");
                     this.scrollPosition = GameConfig.camera.x;
 
-                    var intervalDistance = GameConfig.width;
-                    
-                    var treePos = -this.scrollPosition * 1.5/2;
-                    treePos %= this.width + intervalDistance;
-                    treePos += this.width + intervalDistance;
-                    treePos -= this.tree1.width/2;
-                    this.tree1.position.x = treePos -GameConfig.xOffset;
-                    
-                    var treePos2 = -(this.scrollPosition + this.width/2) * 1.5/2;
-                    treePos2 %= this.width + intervalDistance;
-                    treePos2 += this.width + intervalDistance;
-                    treePos2 -= this.tree2.width/2;
-                    this.tree2.position.x = treePos2 -GameConfig.xOffset;
-            
+                    var intervalDistance = this.bgTex.sprites[0].width/4;
+                        
                     var cloud1Pos = -this.scrollPosition * 1.5/2;
                     cloud1Pos %= this.width + intervalDistance;
                     cloud1Pos += this.width + intervalDistance;
@@ -137,6 +126,15 @@ module ECS {
                     cloud2Pos += this.width + intervalDistance;
                     cloud2Pos -= this.cloud2.width/2;
                     this.cloud2.position.x = cloud2Pos -GameConfig.xOffset;
+
+                    //
+                    for(var i=0;i<this.groundAssetList.length;i++){
+                        var gSpritePos =-(this.scrollPosition + this.width*(i+1))*3/4;
+                        gSpritePos %= this.width + intervalDistance;
+                        gSpritePos += this.width + intervalDistance;
+                        gSpritePos -= this.groundSpriteList[i].width/2;
+                        this.groundSpriteList[i].position.x = gSpritePos -GameConfig.xOffset;      
+                    }
     
                     this.bgTex.setPosition(this.scrollPosition);
                 });
