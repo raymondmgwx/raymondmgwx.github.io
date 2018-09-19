@@ -2571,8 +2571,10 @@ var ECS;
         LoadingSystem.prototype.playStartScreenMusic = function () {
             ECS.GameConfig.audio.setVolume('superMarioMode', 0.0);
             ECS.GameConfig.audio.play("superMarioMode");
+            ECS.GameConfig.audio.stop("superMarioMode");
             ECS.GameConfig.audio.setVolume('GameMusic', 0.0);
             ECS.GameConfig.audio.play("GameMusic");
+            ECS.GameConfig.audio.stop("GameMusic");
             ECS.GameConfig.audio.setVolume('StartMusic', 0.1);
             ECS.GameConfig.audio.play("StartMusic");
         };
