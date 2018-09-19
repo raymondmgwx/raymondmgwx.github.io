@@ -2448,8 +2448,7 @@ var ECS;
             this.segmentManager.chillMode = false;
             this.bulletMult = 1;
             ECS.GameConfig.audio.stop("StartMusic");
-            ECS.GameConfig.audio.setVolume('GameMusic', 0.5);
-            ECS.GameConfig.audio.setVolume('superMarioMode', 0.5);
+            ECS.GameConfig.audio.setVolume('GameMusic', 0.1);
             ECS.GameConfig.audio.play("GameMusic");
         };
         GameKernelSystem.prototype.update = function () {
@@ -2569,12 +2568,6 @@ var ECS;
             return _this;
         }
         LoadingSystem.prototype.playStartScreenMusic = function () {
-            ECS.GameConfig.audio.setVolume('superMarioMode', 0.0);
-            ECS.GameConfig.audio.play("superMarioMode");
-            ECS.GameConfig.audio.stop("superMarioMode");
-            ECS.GameConfig.audio.setVolume('GameMusic', 0.0);
-            ECS.GameConfig.audio.play("GameMusic");
-            ECS.GameConfig.audio.stop("GameMusic");
             ECS.GameConfig.audio.setVolume('StartMusic', 0.1);
             ECS.GameConfig.audio.play("StartMusic");
         };
