@@ -5,6 +5,7 @@
  *
  * ========================================================================= */
 /// <reference path="./GameItems.ts" />
+/// <reference path="./GameCharacter.ts" />
 /// <reference path="./GameBackGround.ts" />
 module ECS {
     declare var PIXI: any;
@@ -95,12 +96,17 @@ module ECS {
                    this.engine.floorManager.addFloor(this.currentSegment.start + this.currentSegment.floor[i]);
                 }
                 
+
+                //add items(temp calcluate for all device)
                 var blocks = this.currentSegment.blocks;
                 var length = blocks.length/2;
                 
                 for ( var i = 0; i < length; i++) 
                 {
-                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2], blocks[(i*2)+1]);
+                    var enemyY =  blocks[(i*2)+1];
+                    var realEnemyY = GameConfig.height * enemyY/GameConfig.fixedHeight;
+
+                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2],realEnemyY);
                 }
                 
                 var pickups = this.currentSegment.coins;
@@ -115,15 +121,21 @@ module ECS {
                         curType = FOODMODE.JAPAN;
                     }
 
-                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2], pickups[(i*2)+1],curType);
+                    var foodY =  pickups[(i*2)+1];
+                    var realfoodY = GameConfig.height * foodY/GameConfig.fixedHeight;
+
+                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2],realfoodY,curType);
                 }
 
                 var platforms = this.currentSegment.platform;
                 var length = platforms.length/2;
                 
+                
                 for ( var i = 0; i < length; i++) 
                 {
-                    this.engine.platManager.addPlatform(this.currentSegment.start + platforms[i*2], platforms[(i*2)+1]);
+                    var platY =  platforms[(i*2)+1];
+                    var realPlatY = GameConfig.height * platY/GameConfig.fixedHeight;
+                    this.engine.platManager.addPlatform(this.currentSegment.start + platforms[i*2],realPlatY );
                 }
                 
                 this.count ++;
@@ -141,8 +153,18 @@ module ECS {
         width:number;
         height:number;
         numberOfBlock:number;
+
+        platBlockHeight:number;
+        platBlockWidth:number;
         constructor(){
             this.position = new PIXI.Point();
+
+            var platFixedHeight = 50;
+            var newPlatHeight = GameConfig.height * platFixedHeight/GameConfig.fixedHeight;
+            var ratio = newPlatHeight / platFixedHeight;
+
+            this.platBlockHeight = newPlatHeight;
+            this.platBlockWidth = ratio*50;
 
             this.numberOfBlock = -3+Math.random() * (8 - 5) + 5;
             this.views =[];
@@ -150,18 +172,19 @@ module ECS {
                 var view =  new PIXI.Sprite(PIXI.Texture.fromFrame("img/floatingGround.png"));
                 view.anchor.x = 0.5;
                 view.anchor.y = 0.5;
-                view.width = 50;
-                view.height=50;
+                view.width = this.platBlockWidth;
+                view.height=  this.platBlockHeight;
                 this.views.push(view);
             }
 
-            this.width = 50*this.numberOfBlock*2;
-            this.height = 50;
+            //calculate all platform info
+            this.width =  this.platBlockWidth * this.numberOfBlock*2;
+            this.height =  this.platBlockHeight;
         }
         update()
         { 
             for(var i=-this.numberOfBlock;i<this.numberOfBlock;i++){
-                this.views[i+this.numberOfBlock].position.x = this.position.x + 50*i - GameConfig.camera.x;;
+                this.views[i+this.numberOfBlock].position.x = this.position.x + this.platBlockWidth*i - GameConfig.camera.x;;
                 this.views[i+this.numberOfBlock].position.y = this.position.y;
             }
 
@@ -277,6 +300,7 @@ module ECS {
             var enemy = this.enemyPool.getObject();
             enemy.position.x = x;
             enemy.position.y = y;
+
             enemy.view.textures = enemy.moveingFrames;
             enemy.view.play();
             this.enemies.push(enemy);
@@ -683,7 +707,6 @@ module ECS {
                     {
                         this.engine.pickupManager.removePickup(i);
                         this.engine.pickup(i);
-
                     }
                 }
             }

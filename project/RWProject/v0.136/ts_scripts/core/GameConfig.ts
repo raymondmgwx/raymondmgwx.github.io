@@ -5,6 +5,7 @@
  *
  * ========================================================================= */
 /// <reference path="./HashSet.ts" />
+/// <reference path="./GameAudio.ts" />
 module ECS {
     declare var PIXI: any;
     export class GameRunTime{
@@ -73,6 +74,8 @@ module ECS {
         static audio:GameAudio;
         static width:number=800;
         static height:number = 600;
+
+        static fixedHeight:number = 600;
 
         static xOffset:number=0;
         static high_mode:boolean=true;

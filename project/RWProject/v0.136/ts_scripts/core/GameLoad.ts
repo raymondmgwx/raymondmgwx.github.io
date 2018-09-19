@@ -59,10 +59,12 @@ module ECS {
                 "img/doroCat.png",
                 "img/dash_stock.png",
                 "img/blade.png",
-                "img/platform.png",
                 "img/bg_up.png",
                 "img/bg_up_ios.png",
                 "img/bg_down.png",
+                "img/PlayPanel/btn_jump.png",
+                "img/PlayPanel/btn_slide.png",
+                "img/PlayPanel/btn_atk.png",
                 "img/floatingGround.png",
                 "assets/background/BackgroundAssets.json",
                 "assets/food/food.json",
@@ -225,7 +227,7 @@ module ECS {
         //for pc version
         window.addEventListener("keydown", this.onKeyDown, true);
         window.addEventListener("keyup", this.onKeyUp, true);
-        window.addEventListener("touchstart", this.onTouchStart, true);
+        //window.addEventListener("touchstart", this.onTouchStart, true);
 
         
         }
@@ -270,14 +272,14 @@ module ECS {
             }
         }
 
-        onTouchStart(event:any){
-                if (event.target.type !== 'button') {
-                    if (GameConfig.game.isPlaying && !(GameConfig.playerMode == PLAYMODE.JUMPING1))
-                        GameConfig.game.player.jump();
-                    if (GameConfig.game.isPlaying && (GameConfig.playerMode == PLAYMODE.JUMPING1))
-                        GameConfig.game.player.jumpTwo(); 
-                }
-        }
+        // onTouchStart(event:any){
+        //         if (event.target.type !== 'button') {
+        //             if (GameConfig.game.isPlaying && !(GameConfig.playerMode == PLAYMODE.JUMPING1))
+        //                 GameConfig.game.player.jump();
+        //             if (GameConfig.game.isPlaying && (GameConfig.playerMode == PLAYMODE.JUMPING1))
+        //                 GameConfig.game.player.jumpTwo(); 
+        //         }
+        // }
         
     }
 

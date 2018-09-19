@@ -16,6 +16,7 @@ module ECS {
         shine:any;
         width:number;
         height:number;
+
         count:number;
         isPickedUp:boolean;
         ratio:number;
@@ -38,13 +39,14 @@ module ECS {
             this.shine = PIXI.Sprite.fromFrame("pickupShine.png");
             this.shine.anchor.x = this.shine.anchor.y = 0.5;
 
-            this.shine.scale.x = this.shine.scale.y = 1;
+            this.shine.scale.x = this.shine.scale.y *GameConfig.height/GameConfig.fixedHeight;
             this.shine.alpha = 0.5;
             this.view.addChild(this.shine);
             this.view.addChild(this.clip);
             
-            this.width = 100;
-            this.height = 100;
+            this.width = GameConfig.height* 100/GameConfig.fixedHeight
+            this.height = GameConfig.height* 100/GameConfig.fixedHeight;
+            
             this.count = Math.random() * 300;
 
         }
@@ -53,8 +55,8 @@ module ECS {
             if(!this.isPickedUp)
             {
                 this.count += 0.1 * GameConfig.time.DELTA_TIME;
-                this.clip.scale.x = 0.55 + Math.sin(this.count) * 0.1;
-                this.clip.scale.y = 0.55 - Math.cos(this.count) * 0.1;
+                this.clip.scale.x = GameConfig.height* 0.4/GameConfig.fixedHeight + Math.sin(this.count) * 0.1;
+                this.clip.scale.y = GameConfig.height* 0.4/GameConfig.fixedHeight - Math.cos(this.count) * 0.1;
                 this.clip.rotation = Math.sin(this.count * 1.5) * 0.2;
                 
                 this.shine.rotation = this.count * 0.2;
@@ -71,57 +73,6 @@ module ECS {
             this.view.position.y = this.position.y;
             
         }
-    }
-
-
-    export class Specialfood{
-        foods:any;
-        activeFoods:any;
-        digits:any;
-        startX:number;
-        addChild:any;
-        setFoodPic:any;
-        constructor(){
-
-            PIXI.DisplayObjectContainer.call( this );
-        
-            
-            this.foods = [  "Food Grey.png",
-                            "Food Grey.png",
-                            "Food Grey.png",
-                            "Food Grey.png"];
-            this.activeFoods = [  "Food.png",
-                                  "Food.png",
-                                  "Food.png",
-                                  "Food.png"];
-            
-            for(var i=0;i<4;i++){
-                this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
-                this.activeFoods[i] = PIXI.Texture.fromFrame(this.activeFoods[i]);
-                
-            }
-            this.startX = 10;
-            
-            this.digits = [];
-            
-            for ( var i = 0; i < 4; i++) 
-            {
-                this.digits[i] = new PIXI.Sprite(this.foods[i]);
-                this.digits[i].scale.x = 0.6;
-                this.digits[i].scale.y = 0.6;
-                this.addChild(this.digits[i]);
-                this.setFoodPic(this.digits[i],i*this.digits[i].width);
-            }     
-        }
-
-    }
-
-    Specialfood.prototype = Object.create( PIXI.DisplayObjectContainer.prototype );
-    Specialfood.prototype.setFoodPic = function(ui:any,posx:number)
-    {
-
-        ui.position.x = this.startX+posx; 
-
     }
 
 }

@@ -28,6 +28,7 @@ module ECS {
             scoreUI:any;
             bestScoreUI:any;
             distanceScoreUI:any;
+            userControlUI:any;
 
             background:any;
             trail:any;
@@ -72,20 +73,26 @@ module ECS {
             showHud() {
                 
                 //up left ui panel
-                this.specialFood = new Specialfood();
+                this.specialFood = new SpecialfoodUI();
 
                 //up right ui panel
                 this.UIPanelUpRight = new GameUIPanelUpRight();
                 this.scoreUI = new Score(this.UIPanelUpRight.startXList,this.UIPanelUpRight.startYList);
                 this.bestScoreUI = new BestScore(this.UIPanelUpRight.startXList,this.UIPanelUpRight.startYList);
                 this.distanceScoreUI = new DistanceScore(this.UIPanelUpRight.startXList,this.UIPanelUpRight.startYList);
+                
+                if(!GameConfig.device.desktop){
+                    this.userControlUI = new GameUIPanelControl();
+                    this.hudContainer.addChild(this.userControlUI.uiContainer);
+                }
 
                 this.hudContainer.addChild(this.UIPanelUpRight.uiContainer);
                 this.hudContainer.addChild(this.scoreUI.container);
                 this.hudContainer.addChild(this.bestScoreUI.container);
                 this.hudContainer.addChild(this.distanceScoreUI.container);
+                
 
-                this.hudContainer.addChild(this.specialFood);
+                this.hudContainer.addChild(this.specialFood.uiContainer);
             }
         
             

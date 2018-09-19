@@ -22,6 +22,83 @@ module ECS {
         return text;
     }
 
+    export class GameUIPanelControl{
+        uiContainer:any;
+        uiBtnJump:any;
+        uiBtnSlide:any;
+        uiBtnAtk:any;
+        constructor(){
+            this.uiContainer = new PIXI.Container();
+            this.uiBtnAtk = new PIXI.Sprite(PIXI.loader.resources["img/PlayPanel/btn_atk.png"].texture);
+            this.uiBtnJump = new PIXI.Sprite(PIXI.loader.resources["img/PlayPanel/btn_jump.png"].texture);
+            this.uiBtnSlide = new PIXI.Sprite(PIXI.loader.resources["img/PlayPanel/btn_slide.png"].texture);
+
+            this.uiBtnAtk.anchor.set(0.5);
+            this.uiBtnJump.anchor.set(0.5);
+            this.uiBtnSlide.anchor.set(0.5);
+
+            this.uiBtnAtk.scale.set(0.4);
+            this.uiBtnJump.scale.set(0.5);
+            this.uiBtnSlide.scale.set(0.5);
+
+            this.uiBtnSlide.position.y = GameConfig.height*4/5 -  this.uiBtnSlide.height/2;
+            this.uiBtnSlide.position.x = 10 + this.uiBtnSlide.width/2;
+
+            this.uiBtnJump.position.y = GameConfig.height*4/5 -  this.uiBtnSlide.height/2 - this.uiBtnJump.height/2 - 40;
+            this.uiBtnJump.position.x = 10 + this.uiBtnJump.width/2;
+
+            
+            this.uiBtnAtk.position.y = GameConfig.height*4/5 -  this.uiBtnAtk.height/2 - 10;
+            this.uiBtnAtk.position.x = GameConfig.width - this.uiBtnAtk.width/2 - 10;
+            
+            this.uiBtnAtk.interactive = true;
+            this.uiBtnJump.interactive = true;
+            this.uiBtnSlide.interactive = true;
+
+            //button event listener
+            this.uiBtnAtk.on('touchstart', function () {
+                //console.log('atk');
+                if (GameConfig.game.isPlaying && GameConfig.specialMode == SPECIALMODE.JAPANMODE){
+                    GameConfig.audio.play("ninjiaModeAttack");
+                    GameConfig.game.player.view.textures =  GameConfig.game.player.dashFrames;
+                    GameConfig.game.player.view.play();
+                    GameConfig.game.player.ninjiaOperate();
+                }else if(GameConfig.game.isPlaying && GameConfig.specialMode == SPECIALMODE.INDONMODE){
+                    GameConfig.audio.play("indoMode");
+                    GameConfig.game.player.view.textures =  GameConfig.game.player.runningFrames;
+                    GameConfig.game.player.view.play();
+                    GameConfig.game.player.indoOperate();
+                }
+            });
+            this.uiBtnJump.on('touchstart', function () {
+                //console.log('jump');
+                GameConfig.audio.play("jump");
+                if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump&& !GameConfig.game.player.isPlayingNinjiaEffect) 
+                    GameConfig.game.player.jump();
+                if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped &&  !GameConfig.game.player.isPlayingNinjiaEffect) 
+                    GameConfig.game.player.jumpTwo(); 
+            });
+
+
+            this.uiBtnSlide.on('touchstart', function () {
+                //console.log('slide');
+                if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped && GameConfig.game.player.onGround){
+                    GameConfig.game.player.slide(true);
+                }
+            });
+            this.uiBtnSlide.on('touchend', function () {
+                //console.log('slide');
+                if (GameConfig.game.isPlaying && GameConfig.game.player.isSlide){
+                    GameConfig.game.player.slide(false);
+                }
+            });
+
+            this.uiContainer.addChild(this.uiBtnJump);
+            this.uiContainer.addChild(this.uiBtnSlide);
+            this.uiContainer.addChild(this.uiBtnAtk);
+        }
+    }
+
     //UIPanel
     export class GameUIPanelUpRight{
        
@@ -190,6 +267,55 @@ module ECS {
         }
      
     }
+
+    export class SpecialfoodUI{
+        uiContainer:any;
+        foods:any;
+        activeFoods:any;
+        digits:any;
+        startX:number;
+
+        constructor(){
+
+        
+            this.uiContainer = new PIXI.Container();
+            this.foods = [  "Food Grey.png",
+                            "Food Grey.png",
+                            "Food Grey.png",
+                            "Food Grey.png"];
+            this.activeFoods = [  "Food.png",
+                                  "Food.png",
+                                  "Food.png",
+                                  "Food.png"];
+            
+            for(var i=0;i<4;i++){
+                this.foods[i] = PIXI.Texture.fromFrame(this.foods[i]);
+                this.activeFoods[i] = PIXI.Texture.fromFrame(this.activeFoods[i]);
+                
+            }
+            this.startX = 10;
+            
+            this.digits = [];
+            
+            for ( var i = 0; i < 4; i++) 
+            {
+                this.digits[i] = new PIXI.Sprite(this.foods[i]);
+                this.digits[i].scale.x = 0.6;
+                this.digits[i].scale.y = 0.6;
+                this.uiContainer.addChild(this.digits[i]);
+                this.setFoodPic(this.digits[i],i*this.digits[i].width);
+            }     
+        }
+        setFoodPic(ui:any,posx:number)
+        {
+    
+            ui.position.x = this.startX+posx; 
+    
+        }
+
+    }
+
+
 
 
 
