@@ -89,7 +89,7 @@ module ECS {
             this.bulletMult = 1;
 
             GameConfig.audio.stop("StartMusic");
-            GameConfig.audio.setVolume('GameMusic', 0.1);
+            GameConfig.audio.setVolume('GameMusic', 0.5);
             GameConfig.audio.play("GameMusic");
         }
 

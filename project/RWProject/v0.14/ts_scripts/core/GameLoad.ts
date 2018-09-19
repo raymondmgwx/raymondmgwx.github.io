@@ -76,7 +76,7 @@ module ECS {
         }
 
         playStartScreenMusic(){
-            GameConfig.audio.setVolume('StartMusic', 0.1);
+            GameConfig.audio.setVolume('StartMusic', 0.5);
             GameConfig.audio.play("StartMusic");
         }
 
