@@ -784,16 +784,18 @@ var ECS;
                 }
             });
             this.uiBtnJump.on('touchstart', function () {
-                //console.log('jump');
-                ECS.GameConfig.audio.play("jump");
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.startJump && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.RUNNING && !ECS.GameConfig.game.player.isPlayingNinjiaEffect) {
                     ECS.GameConfig.game.player.jump();
-                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
+                    ECS.GameConfig.audio.play("jump");
+                }
+                else if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.FALL && ECS.GameConfig.game.player.startJump == true && !ECS.GameConfig.game.player.isPlayingNinjiaEffect) {
                     ECS.GameConfig.game.player.jumpTwo();
+                    ECS.GameConfig.audio.play("jump");
+                }
             });
             this.uiBtnSlide.on('touchstart', function () {
                 //console.log('slide');
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped && ECS.GameConfig.game.player.onGround) {
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.RUNNING && ECS.GameConfig.game.player.onGround) {
                     ECS.GameConfig.game.player.slide(true);
                 }
             });
@@ -1137,6 +1139,8 @@ var ECS;
  *
  * ========================================================================= */
 /// <reference path="./GameConfig.ts" />
+/// <reference path="./GameBackGround.ts" />
+/// <reference path="./GameManager.ts" />
 var ECS;
 (function (ECS) {
     var GameCharacter = /** @class */ (function () {
@@ -1145,7 +1149,7 @@ var ECS;
             this.ninjiaEffectNumber = 0;
             this.isPlayingNinjiaEffect = false;
             this.isPlayingInoEffect = false;
-            console.log("init character!");
+            //console.log("init character!");
             this.position = new PIXI.Point();
             this.speedUpList = [];
             this.runningFrames = [
@@ -1188,7 +1192,7 @@ var ECS;
             //refresh floor position
             this.refreshFloorHeight();
             this.gravity = 9.8;
-            this.baseSpeed = 8;
+            this.baseSpeed = 12;
             this.speed = new PIXI.Point(this.baseSpeed, 0);
             this.activeCount = 0;
             this.isJumped = false;
@@ -1202,7 +1206,7 @@ var ECS;
             this.realAnimationSpeed = 0.23;
             this.volume = 0.3;
             //start speed
-            this.vStart = 30;
+            this.vStart = 35;
             this.mass = 65;
             this.angle = Math.PI * 45 / 360;
             this.startJump = false;
@@ -1270,7 +1274,7 @@ var ECS;
             this.realAnimationSpeed = 0.23;
         };
         GameCharacter.prototype.chkOnGround = function () {
-            if (this.position.y - this.ground >= 0) {
+            if (this.onGround) {
                 return true;
             }
             return false;
@@ -1469,17 +1473,25 @@ var ECS;
                 this.view.rotation += this.rotationSpeed * ECS.GameConfig.time.DELTA_TIME;
             }
         };
-        GameCharacter.prototype.jumpTwo = function () {
-            //console.log("jump two");
+        GameCharacter.prototype.jump = function () {
             if (this.isDead) {
                 if (this.speed.x < 5) {
                     this.isDead = false;
                     this.speed.x = 10;
                 }
             }
-            if (Math.abs(this.position.y - this.ground) > 1) {
-                ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING2;
+            this.startJump = true;
+            ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING1;
+        };
+        GameCharacter.prototype.jumpTwo = function () {
+            if (this.isDead) {
+                if (this.speed.x < 5) {
+                    this.isDead = false;
+                    this.speed.x = 10;
+                }
             }
+            this.startJump = false;
+            ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING2;
         };
         GameCharacter.prototype.slide = function (isSlide) {
             if (this.isDead) {
@@ -1501,16 +1513,6 @@ var ECS;
                 this.isSlide = isSlide;
                 ECS.GameConfig.playerMode = ECS.PLAYMODE.RUNNING;
             }
-        };
-        GameCharacter.prototype.jump = function () {
-            //console.log("click jump");
-            if (this.isDead) {
-                if (this.speed.x < 5) {
-                    this.isDead = false;
-                    this.speed.x = 10;
-                }
-            }
-            ECS.GameConfig.playerMode = ECS.PLAYMODE.JUMPING1;
         };
         GameCharacter.prototype.die = function () {
             if (this.isDead)
@@ -1820,7 +1822,7 @@ var ECS;
                 for (var i = 0; i < length; i++) {
                     var enemyY = blocks[(i * 2) + 1];
                     var realEnemyY = ECS.GameConfig.height * enemyY / ECS.GameConfig.fixedHeight;
-                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i * 2], realEnemyY);
+                    this.engine.enemyManager.addEnemy((ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100 + this.currentSegment.start + blocks[i * 2], realEnemyY);
                 }
                 var pickups = this.currentSegment.coins;
                 var length = pickups.length / 2;
@@ -1833,7 +1835,7 @@ var ECS;
                     }
                     var foodY = pickups[(i * 2) + 1];
                     var realfoodY = ECS.GameConfig.height * foodY / ECS.GameConfig.fixedHeight;
-                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i * 2], realfoodY, curType);
+                    this.engine.pickupManager.addPickup((ECS.GameConfig.allSystem.get("background")).bgTex.spriteWidth + 100 + this.currentSegment.start + pickups[i * 2], realfoodY, curType);
                 }
                 var platforms = this.currentSegment.platform;
                 var length = platforms.length / 2;
@@ -2292,9 +2294,9 @@ var ECS;
                 if (xdist > -plat.width / 2 && xdist < plat.width / 2) {
                     var ydist = plat.position.y - player.position.y;
                     if (ydist > -plat.height / 2 - 20 && ydist < plat.height / 2) {
-                        if (player.position.y < plat.position.y - 10) {
+                        if (player.position.y < plat.position.y - 20) {
                             //player jump to the plat
-                            player.position.y = plat.position.y - plat.height / 2 - player.height / 2;
+                            player.position.y = plat.position.y - plat.height - player.height - 20;
                             player.ground = player.position.y;
                             ECS.GameConfig.isOnPlat = true;
                             player.onGround = true;
@@ -2309,7 +2311,7 @@ var ECS;
                     var plat = platforms[i];
                     var xdist = plat.position.x - player.position.x;
                     if (xdist > -plat.width / 2 && xdist < plat.width / 2) {
-                        var ydist = plat.position.y - plat.height / 2 - player.height / 2 - player.position.y;
+                        var ydist = plat.position.y - plat.height - player.height - player.position.y - 20;
                         if (ydist <= 0) {
                             //console.log("noy");
                             flag = false;
@@ -2321,6 +2323,7 @@ var ECS;
                     ;
                     player.ground = this.engine.player.floorHeight;
                     ECS.GameConfig.playerMode = ECS.PLAYMODE.FALL;
+                    player.onGround = false;
                     //console.log("leave plat");
                 }
             }
@@ -2695,15 +2698,18 @@ var ECS;
         };
         EventListenerSystem.prototype.onKeyDown = function (event) {
             if (event.keyCode == 32 || event.keyCode == 38) {
-                ECS.GameConfig.audio.play("jump");
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.startJump && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.RUNNING && !ECS.GameConfig.game.player.isPlayingNinjiaEffect) {
                     ECS.GameConfig.game.player.jump();
-                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.game.player.isJumped && !ECS.GameConfig.game.player.isPlayingNinjiaEffect)
+                    ECS.GameConfig.audio.play("jump");
+                }
+                else if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.FALL && ECS.GameConfig.game.player.startJump == true && !ECS.GameConfig.game.player.isPlayingNinjiaEffect) {
                     ECS.GameConfig.game.player.jumpTwo();
+                    ECS.GameConfig.audio.play("jump");
+                }
             }
             else if (event.keyCode == 40) {
                 //console.log(GameConfig.game.player.onGround);
-                if (ECS.GameConfig.game.isPlaying && !ECS.GameConfig.game.player.isJumped && ECS.GameConfig.game.player.onGround) {
+                if (ECS.GameConfig.game.isPlaying && ECS.GameConfig.playerMode == ECS.PLAYMODE.RUNNING && ECS.GameConfig.game.player.onGround) {
                     ECS.GameConfig.game.player.slide(true);
                 }
             }

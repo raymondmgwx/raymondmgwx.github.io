@@ -5,6 +5,8 @@
  *
  * ========================================================================= */
 /// <reference path="./GameConfig.ts" />
+/// <reference path="./GameBackGround.ts" />
+/// <reference path="./GameManager.ts" />
 module ECS {
     declare var PIXI: any;
     declare var TweenLite: any;
@@ -71,7 +73,7 @@ module ECS {
 
         constructor(){
 
-            console.log("init character!");
+            //console.log("init character!");
             this.position = new PIXI.Point();
             this.speedUpList = [];
 	
@@ -125,7 +127,7 @@ module ECS {
 
             this.gravity = 9.8;
             
-            this.baseSpeed = 8;
+            this.baseSpeed = 12;
             this.speed = new PIXI.Point(this.baseSpeed, 0);
             
             this.activeCount = 0;
@@ -144,7 +146,7 @@ module ECS {
             this.volume = 0.3;
 
             //start speed
-            this.vStart = 30;
+            this.vStart = 35;
             this.mass = 65;
             this.angle =Math.PI * 45/360;
             this.startJump =false;
@@ -240,7 +242,7 @@ module ECS {
 
         chkOnGround(){
 
-            if(this.position.y-this.ground>=0){
+            if(this.onGround){
                 return true;
             }
 
@@ -494,11 +496,9 @@ module ECS {
                 this.view.rotation += this.rotationSpeed * GameConfig.time.DELTA_TIME;
             }
         }
-        jumpTwo()
+        
+        jump()
         {
-
-            
-            //console.log("jump two");
             if(this.isDead)
             {
                 if(this.speed.x < 5)
@@ -508,11 +508,24 @@ module ECS {
                 }
             }
 
-            if(Math.abs(this.position.y-this.ground)>1)
+            this.startJump = true;
+            GameConfig.playerMode = PLAYMODE.JUMPING1;
+        }
+
+        jumpTwo()
+        {
+            if(this.isDead)
             {
-                GameConfig.playerMode = PLAYMODE.JUMPING2;
+                if(this.speed.x < 5)
+                {
+                    this.isDead = false
+                    this.speed.x = 10;
+                }
             }
 
+            this.startJump = false;
+            GameConfig.playerMode = PLAYMODE.JUMPING2;
+        
         }
 
         slide(isSlide:boolean){
@@ -541,20 +554,7 @@ module ECS {
                  }
         }
 
-        jump()
-        {
-      
-            //console.log("click jump");
-            if(this.isDead)
-            {
-                if(this.speed.x < 5)
-                {
-                    this.isDead = false
-                    this.speed.x = 10;
-                }
-            }
-            GameConfig.playerMode = PLAYMODE.JUMPING1;
-        }
+
 
         die()
         {

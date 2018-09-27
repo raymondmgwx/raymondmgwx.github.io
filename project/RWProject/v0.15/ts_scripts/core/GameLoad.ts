@@ -234,15 +234,19 @@ module ECS {
         }
         onKeyDown(event:any) {
             if (event.keyCode == 32 || event.keyCode == 38) {
-                GameConfig.audio.play("jump");
-                if (GameConfig.game.isPlaying && !GameConfig.game.player.startJump&& !GameConfig.game.player.isPlayingNinjiaEffect) 
+                
+                if (GameConfig.game.isPlaying && GameConfig.playerMode == PLAYMODE.RUNNING&& !GameConfig.game.player.isPlayingNinjiaEffect){
                     GameConfig.game.player.jump();
-                if (GameConfig.game.isPlaying && GameConfig.game.player.isJumped &&  !GameConfig.game.player.isPlayingNinjiaEffect) 
+                    GameConfig.audio.play("jump");
+                }else if (GameConfig.game.isPlaying && GameConfig.playerMode == PLAYMODE.FALL && GameConfig.game.player.startJump == true &&  !GameConfig.game.player.isPlayingNinjiaEffect){
                     GameConfig.game.player.jumpTwo(); 
+                    GameConfig.audio.play("jump");
+                }
+                   
             }else if(event.keyCode == 40) {
                
                 //console.log(GameConfig.game.player.onGround);
-                if (GameConfig.game.isPlaying && !GameConfig.game.player.isJumped && GameConfig.game.player.onGround){
+                if (GameConfig.game.isPlaying && GameConfig.playerMode == PLAYMODE.RUNNING && GameConfig.game.player.onGround){
                     GameConfig.game.player.slide(true);
                 }
                     
@@ -272,15 +276,6 @@ module ECS {
                     
             }
         }
-
-        // onTouchStart(event:any){
-        //         if (event.target.type !== 'button') {
-        //             if (GameConfig.game.isPlaying && !(GameConfig.playerMode == PLAYMODE.JUMPING1))
-        //                 GameConfig.game.player.jump();
-        //             if (GameConfig.game.isPlaying && (GameConfig.playerMode == PLAYMODE.JUMPING1))
-        //                 GameConfig.game.player.jumpTwo(); 
-        //         }
-        // }
         
     }
 

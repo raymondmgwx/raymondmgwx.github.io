@@ -106,7 +106,7 @@ module ECS {
                     var enemyY =  blocks[(i*2)+1];
                     var realEnemyY = GameConfig.height * enemyY/GameConfig.fixedHeight;
 
-                    this.engine.enemyManager.addEnemy(this.currentSegment.start + blocks[i*2],realEnemyY);
+                    this.engine.enemyManager.addEnemy((<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth + 100 +this.currentSegment.start + blocks[i*2],realEnemyY);
                 }
                 
                 var pickups = this.currentSegment.coins;
@@ -124,7 +124,7 @@ module ECS {
                     var foodY =  pickups[(i*2)+1];
                     var realfoodY = GameConfig.height * foodY/GameConfig.fixedHeight;
 
-                    this.engine.pickupManager.addPickup(this.currentSegment.start + pickups[i*2],realfoodY,curType);
+                    this.engine.pickupManager.addPickup((<GameBackGroundSystem>(GameConfig.allSystem.get("background"))).bgTex.spriteWidth + 100 + this.currentSegment.start + pickups[i*2],realfoodY,curType);
                 }
 
                 var platforms = this.currentSegment.platform;
@@ -730,10 +730,10 @@ module ECS {
                     if(ydist > -plat.height/2 -20&& ydist < plat.height/2)
                     {
 
-                        if(player.position.y < plat.position.y-10){
+                        if(player.position.y < plat.position.y-20){
                             
                             //player jump to the plat
-                            player.position.y = plat.position.y-plat.height/2-player.height/2;
+                            player.position.y = plat.position.y-plat.height-player.height-20;
                             player.ground = player.position.y;
 
                             GameConfig.isOnPlat = true;
@@ -753,7 +753,7 @@ module ECS {
                     var xdist = plat.position.x - player.position.x;
                     if(xdist > -plat.width/2 && xdist < plat.width/2)
                     {
-                        var ydist = plat.position.y-plat.height/2-player.height/2 - player.position.y;
+                        var ydist = plat.position.y-plat.height-player.height - player.position.y -20;
     
                         if(ydist <=0)
                         {
@@ -768,6 +768,7 @@ module ECS {
                     GameConfig.isOnPlat = false;;
                     player.ground = this.engine.player.floorHeight;
                     GameConfig.playerMode = PLAYMODE.FALL;
+                    player.onGround = false;
                     //console.log("leave plat");
                 }
             }

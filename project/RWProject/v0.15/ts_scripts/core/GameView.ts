@@ -163,39 +163,6 @@ module ECS {
                     ease: Sine.easeOut
                 });
             }
-            
-            // resize(w, h) {
-            //     //    console.log("Width ->" + w);
-            //     //    console.log("Height -> " + h);
-            
-            //     GameConfig.width = w;
-            //     GameConfig.height = h;
-            
-            //     this.renderer.resize(w, h);
-            //     this.background.width = w;
-            
-            //     this.bestScore.position.x = 900 ;
-            //     this.bestScore.position.y =22;
-            //     this.bestScore.scale.x = 0.3;
-            //     this.bestScore.scale.y = 0.3;
-            
-            //     this.score.position.x = 740;
-            //     this.score.position.y = 22;
-            //     this.score.scale.x = 0.3;
-            //     this.score.scale.y = 0.3;
-    
-            //     this.specialFood.position.x = 0;
-            //     this.specialFood.position.y = 12;
-    
-            //     this.playUIPanel.position.x = 0;
-            //     this.playUIPanel.position.y = 12;
-            
-            //     this.white.scale.x = w / 16;
-            //     this.white.scale.y = h / 16;
-            
-            //     // this.powerBar.position.x = w - 295;
-            //     // this.powerBar.position.y = 12;
-            // }
-    
+        
         }
 }
