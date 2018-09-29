@@ -1,0 +1,1 @@
+tsc --out ../scripts/main.js main.ts Entity.ts Component.ts System.ts HashSet.ts LoadData.ts Utils.ts
