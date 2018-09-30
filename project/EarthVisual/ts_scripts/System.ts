@@ -1041,6 +1041,7 @@ module ECS {
         }
 
         onMouseWheel(event) {
+            event.preventDefault();
             var delta = 0;
 
             if (event.wheelDelta) { /* IE/Opera. */
