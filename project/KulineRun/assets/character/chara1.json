@@ -1,0 +1,236 @@
+{"frames": {
+
+"CHARACTER/JUMP/Jump.png":
+{
+	"frame": {"x":1810,"y":1243,"w":154,"h":265},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":4,"w":154,"h":265},
+	"sourceSize": {"w":154,"h":272}
+},
+"CHARACTER/NEKO/STEAL/steal0001.png":
+{
+	"frame": {"x":1487,"y":643,"w":249,"h":202},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":28,"y":21,"w":249,"h":202},
+	"sourceSize": {"w":300,"h":239}
+},
+"CHARACTER/NEKO/STEAL/steal0002.png":
+{
+	"frame": {"x":732,"y":1445,"w":254,"h":206},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":43,"y":17,"w":254,"h":206},
+	"sourceSize": {"w":300,"h":239}
+},
+"CHARACTER/NEKO/STEAL/steal0003.png":
+{
+	"frame": {"x":1099,"y":1267,"w":239,"h":199},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":43,"y":24,"w":239,"h":199},
+	"sourceSize": {"w":300,"h":239}
+},
+"CHARACTER/NEKO/STEAL/steal0004.png":
+{
+	"frame": {"x":1738,"y":784,"w":234,"h":188},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":48,"y":35,"w":234,"h":188},
+	"sourceSize": {"w":300,"h":239}
+},
+"CHARACTER/NEKO/WALK/neko0001.png":
+{
+	"frame": {"x":988,"y":1468,"w":242,"h":196},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":18,"w":242,"h":196},
+	"sourceSize": {"w":300,"h":232}
+},
+"CHARACTER/NEKO/WALK/neko0002.png":
+{
+	"frame": {"x":1232,"y":1468,"w":237,"h":201},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":33,"y":17,"w":237,"h":201},
+	"sourceSize": {"w":300,"h":232}
+},
+"CHARACTER/NEKO/WALK/neko0003.png":
+{
+	"frame": {"x":1487,"y":847,"w":242,"h":196},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":18,"w":242,"h":196},
+	"sourceSize": {"w":300,"h":232}
+},
+"CHARACTER/NEKO/WALK/neko0004.png":
+{
+	"frame": {"x":1232,"y":1468,"w":237,"h":201},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":33,"y":17,"w":237,"h":201},
+	"sourceSize": {"w":300,"h":232}
+},
+"CHARACTER/POWER EFFECTS/DASH/dash-shinobi-new.png":
+{
+	"frame": {"x":1468,"y":1045,"w":214,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":27,"y":81,"w":214,"h":105},
+	"sourceSize": {"w":270,"h":270}
+},
+"CHARACTER/POWER EFFECTS/INDONTIGHT/boom0001.png":
+{
+	"frame": {"x":1501,"y":1425,"w":221,"h":221},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":533,"y":243,"w":221,"h":221},
+	"sourceSize": {"w":1280,"h":720}
+},
+"CHARACTER/POWER EFFECTS/INDONTIGHT/boom0002.png":
+{
+	"frame": {"x":1283,"y":1,"w":640,"h":640},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":323,"y":36,"w":640,"h":640},
+	"sourceSize": {"w":1280,"h":720}
+},
+"CHARACTER/POWER EFFECTS/INDONTIGHT/boom0003.png":
+{
+	"frame": {"x":1,"y":723,"w":1096,"h":720},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":92,"y":0,"w":1096,"h":720},
+	"sourceSize": {"w":1280,"h":720}
+},
+"CHARACTER/POWER EFFECTS/INDONTIGHT/boom0004.png":
+{
+	"frame": {"x":1,"y":1,"w":1280,"h":720},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1280,"h":720},
+	"sourceSize": {"w":1280,"h":720}
+},
+"CHARACTER/POWER EFFECTS/MARIO/maung ninja.png":
+{
+	"frame": {"x":1,"y":1445,"w":460,"h":160},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":37,"y":159,"w":460,"h":160},
+	"sourceSize": {"w":500,"h":500}
+},
+"CHARACTER/POWER EFFECTS/SHOOT/maung shoot-new.png":
+{
+	"frame": {"x":1738,"y":643,"w":254,"h":139},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":67,"w":254,"h":139},
+	"sourceSize": {"w":270,"h":270}
+},
+"CHARACTER/POWER/DASH/dash0001.png":
+{
+	"frame": {"x":1099,"y":723,"w":191,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":191,"h":270},
+	"sourceSize": {"w":191,"h":270}
+},
+"CHARACTER/POWER/DASH/dash0002.png":
+{
+	"frame": {"x":1099,"y":995,"w":197,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":197,"h":270},
+	"sourceSize": {"w":197,"h":270}
+},
+"CHARACTER/POWER/SHOOT/shoot0001.png":
+{
+	"frame": {"x":1292,"y":643,"w":193,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":193,"h":270},
+	"sourceSize": {"w":193,"h":270}
+},
+"CHARACTER/POWER/SHOOT/shoot0002.png":
+{
+	"frame": {"x":1298,"y":915,"w":168,"h":270},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":168,"h":270},
+	"sourceSize": {"w":168,"h":270}
+},
+"CHARACTER/RUN/Character-01.png":
+{
+	"frame": {"x":1340,"y":1187,"w":159,"h":272},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":159,"h":272},
+	"sourceSize": {"w":159,"h":272}
+},
+"CHARACTER/RUN/Character-02.png":
+{
+	"frame": {"x":1501,"y":1152,"w":154,"h":271},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":271},
+	"sourceSize": {"w":154,"h":271}
+},
+"CHARACTER/RUN/Character-03.png":
+{
+	"frame": {"x":1810,"y":974,"w":158,"h":267},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":267},
+	"sourceSize": {"w":158,"h":267}
+},
+"CHARACTER/RUN/Character-04.png":
+{
+	"frame": {"x":1657,"y":1152,"w":151,"h":271},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":151,"h":271},
+	"sourceSize": {"w":151,"h":271}
+},
+"CHARACTER/RUN/Character-05.png":
+{
+	"frame": {"x":1810,"y":974,"w":158,"h":267},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":267},
+	"sourceSize": {"w":158,"h":267}
+},
+"CHARACTER/RUN/Character-06.png":
+{
+	"frame": {"x":1501,"y":1152,"w":154,"h":271},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":154,"h":271},
+	"sourceSize": {"w":154,"h":271}
+},
+"CHARACTER/SLIDE/Slide.png":
+{
+	"frame": {"x":463,"y":1445,"w":267,"h":159},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":159},
+	"sourceSize": {"w":270,"h":159}
+}},
+"animations": {
+	"CHARACTER/NEKO/STEAL/steal": ["CHARACTER/NEKO/STEAL/steal0001.png","CHARACTER/NEKO/STEAL/steal0002.png","CHARACTER/NEKO/STEAL/steal0003.png","CHARACTER/NEKO/STEAL/steal0004.png"],
+	"CHARACTER/NEKO/WALK/neko": ["CHARACTER/NEKO/WALK/neko0001.png","CHARACTER/NEKO/WALK/neko0002.png","CHARACTER/NEKO/WALK/neko0003.png","CHARACTER/NEKO/WALK/neko0004.png"],
+	"CHARACTER/POWER EFFECTS/INDONTIGHT/boom": ["CHARACTER/POWER EFFECTS/INDONTIGHT/boom0001.png","CHARACTER/POWER EFFECTS/INDONTIGHT/boom0002.png","CHARACTER/POWER EFFECTS/INDONTIGHT/boom0003.png","CHARACTER/POWER EFFECTS/INDONTIGHT/boom0004.png"],
+	"CHARACTER/POWER/DASH/dash": ["CHARACTER/POWER/DASH/dash0001.png","CHARACTER/POWER/DASH/dash0002.png"],
+	"CHARACTER/POWER/SHOOT/shoot": ["CHARACTER/POWER/SHOOT/shoot0001.png","CHARACTER/POWER/SHOOT/shoot0002.png"],
+	"CHARACTER/RUN/Character": ["CHARACTER/RUN/Character-01.png","CHARACTER/RUN/Character-02.png","CHARACTER/RUN/Character-03.png","CHARACTER/RUN/Character-04.png","CHARACTER/RUN/Character-05.png","CHARACTER/RUN/Character-06.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "chara1.png",
+	"format": "RGBA8888",
+	"size": {"w":1993,"h":1670},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:51dc123e2c187194f1c57547b2fe13af:d558d68071e817b3036188bf09c9b233:09514296705306de6d2cd410c45096a9$"
+}
+}

@@ -1,0 +1,70 @@
+{
+    "frames": {
+
+        "BATAGOR.png": {
+            "frame": { "x": 140, "y": 324, "w": 179, "h": 106 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 179, "h": 106 },
+            "sourceSize": { "w": 179, "h": 106 }
+        },
+        "CIRENG.png": {
+            "frame": { "x": 1, "y": 330, "w": 137, "h": 107 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 137, "h": 107 },
+            "sourceSize": { "w": 137, "h": 107 }
+        },
+        "HAMBURG.png": {
+            "frame": { "x": 218, "y": 208, "w": 159, "h": 114 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 159, "h": 114 },
+            "sourceSize": { "w": 159, "h": 114 }
+        },
+        "RAMEN.png": {
+            "frame": { "x": 194, "y": 1, "w": 188, "h": 84 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 188, "h": 84 },
+            "sourceSize": { "w": 188, "h": 84 }
+        },
+        "SEBLAK.png": {
+            "frame": { "x": 1, "y": 219, "w": 137, "h": 109 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 137, "h": 109 },
+            "sourceSize": { "w": 137, "h": 109 }
+        },
+        "OKONOMIYAKI.png": {
+            "frame": { "x": 1, "y": 134, "w": 215, "h": 83 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 215, "h": 83 },
+            "sourceSize": { "w": 215, "h": 83 }
+        },
+        "DANGO.png": {
+            "frame": { "x": 218, "y": 87, "w": 167, "h": 119 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 167, "h": 119 },
+            "sourceSize": { "w": 167, "h": 119 }
+        },
+        "TEPURA.png": {
+            "frame": { "x": 1, "y": 1, "w": 191, "h": 131 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 191, "h": 131 },
+            "sourceSize": { "w": 191, "h": 131 }
+        }
+    },
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "food.png",
+        "format": "RGBA8888",
+        "size": { "w": 386, "h": 438 },
+        "scale": "1",
+        "smartupdate": "$TexturePacker:SmartUpdate:132aac1e55cf21a2de2082d031d9c44b:898b7d329b45704d8dfd7adb90178cf8:dc56c85744751b4d97b97a9b9d1306ba$"
+    }
+}
