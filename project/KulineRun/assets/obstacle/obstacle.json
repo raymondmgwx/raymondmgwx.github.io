@@ -1,6 +1,6 @@
 {"frames": {
 
-"obstacle all-11.png":
+"obstacle-11.png":
 {
 	"frame": {"x":0,"y":0,"w":276,"h":497},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":276,"h":497},
 	"sourceSize": {"w":276,"h":497}
 },
-"obstacle all-13.png":
+"obstacle-13.png":
 {
 	"frame": {"x":0,"y":497,"w":342,"h":618},
 	"rotated": false,
@@ -23,6 +23,6 @@
 	"format": "RGBA8888",
 	"size": {"w":342,"h":1115},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:090e5bac0db3862a7a08ee1c65d464db:47bbf163bd1cdca4b6622682e2aef731:12c47a285be6b48fe6e02d92a983922c$"
+	"smartupdate": "$TexturePacker:SmartUpdate:ff891dabb356fe0a8e95226b284baf7d:47bbf163bd1cdca4b6622682e2aef731:12c47a285be6b48fe6e02d92a983922c$"
 }
 }
