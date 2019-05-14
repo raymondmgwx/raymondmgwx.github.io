@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/NCAPP/precache-manifest.42cb86daa23fd2ed08798f6c2278aaec.js"
+  "/NCAPP/precache-manifest.b40a3339eb8ccce877413845c91df25e.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "ncapp"});
