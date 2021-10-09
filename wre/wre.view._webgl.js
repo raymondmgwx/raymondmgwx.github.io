@@ -28,7 +28,7 @@ WRE.view._webgl._view._init = function(callback) {
         var result = {};
         if (getReqQuery().e == null) {
             //alert("required project name（'e=ProjectName'）");
-            location.href = "https://raymondmcguire.github.io/?e=imvc_lab_project&&theme=Image-Visual-Lab";
+            location.href = "https://raymondmgwx.github.io/?e=imvc_lab_project&&theme=Image-Visual-Lab";
             return
         } else {
             WRE.view._webgl._projectFile += getReqQuery().e + "/" + getReqQuery().e;
